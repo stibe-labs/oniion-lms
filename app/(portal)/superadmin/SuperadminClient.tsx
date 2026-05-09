@@ -7,8 +7,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Upload, X, ImageIcon } from 'lucide-react';
 import type { PortalUser } from '@/types';
-import type { SplashConfig } from '@/lib/platform-config';
-import { SPLASH_CONFIG_DEFAULTS } from '@/lib/platform-config';
+import type { SplashConfig } from '@/lib/splash-config';
+import { SPLASH_CONFIG_DEFAULTS } from '@/lib/splash-config';
 import SplashConfigSection from './SplashConfigSection';
 
 interface Props {

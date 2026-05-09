@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
-import type { SplashConfig } from '@/lib/platform-config';
+import type { SplashConfig } from '@/lib/splash-config';
 
 const SPLASH_DURATION = 3500;
 const FADE_DURATION   = 500;

@@ -5,7 +5,7 @@ import { useToast } from '@/components/dashboard/shared';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Plus, X, Sparkles } from 'lucide-react';
-import type { SplashConfig, SplashTemplate, SplashProgressStyle, SplashLoadingAnim } from '@/lib/platform-config';
+import type { SplashConfig, SplashTemplate, SplashProgressStyle, SplashLoadingAnim } from '@/lib/splash-config';
 
 const PRESET_QUOTES = [
   'Education is the most powerful weapon you can use to change the world.',

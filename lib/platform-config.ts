@@ -1,4 +1,8 @@
 import { db } from '@/lib/db';
+export type { SplashTemplate, SplashProgressStyle, SplashLoadingAnim, SplashConfig } from './splash-config';
+export { SPLASH_CONFIG_DEFAULTS } from './splash-config';
+import type { SplashTemplate, SplashProgressStyle, SplashLoadingAnim, SplashConfig } from './splash-config';
+import { SPLASH_CONFIG_DEFAULTS } from './splash-config';
 
 export async function getPlatformName(): Promise<string> {
   try {
@@ -56,32 +60,6 @@ export async function getLogoConfig(): Promise<LogoConfig> {
     return { logoSmallUrl: null, logoFullUrl: null, faviconUrl: null, authHeight: 40, splashHeight: 36, sidebarHeight: 20, emailHeight: 36 };
   }
 }
-
-export type SplashTemplate     = 'classic' | 'minimal' | 'bold' | 'dark' | 'branded';
-export type SplashProgressStyle = 'bar' | 'dots' | 'ring' | 'pulse' | 'none';
-export type SplashLoadingAnim  = 'buji' | 'none';
-
-export interface SplashConfig {
-  template:      SplashTemplate;
-  progressStyle: SplashProgressStyle;
-  loadingAnim:   SplashLoadingAnim;
-  tagline:       string;
-  accentColor:   string;
-  bgColor:       string;
-  showQuotes:    boolean;
-  quotes:        string[];
-}
-
-export const SPLASH_CONFIG_DEFAULTS: SplashConfig = {
-  template:      'classic',
-  progressStyle: 'bar',
-  loadingAnim:   'buji',
-  tagline:       'Crafting Future',
-  accentColor:   '#10b981',
-  bgColor:       '#fafbfc',
-  showQuotes:    false,
-  quotes:        [],
-};
 
 export async function getSplashConfig(): Promise<SplashConfig> {
   try {
