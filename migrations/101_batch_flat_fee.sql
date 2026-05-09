@@ -2,6 +2,9 @@
 -- Adds support for one-time flat batch fees (special/improvement batches)
 -- with optional classroom entry gate enforcement.
 
+-- ── Normalize legacy 'year' fee_unit to 'annual' ─────────────────────────────
+UPDATE enrollment_fee_structure SET fee_unit = 'annual' WHERE fee_unit = 'year';
+
 -- ── Add new columns ──────────────────────────────────────────────────────────
 ALTER TABLE enrollment_fee_structure
   ADD COLUMN IF NOT EXISTS fee_type TEXT NOT NULL DEFAULT 'enrollment',
