@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { verifyAuth } from '@/lib/auth';
-import { getPlatformName, getBujiEnabled, getLogoConfig, getSplashConfig } from '@/lib/platform-config';
+import { getPlatformName, getBujiEnabled, getLogoConfig, getSplashConfig, getAuthConfig } from '@/lib/platform-config';
 
 export async function GET(req: NextRequest) {
   const user = await verifyAuth(req);
@@ -9,8 +9,8 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ success: false, error: 'Forbidden' }, { status: 403 });
   }
 
-  const [platformName, bujiEnabled, logos, splash] = await Promise.all([
-    getPlatformName(), getBujiEnabled(), getLogoConfig(), getSplashConfig(),
+  const [platformName, bujiEnabled, logos, splash, auth] = await Promise.all([
+    getPlatformName(), getBujiEnabled(), getLogoConfig(), getSplashConfig(), getAuthConfig(),
   ]);
   return NextResponse.json({
     success: true,
@@ -28,11 +28,21 @@ export async function GET(req: NextRequest) {
       splash_template:      splash.template,
       splash_progress_style: splash.progressStyle,
       splash_loading_anim:  splash.loadingAnim,
-      splash_tagline:       splash.tagline,
-      splash_accent_color:  splash.accentColor,
+      splash_tagline:               splash.tagline,
+      splash_tagline_size:          splash.taglineSize,
+      splash_tagline_weight:        splash.taglineWeight,
+      splash_tagline_letter_spacing: splash.taglineLetterSpacing,
+      splash_accent_color:          splash.accentColor,
       splash_bg_color:      splash.bgColor,
       splash_show_quotes:   splash.showQuotes,
       splash_quotes:        splash.quotes,
+      auth_template:        auth.template,
+      auth_accent_color:    auth.accentColor,
+      auth_bg_color:        auth.bgColor,
+      auth_headline:        auth.headline,
+      auth_subheadline:     auth.subheadline,
+      auth_show_tagline:    auth.showTagline,
+      auth_bg_pattern:      auth.bgPattern,
     },
   });
 }
@@ -77,12 +87,25 @@ export async function PUT(req: NextRequest) {
   }
 
   // Splash string fields
-  for (const key of ['splash_template', 'splash_progress_style', 'splash_loading_anim', 'splash_tagline', 'splash_accent_color', 'splash_bg_color'] as const) {
+  for (const key of ['splash_template', 'splash_progress_style', 'splash_loading_anim', 'splash_tagline', 'splash_tagline_weight', 'splash_accent_color', 'splash_bg_color'] as const) {
     if (key in body && typeof body[key] === 'string') {
       await db.query(
         `INSERT INTO school_config (key, value, description) VALUES ($1, $2, $3) ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`,
         [key, body[key], `Splash config - ${key}`]
       );
+    }
+  }
+
+  // Splash numeric fields
+  for (const key of ['splash_tagline_size', 'splash_tagline_letter_spacing'] as const) {
+    if (key in body) {
+      const val = parseInt(body[key], 10);
+      if (!isNaN(val) && val >= 0) {
+        await db.query(
+          `INSERT INTO school_config (key, value, description) VALUES ($1, $2, $3) ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`,
+          [key, String(val), `Splash config - ${key}`]
+        );
+      }
     }
   }
   if ('splash_show_quotes' in body) {
@@ -95,6 +118,22 @@ export async function PUT(req: NextRequest) {
     await db.query(
       `INSERT INTO school_config (key, value, description) VALUES ('splash_quotes', $1, 'Splash quotes JSON array') ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`,
       [JSON.stringify(body.splash_quotes)]
+    );
+  }
+
+  // Auth screen config string fields
+  for (const key of ['auth_template', 'auth_accent_color', 'auth_bg_color', 'auth_headline', 'auth_subheadline', 'auth_bg_pattern'] as const) {
+    if (key in body && typeof body[key] === 'string') {
+      await db.query(
+        `INSERT INTO school_config (key, value, description) VALUES ($1, $2, $3) ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`,
+        [key, body[key], `Auth config - ${key}`]
+      );
+    }
+  }
+  if ('auth_show_tagline' in body) {
+    await db.query(
+      `INSERT INTO school_config (key, value, description) VALUES ('auth_show_tagline', $1, 'Auth screen tagline visible') ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`,
+      [body.auth_show_tagline ? 'true' : 'false']
     );
   }
 

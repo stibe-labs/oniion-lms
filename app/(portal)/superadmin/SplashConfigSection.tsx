@@ -5,7 +5,8 @@ import { useToast } from '@/components/dashboard/shared';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Plus, X, Sparkles, Eye, EyeOff } from 'lucide-react';
-import type { SplashConfig, SplashTemplate, SplashProgressStyle, SplashLoadingAnim } from '@/lib/splash-config';
+import type { SplashConfig, SplashTemplate, SplashProgressStyle, SplashLoadingAnim, SplashTaglineWeight } from '@/lib/splash-config';
+import { TAGLINE_WEIGHT_MAP } from '@/lib/splash-config';
 
 const PRESET_QUOTES = [
   'Education is the most powerful weapon you can use to change the world.',
@@ -84,10 +85,11 @@ const LOADING_ANIMS: { id: SplashLoadingAnim; label: string; desc: string }[] = 
 
 // ── Inline splash preview ─────────────────────────────────────────────────────
 
-function SplashPreview({ cfg, logoUrl, characterUrl, onClose }: {
+function SplashPreview({ cfg, logoUrl, characterUrl, splashLogoHeight, onClose }: {
   cfg: SplashConfig;
   logoUrl: string | null;
   characterUrl: string | null;
+  splashLogoHeight: number;
   onClose: () => void;
 }) {
   const accent = cfg.accentColor;
@@ -127,7 +129,7 @@ function SplashPreview({ cfg, logoUrl, characterUrl, onClose }: {
         src={logoSrc}
         alt="Logo"
         style={{
-          height: 36,
+          height: splashLogoHeight,
           width: 'auto',
           objectFit: 'contain',
           filter: (cfg.template === 'bold' || cfg.template === 'branded') ? 'brightness(0) invert(1)' : undefined,
@@ -135,7 +137,7 @@ function SplashPreview({ cfg, logoUrl, characterUrl, onClose }: {
       />
 
       {/* Tagline */}
-      <p style={{ margin: 0, fontSize: 13, fontWeight: 600, letterSpacing: 4, textTransform: 'uppercase', fontFamily: 'system-ui', color: textColor }}>
+      <p style={{ margin: 0, fontSize: cfg.taglineSize, fontWeight: TAGLINE_WEIGHT_MAP[cfg.taglineWeight], letterSpacing: cfg.taglineLetterSpacing, textTransform: 'uppercase', fontFamily: 'system-ui', color: textColor }}>
         {cfg.tagline || 'Crafting Future'}
       </p>
 
@@ -186,9 +188,10 @@ interface Props {
   initial: SplashConfig;
   logoFullUrl: string | null;
   characterUrl: string | null;
+  splashLogoHeight: number;
 }
 
-export default function SplashConfigSection({ initial, logoFullUrl, characterUrl }: Props) {
+export default function SplashConfigSection({ initial, logoFullUrl, characterUrl, splashLogoHeight }: Props) {
   const toast = useToast();
   const [cfg, setCfg]           = useState<SplashConfig>(initial);
   const [saving, setSaving]     = useState(false);
@@ -221,14 +224,17 @@ export default function SplashConfigSection({ initial, logoFullUrl, characterUrl
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          splash_template:       cfg.template,
-          splash_progress_style: cfg.progressStyle,
-          splash_loading_anim:   cfg.loadingAnim,
-          splash_tagline:        cfg.tagline,
-          splash_accent_color:   cfg.accentColor,
-          splash_bg_color:       cfg.bgColor,
-          splash_show_quotes:    cfg.showQuotes,
-          splash_quotes:         cfg.quotes,
+          splash_template:               cfg.template,
+          splash_progress_style:         cfg.progressStyle,
+          splash_loading_anim:           cfg.loadingAnim,
+          splash_tagline:                cfg.tagline,
+          splash_tagline_size:           cfg.taglineSize,
+          splash_tagline_weight:         cfg.taglineWeight,
+          splash_tagline_letter_spacing: cfg.taglineLetterSpacing,
+          splash_accent_color:           cfg.accentColor,
+          splash_bg_color:               cfg.bgColor,
+          splash_show_quotes:            cfg.showQuotes,
+          splash_quotes:                 cfg.quotes,
         }),
       });
       const data = await res.json();
@@ -246,7 +252,7 @@ export default function SplashConfigSection({ initial, logoFullUrl, characterUrl
   return (
     <>
       {previewing && (
-        <SplashPreview cfg={cfg} logoUrl={logoFullUrl} characterUrl={characterUrl} onClose={() => setPreviewing(false)} />
+        <SplashPreview cfg={cfg} logoUrl={logoFullUrl} characterUrl={characterUrl} splashLogoHeight={splashLogoHeight} onClose={() => setPreviewing(false)} />
       )}
 
       <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm space-y-8">
@@ -374,6 +380,66 @@ export default function SplashConfigSection({ initial, logoFullUrl, characterUrl
             maxLength={60}
           />
           <p className="text-[10px] text-gray-400 mt-1">Shown below the logo. Max 60 characters.</p>
+
+          {/* Typography controls */}
+          <div className="mt-4 space-y-4">
+            {/* Size */}
+            <div>
+              <div className="flex items-center justify-between mb-1.5">
+                <p className="text-xs font-medium text-gray-600">Font Size</p>
+                <span className="text-xs font-semibold tabular-nums text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md">{cfg.taglineSize}px</span>
+              </div>
+              <input
+                type="range"
+                min={10}
+                max={32}
+                value={cfg.taglineSize}
+                onChange={e => set('taglineSize', parseInt(e.target.value, 10))}
+                className="w-full max-w-xs h-1.5 rounded-full appearance-none bg-gray-200 accent-emerald-500 cursor-pointer"
+              />
+            </div>
+
+            {/* Weight */}
+            <div>
+              <p className="text-xs font-medium text-gray-600 mb-2">Font Weight</p>
+              <div className="flex flex-wrap gap-2">
+                {(['normal', 'medium', 'semibold', 'bold'] as SplashTaglineWeight[]).map(w => (
+                  <button
+                    key={w}
+                    type="button"
+                    onClick={() => set('taglineWeight', w)}
+                    className={`px-3 py-1.5 rounded-lg border text-xs transition-all capitalize ${cfg.taglineWeight === w ? 'border-emerald-500 bg-emerald-50 text-emerald-700' : 'border-gray-200 text-gray-500 hover:border-gray-300'}`}
+                    style={{ fontWeight: TAGLINE_WEIGHT_MAP[w] }}
+                  >
+                    {w.charAt(0).toUpperCase() + w.slice(1)}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Letter spacing */}
+            <div>
+              <div className="flex items-center justify-between mb-1.5">
+                <p className="text-xs font-medium text-gray-600">Letter Spacing</p>
+                <span className="text-xs font-semibold tabular-nums text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md">{cfg.taglineLetterSpacing}px</span>
+              </div>
+              <input
+                type="range"
+                min={0}
+                max={12}
+                value={cfg.taglineLetterSpacing}
+                onChange={e => set('taglineLetterSpacing', parseInt(e.target.value, 10))}
+                className="w-full max-w-xs h-1.5 rounded-full appearance-none bg-gray-200 accent-emerald-500 cursor-pointer"
+              />
+            </div>
+
+            {/* Live preview */}
+            <div className="rounded-lg border border-gray-100 bg-gray-50 px-4 py-3 flex items-center justify-center">
+              <p style={{ margin: 0, fontSize: cfg.taglineSize, fontWeight: TAGLINE_WEIGHT_MAP[cfg.taglineWeight], letterSpacing: cfg.taglineLetterSpacing, textTransform: 'uppercase', color: accent, fontFamily: 'system-ui' }}>
+                {cfg.tagline || 'Crafting Future'}
+              </p>
+            </div>
+          </div>
         </div>
 
         {/* ── Rotating quotes ── */}

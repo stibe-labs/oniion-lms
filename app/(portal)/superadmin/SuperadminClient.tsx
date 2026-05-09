@@ -9,7 +9,10 @@ import { Upload, X, ImageIcon } from 'lucide-react';
 import type { PortalUser } from '@/types';
 import type { SplashConfig } from '@/lib/splash-config';
 import { SPLASH_CONFIG_DEFAULTS } from '@/lib/splash-config';
+import type { AuthConfig } from '@/lib/auth-config';
+import { AUTH_CONFIG_DEFAULTS } from '@/lib/auth-config';
 import SplashConfigSection from './SplashConfigSection';
+import AuthConfigSection from './AuthConfigSection';
 
 interface Props {
   user: PortalUser;
@@ -181,6 +184,7 @@ export default function SuperadminClient({ user: _user }: Props) {
   const [sizes, setSizes] = useState({ auth: 40, splash: 36, sidebar: 20, email: 36 });
   const [sizesSaving, setSizesSaving] = useState(false);
   const [splashCfg, setSplashCfg] = useState<SplashConfig>({ ...SPLASH_CONFIG_DEFAULTS });
+  const [authCfg,   setAuthCfg]   = useState<AuthConfig>({ ...AUTH_CONFIG_DEFAULTS });
 
   useEffect(() => {
     fetch('/api/v1/superadmin/settings')
@@ -202,14 +206,26 @@ export default function SuperadminClient({ user: _user }: Props) {
             email:   d.data.logo_email_height   ?? 36,
           });
           setSplashCfg({
-            template:      d.data.splash_template      ?? 'classic',
-            progressStyle: d.data.splash_progress_style ?? 'bar',
-            loadingAnim:   d.data.splash_loading_anim  ?? 'buji',
-            tagline:       d.data.splash_tagline        ?? 'Crafting Future',
-            accentColor:   d.data.splash_accent_color  ?? '#10b981',
-            bgColor:       d.data.splash_bg_color       ?? '#fafbfc',
-            showQuotes:    d.data.splash_show_quotes    ?? false,
-            quotes:        d.data.splash_quotes         ?? [],
+            template:             d.data.splash_template                ?? 'classic',
+            progressStyle:        d.data.splash_progress_style          ?? 'bar',
+            loadingAnim:          d.data.splash_loading_anim            ?? 'character',
+            tagline:              d.data.splash_tagline                  ?? 'Crafting Future',
+            taglineSize:          d.data.splash_tagline_size            ?? 13,
+            taglineWeight:        d.data.splash_tagline_weight          ?? 'semibold',
+            taglineLetterSpacing: d.data.splash_tagline_letter_spacing  ?? 4,
+            accentColor:          d.data.splash_accent_color            ?? '#10b981',
+            bgColor:              d.data.splash_bg_color                ?? '#fafbfc',
+            showQuotes:           d.data.splash_show_quotes             ?? false,
+            quotes:               d.data.splash_quotes                  ?? [],
+          });
+          setAuthCfg({
+            template:    d.data.auth_template    ?? 'classic',
+            accentColor: d.data.auth_accent_color ?? '#10b981',
+            bgColor:     d.data.auth_bg_color    ?? '#f0fdf4',
+            headline:    d.data.auth_headline    ?? 'Empowering every learner',
+            subheadline: d.data.auth_subheadline ?? 'Sign in to continue learning',
+            showTagline: d.data.auth_show_tagline ?? true,
+            bgPattern:   d.data.auth_bg_pattern  ?? 'dots',
           });
         }
       })
@@ -431,7 +447,10 @@ export default function SuperadminClient({ user: _user }: Props) {
       </div>
 
       {/* Splash Screen Design */}
-      {!fetching && <SplashConfigSection initial={splashCfg} logoFullUrl={logos.full} characterUrl={logos.character} />}
+      {!fetching && <SplashConfigSection initial={splashCfg} logoFullUrl={logos.full} characterUrl={logos.character} splashLogoHeight={sizes.splash} />}
+
+      {/* Auth Screen Design */}
+      {!fetching && <AuthConfigSection initial={authCfg} logoFullUrl={logos.full} logoAuthHeight={sizes.auth} />}
     </div>
   );
 }

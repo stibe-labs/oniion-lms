@@ -1,5 +1,7 @@
 'use client';
 import { createContext, useContext, useEffect, useState } from 'react';
+import type { AuthConfig } from '@/lib/auth-config';
+import { AUTH_CONFIG_DEFAULTS } from '@/lib/auth-config';
 
 interface PlatformContextType {
   platformName: string;
@@ -11,6 +13,7 @@ interface PlatformContextType {
   logoSplashHeight:  number;
   logoSidebarHeight: number;
   logoEmailHeight:   number;
+  authConfig: AuthConfig;
   setPlatformName:         (n: string) => void;
   setLogoSmallUrl:         (u: string | null) => void;
   setLogoFullUrl:          (u: string | null) => void;
@@ -20,6 +23,7 @@ interface PlatformContextType {
   setLogoSplashHeight:     (h: number) => void;
   setLogoSidebarHeight:    (h: number) => void;
   setLogoEmailHeight:      (h: number) => void;
+  setAuthConfig:           (c: AuthConfig) => void;
 }
 
 const PlatformContext = createContext<PlatformContextType>({
@@ -32,6 +36,7 @@ const PlatformContext = createContext<PlatformContextType>({
   logoSplashHeight:    36,
   logoSidebarHeight:   20,
   logoEmailHeight:     36,
+  authConfig:          { ...AUTH_CONFIG_DEFAULTS },
   setPlatformName:         () => {},
   setLogoSmallUrl:         () => {},
   setLogoFullUrl:          () => {},
@@ -41,6 +46,7 @@ const PlatformContext = createContext<PlatformContextType>({
   setLogoSplashHeight:     () => {},
   setLogoSidebarHeight:    () => {},
   setLogoEmailHeight:      () => {},
+  setAuthConfig:           () => {},
 });
 
 export function PlatformProvider({ children, initialName = 'Stibe' }: { children: React.ReactNode; initialName?: string }) {
@@ -53,6 +59,7 @@ export function PlatformProvider({ children, initialName = 'Stibe' }: { children
   const [logoSplashHeight,     setLogoSplashHeight]     = useState(36);
   const [logoSidebarHeight,    setLogoSidebarHeight]    = useState(20);
   const [logoEmailHeight,      setLogoEmailHeight]      = useState(36);
+  const [authConfig,           setAuthConfig]           = useState<AuthConfig>({ ...AUTH_CONFIG_DEFAULTS });
 
   useEffect(() => {
     fetch('/api/v1/platform/config')
@@ -67,6 +74,17 @@ export function PlatformProvider({ children, initialName = 'Stibe' }: { children
         if (d.logo_splash_height  > 0)          setLogoSplashHeight(d.logo_splash_height);
         if (d.logo_sidebar_height > 0)          setLogoSidebarHeight(d.logo_sidebar_height);
         if (d.logo_email_height   > 0)          setLogoEmailHeight(d.logo_email_height);
+        if (d.auth_template) {
+          setAuthConfig({
+            template:    d.auth_template    ?? 'classic',
+            accentColor: d.auth_accent_color ?? '#10b981',
+            bgColor:     d.auth_bg_color     ?? '#f0fdf4',
+            headline:    d.auth_headline     ?? 'Empowering every learner',
+            subheadline: d.auth_subheadline  ?? 'Sign in to continue learning',
+            showTagline: d.auth_show_tagline !== false,
+            bgPattern:   d.auth_bg_pattern   ?? 'dots',
+          });
+        }
       })
       .catch(() => {});
   }, []);
@@ -75,8 +93,10 @@ export function PlatformProvider({ children, initialName = 'Stibe' }: { children
     <PlatformContext.Provider value={{
       platformName, logoSmallUrl, logoFullUrl, faviconUrl, loadingCharacterUrl,
       logoAuthHeight, logoSplashHeight, logoSidebarHeight, logoEmailHeight,
+      authConfig,
       setPlatformName, setLogoSmallUrl, setLogoFullUrl, setFaviconUrl, setLoadingCharacterUrl,
       setLogoAuthHeight, setLogoSplashHeight, setLogoSidebarHeight, setLogoEmailHeight,
+      setAuthConfig,
     }}>
       {children}
     </PlatformContext.Provider>
@@ -88,3 +108,4 @@ export function usePlatformContext() { return useContext(PlatformContext); }
 export function useLogoSmall()       { return useContext(PlatformContext).logoSmallUrl; }
 export function useLogoFull()        { return useContext(PlatformContext).logoFullUrl; }
 export function useLoadingCharacter() { return useContext(PlatformContext).loadingCharacterUrl; }
+export function useAuthConfig()      { return useContext(PlatformContext).authConfig; }
