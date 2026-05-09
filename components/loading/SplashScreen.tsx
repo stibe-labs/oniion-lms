@@ -41,6 +41,13 @@ export default function SplashScreen({ children }: { children: React.ReactNode }
       return;
     }
 
+    // Skip if already shown in this browser session (e.g. page reload)
+    if (sessionStorage.getItem('splash_shown')) {
+      setPhase('done');
+      return;
+    }
+    sessionStorage.setItem('splash_shown', '1');
+
     setPhase('splash');
 
     // Animate progress from 0 → 100 over SPLASH_DURATION
