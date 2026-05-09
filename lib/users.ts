@@ -5,7 +5,7 @@
 // ═══════════════════════════════════════════════════════════════
 
 import { db } from '@/lib/db';
-import type { PortalUser, PortalRole } from '@/types';
+import type { PortalRole } from '@/types';
 
 // ── Types ───────────────────────────────────────────────────
 
@@ -25,7 +25,7 @@ export interface PortalUser {
 
 // ── Upsert on login ─────────────────────────────────────────
 
-export async function upsertUser(user: PortalUser): Promise<PortalUser> {
+export async function upsertUser(user: { id: string; name: string; role: PortalRole }): Promise<PortalUser> {
   const result = await db.query<PortalUser>(
     `INSERT INTO portal_users (email, full_name, portal_role, last_login_at)
      VALUES ($1, $2, $3, NOW())
