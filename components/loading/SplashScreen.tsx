@@ -21,6 +21,14 @@ export default function SplashScreen({ children }: { children: React.ReactNode }
   const [phase, setPhase] = useState<'init' | 'splash' | 'fading' | 'done'>('init');
   const [progress, setProgress] = useState(0);
   const progressRef = useRef<ReturnType<typeof setInterval>>(null);
+  const [logoUrl, setLogoUrl] = useState('/logo/full.png');
+
+  useEffect(() => {
+    fetch('/api/v1/platform/config')
+      .then(r => r.json())
+      .then(d => { if (d.logo_full_url) setLogoUrl(d.logo_full_url); })
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     // Skip splash on dashboard routes
@@ -78,7 +86,7 @@ export default function SplashScreen({ children }: { children: React.ReactNode }
 
           {/* Logo */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/logo/full.png" alt="Logo" className="splash-logo" />
+          <img src={logoUrl} alt="Logo" className="splash-logo" />
 
           {/* Tagline */}
           <p className="splash-tagline">
