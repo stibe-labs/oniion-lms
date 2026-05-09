@@ -18,7 +18,6 @@ export async function getBujiEnabled(): Promise<boolean> {
       "SELECT value FROM school_config WHERE key = 'buji_enabled'",
       []
     );
-    // Default true if not set
     return result.rows[0]?.value !== 'false';
   } catch {
     return true;
@@ -57,3 +56,57 @@ export async function getLogoConfig(): Promise<LogoConfig> {
     return { logoSmallUrl: null, logoFullUrl: null, faviconUrl: null, authHeight: 40, splashHeight: 36, sidebarHeight: 20, emailHeight: 36 };
   }
 }
+
+export type SplashTemplate     = 'classic' | 'minimal' | 'bold' | 'dark' | 'branded';
+export type SplashProgressStyle = 'bar' | 'dots' | 'ring' | 'pulse' | 'none';
+export type SplashLoadingAnim  = 'buji' | 'none';
+
+export interface SplashConfig {
+  template:      SplashTemplate;
+  progressStyle: SplashProgressStyle;
+  loadingAnim:   SplashLoadingAnim;
+  tagline:       string;
+  accentColor:   string;
+  bgColor:       string;
+  showQuotes:    boolean;
+  quotes:        string[];
+}
+
+export const SPLASH_CONFIG_DEFAULTS: SplashConfig = {
+  template:      'classic',
+  progressStyle: 'bar',
+  loadingAnim:   'buji',
+  tagline:       'Crafting Future',
+  accentColor:   '#10b981',
+  bgColor:       '#fafbfc',
+  showQuotes:    false,
+  quotes:        [],
+};
+
+export async function getSplashConfig(): Promise<SplashConfig> {
+  try {
+    const result = await db.query<{ key: string; value: string }>(
+      `SELECT key, value FROM school_config WHERE key IN (
+        'splash_template', 'splash_progress_style', 'splash_loading_anim',
+        'splash_tagline', 'splash_accent_color', 'splash_bg_color',
+        'splash_show_quotes', 'splash_quotes'
+      )`
+    );
+    const map = Object.fromEntries(result.rows.map(r => [r.key, r.value]));
+    let quotes: string[] = [];
+    try { quotes = JSON.parse(map['splash_quotes'] ?? '[]'); } catch {}
+    return {
+      template:      (map['splash_template']        ?? 'classic')     as SplashTemplate,
+      progressStyle: (map['splash_progress_style']  ?? 'bar')         as SplashProgressStyle,
+      loadingAnim:   (map['splash_loading_anim']    ?? 'buji')        as SplashLoadingAnim,
+      tagline:       map['splash_tagline']       ?? 'Crafting Future',
+      accentColor:   map['splash_accent_color']  ?? '#10b981',
+      bgColor:       map['splash_bg_color']      ?? '#fafbfc',
+      showQuotes:    map['splash_show_quotes'] === 'true',
+      quotes,
+    };
+  } catch {
+    return { ...SPLASH_CONFIG_DEFAULTS };
+  }
+}
+

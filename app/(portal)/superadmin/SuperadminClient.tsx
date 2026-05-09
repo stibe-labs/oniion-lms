@@ -7,6 +7,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Upload, X, ImageIcon } from 'lucide-react';
 import type { PortalUser } from '@/types';
+import type { SplashConfig } from '@/lib/platform-config';
+import { SPLASH_CONFIG_DEFAULTS } from '@/lib/platform-config';
+import SplashConfigSection from './SplashConfigSection';
 
 interface Props {
   user: PortalUser;
@@ -168,6 +171,7 @@ export default function SuperadminClient({ user: _user }: Props) {
   });
   const [sizes, setSizes] = useState({ auth: 40, splash: 36, sidebar: 20, email: 36 });
   const [sizesSaving, setSizesSaving] = useState(false);
+  const [splashCfg, setSplashCfg] = useState<SplashConfig>({ ...SPLASH_CONFIG_DEFAULTS });
 
   useEffect(() => {
     fetch('/api/v1/superadmin/settings')
@@ -186,6 +190,16 @@ export default function SuperadminClient({ user: _user }: Props) {
             splash:  d.data.logo_splash_height  ?? 36,
             sidebar: d.data.logo_sidebar_height ?? 20,
             email:   d.data.logo_email_height   ?? 36,
+          });
+          setSplashCfg({
+            template:      d.data.splash_template      ?? 'classic',
+            progressStyle: d.data.splash_progress_style ?? 'bar',
+            loadingAnim:   d.data.splash_loading_anim  ?? 'buji',
+            tagline:       d.data.splash_tagline        ?? 'Crafting Future',
+            accentColor:   d.data.splash_accent_color  ?? '#10b981',
+            bgColor:       d.data.splash_bg_color       ?? '#fafbfc',
+            showQuotes:    d.data.splash_show_quotes    ?? false,
+            quotes:        d.data.splash_quotes         ?? [],
           });
         }
       })
@@ -403,6 +417,9 @@ export default function SuperadminClient({ user: _user }: Props) {
           {sizesSaving ? 'Saving…' : 'Save Sizes'}
         </Button>
       </div>
+
+      {/* Splash Screen Design */}
+      {!fetching && <SplashConfigSection initial={splashCfg} logoFullUrl={logos.full} />}
     </div>
   );
 }
