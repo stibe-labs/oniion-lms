@@ -93,6 +93,7 @@ interface Props {
   userEmail: string;
   userRole: string;
   permissions?: Record<string, boolean>;
+  bujiEnabled?: boolean;
 }
 
 // ── Batch & Attendance Types ───────────────────────────────────
@@ -1693,7 +1694,7 @@ function MobileBottomNav({
 
 // ── Main Dashboard Component ───────────────────────────────────
 
-export default function StudentDashboardClient({ userName, userEmail, userRole, permissions }: Props) {
+export default function StudentDashboardClient({ userName, userEmail, userRole, permissions, bujiEnabled = true }: Props) {
   const platformName = usePlatformName();
   const router = useRouter();
 
@@ -2375,7 +2376,7 @@ export default function StudentDashboardClient({ userName, userEmail, userRole, 
       />
 
       {/* Buji AI Chatbot */}
-      <BujiChatbot userEmail={userEmail} userName={userName} userContext={bujiContext} />
+      <BujiChatbot userEmail={userEmail} userName={userName} userContext={bujiContext} enabled={bujiEnabled} />
     </DashboardShell>
   );
 }

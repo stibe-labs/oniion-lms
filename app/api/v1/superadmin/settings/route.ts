@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { verifyAuth } from '@/lib/auth';
-import { getPlatformName } from '@/lib/platform-config';
+import { getPlatformName, getBujiEnabled } from '@/lib/platform-config';
 
 export async function GET(req: NextRequest) {
   const user = await verifyAuth(req);
@@ -9,8 +9,11 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ success: false, error: 'Forbidden' }, { status: 403 });
   }
 
-  const platformName = await getPlatformName();
-  return NextResponse.json({ success: true, data: { platform_name: platformName } });
+  const [platformName, bujiEnabled] = await Promise.all([
+    getPlatformName(),
+    getBujiEnabled(),
+  ]);
+  return NextResponse.json({ success: true, data: { platform_name: platformName, buji_enabled: bujiEnabled } });
 }
 
 export async function PUT(req: NextRequest) {
@@ -20,17 +23,33 @@ export async function PUT(req: NextRequest) {
   }
 
   const body = await req.json();
-  const platformName = (body.platform_name ?? '').trim();
-  if (!platformName) {
-    return NextResponse.json({ success: false, error: 'platform_name is required' }, { status: 400 });
+
+  if ('platform_name' in body) {
+    const platformName = (body.platform_name ?? '').trim();
+    if (!platformName) {
+      return NextResponse.json({ success: false, error: 'platform_name is required' }, { status: 400 });
+    }
+    await db.query(
+      `INSERT INTO school_config (key, value, description)
+       VALUES ('platform_name', $1, 'Platform display name shown across the UI')
+       ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`,
+      [platformName]
+    );
   }
 
-  await db.query(
-    `INSERT INTO school_config (key, value, description)
-     VALUES ('platform_name', $1, 'Platform display name shown across the UI')
-     ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`,
-    [platformName]
-  );
+  if ('buji_enabled' in body) {
+    await db.query(
+      `INSERT INTO school_config (key, value, description)
+       VALUES ('buji_enabled', $1, 'Whether the Buji AI chatbot is shown to students')
+       ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`,
+      [body.buji_enabled ? 'true' : 'false']
+    );
+  }
 
-  return NextResponse.json({ success: true, data: { platform_name: platformName } });
+  const [platformName, bujiEnabled] = await Promise.all([
+    getPlatformName(),
+    getBujiEnabled(),
+  ]);
+  return NextResponse.json({ success: true, data: { platform_name: platformName, buji_enabled: bujiEnabled } });
 }
+

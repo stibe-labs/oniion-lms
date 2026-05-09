@@ -4,6 +4,7 @@ import { verifySession, COOKIE_NAME } from '@/lib/session';
 import LoginForm from '@/components/auth/LoginForm';
 import LoginSlideshow from '@/components/auth/LoginSlideshow';
 import BujiChatbot from '@/components/auth/BujiChatbot';
+import { getBujiEnabled } from '@/lib/platform-config';
 
 export default async function LoginPage() {
   const cookieStore = await cookies();
@@ -13,6 +14,8 @@ export default async function LoginPage() {
     const user = await verifySession(token);
     if (user) redirect('/batch-coordinator');
   }
+
+  const bujiEnabled = await getBujiEnabled();
 
   return (
     <main className="relative h-screen w-screen overflow-hidden bg-white sm:bg-black">
@@ -43,7 +46,7 @@ export default async function LoginPage() {
       </div>
 
       {/* ── Buji AI Chatbot ── */}
-      <BujiChatbot />
+      <BujiChatbot enabled={bujiEnabled} />
     </main>
   );
 }

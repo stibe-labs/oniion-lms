@@ -171,9 +171,10 @@ interface BujiProps {
   userEmail?: string;
   userName?: string;
   userContext?: string;
+  enabled?: boolean;
 }
 
-export default function BujiChatbot({ userEmail, userName, userContext }: BujiProps = {}) {
+export default function BujiChatbot({ userEmail, userName, userContext, enabled = true }: BujiProps = {}) {
   const platformName = usePlatformName();
   const storageKey = getStorageKey(userEmail);
   const [isOpen, setIsOpen] = useState(false);
@@ -540,6 +541,8 @@ export default function BujiChatbot({ userEmail, userName, userContext }: BujiPr
   const chatWindowClass = isFullscreen
     ? 'fixed inset-0 z-50 flex flex-col overflow-hidden bg-gray-950'
     : 'fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 w-[calc(100vw-2rem)] sm:w-[400px] h-[min(600px,calc(100vh-3rem))] flex flex-col rounded-2xl overflow-hidden bg-gray-950';
+
+  if (!enabled) return null;
 
   return (
     <>
