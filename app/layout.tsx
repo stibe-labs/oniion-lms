@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import ClientOverlays from "@/components/ui/ClientOverlays";
 import SplashScreen from "@/components/loading/SplashScreen";
 import RootProviders from "@/app/root-providers";
-import { getPlatformName } from "@/lib/platform-config";
+import { getPlatformName, getLogoConfig } from "@/lib/platform-config";
 import "./globals.css";
 import "katex/dist/katex.min.css";
 
@@ -18,13 +18,14 @@ const geistMono = Geist_Mono({
 });
 
 export async function generateMetadata(): Promise<Metadata> {
-  const platformName = await getPlatformName();
+  const [platformName, logos] = await Promise.all([getPlatformName(), getLogoConfig()]);
+  const favicon = logos.faviconUrl ?? logos.logoSmallUrl ?? '/logo/main.png';
   return {
     title: `${platformName} Portal`,
     description: `${platformName} Online Classroom Portal — Live sessions, whiteboard, and real-time collaboration`,
     icons: {
-      icon: '/logo/main.png',
-      apple: '/logo/main.png',
+      icon: favicon,
+      apple: favicon,
     },
     appleWebApp: {
       capable: true,

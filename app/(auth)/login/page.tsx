@@ -4,7 +4,7 @@ import { verifySession, COOKIE_NAME } from '@/lib/session';
 import LoginForm from '@/components/auth/LoginForm';
 import LoginSlideshow from '@/components/auth/LoginSlideshow';
 import BujiChatbot from '@/components/auth/BujiChatbot';
-import { getBujiEnabled } from '@/lib/platform-config';
+import { getBujiEnabled, getLogoConfig } from '@/lib/platform-config';
 
 export default async function LoginPage() {
   const cookieStore = await cookies();
@@ -15,7 +15,8 @@ export default async function LoginPage() {
     if (user) redirect('/batch-coordinator');
   }
 
-  const bujiEnabled = await getBujiEnabled();
+  const [bujiEnabled, logos] = await Promise.all([getBujiEnabled(), getLogoConfig()]);
+  const logoSrc = logos.logoFullUrl ?? logos.logoSmallUrl ?? '/logo/full.png';
 
   return (
     <main className="relative h-screen w-screen overflow-hidden bg-white sm:bg-black">
@@ -24,7 +25,7 @@ export default async function LoginPage() {
 
       {/* ── Logo — top-left on desktop ── */}
       <div className="absolute top-6 left-8 z-40 hidden sm:block">
-        <img src="/logo/full.png" alt="Logo" className="h-10 object-contain drop-shadow-lg" />
+        <img src={logoSrc} alt="Logo" className="h-10 object-contain drop-shadow-lg" />
       </div>
 
       {/* ── Fullscreen image slideshow — desktop only ── */}

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { verifyAuth } from '@/lib/auth';
-import { getPlatformName, getBujiEnabled } from '@/lib/platform-config';
+import { getPlatformName, getBujiEnabled, getLogoConfig } from '@/lib/platform-config';
 
 export async function GET(req: NextRequest) {
   const user = await verifyAuth(req);
@@ -9,11 +9,21 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ success: false, error: 'Forbidden' }, { status: 403 });
   }
 
-  const [platformName, bujiEnabled] = await Promise.all([
+  const [platformName, bujiEnabled, logos] = await Promise.all([
     getPlatformName(),
     getBujiEnabled(),
+    getLogoConfig(),
   ]);
-  return NextResponse.json({ success: true, data: { platform_name: platformName, buji_enabled: bujiEnabled } });
+  return NextResponse.json({
+    success: true,
+    data: {
+      platform_name: platformName,
+      buji_enabled: bujiEnabled,
+      logo_small_url: logos.logoSmallUrl,
+      logo_full_url:  logos.logoFullUrl,
+      favicon_url:    logos.faviconUrl,
+    },
+  });
 }
 
 export async function PUT(req: NextRequest) {
@@ -46,10 +56,20 @@ export async function PUT(req: NextRequest) {
     );
   }
 
-  const [platformName, bujiEnabled] = await Promise.all([
+  const [platformName, bujiEnabled, logos] = await Promise.all([
     getPlatformName(),
     getBujiEnabled(),
+    getLogoConfig(),
   ]);
-  return NextResponse.json({ success: true, data: { platform_name: platformName, buji_enabled: bujiEnabled } });
+  return NextResponse.json({
+    success: true,
+    data: {
+      platform_name: platformName,
+      buji_enabled: bujiEnabled,
+      logo_small_url: logos.logoSmallUrl,
+      logo_full_url:  logos.logoFullUrl,
+      favicon_url:    logos.faviconUrl,
+    },
+  });
 }
 

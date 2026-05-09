@@ -24,3 +24,25 @@ export async function getBujiEnabled(): Promise<boolean> {
     return true;
   }
 }
+
+export interface LogoConfig {
+  logoSmallUrl: string | null;
+  logoFullUrl: string | null;
+  faviconUrl: string | null;
+}
+
+export async function getLogoConfig(): Promise<LogoConfig> {
+  try {
+    const result = await db.query<{ key: string; value: string }>(
+      `SELECT key, value FROM school_config WHERE key IN ('logo_small_url', 'logo_full_url', 'favicon_url')`
+    );
+    const map = Object.fromEntries(result.rows.map(r => [r.key, r.value]));
+    return {
+      logoSmallUrl: map['logo_small_url'] ?? null,
+      logoFullUrl:  map['logo_full_url']  ?? null,
+      faviconUrl:   map['favicon_url']    ?? null,
+    };
+  } catch {
+    return { logoSmallUrl: null, logoFullUrl: null, faviconUrl: null };
+  }
+}
