@@ -10,7 +10,7 @@ import { useEffect, useState, useCallback, useRef } from 'react';
 import {
   AlertTriangle, CheckCircle2, Loader2, Trophy, Target, XCircle,
 } from 'lucide-react';
-import { usePlatformName } from '@/components/providers/PlatformProvider';
+import { usePlatformName, useLoadingCharacter } from '@/components/providers/PlatformProvider';
 
 const QUESTION_TIME = 30;
 const ADVANCE_DELAY = 600;
@@ -69,6 +69,7 @@ interface Props {
 
 export default function DemoExamClient({ demoRequestId }: Props) {
   const platformName = usePlatformName();
+  const characterUrl = useLoadingCharacter();
   const [exam, setExam] = useState<ExamData | null>(null);
   const [answers, setAnswers] = useState<AnswerRecord[]>([]);
   const [currentQ, setCurrentQ] = useState(0);
@@ -205,8 +206,12 @@ export default function DemoExamClient({ demoRequestId }: Props) {
     return (
       <div className="min-h-screen bg-[#1a1a2e] flex items-center justify-center">
         <div className="text-center">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/buji/4 second thinking.gif" alt="Loading" width={100} className="mx-auto mb-3" style={{ objectFit: 'contain' }} />
+          {characterUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={characterUrl} alt="" width={100} className="mx-auto mb-3" style={{ objectFit: 'contain' }} />
+          ) : (
+            <Loader2 className="h-12 w-12 animate-spin text-teal-400/60 mx-auto mb-3" />
+          )}
           <p className="text-sm text-teal-200/60">Loading your demo exam…</p>
         </div>
       </div>
@@ -290,8 +295,12 @@ export default function DemoExamClient({ demoRequestId }: Props) {
     return (
       <div className="min-h-screen bg-[#1a1a2e] flex items-center justify-center">
         <div className="text-center">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/buji/4 second thinking.gif" alt="Grading" width={120} className="mx-auto mb-4" style={{ objectFit: 'contain' }} />
+          {characterUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={characterUrl} alt="" width={120} className="mx-auto mb-4" style={{ objectFit: 'contain' }} />
+          ) : (
+            <Loader2 className="h-12 w-12 animate-spin text-teal-400/60 mx-auto mb-4" />
+          )}
           <p className="text-sm text-white font-medium">Grading your exam…</p>
           <p className="text-xs text-gray-400 mt-1">This will only take a moment</p>
         </div>

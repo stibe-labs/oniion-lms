@@ -2,7 +2,7 @@
 
 export type SplashTemplate     = 'classic' | 'minimal' | 'bold' | 'dark' | 'branded';
 export type SplashProgressStyle = 'bar' | 'dots' | 'ring' | 'pulse' | 'wave' | 'none';
-export type SplashLoadingAnim  = 'buji' | 'none';
+export type SplashLoadingAnim  = 'character' | 'none';
 
 export interface SplashConfig {
   template:      SplashTemplate;
@@ -18,7 +18,7 @@ export interface SplashConfig {
 export const SPLASH_CONFIG_DEFAULTS: SplashConfig = {
   template:      'classic',
   progressStyle: 'bar',
-  loadingAnim:   'buji',
+  loadingAnim:   'character',
   tagline:       'Crafting Future',
   accentColor:   '#10b981',
   bgColor:       '#fafbfc',

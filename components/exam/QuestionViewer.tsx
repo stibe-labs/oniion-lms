@@ -6,6 +6,7 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useLoadingCharacter } from '@/components/providers/PlatformProvider';
 import {
   X, ChevronLeft, ChevronRight, Check, Lightbulb, Loader2,
   BarChart3, Image, ZoomIn, ZoomOut,
@@ -30,6 +31,7 @@ interface Props {
 }
 
 export default function QuestionViewer({ questions, onClose, topicTitle }: Props) {
+  const characterUrl = useLoadingCharacter();
   const [current, setCurrent] = useState(0);
   const [showSteps, setShowSteps] = useState(false);
   const [steps, setSteps] = useState<Record<string, string>>({});
@@ -276,8 +278,12 @@ export default function QuestionViewer({ questions, onClose, topicTitle }: Props
                 <div className="mt-3 rounded-xl bg-gray-900/80 border border-gray-800 p-5 space-y-3">
                   {loadingSteps === q.id ? (
                     <div className="flex flex-col items-center gap-2 text-gray-400 text-sm py-4 justify-center">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src="/buji/4 second thinking.gif" alt="Thinking" width={64} style={{ objectFit: 'contain' }} />
+                      {characterUrl ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={characterUrl} alt="" width={64} style={{ objectFit: 'contain' }} />
+                      ) : (
+                        <Loader2 className="h-8 w-8 animate-spin text-amber-400/60" />
+                      )}
                       Generating solution steps...
                     </div>
                   ) : steps[q.id] ? (

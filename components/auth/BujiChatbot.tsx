@@ -2,31 +2,13 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { Send, X, Maximize2, Shrink, Paperclip, FileText, Plus, MessageSquare, Trash2, Menu } from 'lucide-react';
-import { usePlatformName } from '@/components/providers/PlatformProvider';
+import { usePlatformName, useLoadingCharacter } from '@/components/providers/PlatformProvider';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 
-// ── Buji animation paths (APNG for true alpha transparency) ──
-const BUJI = {
-  idle: '/buji/3 second resting.png',
-  thinking: '/buji/4 second thinking.png',
-  thinkingShort: '/buji/4 second thinking last2s.png',
-  celebration: '/buji/1 second loading celebration.png',
-  reading: '/buji/8 second reading.png',
-};
-
-// Shuffled button animations — cycles through with crossfade (>4s only)
-const BUJI_SHUFFLE = [
-  '/buji/8 second reading.png',
-  '/buji/5 second fly.png',
-  '/buji/5 second upside doown animation.png',
-  '/buji/6 second reading and running.png',
-];
-
-// Duration (ms) each animation plays before crossfading to next
-const SHUFFLE_DURATIONS = [8000, 5000, 5000, 6000];
+// ── Chat state types ──────────────────────────────────────────────────────────
 
 type BujiState = 'idle' | 'thinking' | 'celebration';
 
@@ -176,6 +158,7 @@ interface BujiProps {
 
 export default function BujiChatbot({ userEmail, userName, userContext, enabled = true }: BujiProps = {}) {
   const platformName = usePlatformName();
+  const characterUrl = useLoadingCharacter();
   const storageKey = getStorageKey(userEmail);
   const [isOpen, setIsOpen] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -188,13 +171,10 @@ export default function BujiChatbot({ userEmail, userName, userContext, enabled 
   const [badgeIndex, setBadgeIndex] = useState(0);
   const [badgeVisible, setBadgeVisible] = useState(true);
   const [badgePhase, setBadgePhase] = useState<'text' | 'dots'>('text');
-  const [shuffleIndex, setShuffleIndex] = useState(0);
-  const [shuffleFading, setShuffleFading] = useState(false);
   const [typingMsgIndex, setTypingMsgIndex] = useState<number | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const celebrationTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const shuffleTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [pendingFile, setPendingFile] = useState<File | null>(null);
   const [pendingPreview, setPendingPreview] = useState<string | null>(null);
@@ -300,26 +280,8 @@ export default function BujiChatbot({ userEmail, userName, userContext, enabled 
   useEffect(() => {
     return () => {
       if (celebrationTimer.current) clearTimeout(celebrationTimer.current);
-      if (shuffleTimer.current) clearTimeout(shuffleTimer.current);
     };
   }, []);
-
-  // Shuffle animation with crossfade — runs for both button and header
-  useEffect(() => {
-    const scheduleNext = () => {
-      shuffleTimer.current = setTimeout(() => {
-        setShuffleFading(true);
-        setTimeout(() => {
-          setShuffleIndex((prev) => (prev + 1) % BUJI_SHUFFLE.length);
-          setShuffleFading(false);
-        }, 400);
-      }, SHUFFLE_DURATIONS[shuffleIndex]);
-    };
-    scheduleNext();
-    return () => {
-      if (shuffleTimer.current) clearTimeout(shuffleTimer.current);
-    };
-  }, [shuffleIndex]);
 
   // Badge message rotation
   useEffect(() => {
@@ -534,7 +496,6 @@ export default function BujiChatbot({ userEmail, userName, userContext, enabled 
     }
   }
 
-  const headerGif = BUJI_SHUFFLE[shuffleIndex];
   const grouped = groupConversations(conversations);
   const hasHistory = conversations.length > 0;
 
@@ -588,13 +549,14 @@ export default function BujiChatbot({ userEmail, userName, userContext, enabled 
             <div className="absolute inset-0 rounded-full bg-emerald-400/0 group-hover:bg-emerald-400/10 transition-all duration-500 scale-110 blur-xl pointer-events-none" />
             <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-20 h-4 bg-black/10 dark:bg-emerald-400/10 rounded-full blur-lg group-hover:w-24 group-hover:bg-emerald-400/15 transition-all duration-300" />
             <div className="relative w-28 h-28 sm:w-36 sm:h-36 group-hover:scale-115 group-active:scale-90 transition-transform duration-300 ease-out drop-shadow-[0_6px_20px_rgba(16,185,129,0.3)] group-hover:drop-shadow-[0_8px_30px_rgba(16,185,129,0.5)]">
-              <img
-                src={BUJI_SHUFFLE[shuffleIndex]}
-                alt="Buji"
-                className="w-full h-full object-contain transition-opacity duration-400 ease-in-out"
-                style={{ opacity: shuffleFading ? 0 : 1 }}
-                loading="eager"
-              />
+              {characterUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={characterUrl} alt="AI Assistant" className="w-full h-full object-contain" loading="eager" />
+              ) : (
+                <div className="w-full h-full rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center">
+                  <span className="text-white text-4xl font-bold">AI</span>
+                </div>
+              )}
               {/* Demo badge on the floating button */}
               <span className="absolute -top-1 -right-1 rounded-full bg-amber-400 px-1.5 py-0.5 text-[9px] font-black uppercase tracking-wider text-amber-900 shadow-md shadow-amber-400/40 ring-2 ring-gray-950/60">DEMO</span>
             </div>
@@ -623,10 +585,15 @@ export default function BujiChatbot({ userEmail, userName, userContext, enabled 
             <div className={`absolute top-0 left-0 bottom-0 w-[280px] max-w-[80%] bg-gradient-to-b from-emerald-950 via-gray-950 to-gray-950 border-r border-emerald-500/20 flex flex-col shadow-2xl shadow-black/60 transition-transform duration-300 ease-out ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
               <div className="flex items-center justify-between px-4 py-3 border-b border-emerald-500/15 shrink-0">
                 <div className="flex items-center gap-2">
-                  <div className="w-7 h-7 rounded-full overflow-hidden border border-emerald-400/30 bg-emerald-950">
-                    <img src={BUJI.idle} alt="Buji" className="w-full h-full object-cover" />
+                  <div className="w-7 h-7 rounded-full overflow-hidden border border-emerald-400/30 bg-emerald-950 flex items-center justify-center">
+                    {characterUrl ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={characterUrl} alt="" className="w-full h-full object-cover" />
+                    ) : (
+                      <span className="text-emerald-400 text-[10px] font-bold">AI</span>
+                    )}
                   </div>
-                  <span className="text-sm font-semibold text-white">Buji</span>
+                  <span className="text-sm font-semibold text-white">AI Assistant</span>
                 </div>
                 <button
                   onClick={() => setSidebarOpen(false)}
@@ -703,17 +670,17 @@ export default function BujiChatbot({ userEmail, userName, userContext, enabled 
             >
               <Menu className="w-5 h-5" />
             </button>
-            <div className="w-9 h-9 rounded-full overflow-hidden border border-emerald-400/40 bg-emerald-950 shrink-0">
-              <img
-                src={headerGif}
-                alt="Buji"
-                className="w-full h-full object-cover transition-opacity duration-400"
-                style={{ opacity: shuffleFading ? 0 : 1 }}
-              />
+            <div className="w-9 h-9 rounded-full overflow-hidden border border-emerald-400/40 bg-emerald-950 shrink-0 flex items-center justify-center">
+              {characterUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={characterUrl} alt="" className="w-full h-full object-cover" />
+              ) : (
+                <span className="text-emerald-400 text-xs font-bold">AI</span>
+              )}
             </div>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2">
-                <h3 className="text-sm font-semibold text-white leading-tight">Buji</h3>
+                <h3 className="text-sm font-semibold text-white leading-tight">AI Assistant</h3>
                 <span className="inline-flex items-center rounded-full bg-amber-400/20 border border-amber-400/40 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-amber-300">Demo</span>
               </div>
               <p className="text-[11px] text-emerald-300/70 flex items-center gap-1.5">
@@ -765,12 +732,13 @@ export default function BujiChatbot({ userEmail, userName, userContext, enabled 
                 {/* Welcome message */}
                 {messages.length === 0 && (
                   <div className="flex flex-col items-center justify-center h-full text-center px-4 animate-fade-in">
-                    <div className="w-28 h-28 rounded-2xl overflow-hidden mb-4 border border-emerald-500/20 shadow-lg shadow-emerald-500/10 bg-emerald-950/50">
-                      <img
-                        src={BUJI.reading}
-                        alt="Buji reading"
-                        className="w-full h-full object-cover"
-                      />
+                    <div className="w-28 h-28 rounded-2xl overflow-hidden mb-4 border border-emerald-500/20 shadow-lg shadow-emerald-500/10 bg-emerald-950/50 flex items-center justify-center">
+                      {characterUrl ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={characterUrl} alt="" className="w-full h-full object-cover" />
+                      ) : (
+                        <span className="text-emerald-400 text-3xl font-bold">AI</span>
+                      )}
                     </div>
                     <h4 className="text-lg font-semibold text-white mb-1.5">{userName ? `Hi ${userName.split(' ')[0]}! 👋` : "Hi, I'm Buji! 👋"}</h4>
                     <p className="text-sm text-emerald-200/60 mb-5 max-w-[280px]">
@@ -834,12 +802,13 @@ export default function BujiChatbot({ userEmail, userName, userContext, enabled 
                   >
                     {/* Buji avatar — shows last-2s thinking during typewriter */}
                     {msg.role === 'assistant' && (
-                      <div className="w-7 h-7 rounded-full overflow-hidden border border-emerald-500/30 shrink-0 mt-0.5 bg-emerald-950">
-                        <img
-                          src={i === typingMsgIndex ? BUJI.thinkingShort : BUJI.idle}
-                          alt="Buji"
-                          className="w-full h-full object-cover"
-                        />
+                      <div className="w-7 h-7 rounded-full overflow-hidden border border-emerald-500/30 shrink-0 mt-0.5 bg-emerald-950 flex items-center justify-center">
+                        {characterUrl ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img src={characterUrl} alt="" className="w-full h-full object-cover" />
+                        ) : (
+                          <span className="text-emerald-400 text-[9px] font-bold">AI</span>
+                        )}
                       </div>
                     )}
                     <div
@@ -879,12 +848,13 @@ export default function BujiChatbot({ userEmail, userName, userContext, enabled 
                 {/* Typing indicator — bouncing dots while waiting for API */}
                 {loading && (
                   <div className="flex gap-2.5 justify-start animate-message-in">
-                    <div className="w-7 h-7 rounded-full overflow-hidden border border-emerald-500/30 shrink-0 mt-0.5 bg-emerald-950">
-                      <img
-                        src={BUJI.thinking}
-                        alt="Buji thinking"
-                        className="w-full h-full object-cover"
-                      />
+                    <div className="w-7 h-7 rounded-full overflow-hidden border border-emerald-500/30 shrink-0 mt-0.5 bg-emerald-950 flex items-center justify-center">
+                      {characterUrl ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={characterUrl} alt="" className="w-full h-full object-cover" />
+                      ) : (
+                        <span className="text-emerald-400 text-[9px] font-bold">AI</span>
+                      )}
                     </div>
                     <div className="px-4 py-3 rounded-2xl rounded-bl-md bg-white/8 border border-white/5">
                       <div className="flex gap-1.5">

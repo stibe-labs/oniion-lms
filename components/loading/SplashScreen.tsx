@@ -115,16 +115,17 @@ type TemplateProps = {
   logoUrl: string;
   logoHeight: number;
   displayText: string;
+  characterUrl: string | null;
 };
 
-/** Classic — white bg, Buji GIF, logo, tagline, progress */
-function ClassicTemplate({ cfg, progress, logoUrl, logoHeight, displayText }: TemplateProps) {
+/** Classic — white bg, character, logo, tagline, progress */
+function ClassicTemplate({ cfg, progress, logoUrl, logoHeight, displayText, characterUrl }: TemplateProps) {
   const accent = cfg.accentColor;
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14 }}>
-      {cfg.loadingAnim === 'buji' && (
+      {cfg.loadingAnim === 'character' && characterUrl && (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src="/buji/4 second thinking.gif" alt="" style={{ width: 160, height: 'auto', objectFit: 'contain', pointerEvents: 'none' }} />
+        <img src={characterUrl} alt="" style={{ width: 160, height: 'auto', objectFit: 'contain', pointerEvents: 'none' }} />
       )}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={logoUrl} alt="Logo" style={{ height: logoHeight, width: 'auto', objectFit: 'contain', pointerEvents: 'none' }} />
@@ -161,7 +162,6 @@ function BoldTemplate({ cfg, progress, logoUrl, logoHeight, displayText }: Templ
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20 }}>
       <div style={{ position: 'relative' }}>
-        {/* glow behind logo */}
         <div style={{ position: 'absolute', inset: -20, background: 'rgba(255,255,255,0.15)', borderRadius: '50%', filter: 'blur(24px)' }} />
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={logoUrl} alt="Logo" style={{ height: logoHeight * 1.6, width: 'auto', objectFit: 'contain', position: 'relative', filter: 'drop-shadow(0 4px 24px rgba(0,0,0,0.2))', animation: 'splashScale 0.5s cubic-bezier(.22,1,.36,1) forwards' }} />
@@ -176,13 +176,13 @@ function BoldTemplate({ cfg, progress, logoUrl, logoHeight, displayText }: Templ
 }
 
 /** Dark — dark #0f172a background, glowing accent elements */
-function DarkTemplate({ cfg, progress, logoUrl, logoHeight, displayText }: TemplateProps) {
+function DarkTemplate({ cfg, progress, logoUrl, logoHeight, displayText, characterUrl }: TemplateProps) {
   const accent = cfg.accentColor;
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20 }}>
-      {cfg.loadingAnim === 'buji' && (
+      {cfg.loadingAnim === 'character' && characterUrl && (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src="/buji/4 second thinking.gif" alt="" style={{ width: 130, height: 'auto', objectFit: 'contain', opacity: 0.9 }} />
+        <img src={characterUrl} alt="" style={{ width: 130, height: 'auto', objectFit: 'contain', opacity: 0.9 }} />
       )}
       <div style={{ position: 'relative' }}>
         <div style={{ position: 'absolute', inset: -16, background: accent, opacity: 0.15, borderRadius: '50%', filter: 'blur(20px)', animation: 'splashPulseGlow 2s ease-in-out infinite alternate' }} />
@@ -211,11 +211,11 @@ function BrandedTemplate({ cfg, progress, logoUrl, logoHeight, displayText }: Te
 
 function SplashTemplate(props: TemplateProps) {
   switch (props.cfg.template) {
-    case 'minimal':  return <MinimalTemplate {...props} />;
-    case 'bold':     return <BoldTemplate    {...props} />;
-    case 'dark':     return <DarkTemplate    {...props} />;
-    case 'branded':  return <BrandedTemplate {...props} />;
-    default:         return <ClassicTemplate {...props} />;
+    case 'minimal':  return <MinimalTemplate  {...props} />;
+    case 'bold':     return <BoldTemplate     {...props} />;
+    case 'dark':     return <DarkTemplate     {...props} />;
+    case 'branded':  return <BrandedTemplate  {...props} />;
+    default:         return <ClassicTemplate  {...props} />;
   }
 }
 
@@ -240,8 +240,9 @@ export default function SplashScreen({ children }: { children: React.ReactNode }
   const progressRef               = useRef<ReturnType<typeof setInterval>>(null);
   const [logoUrl, setLogoUrl]     = useState('/logo/full.png');
   const [logoHeight, setLogoHeight] = useState(36);
+  const [characterUrl, setCharacterUrl] = useState<string | null>(null);
   const [cfg, setCfg]             = useState<SplashConfig>({
-    template: 'classic', progressStyle: 'bar', loadingAnim: 'buji',
+    template: 'classic', progressStyle: 'bar', loadingAnim: 'character',
     tagline: 'Crafting Future', accentColor: '#10b981', bgColor: '#fafbfc',
     showQuotes: false, quotes: [],
   });
@@ -252,12 +253,13 @@ export default function SplashScreen({ children }: { children: React.ReactNode }
     fetch('/api/v1/platform/config')
       .then(r => r.json())
       .then(d => {
-        if (d.logo_full_url)      setLogoUrl(d.logo_full_url);
-        if (d.logo_splash_height) setLogoHeight(d.logo_splash_height);
+        if (d.logo_full_url)           setLogoUrl(d.logo_full_url);
+        if (d.logo_splash_height)      setLogoHeight(d.logo_splash_height);
+        if (d.loading_character_url)   setCharacterUrl(d.loading_character_url);
         const splashCfg: SplashConfig = {
           template:      d.splash_template      ?? 'classic',
           progressStyle: d.splash_progress_style ?? 'bar',
-          loadingAnim:   d.splash_loading_anim  ?? 'buji',
+          loadingAnim:   (d.splash_loading_anim === 'buji' ? 'character' : (d.splash_loading_anim ?? 'character')),
           tagline:       d.splash_tagline        ?? 'Crafting Future',
           accentColor:   d.splash_accent_color  ?? '#10b981',
           bgColor:       d.splash_bg_color       ?? '#fafbfc',
@@ -265,7 +267,6 @@ export default function SplashScreen({ children }: { children: React.ReactNode }
           quotes:        d.splash_quotes         ?? [],
         };
         setCfg(splashCfg);
-        // Pick display text
         if (splashCfg.showQuotes && splashCfg.quotes.length > 0) {
           setDisplayText(splashCfg.quotes[Math.floor(Math.random() * splashCfg.quotes.length)]);
         } else {
@@ -316,7 +317,7 @@ export default function SplashScreen({ children }: { children: React.ReactNode }
         transition: `opacity ${FADE_DURATION}ms cubic-bezier(.4,0,0,1)`,
         opacity: phase === 'fading' ? 0 : 1,
       }}>
-        <SplashTemplate cfg={cfg} progress={progress} logoUrl={logoUrl} logoHeight={logoHeight} displayText={displayText} />
+        <SplashTemplate cfg={cfg} progress={progress} logoUrl={logoUrl} logoHeight={logoHeight} displayText={displayText} characterUrl={characterUrl} />
       </div>
     </>
   );

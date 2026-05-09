@@ -20,6 +20,7 @@ export async function GET(req: NextRequest) {
       logo_small_url:       logos.logoSmallUrl,
       logo_full_url:        logos.logoFullUrl,
       favicon_url:          logos.faviconUrl,
+      loading_character_url: logos.loadingCharacterUrl,
       logo_auth_height:     logos.authHeight,
       logo_splash_height:   logos.splashHeight,
       logo_sidebar_height:  logos.sidebarHeight,

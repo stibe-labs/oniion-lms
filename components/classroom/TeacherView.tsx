@@ -30,6 +30,7 @@ import { useAINotifications } from '@/hooks/useAINotifications';
 import { cn } from '@/lib/utils';
 import { useAttentionMonitor, ATTENTION_TOPIC, type AttentionMessage, type AttentionData, type MonitorConfig } from '@/hooks/useAttentionMonitor';
 import { sfxHandRaise, sfxHandLower, sfxParticipantJoin, sfxParticipantLeave, sfxMediaRequest, sfxMediaControl, sfxTabSwitch, hapticTap } from '@/lib/sounds';
+import { useLoadingCharacter } from '@/components/providers/PlatformProvider';
 
 /**
  * TeacherView — Google Meet-style teacher classroom.
@@ -83,6 +84,7 @@ export default function TeacherView({
   onTimeExpired,
   onDurationUpdate,
 }: TeacherViewProps) {
+  const characterUrl = useLoadingCharacter();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [sidebarTab, setSidebarTab] = useState<'chat' | 'homework' | 'participants' | 'attendance' | 'monitoring' | 'exam_results' | 'approvals'>('approvals');
   const [showMaterialsOverlay, setShowMaterialsOverlay] = useState(false);
@@ -4226,8 +4228,12 @@ export default function TeacherView({
                   const ss = genElapsed % 60;
                   return (
                     <div className="py-4 space-y-4">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src="/buji/4 second thinking.gif" alt="Thinking" width={80} className="mx-auto" style={{ objectFit: 'contain' }} />
+                      {characterUrl ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={characterUrl} alt="" width={80} className="mx-auto" style={{ objectFit: 'contain' }} />
+                      ) : (
+                        <div className="w-10 h-10 mx-auto rounded-full border-2 border-teal-500/40 border-t-teal-400 animate-spin" />
+                      )}
                       <div className="flex items-center justify-between">
                         <p className="text-sm font-medium text-[#e8eaed]">Generating Questions…</p>
                         <span className="text-xs font-mono text-teal-400">{mm}:{ss.toString().padStart(2, '0')}</span>

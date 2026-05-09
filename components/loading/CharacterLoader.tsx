@@ -1,40 +1,32 @@
 'use client';
 
-/* eslint-disable @next/next/no-img-element */
-
-const RUNNING_GIF = '/buji/2 second running.gif';
-
 /**
- * Animated GIF loading indicator (large).
+ * Spinner-based loading indicator (large).
  */
 export function CharacterLoader({
   size = 140,
   text,
-  showOrbit: _showOrbit = true,
 }: {
   size?: number;
   text?: string;
   showOrbit?: boolean;
 }) {
+  const spinnerSize = Math.round(size * 0.35);
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, justifyContent: 'center', minHeight: '100%' }}>
-      <img
-        src={RUNNING_GIF}
-        alt="Loading"
-        width={size}
-        style={{ objectFit: 'contain', pointerEvents: 'none', userSelect: 'none' }}
-      />
+      <div style={{ width: spinnerSize, height: spinnerSize, borderRadius: '50%', border: `${Math.max(3, Math.round(spinnerSize / 12))}px solid #e5e7eb`, borderTopColor: '#10b981', animation: 'charLoaderSpin 0.8s linear infinite' }} />
       {text && (
         <p style={{ fontSize: 13, fontWeight: 600, letterSpacing: 1.5, textTransform: 'uppercase', color: '#6b7280' }}>
           {text}
         </p>
       )}
+      <style>{`@keyframes charLoaderSpin{to{transform:rotate(360deg)}}`}</style>
     </div>
   );
 }
 
 /**
- * Mini GIF loader for inline/section loading states.
+ * Mini spinner for inline/section loading states.
  */
 export function MiniCharacterLoader({
   text = 'Loading',
@@ -43,23 +35,19 @@ export function MiniCharacterLoader({
 }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '20px 0' }}>
-      <img
-        src={RUNNING_GIF}
-        alt="Loading"
-        width={72}
-        style={{ objectFit: 'contain', pointerEvents: 'none', userSelect: 'none' }}
-      />
+      <div style={{ width: 28, height: 28, borderRadius: '50%', border: '3px solid #e5e7eb', borderTopColor: '#10b981', animation: 'charLoaderSpin 0.8s linear infinite' }} />
       {text && (
         <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: 1, textTransform: 'uppercase', color: '#6b7280' }}>
           {text}
         </p>
       )}
+      <style>{`@keyframes charLoaderSpin{to{transform:rotate(360deg)}}`}</style>
     </div>
   );
 }
 
 /**
- * Full-page loading screen with GIF.
+ * Full-page loading screen.
  */
 export function CharacterLoadingPage({
   text,

@@ -961,8 +961,12 @@ export function LoadingState() {
 export function Spinner({ size = 'md', className }: { size?: 'sm' | 'md' | 'lg'; className?: string }) {
   const sizeMap = { sm: 16, md: 24, lg: 32 };
   const px = sizeMap[size];
-  /* eslint-disable-next-line @next/next/no-img-element */
-  return <img src="/buji/2 second running.gif" alt="" width={px} height={px} className={className ?? ''} style={{ objectFit: 'contain' }} />;
+  return (
+    <span className={className ?? ''} style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: px, height: px }}>
+      <span style={{ width: px, height: px, borderRadius: '50%', border: `${Math.max(2, Math.round(px / 8))}px solid #e5e7eb`, borderTopColor: '#10b981', animation: 'spinnerSpin 0.8s linear infinite', display: 'inline-block' }} />
+      <style>{`@keyframes spinnerSpin{to{transform:rotate(360deg)}}`}</style>
+    </span>
+  );
 }
 
 /** Skeleton loading placeholder */

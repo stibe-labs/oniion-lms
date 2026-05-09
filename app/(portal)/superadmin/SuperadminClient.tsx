@@ -15,7 +15,7 @@ interface Props {
   user: PortalUser;
 }
 
-type LogoType = 'small' | 'full' | 'favicon';
+type LogoType = 'small' | 'full' | 'favicon' | 'character';
 
 interface LogoSlot {
   type: LogoType;
@@ -42,6 +42,12 @@ const LOGO_SLOTS: LogoSlot[] = [
     label: 'Favicon',
     description: 'Icon shown in the browser tab.',
     hint: 'Recommended: PNG or ICO, 32×32 or 64×64 px',
+  },
+  {
+    type: 'character',
+    label: 'Loading Character',
+    description: 'Mascot/character shown in loading states, splash screen, and the AI chatbot.',
+    hint: 'Recommended: Animated GIF or PNG with transparency, square format. Max 5 MB',
   },
 ];
 
@@ -150,7 +156,10 @@ function LogoUploader({
       <input
         ref={inputRef}
         type="file"
-        accept="image/png,image/jpeg,image/jpg,image/svg+xml,image/webp,image/x-icon"
+        accept={slot.type === 'character'
+          ? 'image/png,image/jpeg,image/gif,image/webp,image/apng'
+          : 'image/png,image/jpeg,image/jpg,image/svg+xml,image/webp,image/x-icon'
+        }
         className="hidden"
         onChange={e => { const f = e.target.files?.[0]; if (f) handleFile(f); e.target.value = ''; }}
       />
@@ -159,15 +168,15 @@ function LogoUploader({
 }
 
 export default function SuperadminClient({ user: _user }: Props) {
-  const { setPlatformName, setLogoSmallUrl, setLogoFullUrl, setLogoAuthHeight, setLogoSplashHeight, setLogoSidebarHeight, setLogoEmailHeight } = usePlatformContext();
+  const { setPlatformName, setLogoSmallUrl, setLogoFullUrl, setLogoAuthHeight, setLogoSplashHeight, setLogoSidebarHeight, setLogoEmailHeight, setLoadingCharacterUrl } = usePlatformContext();
   const toast = useToast();
   const [value, setValue] = useState('');
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
   const [bujiEnabled, setBujiEnabled] = useState(true);
   const [bujiSaving, setBujiSaving] = useState(false);
-  const [logos, setLogos] = useState<{ small: string | null; full: string | null; favicon: string | null }>({
-    small: null, full: null, favicon: null,
+  const [logos, setLogos] = useState<{ small: string | null; full: string | null; favicon: string | null; character: string | null }>({
+    small: null, full: null, favicon: null, character: null,
   });
   const [sizes, setSizes] = useState({ auth: 40, splash: 36, sidebar: 20, email: 36 });
   const [sizesSaving, setSizesSaving] = useState(false);
@@ -181,9 +190,10 @@ export default function SuperadminClient({ user: _user }: Props) {
           setValue(d.data.platform_name);
           setBujiEnabled(d.data.buji_enabled ?? true);
           setLogos({
-            small:   d.data.logo_small_url ?? null,
-            full:    d.data.logo_full_url  ?? null,
-            favicon: d.data.favicon_url    ?? null,
+            small:     d.data.logo_small_url       ?? null,
+            full:      d.data.logo_full_url         ?? null,
+            favicon:   d.data.favicon_url           ?? null,
+            character: d.data.loading_character_url ?? null,
           });
           setSizes({
             auth:    d.data.logo_auth_height    ?? 40,
@@ -249,14 +259,16 @@ export default function SuperadminClient({ user: _user }: Props) {
 
   function handleLogoUploaded(type: LogoType, url: string) {
     setLogos(prev => ({ ...prev, [type]: url }));
-    if (type === 'small') setLogoSmallUrl(url);
-    if (type === 'full')  setLogoFullUrl(url);
+    if (type === 'small')     setLogoSmallUrl(url);
+    if (type === 'full')      setLogoFullUrl(url);
+    if (type === 'character') setLoadingCharacterUrl(url);
   }
 
   function handleLogoRemoved(type: LogoType) {
     setLogos(prev => ({ ...prev, [type]: null }));
-    if (type === 'small') setLogoSmallUrl(null);
-    if (type === 'full')  setLogoFullUrl(null);
+    if (type === 'small')     setLogoSmallUrl(null);
+    if (type === 'full')      setLogoFullUrl(null);
+    if (type === 'character') setLoadingCharacterUrl(null);
   }
 
   async function handleSaveSizes() {
@@ -419,7 +431,7 @@ export default function SuperadminClient({ user: _user }: Props) {
       </div>
 
       {/* Splash Screen Design */}
-      {!fetching && <SplashConfigSection initial={splashCfg} logoFullUrl={logos.full} />}
+      {!fetching && <SplashConfigSection initial={splashCfg} logoFullUrl={logos.full} characterUrl={logos.character} />}
     </div>
   );
 }

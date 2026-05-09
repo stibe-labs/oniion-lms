@@ -32,6 +32,7 @@ export interface LogoConfig {
   logoSmallUrl: string | null;
   logoFullUrl: string | null;
   faviconUrl: string | null;
+  loadingCharacterUrl: string | null;
   authHeight: number;
   splashHeight: number;
   sidebarHeight: number;
@@ -42,22 +43,23 @@ export async function getLogoConfig(): Promise<LogoConfig> {
   try {
     const result = await db.query<{ key: string; value: string }>(
       `SELECT key, value FROM school_config WHERE key IN (
-        'logo_small_url', 'logo_full_url', 'favicon_url',
+        'logo_small_url', 'logo_full_url', 'favicon_url', 'loading_character_url',
         'logo_auth_height', 'logo_splash_height', 'logo_sidebar_height', 'logo_email_height'
       )`
     );
     const map = Object.fromEntries(result.rows.map(r => [r.key, r.value]));
     return {
-      logoSmallUrl:  map['logo_small_url'] ?? null,
-      logoFullUrl:   map['logo_full_url']  ?? null,
-      faviconUrl:    map['favicon_url']    ?? null,
+      logoSmallUrl:        map['logo_small_url'] ?? null,
+      logoFullUrl:         map['logo_full_url']  ?? null,
+      faviconUrl:          map['favicon_url']    ?? null,
+      loadingCharacterUrl: map['loading_character_url'] ?? null,
       authHeight:    parseInt(map['logo_auth_height']    ?? '40', 10),
       splashHeight:  parseInt(map['logo_splash_height']  ?? '36', 10),
       sidebarHeight: parseInt(map['logo_sidebar_height'] ?? '20', 10),
       emailHeight:   parseInt(map['logo_email_height']   ?? '36', 10),
     };
   } catch {
-    return { logoSmallUrl: null, logoFullUrl: null, faviconUrl: null, authHeight: 40, splashHeight: 36, sidebarHeight: 20, emailHeight: 36 };
+    return { logoSmallUrl: null, logoFullUrl: null, faviconUrl: null, loadingCharacterUrl: null, authHeight: 40, splashHeight: 36, sidebarHeight: 20, emailHeight: 36 };
   }
 }
 
@@ -76,7 +78,7 @@ export async function getSplashConfig(): Promise<SplashConfig> {
     return {
       template:      (map['splash_template']        ?? 'classic')     as SplashTemplate,
       progressStyle: (map['splash_progress_style']  ?? 'bar')         as SplashProgressStyle,
-      loadingAnim:   (map['splash_loading_anim']    ?? 'buji')        as SplashLoadingAnim,
+      loadingAnim:   (map['splash_loading_anim'] === 'buji' ? 'character' : (map['splash_loading_anim'] ?? 'character')) as SplashLoadingAnim,
       tagline:       map['splash_tagline']       ?? 'Crafting Future',
       accentColor:   map['splash_accent_color']  ?? '#10b981',
       bgColor:       map['splash_bg_color']      ?? '#fafbfc',

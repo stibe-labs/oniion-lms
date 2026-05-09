@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useToast } from '@/components/dashboard/shared';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Plus, X, Sparkles } from 'lucide-react';
+import { Plus, X, Sparkles, Eye, EyeOff } from 'lucide-react';
 import type { SplashConfig, SplashTemplate, SplashProgressStyle, SplashLoadingAnim } from '@/lib/splash-config';
 
 const PRESET_QUOTES = [
@@ -78,22 +78,122 @@ const PROGRESS_STYLES: { id: SplashProgressStyle; label: string; preview: React.
 ];
 
 const LOADING_ANIMS: { id: SplashLoadingAnim; label: string; desc: string }[] = [
-  { id: 'buji', label: 'Buji Character', desc: 'Animated Buji thinking GIF' },
-  { id: 'none', label: 'None',          desc: 'Logo only, no character' },
+  { id: 'character', label: 'Character',  desc: 'Your uploaded loading character/mascot' },
+  { id: 'none',      label: 'None',       desc: 'Logo only, no character' },
 ];
+
+// ── Inline splash preview ─────────────────────────────────────────────────────
+
+function SplashPreview({ cfg, logoUrl, characterUrl, onClose }: {
+  cfg: SplashConfig;
+  logoUrl: string | null;
+  characterUrl: string | null;
+  onClose: () => void;
+}) {
+  const accent = cfg.accentColor;
+  const bg = cfg.template === 'bold'
+    ? `linear-gradient(135deg, ${accent}cc, ${accent}ff)`
+    : cfg.template === 'dark'    ? '#0f172a'
+    : cfg.template === 'branded' ? accent
+    : cfg.template === 'minimal' ? '#f8fafc'
+    : cfg.bgColor || '#fafbfc';
+
+  const textColor = cfg.template === 'bold' || cfg.template === 'branded' ? '#fff'
+    : cfg.template === 'dark' ? '#64748b'
+    : accent;
+
+  const logoSrc = logoUrl ?? '/logo/full.png';
+
+  return (
+    <div style={{ position: 'fixed', inset: 0, zIndex: 9999, background: bg, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 16 }}>
+      {/* Close button */}
+      <button
+        type="button"
+        onClick={onClose}
+        style={{ position: 'absolute', top: 20, right: 20, background: 'rgba(0,0,0,0.2)', border: 'none', borderRadius: 8, padding: '6px 14px', cursor: 'pointer', color: cfg.template === 'dark' || cfg.template === 'bold' || cfg.template === 'branded' ? '#fff' : '#374151', fontSize: 13, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6 }}
+      >
+        <EyeOff style={{ width: 14, height: 14 }} /> Close Preview
+      </button>
+
+      {/* Character */}
+      {cfg.loadingAnim === 'character' && characterUrl && (cfg.template === 'classic' || cfg.template === 'dark') && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={characterUrl} alt="" style={{ width: cfg.template === 'dark' ? 130 : 160, height: 'auto', objectFit: 'contain', opacity: cfg.template === 'dark' ? 0.9 : 1 }} />
+      )}
+
+      {/* Logo */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={logoSrc}
+        alt="Logo"
+        style={{
+          height: 36,
+          width: 'auto',
+          objectFit: 'contain',
+          filter: (cfg.template === 'bold' || cfg.template === 'branded') ? 'brightness(0) invert(1)' : undefined,
+        }}
+      />
+
+      {/* Tagline */}
+      <p style={{ margin: 0, fontSize: 13, fontWeight: 600, letterSpacing: 4, textTransform: 'uppercase', fontFamily: 'system-ui', color: textColor }}>
+        {cfg.tagline || 'Crafting Future'}
+      </p>
+
+      {/* Progress indicator preview */}
+      {cfg.progressStyle !== 'none' && (
+        <div style={{ color: cfg.template === 'bold' || cfg.template === 'branded' ? '#fff' : accent }}>
+          {cfg.progressStyle === 'bar' && (
+            <div style={{ width: 180, height: 4, background: 'rgba(0,0,0,0.1)', borderRadius: 99 }}>
+              <div style={{ height: '100%', borderRadius: 99, background: cfg.template === 'bold' || cfg.template === 'branded' ? 'rgba(255,255,255,0.9)' : accent, width: '65%' }} />
+            </div>
+          )}
+          {cfg.progressStyle === 'dots' && (
+            <div style={{ display: 'flex', gap: 8 }}>
+              {[0,1,2].map(i => <span key={i} style={{ width: 9, height: 9, borderRadius: '50%', background: cfg.template === 'bold' || cfg.template === 'branded' ? '#fff' : accent, display: 'inline-block' }} />)}
+            </div>
+          )}
+          {cfg.progressStyle === 'ring' && (
+            <div style={{ width: 40, height: 40, borderRadius: '50%', border: `3px solid ${cfg.template === 'bold' || cfg.template === 'branded' ? 'rgba(255,255,255,0.3)' : '#e5e7eb'}`, borderTopColor: cfg.template === 'bold' || cfg.template === 'branded' ? '#fff' : accent }} />
+          )}
+          {cfg.progressStyle === 'pulse' && (
+            <div style={{ width: 40, height: 40, borderRadius: '50%', border: `2px solid ${cfg.template === 'bold' || cfg.template === 'branded' ? '#fff' : accent}`, opacity: 0.6 }} />
+          )}
+          {cfg.progressStyle === 'wave' && (
+            <div style={{ display: 'flex', gap: 5, alignItems: 'flex-end', height: 28 }}>
+              {[6,14,10,14,6].map((h,i) => <span key={i} style={{ width: 5, height: h, background: cfg.template === 'bold' || cfg.template === 'branded' ? '#fff' : accent, borderRadius: 3, display: 'inline-block' }} />)}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Minimal bottom bar */}
+      {cfg.template === 'minimal' && (
+        <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 3, background: '#f3f4f6' }}>
+          <div style={{ height: '100%', background: `linear-gradient(90deg,${accent}66,${accent})`, width: '65%' }} />
+        </div>
+      )}
+
+      <p style={{ position: 'absolute', bottom: 16, fontSize: 11, opacity: 0.4, fontFamily: 'system-ui', color: cfg.template === 'dark' || cfg.template === 'bold' || cfg.template === 'branded' ? '#fff' : '#374151' }}>
+        Preview — this is how your splash screen will look
+      </p>
+    </div>
+  );
+}
 
 // ── Main component ────────────────────────────────────────────────────────────
 
 interface Props {
   initial: SplashConfig;
   logoFullUrl: string | null;
+  characterUrl: string | null;
 }
 
-export default function SplashConfigSection({ initial, logoFullUrl }: Props) {
+export default function SplashConfigSection({ initial, logoFullUrl, characterUrl }: Props) {
   const toast = useToast();
-  const [cfg, setCfg]         = useState<SplashConfig>(initial);
-  const [saving, setSaving]   = useState(false);
+  const [cfg, setCfg]           = useState<SplashConfig>(initial);
+  const [saving, setSaving]     = useState(false);
   const [newQuote, setNewQuote] = useState('');
+  const [previewing, setPreviewing] = useState(false);
 
   function set<K extends keyof SplashConfig>(key: K, val: SplashConfig[K]) {
     setCfg(prev => ({ ...prev, [key]: val }));
@@ -121,14 +221,14 @@ export default function SplashConfigSection({ initial, logoFullUrl }: Props) {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          splash_template:      cfg.template,
+          splash_template:       cfg.template,
           splash_progress_style: cfg.progressStyle,
-          splash_loading_anim:  cfg.loadingAnim,
-          splash_tagline:       cfg.tagline,
-          splash_accent_color:  cfg.accentColor,
-          splash_bg_color:      cfg.bgColor,
-          splash_show_quotes:   cfg.showQuotes,
-          splash_quotes:        cfg.quotes,
+          splash_loading_anim:   cfg.loadingAnim,
+          splash_tagline:        cfg.tagline,
+          splash_accent_color:   cfg.accentColor,
+          splash_bg_color:       cfg.bgColor,
+          splash_show_quotes:    cfg.showQuotes,
+          splash_quotes:         cfg.quotes,
         }),
       });
       const data = await res.json();
@@ -144,192 +244,220 @@ export default function SplashConfigSection({ initial, logoFullUrl }: Props) {
   const accent = cfg.accentColor;
 
   return (
-    <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm space-y-8">
-      <div>
-        <h2 className="text-sm font-semibold text-gray-700 mb-0.5 flex items-center gap-2">
-          <Sparkles className="h-4 w-4 text-emerald-500" />
-          Splash Screen Design
-        </h2>
-        <p className="text-xs text-gray-500">Customize the first-load screen shown to users. Changes take effect on next fresh tab open.</p>
-      </div>
+    <>
+      {previewing && (
+        <SplashPreview cfg={cfg} logoUrl={logoFullUrl} characterUrl={characterUrl} onClose={() => setPreviewing(false)} />
+      )}
 
-      {/* ── Template picker ── */}
-      <div>
-        <p className="text-xs font-semibold text-gray-600 uppercase tracking-wider mb-3">Template</p>
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
-          {TEMPLATES.map(t => (
-            <button
-              key={t.id}
-              type="button"
-              onClick={() => set('template', t.id)}
-              className={`rounded-lg border-2 p-2 text-left transition-all ${cfg.template === t.id ? 'border-emerald-500 shadow-sm shadow-emerald-100' : 'border-gray-200 hover:border-gray-300'}`}
-            >
-              <TemplateThumbnail id={t.id} accent={accent} bg={cfg.bgColor} />
-              <p className={`mt-2 text-[11px] font-semibold ${cfg.template === t.id ? 'text-emerald-600' : 'text-gray-600'}`}>{t.label}</p>
-              <p className="text-[10px] text-gray-400 leading-tight mt-0.5">{t.desc}</p>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* ── Progress style ── */}
-      <div>
-        <p className="text-xs font-semibold text-gray-600 uppercase tracking-wider mb-3">Progress Indicator</p>
-        <div className="flex flex-wrap gap-2">
-          {PROGRESS_STYLES.map(p => (
-            <button
-              key={p.id}
-              type="button"
-              onClick={() => set('progressStyle', p.id)}
-              className={`flex items-center gap-2 rounded-lg border px-3 py-2 text-xs font-medium transition-all ${cfg.progressStyle === p.id ? 'border-emerald-500 bg-emerald-50 text-emerald-700' : 'border-gray-200 text-gray-500 hover:border-gray-300'}`}
-              style={{ color: cfg.progressStyle === p.id ? accent : undefined }}
-            >
-              <span style={{ color: cfg.progressStyle === p.id ? accent : '#9ca3af' }}>{p.preview}</span>
-              {p.label}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* ── Loading animation ── */}
-      <div>
-        <p className="text-xs font-semibold text-gray-600 uppercase tracking-wider mb-3">Loading Character</p>
-        <div className="flex flex-wrap gap-3">
-          {LOADING_ANIMS.map(a => (
-            <button
-              key={a.id}
-              type="button"
-              onClick={() => set('loadingAnim', a.id)}
-              className={`flex items-start gap-3 rounded-lg border p-3 text-left transition-all w-44 ${cfg.loadingAnim === a.id ? 'border-emerald-500 bg-emerald-50' : 'border-gray-200 hover:border-gray-300'}`}
-            >
-              {a.id === 'buji' && (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src="/buji/4 second thinking.gif" alt="" className="h-8 w-8 object-contain shrink-0" />
-              )}
-              {a.id === 'none' && <span className="h-8 w-8 shrink-0 flex items-center justify-center text-gray-300 text-xl">—</span>}
-              <div>
-                <p className={`text-xs font-semibold ${cfg.loadingAnim === a.id ? 'text-emerald-700' : 'text-gray-600'}`}>{a.label}</p>
-                <p className="text-[10px] text-gray-400 leading-tight mt-0.5">{a.desc}</p>
-              </div>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* ── Colors ── */}
-      <div>
-        <p className="text-xs font-semibold text-gray-600 uppercase tracking-wider mb-3">Colors</p>
-        <div className="flex flex-wrap gap-6">
-          <label className="flex items-center gap-3 cursor-pointer">
-            <input type="color" value={cfg.accentColor} onChange={e => set('accentColor', e.target.value)} className="h-9 w-14 rounded cursor-pointer border border-gray-200 p-0.5" />
-            <div>
-              <p className="text-xs font-medium text-gray-700">Accent Color</p>
-              <p className="text-[10px] text-gray-400">Progress bars, glows, tagline</p>
-              <p className="text-[10px] text-gray-400 font-mono">{cfg.accentColor}</p>
-            </div>
-          </label>
-          {(cfg.template === 'classic' || cfg.template === 'minimal') && (
-            <label className="flex items-center gap-3 cursor-pointer">
-              <input type="color" value={cfg.bgColor} onChange={e => set('bgColor', e.target.value)} className="h-9 w-14 rounded cursor-pointer border border-gray-200 p-0.5" />
-              <div>
-                <p className="text-xs font-medium text-gray-700">Background Color</p>
-                <p className="text-[10px] text-gray-400">Classic & Minimal templates only</p>
-                <p className="text-[10px] text-gray-400 font-mono">{cfg.bgColor}</p>
-              </div>
-            </label>
-          )}
-        </div>
-      </div>
-
-      {/* ── Tagline ── */}
-      <div>
-        <p className="text-xs font-semibold text-gray-600 uppercase tracking-wider mb-3">Tagline</p>
-        <Input
-          value={cfg.tagline}
-          onChange={e => set('tagline', e.target.value)}
-          placeholder="e.g. Crafting Future"
-          className="max-w-xs text-sm"
-          maxLength={60}
-        />
-        <p className="text-[10px] text-gray-400 mt-1">Shown below the logo. Max 60 characters.</p>
-      </div>
-
-      {/* ── Rotating quotes ── */}
-      <div>
-        <div className="flex items-center justify-between mb-3">
-          <p className="text-xs font-semibold text-gray-600 uppercase tracking-wider">Rotating Quotes</p>
+      <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm space-y-8">
+        <div className="flex items-start justify-between">
+          <div>
+            <h2 className="text-sm font-semibold text-gray-700 mb-0.5 flex items-center gap-2">
+              <Sparkles className="h-4 w-4 text-emerald-500" />
+              Splash Screen Design
+            </h2>
+            <p className="text-xs text-gray-500">Customize the first-load screen shown to users. Changes take effect on next fresh tab open.</p>
+          </div>
           <button
             type="button"
-            role="switch"
-            aria-checked={cfg.showQuotes}
-            onClick={() => set('showQuotes', !cfg.showQuotes)}
-            className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors focus:outline-none ${cfg.showQuotes ? 'bg-emerald-500' : 'bg-gray-300'}`}
+            onClick={() => setPreviewing(true)}
+            className="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-xs font-medium text-gray-600 hover:bg-gray-100 transition-colors shrink-0"
           >
-            <span className={`pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow transition duration-200 ${cfg.showQuotes ? 'translate-x-4' : 'translate-x-0'}`} />
+            <Eye className="h-3.5 w-3.5" />
+            Preview
           </button>
         </div>
 
-        {cfg.showQuotes && (
-          <div className="space-y-3">
-            <p className="text-[10px] text-gray-400">When enabled, a random quote from the list below replaces the tagline. One new random quote is picked each time the splash shows.</p>
-
-            {/* Custom quotes list */}
-            {cfg.quotes.length > 0 && (
-              <div className="space-y-1.5 max-h-48 overflow-y-auto pr-1">
-                {cfg.quotes.map((q, i) => (
-                  <div key={i} className="flex items-start gap-2 rounded-lg bg-gray-50 px-3 py-2">
-                    <p className="flex-1 text-xs text-gray-600 leading-snug">{q}</p>
-                    <button type="button" onClick={() => removeQuote(i)} className="shrink-0 text-gray-400 hover:text-red-500 transition-colors mt-0.5">
-                      <X className="h-3.5 w-3.5" />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {/* Add quote */}
-            <div className="flex gap-2">
-              <Input
-                value={newQuote}
-                onChange={e => setNewQuote(e.target.value)}
-                onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); addQuote(newQuote); } }}
-                placeholder="Type a quote and press Enter or +"
-                className="flex-1 text-xs"
-                maxLength={200}
-              />
-              <button type="button" onClick={() => addQuote(newQuote)} disabled={!newQuote.trim()} className="inline-flex items-center gap-1 rounded-md bg-emerald-500 px-3 py-1.5 text-xs font-medium text-white hover:bg-emerald-600 disabled:opacity-40 transition-colors">
-                <Plus className="h-3.5 w-3.5" />
+        {/* ── Template picker ── */}
+        <div>
+          <p className="text-xs font-semibold text-gray-600 uppercase tracking-wider mb-3">Template</p>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+            {TEMPLATES.map(t => (
+              <button
+                key={t.id}
+                type="button"
+                onClick={() => set('template', t.id)}
+                className={`rounded-lg border-2 p-2 text-left transition-all ${cfg.template === t.id ? 'border-emerald-500 shadow-sm shadow-emerald-100' : 'border-gray-200 hover:border-gray-300'}`}
+              >
+                <TemplateThumbnail id={t.id} accent={accent} bg={cfg.bgColor} />
+                <p className={`mt-2 text-[11px] font-semibold ${cfg.template === t.id ? 'text-emerald-600' : 'text-gray-600'}`}>{t.label}</p>
+                <p className="text-[10px] text-gray-400 leading-tight mt-0.5">{t.desc}</p>
               </button>
-            </div>
-
-            {/* Preset quotes */}
-            <details className="group">
-              <summary className="text-[11px] text-emerald-600 cursor-pointer hover:text-emerald-700 select-none font-medium list-none flex items-center gap-1">
-                <span className="group-open:hidden">+ Add from presets</span>
-                <span className="hidden group-open:inline">− Hide presets</span>
-              </summary>
-              <div className="mt-2 space-y-1">
-                {PRESET_QUOTES.filter(q => !cfg.quotes.includes(q)).map((q, i) => (
-                  <button key={i} type="button" onClick={() => addPreset(q)} className="w-full text-left text-[11px] text-gray-500 hover:text-gray-800 hover:bg-gray-50 rounded px-2 py-1 transition-colors leading-snug">
-                    + {q}
-                  </button>
-                ))}
-                {PRESET_QUOTES.every(q => cfg.quotes.includes(q)) && (
-                  <p className="text-[10px] text-gray-400 px-2">All presets already added.</p>
-                )}
-              </div>
-            </details>
+            ))}
           </div>
-        )}
-      </div>
+        </div>
 
-      {/* ── Save ── */}
-      <div className="pt-2 border-t border-gray-100">
-        <Button onClick={handleSave} disabled={saving} className="w-full sm:w-auto">
-          {saving ? 'Saving…' : 'Save Splash Config'}
-        </Button>
-        <p className="text-[10px] text-gray-400 mt-2">Clear sessionStorage in browser devtools to preview changes immediately.</p>
+        {/* ── Progress style ── */}
+        <div>
+          <p className="text-xs font-semibold text-gray-600 uppercase tracking-wider mb-3">Progress Indicator</p>
+          <div className="flex flex-wrap gap-2">
+            {PROGRESS_STYLES.map(p => (
+              <button
+                key={p.id}
+                type="button"
+                onClick={() => set('progressStyle', p.id)}
+                className={`flex items-center gap-2 rounded-lg border px-3 py-2 text-xs font-medium transition-all ${cfg.progressStyle === p.id ? 'border-emerald-500 bg-emerald-50 text-emerald-700' : 'border-gray-200 text-gray-500 hover:border-gray-300'}`}
+                style={{ color: cfg.progressStyle === p.id ? accent : undefined }}
+              >
+                <span style={{ color: cfg.progressStyle === p.id ? accent : '#9ca3af' }}>{p.preview}</span>
+                {p.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* ── Loading character ── */}
+        <div>
+          <p className="text-xs font-semibold text-gray-600 uppercase tracking-wider mb-3">Loading Character</p>
+          <div className="flex flex-wrap gap-3">
+            {LOADING_ANIMS.map(a => (
+              <button
+                key={a.id}
+                type="button"
+                onClick={() => set('loadingAnim', a.id)}
+                className={`flex items-start gap-3 rounded-lg border p-3 text-left transition-all w-52 ${cfg.loadingAnim === a.id ? 'border-emerald-500 bg-emerald-50' : 'border-gray-200 hover:border-gray-300'}`}
+              >
+                {a.id === 'character' && characterUrl ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={characterUrl} alt="" className="h-10 w-10 object-contain shrink-0 rounded" />
+                ) : a.id === 'character' ? (
+                  <span className="h-10 w-10 shrink-0 flex items-center justify-center rounded border-2 border-dashed border-gray-200 text-gray-300 text-[10px] font-medium text-center leading-tight">No char.</span>
+                ) : (
+                  <span className="h-10 w-10 shrink-0 flex items-center justify-center text-gray-300 text-xl">—</span>
+                )}
+                <div>
+                  <p className={`text-xs font-semibold ${cfg.loadingAnim === a.id ? 'text-emerald-700' : 'text-gray-600'}`}>{a.label}</p>
+                  <p className="text-[10px] text-gray-400 leading-tight mt-0.5">{a.desc}</p>
+                  {a.id === 'character' && !characterUrl && (
+                    <p className="text-[10px] text-amber-500 mt-0.5">Upload a character in Logos above</p>
+                  )}
+                </div>
+              </button>
+            ))}
+          </div>
+          <p className="text-[10px] text-gray-400 mt-2">Only shown in Classic and Dark templates.</p>
+        </div>
+
+        {/* ── Colors ── */}
+        <div>
+          <p className="text-xs font-semibold text-gray-600 uppercase tracking-wider mb-3">Colors</p>
+          <div className="flex flex-wrap gap-6">
+            <label className="flex items-center gap-3 cursor-pointer">
+              <input type="color" value={cfg.accentColor} onChange={e => set('accentColor', e.target.value)} className="h-9 w-14 rounded cursor-pointer border border-gray-200 p-0.5" />
+              <div>
+                <p className="text-xs font-medium text-gray-700">Accent Color</p>
+                <p className="text-[10px] text-gray-400">Progress bars, glows, tagline</p>
+                <p className="text-[10px] text-gray-400 font-mono">{cfg.accentColor}</p>
+              </div>
+            </label>
+            {(cfg.template === 'classic' || cfg.template === 'minimal') && (
+              <label className="flex items-center gap-3 cursor-pointer">
+                <input type="color" value={cfg.bgColor} onChange={e => set('bgColor', e.target.value)} className="h-9 w-14 rounded cursor-pointer border border-gray-200 p-0.5" />
+                <div>
+                  <p className="text-xs font-medium text-gray-700">Background Color</p>
+                  <p className="text-[10px] text-gray-400">Classic & Minimal templates only</p>
+                  <p className="text-[10px] text-gray-400 font-mono">{cfg.bgColor}</p>
+                </div>
+              </label>
+            )}
+          </div>
+        </div>
+
+        {/* ── Tagline ── */}
+        <div>
+          <p className="text-xs font-semibold text-gray-600 uppercase tracking-wider mb-3">Tagline</p>
+          <Input
+            value={cfg.tagline}
+            onChange={e => set('tagline', e.target.value)}
+            placeholder="e.g. Crafting Future"
+            className="max-w-xs text-sm"
+            maxLength={60}
+          />
+          <p className="text-[10px] text-gray-400 mt-1">Shown below the logo. Max 60 characters.</p>
+        </div>
+
+        {/* ── Rotating quotes ── */}
+        <div>
+          <div className="flex items-center justify-between mb-3">
+            <p className="text-xs font-semibold text-gray-600 uppercase tracking-wider">Rotating Quotes</p>
+            <button
+              type="button"
+              role="switch"
+              aria-checked={cfg.showQuotes}
+              onClick={() => set('showQuotes', !cfg.showQuotes)}
+              className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors focus:outline-none ${cfg.showQuotes ? 'bg-emerald-500' : 'bg-gray-300'}`}
+            >
+              <span className={`pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow transition duration-200 ${cfg.showQuotes ? 'translate-x-4' : 'translate-x-0'}`} />
+            </button>
+          </div>
+
+          {cfg.showQuotes && (
+            <div className="space-y-3">
+              <p className="text-[10px] text-gray-400">When enabled, a random quote from the list below replaces the tagline. One new random quote is picked each time the splash shows.</p>
+
+              {cfg.quotes.length > 0 && (
+                <div className="space-y-1.5 max-h-48 overflow-y-auto pr-1">
+                  {cfg.quotes.map((q, i) => (
+                    <div key={i} className="flex items-start gap-2 rounded-lg bg-gray-50 px-3 py-2">
+                      <p className="flex-1 text-xs text-gray-600 leading-snug">{q}</p>
+                      <button type="button" onClick={() => removeQuote(i)} className="shrink-0 text-gray-400 hover:text-red-500 transition-colors mt-0.5">
+                        <X className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              <div className="flex gap-2">
+                <Input
+                  value={newQuote}
+                  onChange={e => setNewQuote(e.target.value)}
+                  onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); addQuote(newQuote); } }}
+                  placeholder="Type a quote and press Enter or +"
+                  className="flex-1 text-xs"
+                  maxLength={200}
+                />
+                <button type="button" onClick={() => addQuote(newQuote)} disabled={!newQuote.trim()} className="inline-flex items-center gap-1 rounded-md bg-emerald-500 px-3 py-1.5 text-xs font-medium text-white hover:bg-emerald-600 disabled:opacity-40 transition-colors">
+                  <Plus className="h-3.5 w-3.5" />
+                </button>
+              </div>
+
+              <details className="group">
+                <summary className="text-[11px] text-emerald-600 cursor-pointer hover:text-emerald-700 select-none font-medium list-none flex items-center gap-1">
+                  <span className="group-open:hidden">+ Add from presets</span>
+                  <span className="hidden group-open:inline">− Hide presets</span>
+                </summary>
+                <div className="mt-2 space-y-1">
+                  {PRESET_QUOTES.filter(q => !cfg.quotes.includes(q)).map((q, i) => (
+                    <button key={i} type="button" onClick={() => addPreset(q)} className="w-full text-left text-[11px] text-gray-500 hover:text-gray-800 hover:bg-gray-50 rounded px-2 py-1 transition-colors leading-snug">
+                      + {q}
+                    </button>
+                  ))}
+                  {PRESET_QUOTES.every(q => cfg.quotes.includes(q)) && (
+                    <p className="text-[10px] text-gray-400 px-2">All presets already added.</p>
+                  )}
+                </div>
+              </details>
+            </div>
+          )}
+        </div>
+
+        {/* ── Save ── */}
+        <div className="pt-2 border-t border-gray-100 flex items-center gap-3 flex-wrap">
+          <Button onClick={handleSave} disabled={saving} className="w-full sm:w-auto">
+            {saving ? 'Saving…' : 'Save Splash Config'}
+          </Button>
+          <button
+            type="button"
+            onClick={() => setPreviewing(true)}
+            className="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 bg-gray-50 px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 transition-colors"
+          >
+            <Eye className="h-4 w-4" />
+            Preview
+          </button>
+          <p className="text-[10px] text-gray-400 w-full sm:w-auto">Clear sessionStorage in browser devtools to preview changes immediately after saving.</p>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

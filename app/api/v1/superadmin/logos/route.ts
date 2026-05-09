@@ -5,23 +5,26 @@ import { randomUUID } from 'crypto';
 import { db } from '@/lib/db';
 import { verifyAuth } from '@/lib/auth';
 
-const LOGO_TYPES = ['small', 'full', 'favicon'] as const;
+const LOGO_TYPES = ['small', 'full', 'favicon', 'character'] as const;
 type LogoType = typeof LOGO_TYPES[number];
 
 const CONFIG_KEY: Record<LogoType, string> = {
-  small:   'logo_small_url',
-  full:    'logo_full_url',
-  favicon: 'favicon_url',
+  small:     'logo_small_url',
+  full:      'logo_full_url',
+  favicon:   'favicon_url',
+  character: 'loading_character_url',
 };
 
 const DESCRIPTION: Record<LogoType, string> = {
-  small:   'Small/icon logo shown in sidebar and nav',
-  full:    'Full/wide logo shown on login page and public pages',
-  favicon: 'Favicon shown in browser tab',
+  small:     'Small/icon logo shown in sidebar and nav',
+  full:      'Full/wide logo shown on login page and public pages',
+  favicon:   'Favicon shown in browser tab',
+  character: 'Loading character/mascot shown in loading states and splash screen',
 };
 
-const ALLOWED_MIME = new Set(['image/png', 'image/jpeg', 'image/jpg', 'image/svg+xml', 'image/webp', 'image/x-icon', 'image/vnd.microsoft.icon']);
-const MAX_SIZE = 2 * 1024 * 1024; // 2 MB
+const ALLOWED_MIME = new Set(['image/png', 'image/jpeg', 'image/jpg', 'image/svg+xml', 'image/webp', 'image/x-icon', 'image/vnd.microsoft.icon', 'image/gif', 'image/apng']);
+const MAX_SIZE_DEFAULT = 2 * 1024 * 1024; // 2 MB
+const MAX_SIZE_CHARACTER = 5 * 1024 * 1024; // 5 MB (allow animated GIF/APNG)
 
 const UPLOAD_DIR = path.join(process.cwd(), 'public', 'uploads', 'logos');
 
@@ -40,10 +43,11 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: false, error: 'Invalid logo type. Must be: small, full, or favicon' }, { status: 400 });
   }
   if (!ALLOWED_MIME.has(file.type)) {
-    return NextResponse.json({ success: false, error: 'Invalid file type. Use PNG, JPG, SVG, WebP, or ICO' }, { status: 400 });
+    return NextResponse.json({ success: false, error: 'Invalid file type. Use PNG, JPG, SVG, WebP, ICO, or GIF' }, { status: 400 });
   }
-  if (file.size > MAX_SIZE) {
-    return NextResponse.json({ success: false, error: 'File too large. Max 2 MB' }, { status: 400 });
+  const maxSize = logoType === 'character' ? MAX_SIZE_CHARACTER : MAX_SIZE_DEFAULT;
+  if (file.size > maxSize) {
+    return NextResponse.json({ success: false, error: `File too large. Max ${logoType === 'character' ? '5' : '2'} MB` }, { status: 400 });
   }
 
   // Delete old file if it exists in our uploads dir
