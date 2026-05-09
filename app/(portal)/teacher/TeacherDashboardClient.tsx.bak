@@ -1,0 +1,757 @@
+// ═══════════════════════════════════════════════════════════════
+// Teacher Dashboard — Client Component
+// Tabs: Overview · My Classes · Salary · My Profile
+// Theme: light / emerald primary — uses shared UI components
+// ═══════════════════════════════════════════════════════════════
+
+'use client';
+
+import { useEffect, useState, useCallback } from 'react';
+import DashboardShell from '@/components/dashboard/DashboardShell';
+import {
+  PageHeader, RefreshButton, Button, SearchInput, TabBar,
+  StatCard, Card, Badge, StatusBadge,
+  LoadingState, EmptyState, Alert, Avatar, money,
+} from '@/components/dashboard/shared';
+import { fmtSmartDateIST, fmtTimeIST, fmtDateLongIST } from '@/lib/utils';
+import {
+  LayoutDashboard, BookOpen, User, Radio, Calendar, Clock,
+  CheckCircle2, XCircle, ChevronDown,
+  ChevronRight, GraduationCap, Award, Briefcase, Phone, Timer,
+  Info, Users, FileText, Save, Loader2,
+} from 'lucide-react';
+
+// ── Types ───────────────────────────────────────────────────────
+
+interface Room {
+  room_id: string;
+  room_name: string;
+  subject: string;
+  grade: string;
+  section: string | null;
+  status: string;
+  scheduled_start: string;
+  duration_minutes: number;
+  notes_for_teacher: string | null;
+  max_participants: number;
+  student_count: number;
+  class_portion: string | null;
+  class_remarks: string | null;
+}
+
+interface TeacherProfile {
+  name: string;
+  email: string;
+  phone: string | null;
+  whatsapp: string | null;
+  date_of_birth: string | null;
+  subjects: string[] | null;
+  qualification: string | null;
+  experience_years: number | null;
+  assigned_region: string | null;
+  notes: string | null;
+}
+
+interface Props {
+  userName: string;
+  userEmail: string;
+  userRole: string;
+  permissions?: Record<string, boolean>;
+}
+
+// ── Helpers ─────────────────────────────────────────────────────
+
+function fmtDuration(mins: number): string {
+  if (mins < 60) return `${mins}m`;
+  const h = Math.floor(mins / 60);
+  const m = mins % 60;
+  return m ? `${h}h ${m}m` : `${h}h`;
+}
+
+function effectiveStatus(room: Room): string {
+  if (room.status === 'scheduled') {
+    const endMs = new Date(room.scheduled_start).getTime() + room.duration_minutes * 60_000;
+    if (Date.now() >= endMs) return 'ended';
+  }
+  return room.status;
+}
+
+// ── Countdown ───────────────────────────────────────────────────
+
+function Countdown({ scheduledStart, durationMinutes }: { scheduledStart: string; durationMinutes: number }) {
+  const [label, setLabel] = useState('');
+  useEffect(() => {
+    const tick = () => {
+      const now = Date.now();
+      const startMs = new Date(scheduledStart).getTime();
+      const endMs = startMs + durationMinutes * 60_000;
+      if (now < startMs) {
+        const diff = startMs - now;
+        const h = Math.floor(diff / 3_600_000);
+        const m = Math.floor((diff % 3_600_000) / 60_000);
+        const s = Math.floor((diff % 60_000) / 1_000);
+        setLabel(`Starts in ${h > 0 ? `${h}h ` : ''}${m}m ${s}s`);
+      } else if (now < endMs) {
+        const diff = endMs - now;
+        const m = Math.floor(diff / 60_000);
+        const s = Math.floor((diff % 60_000) / 1_000);
+        setLabel(`${m}m ${s}s remaining`);
+      } else {
+        setLabel('Class ended');
+      }
+    };
+    tick();
+    const id = setInterval(tick, 1_000);
+    return () => clearInterval(id);
+  }, [scheduledStart, durationMinutes]);
+  return <>{label}</>;
+}
+
+// ── Overview Tab ────────────────────────────────────────────────
+
+function OverviewTab({ rooms, userName }: { rooms: Room[]; userName: string }) {
+  const now = new Date();
+  const todayStr = now.toLocaleDateString('en-IN');
+  const liveRooms = rooms.filter((r) => effectiveStatus(r) === 'live');
+  const scheduled = rooms.filter((r) => effectiveStatus(r) === 'scheduled');
+  const ended = rooms.filter((r) => effectiveStatus(r) === 'ended');
+  const todayRooms = rooms.filter((r) => {
+    const d = new Date(r.scheduled_start);
+    return d.toLocaleDateString('en-IN') === todayStr;
+  });
+  const nextClass = [...scheduled].sort(
+    (a, b) => new Date(a.scheduled_start).getTime() - new Date(b.scheduled_start).getTime()
+  )[0];
+
+  return (
+    <div className="space-y-6">
+      {/* Live Alert */}
+      {liveRooms.length > 0 && (
+        <div className="rounded-xl border-2 border-green-400 bg-green-50 p-4">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-green-100">
+              <Radio className="h-5 w-5 text-green-600 animate-pulse" />
+            </div>
+            <div className="flex-1">
+              <p className="font-semibold text-green-800">
+                {liveRooms.length} Class{liveRooms.length > 1 ? 'es' : ''} Live Now
+              </p>
+              <p className="text-sm text-green-700">
+                {liveRooms.map((r) => r.room_name).join(', ')}
+              </p>
+            </div>
+            <a
+              href={`/classroom/${liveRooms[0].room_id}`}
+              className="rounded-lg bg-green-600 px-4 py-2 text-sm font-bold text-white shadow-sm hover:bg-green-700 transition-colors"
+            >
+              Enter Classroom
+            </a>
+          </div>
+        </div>
+      )}
+
+      {/* Stats Grid */}
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <StatCard icon={BookOpen} label="Total Classes" value={rooms.length} />
+        <StatCard icon={Radio} label="Live Now" value={liveRooms.length} variant="success" />
+        <StatCard icon={Calendar} label="Upcoming" value={scheduled.length} variant="info" />
+        <StatCard icon={CheckCircle2} label="Completed" value={ended.length} />
+      </div>
+
+      {/* Next Class */}
+      {nextClass && (
+        <Card className="p-5">
+          <div className="flex items-center gap-2 mb-3">
+            <Calendar className="h-4 w-4 text-emerald-600" />
+            <h3 className="text-sm font-semibold text-gray-800">Next Class</h3>
+          </div>
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-lg font-bold text-gray-900">{nextClass.room_name}</p>
+              <p className="text-sm text-gray-500">
+                {nextClass.subject} · {nextClass.grade}{nextClass.section ? ` · ${nextClass.section}` : ''}
+              </p>
+              <div className="mt-2 flex items-center gap-3 text-sm text-gray-500">
+                <span className="flex items-center gap-1">
+                  <Clock className="h-3.5 w-3.5" /> {fmtSmartDateIST(nextClass.scheduled_start)}
+                </span>
+                <span>{fmtDuration(nextClass.duration_minutes)}</span>
+                <span className="flex items-center gap-1">
+                  <Users className="h-3.5 w-3.5" /> {nextClass.student_count} student{nextClass.student_count !== 1 ? 's' : ''}
+                </span>
+              </div>
+            </div>
+            <div className="text-right">
+              <div className="rounded-lg bg-teal-50 border border-teal-200 px-3 py-2 text-sm font-mono font-bold text-teal-700">
+                <Countdown scheduledStart={nextClass.scheduled_start} durationMinutes={nextClass.duration_minutes} />
+              </div>
+            </div>
+          </div>
+        </Card>
+      )}
+
+      {/* Today's Schedule */}
+      <Card className="p-5">
+        <div className="flex items-center gap-2 mb-4">
+          <Clock className="h-4 w-4 text-emerald-600" />
+          <h3 className="text-sm font-semibold text-gray-800">Today&apos;s Schedule</h3>
+          <Badge label={`${todayRooms.length} class${todayRooms.length !== 1 ? 'es' : ''}`} variant="default" />
+        </div>
+
+        {todayRooms.length === 0 ? (
+          <p className="py-8 text-center text-sm text-gray-400">No classes scheduled for today</p>
+        ) : (
+          <div className="space-y-2">
+            {todayRooms
+              .sort((a, b) => new Date(a.scheduled_start).getTime() - new Date(b.scheduled_start).getTime())
+              .map((r) => {
+                const es = effectiveStatus(r);
+                return (
+                  <div
+                    key={r.room_id}
+                    className="flex items-center gap-3 rounded-lg border border-gray-100 bg-gray-50/50 px-4 py-3"
+                  >
+                    <div className="text-sm font-mono font-semibold text-gray-500 w-16 shrink-0">
+                      {fmtTimeIST(new Date(r.scheduled_start))}
+                    </div>
+                    <div className="h-8 w-0.5 rounded bg-gray-200" />
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm font-medium text-gray-800">{r.room_name}</p>
+                      <p className="text-xs text-gray-500">
+                        {r.subject} · {fmtDuration(r.duration_minutes)} · {r.student_count} students
+                      </p>
+                    </div>
+                    <StatusBadge status={es} />
+                    {es === 'live' && (
+                      <a
+                        href={`/classroom/${r.room_id}`}
+                        className="rounded-lg bg-green-600 px-3 py-1.5 text-xs font-bold text-white hover:bg-green-700"
+                      >
+                        Enter
+                      </a>
+                    )}
+                  </div>
+                );
+              })}
+          </div>
+        )}
+      </Card>
+    </div>
+  );
+}
+
+// ── My Classes Tab ──────────────────────────────────────────────
+
+type FilterKey = 'all' | 'live' | 'scheduled' | 'ended' | 'cancelled';
+
+function MyClassesTab({ rooms }: { rooms: Room[] }) {
+  const [search, setSearch] = useState('');
+  const [filter, setFilter] = useState<FilterKey>('all');
+  const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [localPortions, setLocalPortions] = useState<Record<string, { portion: string; remarks: string }>>({});
+
+  const q = search.toLowerCase();
+  const filtered = rooms.filter((r) => {
+    const es = effectiveStatus(r);
+    const matchSearch = !q || r.room_name.toLowerCase().includes(q) || r.subject.toLowerCase().includes(q);
+    const matchFilter = filter === 'all' || es === filter;
+    return matchSearch && matchFilter;
+  });
+
+  const counts: Record<FilterKey, number> = {
+    all: rooms.length,
+    live: rooms.filter((r) => effectiveStatus(r) === 'live').length,
+    scheduled: rooms.filter((r) => effectiveStatus(r) === 'scheduled').length,
+    ended: rooms.filter((r) => effectiveStatus(r) === 'ended').length,
+    cancelled: rooms.filter((r) => effectiveStatus(r) === 'cancelled').length,
+  };
+
+  return (
+    <div className="space-y-4">
+      {/* Search + Filters */}
+      <div className="flex flex-wrap items-center gap-3">
+        <SearchInput value={search} onChange={setSearch} placeholder="Search classes…" className="w-64" />
+        <div className="flex flex-wrap gap-2">
+          {(['all', 'live', 'scheduled', 'ended', 'cancelled'] as FilterKey[]).map((f) => (
+            <button
+              key={f}
+              onClick={() => setFilter(f)}
+              className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium capitalize transition-colors ${
+                filter === f
+                  ? 'bg-emerald-600 text-white shadow-sm'
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              }`}
+            >
+              {f === 'live' && <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-green-400" />}
+              {f === 'all' ? 'All' : f.charAt(0).toUpperCase() + f.slice(1)}
+              <span className={`rounded-full px-1.5 text-[10px] font-bold ${
+                filter === f ? 'bg-white/20' : 'bg-white'
+              }`}>
+                {counts[f]}
+              </span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Class list */}
+      {filtered.length === 0 ? (
+        <EmptyState icon={BookOpen} message={search ? 'No classes match your search' : 'No classes in this category'} />
+      ) : (
+        <div className="space-y-2">
+          {filtered.map((room) => {
+            const es = effectiveStatus(room);
+            const isExpanded = expandedId === room.room_id;
+            return (
+              <Card
+                key={room.room_id}
+                className={`overflow-hidden transition-colors ${isExpanded ? 'ring-1 ring-emerald-300' : ''}`}
+              >
+                {/* Clickable row */}
+                <button
+                  className="flex w-full items-center gap-4 p-4 text-left"
+                  onClick={() => setExpandedId(isExpanded ? null : room.room_id)}
+                >
+                  <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg ${
+                    es === 'live' ? 'bg-green-100' :
+                    es === 'scheduled' ? 'bg-teal-50' :
+                    es === 'cancelled' ? 'bg-red-50' : 'bg-gray-100'
+                  }`}>
+                    {es === 'live'      && <Radio        className="h-5 w-5 text-green-600" />}
+                    {es === 'ended'     && <CheckCircle2 className="h-5 w-5 text-gray-400" />}
+                    {es === 'cancelled' && <XCircle      className="h-5 w-5 text-red-500" />}
+                    {es === 'scheduled' && <Calendar     className="h-5 w-5 text-teal-600" />}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate font-medium text-gray-900">{room.room_name}</p>
+                    <div className="mt-0.5 flex flex-wrap items-center gap-3 text-xs text-gray-500">
+                      <span>{room.subject} · {room.grade}{room.section ? ` · ${room.section}` : ''}</span>
+                      <span className="flex items-center gap-1">
+                        <Clock className="h-3 w-3" /> {fmtSmartDateIST(room.scheduled_start)}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <Users className="h-3 w-3" /> {room.student_count}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex shrink-0 items-center gap-3">
+                    <div className="hidden text-right sm:block">
+                      <StatusBadge status={es} />
+                      <p className="mt-1 text-xs text-gray-400">{fmtDuration(room.duration_minutes)}</p>
+                    </div>
+                    {es === 'live' && (
+                      <a
+                        href={`/classroom/${room.room_id}`}
+                        onClick={(e) => e.stopPropagation()}
+                        className="rounded-lg bg-green-600 px-3 py-1.5 text-xs font-bold text-white hover:bg-green-700"
+                      >
+                        Enter
+                      </a>
+                    )}
+                    {isExpanded
+                      ? <ChevronDown className="h-4 w-4 text-gray-400" />
+                      : <ChevronRight className="h-4 w-4 text-gray-400" />}
+                  </div>
+                </button>
+
+                {/* Expanded detail panel */}
+                {isExpanded && (
+                  <div className="space-y-3 border-t border-gray-100 bg-gray-50/50 px-4 pb-4 pt-3">
+                    <div className="grid grid-cols-2 gap-3 text-sm sm:grid-cols-4">
+                      <div>
+                        <p className="mb-0.5 text-xs text-gray-400">Date &amp; Time</p>
+                        <p className="text-gray-800">{fmtSmartDateIST(room.scheduled_start)}</p>
+                      </div>
+                      <div>
+                        <p className="mb-0.5 text-xs text-gray-400">Duration</p>
+                        <p className="text-gray-800">{fmtDuration(room.duration_minutes)}</p>
+                      </div>
+                      <div>
+                        <p className="mb-0.5 text-xs text-gray-400">Students</p>
+                        <p className="text-gray-800">{room.student_count} enrolled / {room.max_participants} max</p>
+                      </div>
+                      <div>
+                        <p className="mb-0.5 text-xs text-gray-400">Status</p>
+                        <StatusBadge status={es} />
+                      </div>
+                    </div>
+
+                    {room.notes_for_teacher && (
+                      <Alert variant="warning" message={`Coordinator notes: ${room.notes_for_teacher}`} />
+                    )}
+
+                    {es === 'scheduled' && (
+                      <div className="flex items-center gap-2 rounded-lg border border-teal-200 bg-teal-50 px-3 py-2 text-sm text-teal-700">
+                        <Timer className="h-4 w-4 shrink-0" />
+                        <span className="font-mono font-bold">
+                          <Countdown scheduledStart={room.scheduled_start} durationMinutes={room.duration_minutes} />
+                        </span>
+                      </div>
+                    )}
+
+                    {es === 'ended' && (
+                      <ClassPortionForm
+                        roomId={room.room_id}
+                        currentPortion={localPortions[room.room_id]?.portion ?? room.class_portion}
+                        currentRemarks={localPortions[room.room_id]?.remarks ?? room.class_remarks}
+                        onSaved={(portion, remarks) => {
+                          setLocalPortions((prev) => ({ ...prev, [room.room_id]: { portion, remarks } }));
+                        }}
+                      />
+                    )}
+                  </div>
+                )}
+              </Card>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── Class Portion & Remarks Form ──────────────────────────────
+
+function ClassPortionForm({
+  roomId,
+  currentPortion,
+  currentRemarks,
+  onSaved,
+}: {
+  roomId: string;
+  currentPortion: string | null;
+  currentRemarks: string | null;
+  onSaved: (portion: string, remarks: string) => void;
+}) {
+  const [portion, setPortion] = useState(currentPortion || '');
+  const [remarks, setRemarks] = useState(currentRemarks || '');
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
+
+  const handleSave = async () => {
+    if (!portion.trim() && !remarks.trim()) return;
+    setSaving(true);
+    setSaved(false);
+    try {
+      const res = await fetch(`/api/v1/room/${roomId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ class_portion: portion, class_remarks: remarks }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        onSaved(portion, remarks);
+        setSaved(true);
+        setTimeout(() => setSaved(false), 3000);
+      } else {
+        alert(data.error || 'Failed to save');
+      }
+    } catch {
+      alert('Network error');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <div className="rounded-lg border border-emerald-200 bg-emerald-50/50 p-3">
+      <p className="mb-2 flex items-center gap-1.5 text-xs font-semibold text-emerald-700">
+        <FileText className="h-3.5 w-3.5" /> Class Portion &amp; Remarks
+      </p>
+      <div className="space-y-2">
+        <div>
+          <label className="mb-0.5 block text-xs text-gray-500">Topics Covered</label>
+          <input
+            type="text"
+            value={portion}
+            onChange={(e) => setPortion(e.target.value)}
+            placeholder="e.g. Chapter 5 — Quadratic Equations (completed)"
+            className="w-full rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm text-gray-800 placeholder:text-gray-400 focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400 focus:outline-none"
+          />
+        </div>
+        <div>
+          <label className="mb-0.5 block text-xs text-gray-500">Remarks</label>
+          <textarea
+            value={remarks}
+            onChange={(e) => setRemarks(e.target.value)}
+            placeholder="Post-class notes, observations, homework assigned..."
+            rows={2}
+            className="w-full rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm text-gray-800 placeholder:text-gray-400 focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400 focus:outline-none resize-none"
+          />
+        </div>
+        <div className="flex items-center gap-2">
+          <Button
+            variant="primary"
+            size="xs"
+            icon={saving ? Loader2 : Save}
+            loading={saving}
+            disabled={saving || (!portion.trim() && !remarks.trim())}
+            onClick={handleSave}
+          >
+            Save
+          </Button>
+          {saved && (
+            <span className="flex items-center gap-1 text-xs text-green-600 font-medium">
+              <CheckCircle2 className="h-3 w-3" /> Saved
+            </span>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Profile Tab ───────────────────────────────────────────────
+
+function ProfileTab({ profile, loading }: { profile: TeacherProfile | null; loading: boolean }) {
+  if (loading) return <LoadingState />;
+
+  if (!profile) {
+    return <EmptyState icon={User} message="Your profile will appear here once HR has filled in your details." />;
+  }
+
+  const Field = ({
+    label,
+    value,
+    icon: Icon,
+  }: {
+    label: string;
+    value?: string | number | null;
+    icon: React.ElementType;
+  }) => (
+    <div className="flex items-start gap-3 border-b border-gray-100 py-3 last:border-0">
+      <Icon className="mt-0.5 h-4 w-4 shrink-0 text-gray-400" />
+      <div>
+        <p className="mb-0.5 text-xs text-gray-400">{label}</p>
+        <p className={`text-sm ${value != null && value !== '' ? 'text-gray-800' : 'italic text-gray-400'}`}>
+          {value != null && value !== '' ? String(value) : 'Not set'}
+        </p>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="max-w-2xl space-y-5">
+      {/* Header Card */}
+      <div className="rounded-2xl border border-emerald-200 bg-linear-to-br from-emerald-50 to-white p-6 shadow-sm">
+        <div className="flex items-center gap-5">
+          <Avatar name={profile.name} size="lg" />
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900">{profile.name}</h2>
+            <p className="mt-0.5 text-sm font-medium text-emerald-600">Teacher</p>
+            <p className="mt-1 text-xs text-gray-500">{profile.email}</p>
+          </div>
+        </div>
+        {profile.subjects && profile.subjects.length > 0 && (
+          <div className="mt-4 flex flex-wrap gap-2">
+            {profile.subjects.map((s) => (
+              <Badge key={s} label={s} variant="primary" />
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Detail Fields */}
+      <Card className="px-5">
+        <Field label="Phone" value={profile.phone} icon={Phone} />
+        <Field label="WhatsApp" value={profile.whatsapp} icon={Phone} />
+        <Field
+          label="Date of Birth"
+          value={profile.date_of_birth ? fmtDateLongIST(profile.date_of_birth) : null}
+          icon={Calendar}
+        />
+        <Field label="Qualification" value={profile.qualification} icon={GraduationCap} />
+        <Field
+          label="Experience"
+          value={
+            profile.experience_years != null
+              ? `${profile.experience_years} year${profile.experience_years !== 1 ? 's' : ''}`
+              : null
+          }
+          icon={Briefcase}
+        />
+        <Field label="Region" value={profile.assigned_region} icon={Award} />
+        {profile.notes && <Field label="Notes" value={profile.notes} icon={Info} />}
+      </Card>
+    </div>
+  );
+}
+
+// ── Salary Tab ────────────────────────────────────────────────
+
+function SalaryTab({ payslips, loading }: {
+  payslips: {
+    id: string; period_label: string; period_start: string; period_end: string;
+    classes_conducted: number; classes_cancelled: number; classes_missed: number;
+    base_pay_paise: number; incentive_paise: number; lop_paise: number;
+    total_paise: number; status: string;
+  }[];
+  loading: boolean;
+}) {
+  if (loading) return <LoadingState />;
+  if (payslips.length === 0) return <EmptyState icon={Briefcase} message="No payslips available yet" />;
+
+  return (
+    <div className="space-y-3">
+      {payslips.map((s) => (
+        <Card key={s.id} className="p-4">
+          <div className="flex items-center justify-between mb-3">
+            <h4 className="font-semibold text-gray-900">{s.period_label || 'Payslip'}</h4>
+            <StatusBadge status={s.status} />
+          </div>
+          {s.period_start && (
+            <p className="text-xs text-gray-500 mb-3">
+              {new Date(s.period_start).toLocaleDateString('en-IN')} — {new Date(s.period_end).toLocaleDateString('en-IN')}
+            </p>
+          )}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div>
+              <p className="text-[10px] uppercase tracking-wide text-gray-400">Classes</p>
+              <p className="text-sm text-gray-900 font-bold">{s.classes_conducted}</p>
+            </div>
+            <div>
+              <p className="text-[10px] uppercase tracking-wide text-gray-400">Base Pay</p>
+              <p className="text-sm text-green-700 font-bold">{money(s.base_pay_paise)}</p>
+            </div>
+            <div>
+              <p className="text-[10px] uppercase tracking-wide text-gray-400">Incentive</p>
+              <p className="text-sm text-teal-700 font-bold">{money(s.incentive_paise)}</p>
+            </div>
+            <div>
+              <p className="text-[10px] uppercase tracking-wide text-gray-400">Total</p>
+              <p className="text-sm text-gray-900 font-extrabold">{money(s.total_paise)}</p>
+            </div>
+          </div>
+          {(s.classes_cancelled > 0 || s.classes_missed > 0) && (
+            <div className="flex gap-4 mt-2 text-xs">
+              {s.classes_cancelled > 0 && (
+                <span className="text-amber-600">{s.classes_cancelled} cancelled</span>
+              )}
+              {s.classes_missed > 0 && (
+                <span className="text-red-600">
+                  {s.classes_missed} missed (LOP: {money(s.lop_paise)})
+                </span>
+              )}
+            </div>
+          )}
+        </Card>
+      ))}
+    </div>
+  );
+}
+
+// ── Main Dashboard Component ──────────────────────────────────
+
+export default function TeacherDashboardClient({ userName, userEmail, userRole, permissions }: Props) {
+  const [rooms, setRooms] = useState<Room[]>([]);
+  const [profile, setProfile] = useState<TeacherProfile | null>(null);
+  const [payslips, setPayslips] = useState<{
+    id: string; period_label: string; period_start: string; period_end: string;
+    classes_conducted: number; classes_cancelled: number; classes_missed: number;
+    base_pay_paise: number; incentive_paise: number; lop_paise: number;
+    total_paise: number; status: string;
+  }[]>([]);
+  const [loadingRooms, setLoadingRooms] = useState(true);
+  const [loadingProfile, setLoadingProfile] = useState(false);
+  const [loadingPay, setLoadingPay] = useState(false);
+  const [activeTab, setActiveTab] = useState('overview');
+
+  const fetchRooms = useCallback(async () => {
+    setLoadingRooms(true);
+    try {
+      const res = await fetch('/api/v1/teacher/rooms');
+      const text = await res.text();
+      if (!text) { console.error('[Teacher] rooms: empty response'); return; }
+      const data = JSON.parse(text);
+      if (data.success) setRooms(data.data?.rooms ?? []);
+    } catch (err) {
+      console.error('[Teacher] rooms fetch failed:', err);
+    } finally {
+      setLoadingRooms(false);
+    }
+  }, []);
+
+  const fetchProfile = useCallback(async () => {
+    setLoadingProfile(true);
+    try {
+      const res = await fetch('/api/v1/teacher/profile');
+      const text = await res.text();
+      if (!text) { console.error('[Teacher] profile: empty response'); return; }
+      const data = JSON.parse(text);
+      if (data.success) setProfile(data.data);
+      else console.error('[Teacher] profile error:', data.error);
+    } catch (err) {
+      console.error('[Teacher] profile fetch failed:', err);
+    } finally {
+      setLoadingProfile(false);
+    }
+  }, []);
+
+  const fetchPayslips = useCallback(async () => {
+    setLoadingPay(true);
+    try {
+      const res = await fetch('/api/v1/payroll?resource=payslips');
+      const data = await res.json();
+      if (data.success) setPayslips(data.data?.payslips || []);
+    } catch (e) {
+      console.error('[Teacher] payslips fetch failed:', e);
+    }
+    setLoadingPay(false);
+  }, []);
+
+  useEffect(() => { fetchRooms(); }, [fetchRooms]);
+
+  useEffect(() => {
+    if (activeTab === 'profile' && !profile) fetchProfile();
+  }, [activeTab, profile, fetchProfile]);
+
+  useEffect(() => {
+    if (activeTab === 'salary' && payslips.length === 0) fetchPayslips();
+  }, [activeTab, payslips.length, fetchPayslips]);
+
+  useEffect(() => {
+    const id = setInterval(fetchRooms, 60_000);
+    return () => clearInterval(id);
+  }, [fetchRooms]);
+
+  const liveCount = rooms.filter((r) => effectiveStatus(r) === 'live').length;
+
+  const tabs = [
+    { key: 'overview', label: 'Overview', icon: LayoutDashboard },
+    { key: 'classes', label: liveCount > 0 ? `My Classes · ${liveCount} Live` : 'My Classes', icon: BookOpen },
+    ...(permissions?.salary_view !== false
+      ? [{ key: 'salary', label: 'Salary', icon: Briefcase }]
+      : []),
+    { key: 'profile', label: 'My Profile', icon: User },
+  ];
+
+  return (
+    <DashboardShell role={userRole} userName={userName} userEmail={userEmail} permissions={permissions}>
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <PageHeader
+            icon={BookOpen}
+            title="Teacher Dashboard"
+            subtitle={`Welcome back, ${userName.split(' ')[0]}`}
+          />
+          <RefreshButton loading={loadingRooms} onClick={fetchRooms} />
+        </div>
+
+        <TabBar tabs={tabs} active={activeTab} onChange={setActiveTab} />
+
+        {loadingRooms && rooms.length === 0 ? (
+          <LoadingState />
+        ) : (
+          <>
+            {activeTab === 'overview' && <OverviewTab rooms={rooms} userName={userName} />}
+            {activeTab === 'classes' && <MyClassesTab rooms={rooms} />}
+            {activeTab === 'salary' && permissions?.salary_view !== false && (
+              <SalaryTab payslips={payslips} loading={loadingPay} />
+            )}
+            {activeTab === 'profile' && <ProfileTab profile={profile} loading={loadingProfile} />}
+          </>
+        )}
+      </div>
+    </DashboardShell>
+  );
+}

@@ -1,0 +1,1511 @@
+'use client';
+
+import { useEffect, useState, useCallback } from 'react';
+import DashboardShell from '@/components/dashboard/DashboardShell';
+import { fmtDateBriefIST, fmtTimeIST } from '@/lib/utils';
+import Script from 'next/script';
+import {
+  LayoutDashboard,
+  Users,
+  Calendar,
+  Clock,
+  Radio,
+  RefreshCw,
+  Eye,
+  CheckCircle2,
+  CreditCard,
+  GraduationCap,
+  FileText,
+  BookOpen,
+  ClipboardList,
+  AlertCircle,
+  BarChart3,
+  MessageSquare,
+  TrendingUp,
+  TrendingDown,
+  ChevronDown,
+  ChevronUp,
+  Send,
+  X,
+  Brain,
+  Download,
+  Loader2,
+  Shield,
+  CalendarClock,
+  Ban,
+} from 'lucide-react';
+
+/* ─── Interfaces ──────────────────────────────────────────── */
+
+/** Treat 'live' rooms past their end time as 'ended' (safety net). */
+function effectiveStatus(room: { status: string; scheduled_start: string; duration_minutes: number }): string {
+  if (room.status === 'live') {
+    const endMs = new Date(room.scheduled_start).getTime() + room.duration_minutes * 60_000;
+    if (Date.now() >= endMs) return 'ended';
+  }
+  return room.status;
+}
+
+interface ChildRoom {
+  room_id: string;
+  room_name: string;
+  subject: string;
+  grade: string;
+  status: string;
+  scheduled_start: string;
+  duration_minutes: number;
+  teacher_email: string | null;
+  student_email?: string;
+  student_name?: string;
+}
+
+interface AttendanceChild {
+  student_email: string;
+  student_name: string;
+  summary: {
+    total_sessions: number;
+    present: number;
+    absent: number;
+    late: number;
+    attendance_rate: number;
+    avg_time_minutes: number;
+    total_rejoins: number;
+  };
+  recent_sessions: Array<{
+    room_id: string;
+    batch_name: string;
+    subject: string;
+    grade: string;
+    scheduled_start: string;
+    status: string;
+    is_late: boolean;
+    late_by_seconds: number;
+    time_in_class_seconds: number;
+    join_count: number;
+  }>;
+}
+
+interface ExamChild {
+  student_email: string;
+  student_name: string;
+  summary: {
+    total_exams: number;
+    avg_percentage: number;
+    best_score: number;
+    worst_score: number;
+    passed: number;
+    failed: number;
+  };
+  exams: Array<{
+    attempt_id: string;
+    exam_title: string;
+    subject: string;
+    exam_type: string;
+    total_marks: number;
+    total_marks_obtained: number;
+    percentage: number;
+    grade_letter: string;
+    passed: boolean;
+    submitted_at: string;
+  }>;
+}
+
+interface Complaint {
+  id: string;
+  subject: string;
+  category: string;
+  description: string;
+  priority: string;
+  status: string;
+  resolution: string | null;
+  created_at: string;
+}
+
+interface ParentSessionRequest {
+  id: string;
+  request_type: 'reschedule' | 'cancel';
+  requester_email: string;
+  batch_session_id: string;
+  batch_id: string;
+  reason: string;
+  proposed_date: string | null;
+  proposed_time: string | null;
+  status: 'pending' | 'approved' | 'rejected' | 'withdrawn';
+  rejection_reason: string | null;
+  reviewed_by: string | null;
+  reviewed_at: string | null;
+  created_at: string;
+  batch_name?: string;
+  subject?: string;
+  session_date?: string;
+  requester_name?: string;
+}
+
+interface LedgerEntry {
+  date: string;
+  type: 'invoice' | 'payment';
+  reference: string;
+  description: string;
+  debit_paise: number;
+  credit_paise: number;
+  balance_paise: number;
+  status?: string;
+  currency: string;
+}
+
+interface Props {
+  userName: string;
+  userEmail: string;
+  userRole: string;
+  permissions?: Record<string, boolean>;
+}
+
+type TabId = 'overview' | 'attendance' | 'exams' | 'fees' | 'reports' | 'complaints' | 'monitoring' | 'requests';
+const VALID_TABS: TabId[] = ['overview', 'attendance', 'exams', 'fees', 'reports', 'complaints', 'monitoring', 'requests'];
+
+/* ─── Component ───────────────────────────────────────────── */
+
+export default function ParentDashboardClient({ userName, userEmail, userRole, permissions }: Props) {
+  const [activeTab, setActiveTab] = useState<TabId>(() => {
+    if (typeof window !== 'undefined') {
+      const h = window.location.hash.replace('#', '') as TabId;
+      if (VALID_TABS.includes(h)) return h;
+    }
+    return 'overview';
+  });
+  const [rooms, setRooms] = useState<ChildRoom[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [invoices, setInvoices] = useState<Record<string, unknown>[]>([]);
+
+  // Attendance state
+  const [attendanceChildren, setAttendanceChildren] = useState<AttendanceChild[]>([]);
+  const [attendanceLoading, setAttendanceLoading] = useState(false);
+
+  // Exam state
+  const [examChildren, setExamChildren] = useState<ExamChild[]>([]);
+  const [examLoading, setExamLoading] = useState(false);
+
+  // Complaints state
+  const [complaints, setComplaints] = useState<Complaint[]>([]);
+  const [complaintsLoading, setComplaintsLoading] = useState(false);
+  const [showComplaintForm, setShowComplaintForm] = useState(false);
+  const [complaintForm, setComplaintForm] = useState({
+    subject: '',
+    category: 'general',
+    description: '',
+    priority: 'medium',
+  });
+  const [submitting, setSubmitting] = useState(false);
+
+  // Ledger state
+  const [ledgerEntries, setLedgerEntries] = useState<LedgerEntry[]>([]);
+  const [ledgerSummary, setLedgerSummary] = useState<{
+    total_invoiced_paise: number;
+    total_paid_paise: number;
+    outstanding_paise: number;
+    currency: string;
+  } | null>(null);
+  const [ledgerLoading, setLedgerLoading] = useState(false);
+
+  // Reports state
+  const [reports, setReports] = useState<Record<string, unknown>[]>([]);
+  const [reportsLoading, setReportsLoading] = useState(false);
+  const [expandedReport, setExpandedReport] = useState<string | null>(null);
+
+  // Monitoring state
+  const [monitorReports, setMonitorReports] = useState<Record<string, unknown>[]>([]);
+  const [monitorLoading, setMonitorLoading] = useState(false);
+
+  // Payment state
+  const [payingInvoice, setPayingInvoice] = useState<string | null>(null);
+  const [razorpayLoaded, setRazorpayLoaded] = useState(false);
+
+  // Session requests state
+  const [sessionRequests, setSessionRequests] = useState<ParentSessionRequest[]>([]);
+  const [requestsLoading, setRequestsLoading] = useState(false);
+  const [showRequestForm, setShowRequestForm] = useState(false);
+  const [requestForm, setRequestForm] = useState({ sessionId: '', batchId: '', childEmail: '', requestType: 'reschedule' as 'reschedule' | 'cancel', reason: '', proposedDate: '', proposedTime: '' });
+  const [requestSubmitting, setRequestSubmitting] = useState(false);
+
+  /* ─── Fetchers ─────────────────────────────────────────── */
+
+  const fetchRooms = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await fetch('/api/v1/parent/rooms');
+      const data = await res.json();
+      if (data.success) setRooms(data.data?.rooms || []);
+    } catch (err) { console.error('Failed to fetch:', err); }
+    finally { setLoading(false); }
+  }, []);
+
+  const fetchInvoices = useCallback(async () => {
+    try {
+      const res = await fetch('/api/v1/payment/invoices');
+      const data = await res.json();
+      if (data.success) setInvoices(data.data?.invoices || []);
+    } catch (err) { console.error('Invoices fetch failed:', err); }
+  }, []);
+
+  const fetchAttendance = useCallback(async () => {
+    setAttendanceLoading(true);
+    try {
+      const res = await fetch('/api/v1/parent/attendance');
+      const data = await res.json();
+      if (data.success) setAttendanceChildren(data.data?.children || []);
+    } catch (err) { console.error('Attendance fetch failed:', err); }
+    finally { setAttendanceLoading(false); }
+  }, []);
+
+  const fetchExams = useCallback(async () => {
+    setExamLoading(true);
+    try {
+      const res = await fetch('/api/v1/parent/exams');
+      const data = await res.json();
+      if (data.success) setExamChildren(data.data?.children || []);
+    } catch (err) { console.error('Exams fetch failed:', err); }
+    finally { setExamLoading(false); }
+  }, []);
+
+  const fetchComplaints = useCallback(async () => {
+    setComplaintsLoading(true);
+    try {
+      const res = await fetch('/api/v1/parent/complaints');
+      const data = await res.json();
+      if (data.success) setComplaints(data.data?.complaints || []);
+    } catch (err) { console.error('Complaints fetch failed:', err); }
+    finally { setComplaintsLoading(false); }
+  }, []);
+
+  const fetchLedger = useCallback(async () => {
+    setLedgerLoading(true);
+    try {
+      const res = await fetch('/api/v1/payment/ledger');
+      const data = await res.json();
+      if (data.success) {
+        setLedgerEntries(data.data?.entries || []);
+        setLedgerSummary(data.data?.summary || null);
+      }
+    } catch (err) { console.error('Ledger fetch failed:', err); }
+    finally { setLedgerLoading(false); }
+  }, []);
+
+  const fetchReports = useCallback(async () => {
+    setReportsLoading(true);
+    try {
+      const res = await fetch('/api/v1/parent/reports');
+      const data = await res.json();
+      if (data.success) setReports(data.data?.reports || []);
+    } catch (err) { console.error('Reports fetch failed:', err); }
+    finally { setReportsLoading(false); }
+  }, []);
+
+  const fetchMonitorReports = useCallback(async () => {
+    setMonitorLoading(true);
+    try {
+      const res = await fetch('/api/v1/monitoring/reports?role=parent');
+      const data = await res.json();
+      if (data.success) setMonitorReports(data.data?.reports || []);
+    } catch (err) { console.error('Monitor reports fetch failed:', err); }
+    finally { setMonitorLoading(false); }
+  }, []);
+
+  // Razorpay global type
+  const getRazorpay = () => (window as unknown as { Razorpay?: new (opts: Record<string, unknown>) => { open: () => void } }).Razorpay;
+
+  const handlePayInvoice = useCallback(async (invoiceId: string) => {
+    setPayingInvoice(invoiceId);
+    try {
+      const res = await fetch('/api/v1/payment/initiate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ invoice_id: invoiceId }),
+      });
+      const data = await res.json();
+      if (!data.success) { alert(data.error || 'Payment initiation failed'); return; }
+
+      const order = data.data;
+
+      if (order.mode === 'test' || order.mode === 'mock') {
+        // Mock mode: auto-complete
+        const cbRes = await fetch('/api/v1/payment/callback', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ mock: true, invoice_id: invoiceId }),
+        });
+        const cbData = await cbRes.json();
+        if (cbData.success) { fetchLedger(); fetchInvoices(); }
+        else { alert('Payment failed'); }
+      } else {
+        // Live Razorpay
+        const Razorpay = getRazorpay();
+        if (!Razorpay) { alert('Payment gateway loading...'); return; }
+        const rzp = new Razorpay({
+          key: order.gatewayKeyId,
+          amount: order.amount,
+          currency: order.currency,
+          name: 'stibe Academy',
+          description: 'Fee Payment',
+          order_id: order.orderId,
+          prefill: order.prefill,
+          theme: { color: '#2563eb' },
+          handler: async (response: Record<string, string>) => {
+            await fetch('/api/v1/payment/callback', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(response),
+            });
+            fetchLedger();
+            fetchInvoices();
+          },
+        });
+        rzp.open();
+      }
+    } catch { alert('Network error'); }
+    finally { setPayingInvoice(null); }
+  }, [fetchLedger, fetchInvoices]);
+
+  const fetchSessionRequests = useCallback(async () => {
+    setRequestsLoading(true);
+    try {
+      const res = await fetch('/api/v1/session-requests');
+      const data = await res.json();
+      if (data.success) setSessionRequests(data.requests ?? []);
+    } catch (err) { console.error('[Parent] session-requests fetch failed:', err); }
+    finally { setRequestsLoading(false); }
+  }, []);
+
+  const submitSessionRequest = async () => {
+    if (!requestForm.sessionId || !requestForm.reason) return;
+    setRequestSubmitting(true);
+    try {
+      const body: Record<string, string> = {
+        batch_session_id: requestForm.sessionId,
+        batch_id: requestForm.batchId,
+        request_type: requestForm.requestType,
+        reason: requestForm.reason,
+      };
+      if (requestForm.requestType === 'reschedule') {
+        if (requestForm.proposedDate) body.proposed_date = requestForm.proposedDate;
+        if (requestForm.proposedTime) body.proposed_time = requestForm.proposedTime;
+      }
+      const res = await fetch('/api/v1/session-requests', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+      const data = await res.json();
+      if (data.success) { setShowRequestForm(false); setRequestForm({ sessionId: '', batchId: '', childEmail: '', requestType: 'reschedule', reason: '', proposedDate: '', proposedTime: '' }); fetchSessionRequests(); }
+    } catch { /* */ } finally { setRequestSubmitting(false); }
+  };
+
+  const withdrawSessionRequest = async (id: string) => {
+    try {
+      await fetch('/api/v1/session-requests', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'withdraw', request_id: id }) });
+      fetchSessionRequests();
+    } catch { /* */ }
+  };
+
+  // Hash sync — keep URL hash in sync with active tab
+  useEffect(() => {
+    const hash = activeTab === 'overview' ? '' : `#${activeTab}`;
+    window.history.replaceState(null, '', window.location.pathname + hash);
+  }, [activeTab]);
+
+  useEffect(() => {
+    const onHash = () => {
+      const h = window.location.hash.replace('#', '') as TabId;
+      if (VALID_TABS.includes(h)) setActiveTab(h);
+      else if (!window.location.hash) setActiveTab('overview');
+    };
+    window.addEventListener('hashchange', onHash);
+    return () => window.removeEventListener('hashchange', onHash);
+  }, []);
+
+  useEffect(() => {
+    fetchRooms();
+    fetchInvoices();
+  }, [fetchRooms, fetchInvoices]);
+
+  // Lazy load tab data
+  useEffect(() => {
+    if (activeTab === 'attendance' && attendanceChildren.length === 0 && !attendanceLoading) fetchAttendance();
+    if (activeTab === 'exams' && examChildren.length === 0 && !examLoading) fetchExams();
+    if (activeTab === 'complaints' && complaints.length === 0 && !complaintsLoading) fetchComplaints();
+    if (activeTab === 'fees' && ledgerEntries.length === 0 && !ledgerLoading) fetchLedger();
+    if (activeTab === 'reports' && reports.length === 0 && !reportsLoading) fetchReports();
+    if (activeTab === 'monitoring' && monitorReports.length === 0 && !monitorLoading) fetchMonitorReports();
+    if (activeTab === 'requests' && sessionRequests.length === 0 && !requestsLoading) fetchSessionRequests();
+  }, [activeTab, attendanceChildren.length, attendanceLoading, examChildren.length, examLoading,
+      complaints.length, complaintsLoading, ledgerEntries.length, ledgerLoading, reports.length,
+      reportsLoading, monitorReports.length, monitorLoading,
+      fetchAttendance, fetchExams, fetchComplaints, fetchLedger, fetchReports, fetchMonitorReports, fetchSessionRequests,
+      sessionRequests.length, requestsLoading]);
+
+  const live = rooms.filter((r) => effectiveStatus(r) === 'live');
+  const upcoming = rooms.filter((r) => effectiveStatus(r) === 'scheduled');
+
+
+
+  const tabs: { id: TabId; label: string; icon: React.ElementType }[] = [
+    { id: 'overview', label: 'Overview', icon: LayoutDashboard },
+    ...(permissions?.attendance_view !== false ? [{ id: 'attendance' as TabId, label: 'Attendance', icon: ClipboardList }] : []),
+    ...(permissions?.exams_view !== false ? [{ id: 'exams' as TabId, label: 'Exams', icon: GraduationCap }] : []),
+    ...(permissions?.fees_view !== false ? [{ id: 'fees' as TabId, label: 'Fee Ledger', icon: CreditCard }] : []),
+    ...(permissions?.reports_view !== false ? [{ id: 'reports' as TabId, label: 'Reports', icon: BarChart3 }] : []),
+    { id: 'monitoring' as TabId, label: 'AI Monitoring', icon: Brain },
+    { id: 'requests' as TabId, label: `Requests${sessionRequests.filter(r => r.status === 'pending').length > 0 ? ' · ' + sessionRequests.filter(r => r.status === 'pending').length : ''}`, icon: CalendarClock },
+    ...(permissions?.complaints_file !== false ? [{ id: 'complaints' as TabId, label: 'Complaints', icon: MessageSquare }] : []),
+  ];
+
+  /* ─── Submit complaint ──────────────────────────────────── */
+
+  const submitComplaint = async () => {
+    if (!complaintForm.subject.trim() || !complaintForm.description.trim()) return;
+    setSubmitting(true);
+    try {
+      const res = await fetch('/api/v1/parent/complaints', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(complaintForm),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setShowComplaintForm(false);
+        setComplaintForm({ subject: '', category: 'general', description: '', priority: 'medium' });
+        fetchComplaints();
+      }
+    } catch (err) { console.error('Complaint submit failed:', err); }
+    finally { setSubmitting(false); }
+  };
+
+  /* ─── Helpers ────────────────────────────────────────────── */
+
+  const fmtCurrency = (paise: number, currency: string = 'INR') => {
+    const symbols: Record<string, string> = {
+      INR: '₹', AED: 'د.إ', SAR: '﷼', QAR: 'ر.ق', KWD: 'د.ك', OMR: 'ر.ع.', BHD: '.د.ب', USD: '$',
+    };
+    return `${symbols[currency] || currency} ${(paise / 100).toFixed(2)}`;
+  };
+
+  const statusBadge: Record<string, string> = {
+    paid: 'text-green-400 border-green-700 bg-green-950/30',
+    pending: 'text-yellow-400 border-yellow-700 bg-yellow-950/30',
+    overdue: 'text-red-400 border-red-700 bg-red-950/30',
+    open: 'text-blue-400 border-blue-700 bg-blue-950/30',
+    in_progress: 'text-yellow-400 border-yellow-700 bg-yellow-950/30',
+    resolved: 'text-green-400 border-green-700 bg-green-950/30',
+    closed: 'text-muted-foreground border-border',
+  };
+
+  /* ─── Render ──────────────────────────────────────────── */
+
+  return (
+    <DashboardShell role={userRole} userName={userName} userEmail={userEmail} permissions={permissions}>
+      <Script src="https://checkout.razorpay.com/v1/checkout.js" onLoad={() => setRazorpayLoaded(true)} strategy="afterInteractive" />
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold">Parent Dashboard</h1>
+        <p className="text-sm text-muted-foreground">Monitor your child&apos;s sessions, progress, and fees</p>
+      </div>
+
+      {/* Tabs */}
+      <div className="mb-6 flex gap-1 overflow-x-auto rounded-xl border border-border bg-card p-1">
+        {tabs.map((tab) => {
+          const Icon = tab.icon;
+          return (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-medium transition-all whitespace-nowrap
+                ${activeTab === tab.id
+                  ? 'bg-primary text-primary-foreground shadow-sm'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'}`}
+            >
+              <Icon className="h-3.5 w-3.5" />
+              {tab.label}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* ─── OVERVIEW TAB ──────────────────────────────── */}
+      {activeTab === 'overview' && (
+        <>
+          {/* Stats */}
+          <div className="mb-6 grid grid-cols-3 gap-3">
+            <div className="rounded-xl border border-green-700 bg-card p-4">
+              <p className="text-xs text-muted-foreground">Live Now</p>
+              <p className="mt-1 text-2xl font-bold text-green-400">{live.length}</p>
+            </div>
+            <div className="rounded-xl border border-primary/30 bg-card p-4">
+              <p className="text-xs text-muted-foreground">Upcoming</p>
+              <p className="mt-1 text-2xl font-bold text-primary">{upcoming.length}</p>
+            </div>
+            <div className="rounded-xl border border-border bg-card p-4">
+              <p className="text-xs text-muted-foreground">Total</p>
+              <p className="mt-1 text-2xl font-bold">{rooms.length}</p>
+            </div>
+          </div>
+
+          {/* Live classes with observe */}
+          {live.length > 0 && (
+            <div className="mb-6">
+              <h2 className="mb-3 text-sm font-semibold text-green-400 uppercase tracking-wider flex items-center gap-2">
+                <Radio className="h-4 w-4 animate-pulse" /> Live Now
+              </h2>
+              {live.map((room) => (
+                <div key={room.room_id} className="mb-3 flex items-center gap-4 rounded-xl border border-green-800 bg-green-950/30 p-4">
+                  <Radio className="h-6 w-6 text-green-400" />
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-medium truncate">{room.room_name}</h3>
+                    <p className="text-xs text-muted-foreground">
+                      {room.subject} · {room.grade} · Teacher: {room.teacher_email || '—'}
+                    </p>
+                  </div>
+                  <a
+                    href={`/classroom/${room.room_id}?mode=observe`}
+                    className="flex items-center gap-1 rounded-lg bg-primary px-3 py-2 text-xs font-medium text-primary-foreground hover:bg-primary/90"
+                  >
+                    <Eye className="h-3.5 w-3.5" /> Observe
+                  </a>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Upcoming */}
+          <h2 className="mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+            Upcoming Sessions
+          </h2>
+          <div className="space-y-3">
+            {loading && rooms.length === 0 ? (
+              <div className="flex items-center justify-center py-16 text-muted-foreground">
+                <RefreshCw className="mr-2 h-5 w-5 animate-spin" /> Loading...
+              </div>
+            ) : upcoming.length === 0 ? (
+              <div className="rounded-xl border border-dashed border-border py-12 text-center">
+                <Calendar className="mx-auto mb-2 h-8 w-8 text-muted-foreground/60" />
+                <p className="text-muted-foreground text-sm">No upcoming sessions</p>
+              </div>
+            ) : (
+              upcoming.map((room) => {
+                const d = new Date(room.scheduled_start);
+                return (
+                  <div key={room.room_id} className="flex items-center gap-4 rounded-xl border border-border bg-card p-4">
+                    <Calendar className="h-8 w-8 text-primary" />
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-medium truncate">{room.room_name}</h3>
+                      <div className="flex gap-3 mt-1 text-xs text-muted-foreground">
+                        <span>{room.subject} · {room.grade}</span>
+                        <span className="flex items-center gap-1">
+                          <Clock className="h-3 w-3" />
+                          {fmtDateBriefIST(d)} {fmtTimeIST(d)}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })
+            )}
+          </div>
+
+          {/* Completed */}
+          {rooms.filter((r) => r.status === 'ended').length > 0 && (
+            <>
+              <h2 className="mt-8 mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider flex items-center gap-2">
+                <CheckCircle2 className="h-4 w-4" /> Completed
+              </h2>
+              <div className="space-y-2">
+                {rooms.filter((r) => r.status === 'ended').slice(0, 5).map((room) => (
+                  <div key={room.room_id} className="flex items-center gap-3 rounded-lg border border-border bg-card/50 p-3 opacity-60">
+                    <CheckCircle2 className="h-5 w-5 text-muted-foreground/60" />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm truncate">{room.room_name}</p>
+                      <p className="text-xs text-muted-foreground/80">{room.subject} · {room.grade}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
+
+          {/* Quick Fee Summary */}
+          <h2 className="mt-8 mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider flex items-center gap-2">
+            <CreditCard className="h-4 w-4" /> Fee Summary
+          </h2>
+          {invoices.length === 0 ? (
+            <div className="rounded-xl border border-dashed border-border py-8 text-center">
+              <CreditCard className="mx-auto mb-2 h-8 w-8 text-muted-foreground/60" />
+              <p className="text-muted-foreground text-sm">No invoices found</p>
+            </div>
+          ) : (
+            <div className="space-y-2">
+              {invoices.slice(0, 5).map((inv, idx) => {
+                const st = inv.status as string;
+                return (
+                  <div key={idx} className="flex items-center gap-3 rounded-lg border border-border bg-card/50 p-3">
+                    <FileText className="h-5 w-5 text-primary" />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm truncate">{inv.invoice_number as string || `Invoice #${idx + 1}`}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {fmtCurrency(inv.amount_paise as number, inv.currency as string)} · Due: {inv.due_date ? new Date(inv.due_date as string).toLocaleDateString('en-IN') : '—'}
+                      </p>
+                    </div>
+                    <span className={`text-[10px] font-semibold uppercase border rounded px-2 py-0.5 ${statusBadge[st] || 'text-muted-foreground border-border'}`}>
+                      {st}
+                    </span>
+                  </div>
+                );
+              })}
+              {invoices.length > 5 && (
+                <button onClick={() => setActiveTab('fees')} className="text-xs text-primary hover:underline">
+                  View all {invoices.length} invoices →
+                </button>
+              )}
+            </div>
+          )}
+        </>
+      )}
+
+      {/* ─── ATTENDANCE TAB ──────────────────────────────── */}
+      {activeTab === 'attendance' && (
+        <div>
+          <div className="mb-4 flex items-center justify-between">
+            <h2 className="text-lg font-semibold">Attendance Reports</h2>
+            <button onClick={fetchAttendance} className="flex items-center gap-1 text-xs text-primary hover:underline">
+              <RefreshCw className="h-3 w-3" /> Refresh
+            </button>
+          </div>
+
+          {attendanceLoading ? (
+            <div className="flex items-center justify-center py-16 text-muted-foreground">
+              <RefreshCw className="mr-2 h-5 w-5 animate-spin" /> Loading attendance...
+            </div>
+          ) : attendanceChildren.length === 0 ? (
+            <div className="rounded-xl border border-dashed border-border py-12 text-center">
+              <ClipboardList className="mx-auto mb-2 h-8 w-8 text-muted-foreground/60" />
+              <p className="text-muted-foreground text-sm">No attendance records found</p>
+            </div>
+          ) : (
+            attendanceChildren.map((child) => (
+              <div key={child.student_email} className="mb-6">
+                <h3 className="mb-3 font-medium flex items-center gap-2">
+                  <Users className="h-4 w-4 text-primary" />
+                  {child.student_name}
+                </h3>
+
+                {/* Summary Cards */}
+                <div className="mb-4 grid grid-cols-2 md:grid-cols-4 gap-3">
+                  <div className="rounded-xl border border-border bg-card p-3">
+                    <p className="text-[10px] text-muted-foreground uppercase">Attendance Rate</p>
+                    <p className={`mt-1 text-xl font-bold ${child.summary.attendance_rate >= 75 ? 'text-green-400' : 'text-red-400'}`}>
+                      {child.summary.attendance_rate}%
+                    </p>
+                  </div>
+                  <div className="rounded-xl border border-border bg-card p-3">
+                    <p className="text-[10px] text-muted-foreground uppercase">Present</p>
+                    <p className="mt-1 text-xl font-bold text-green-400">{child.summary.present}/{child.summary.total_sessions}</p>
+                  </div>
+                  <div className="rounded-xl border border-border bg-card p-3">
+                    <p className="text-[10px] text-muted-foreground uppercase">Absent</p>
+                    <p className="mt-1 text-xl font-bold text-red-400">{child.summary.absent}</p>
+                  </div>
+                  <div className="rounded-xl border border-border bg-card p-3">
+                    <p className="text-[10px] text-muted-foreground uppercase">Late</p>
+                    <p className="mt-1 text-xl font-bold text-yellow-400">{child.summary.late}</p>
+                  </div>
+                </div>
+
+                {/* Recent Sessions */}
+                <h4 className="mb-2 text-xs font-semibold text-muted-foreground uppercase">Recent Sessions</h4>
+                <div className="space-y-2">
+                  {child.recent_sessions.slice(0, 10).map((session, idx) => (
+                    <div key={idx} className="flex items-center gap-3 rounded-lg border border-border bg-card/50 p-3">
+                      <div className={`h-2.5 w-2.5 rounded-full ${session.status === 'present' ? 'bg-green-400' : session.status === 'absent' ? 'bg-red-400' : 'bg-yellow-400'}`} />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm truncate">{session.batch_name}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {session.subject} · {new Date(session.scheduled_start).toLocaleDateString('en-IN')}
+                          {session.is_late && <span className="ml-2 text-yellow-400">Late by {Math.round(session.late_by_seconds / 60)}min</span>}
+                        </p>
+                      </div>
+                      <span className="text-xs text-muted-foreground">
+                        {Math.round(session.time_in_class_seconds / 60)}min
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      )}
+
+      {/* ─── EXAMS TAB ───────────────────────────────────── */}
+      {activeTab === 'exams' && (
+        <div>
+          <div className="mb-4 flex items-center justify-between">
+            <h2 className="text-lg font-semibold">Exam Results</h2>
+            <button onClick={fetchExams} className="flex items-center gap-1 text-xs text-primary hover:underline">
+              <RefreshCw className="h-3 w-3" /> Refresh
+            </button>
+          </div>
+
+          {examLoading ? (
+            <div className="flex items-center justify-center py-16 text-muted-foreground">
+              <RefreshCw className="mr-2 h-5 w-5 animate-spin" /> Loading exams...
+            </div>
+          ) : examChildren.length === 0 ? (
+            <div className="rounded-xl border border-dashed border-border py-12 text-center">
+              <GraduationCap className="mx-auto mb-2 h-8 w-8 text-muted-foreground/60" />
+              <p className="text-muted-foreground text-sm">No exam results found</p>
+            </div>
+          ) : (
+            examChildren.map((child) => (
+              <div key={child.student_email} className="mb-6">
+                <h3 className="mb-3 font-medium flex items-center gap-2">
+                  <Users className="h-4 w-4 text-primary" />
+                  {child.student_name}
+                </h3>
+
+                {/* Summary */}
+                <div className="mb-4 grid grid-cols-2 md:grid-cols-4 gap-3">
+                  <div className="rounded-xl border border-border bg-card p-3">
+                    <p className="text-[10px] text-muted-foreground uppercase">Average Score</p>
+                    <p className={`mt-1 text-xl font-bold ${child.summary.avg_percentage >= 60 ? 'text-green-400' : 'text-red-400'}`}>
+                      {child.summary.avg_percentage}%
+                    </p>
+                  </div>
+                  <div className="rounded-xl border border-border bg-card p-3">
+                    <p className="text-[10px] text-muted-foreground uppercase">Exams Taken</p>
+                    <p className="mt-1 text-xl font-bold">{child.summary.total_exams}</p>
+                  </div>
+                  <div className="rounded-xl border border-border bg-card p-3">
+                    <p className="text-[10px] text-muted-foreground uppercase">Passed</p>
+                    <p className="mt-1 text-xl font-bold text-green-400 flex items-center gap-1">
+                      <TrendingUp className="h-4 w-4" /> {child.summary.passed}
+                    </p>
+                  </div>
+                  <div className="rounded-xl border border-border bg-card p-3">
+                    <p className="text-[10px] text-muted-foreground uppercase">Failed</p>
+                    <p className="mt-1 text-xl font-bold text-red-400 flex items-center gap-1">
+                      <TrendingDown className="h-4 w-4" /> {child.summary.failed}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Subject-wise Performance Matrix */}
+                {child.exams.length > 0 && (() => {
+                  const bySubject: Record<string, { total: number; sum: number; passed: number; count: number; best: number; worst: number }> = {};
+                  child.exams.forEach(e => {
+                    if (!bySubject[e.subject]) bySubject[e.subject] = { total: 0, sum: 0, passed: 0, count: 0, best: 0, worst: 100 };
+                    const s = bySubject[e.subject];
+                    s.count++; s.sum += e.percentage; s.total += e.total_marks;
+                    if (e.passed) s.passed++;
+                    if (e.percentage > s.best) s.best = e.percentage;
+                    if (e.percentage < s.worst) s.worst = e.percentage;
+                  });
+                  const subjects = Object.entries(bySubject);
+                  if (subjects.length < 1) return null;
+                  return (
+                    <div className="mb-4 rounded-xl border border-border bg-card p-4">
+                      <h4 className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide mb-3 flex items-center gap-1.5">
+                        <BarChart3 className="h-3 w-3" /> Subject Performance
+                      </h4>
+                      <div className="space-y-2.5">
+                        {subjects.map(([subject, data]) => {
+                          const avg = Math.round(data.sum / data.count);
+                          const barColor = avg >= 75 ? 'bg-green-500' : avg >= 50 ? 'bg-amber-500' : 'bg-red-500';
+                          return (
+                            <div key={subject}>
+                              <div className="flex items-center justify-between mb-1">
+                                <span className="text-xs font-medium">{subject}</span>
+                                <span className="text-xs text-muted-foreground">
+                                  {avg}% avg · {data.count} exam{data.count !== 1 ? 's' : ''} · {data.passed} passed
+                                </span>
+                              </div>
+                              <div className="h-2 rounded-full bg-muted overflow-hidden">
+                                <div className={`h-full rounded-full transition-all duration-500 ${barColor}`} style={{ width: `${avg}%` }} />
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  );
+                })()}
+
+                {/* Exam List */}
+                <div className="space-y-2">
+                  {child.exams.map((exam) => (
+                    <div key={exam.attempt_id} className="flex items-center gap-3 rounded-lg border border-border bg-card/50 p-3">
+                      <BookOpen className={`h-5 w-5 ${exam.passed ? 'text-green-400' : 'text-red-400'}`} />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm truncate">{exam.exam_title}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {exam.subject} · {exam.exam_type} · {new Date(exam.submitted_at).toLocaleDateString('en-IN')}
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <p className={`text-sm font-bold ${exam.passed ? 'text-green-400' : 'text-red-400'}`}>
+                          {exam.total_marks_obtained}/{exam.total_marks}
+                        </p>
+                        <p className="text-[10px] text-muted-foreground">
+                          {exam.percentage.toFixed(1)}% · {exam.grade_letter}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      )}
+
+      {/* ─── FEES / LEDGER TAB ────────────────────────────── */}
+      {activeTab === 'fees' && (
+        <div>
+          <h2 className="mb-4 text-lg font-semibold">Fees & Payments</h2>
+
+          {ledgerLoading ? (
+            <div className="flex items-center justify-center py-16 text-muted-foreground">
+              <RefreshCw className="mr-2 h-5 w-5 animate-spin" /> Loading ledger...
+            </div>
+          ) : (
+            <>
+              {/* Summary */}
+              {ledgerSummary && (
+                <div className="mb-6 grid grid-cols-3 gap-3">
+                  <div className="rounded-xl border border-border bg-card p-4">
+                    <p className="text-xs text-muted-foreground">Total Invoiced</p>
+                    <p className="mt-1 text-lg font-bold">{fmtCurrency(ledgerSummary.total_invoiced_paise, ledgerSummary.currency)}</p>
+                  </div>
+                  <div className="rounded-xl border border-green-700 bg-card p-4">
+                    <p className="text-xs text-muted-foreground">Total Paid</p>
+                    <p className="mt-1 text-lg font-bold text-green-400">{fmtCurrency(ledgerSummary.total_paid_paise, ledgerSummary.currency)}</p>
+                  </div>
+                  <div className={`rounded-xl border ${ledgerSummary.outstanding_paise > 0 ? 'border-red-700' : 'border-green-700'} bg-card p-4`}>
+                    <p className="text-xs text-muted-foreground">Outstanding</p>
+                    <p className={`mt-1 text-lg font-bold ${ledgerSummary.outstanding_paise > 0 ? 'text-red-400' : 'text-green-400'}`}>
+                      {fmtCurrency(ledgerSummary.outstanding_paise, ledgerSummary.currency)}
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {/* Pending Invoices — Pay Now */}
+              {invoices.filter(inv => inv.status === 'pending' || inv.status === 'overdue').length > 0 && (
+                <div className="mb-6">
+                  <h3 className="mb-3 text-sm font-semibold text-red-400 uppercase tracking-wider flex items-center gap-2">
+                    <AlertCircle className="h-4 w-4" /> Pending Payments
+                  </h3>
+                  <div className="space-y-3">
+                    {invoices.filter(inv => inv.status === 'pending' || inv.status === 'overdue').map(inv => (
+                      <div key={inv.id as string} className="rounded-xl border border-amber-700/50 bg-amber-950/10 p-4 flex items-center gap-4">
+                        <CreditCard className="h-8 w-8 text-amber-400 shrink-0" />
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium truncate">{inv.description as string || inv.invoice_number as string}</p>
+                          <p className="text-xs text-muted-foreground mt-0.5">
+                            Invoice: {inv.invoice_number as string} &middot; Due: {new Date(inv.due_date as string).toLocaleDateString('en-IN')}
+                          </p>
+                        </div>
+                        <div className="text-right shrink-0">
+                          <p className="text-lg font-bold text-amber-300">{fmtCurrency(inv.amount_paise as number, inv.currency as string)}</p>
+                          <button
+                            onClick={() => handlePayInvoice(inv.id as string)}
+                            disabled={payingInvoice === inv.id}
+                            className="mt-1 flex items-center gap-1 rounded-lg bg-amber-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-amber-700 disabled:opacity-50"
+                          >
+                            {payingInvoice === inv.id ? (
+                              <><Loader2 className="h-3 w-3 animate-spin" /> Processing...</>
+                            ) : (
+                              <><CreditCard className="h-3 w-3" /> Pay Now</>
+                            )}
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Paid Invoices with PDF download */}
+              {invoices.filter(inv => inv.status === 'paid').length > 0 && (
+                <div className="mb-6">
+                  <h3 className="mb-3 text-sm font-semibold text-green-400 uppercase tracking-wider flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4" /> Payment Receipts
+                  </h3>
+                  <div className="space-y-2">
+                    {invoices.filter(inv => inv.status === 'paid').slice(0, 20).map(inv => (
+                      <div key={inv.id as string} className="rounded-xl border border-border bg-card p-3 flex items-center gap-3">
+                        <CheckCircle2 className="h-5 w-5 text-green-400 shrink-0" />
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm truncate">{inv.description as string || inv.invoice_number as string}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {inv.invoice_number as string} &middot; Paid: {new Date(inv.paid_at as string).toLocaleDateString('en-IN')}
+                          </p>
+                        </div>
+                        <p className="text-sm font-bold text-green-400 shrink-0">{fmtCurrency(inv.amount_paise as number, inv.currency as string)}</p>
+                        <a
+                          href={`/api/v1/payment/invoice-pdf/${inv.id as string}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-1 rounded-lg border border-border px-2 py-1 text-[10px] text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                        >
+                          <Download className="h-3 w-3" /> PDF
+                        </a>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Full Ledger Table */}
+              <h3 className="mb-3 text-sm font-semibold text-muted-foreground uppercase tracking-wider">Transaction Ledger</h3>
+              {ledgerEntries.length === 0 ? (
+                <div className="rounded-xl border border-dashed border-border py-12 text-center">
+                  <CreditCard className="mx-auto mb-2 h-8 w-8 text-muted-foreground/60" />
+                  <p className="text-muted-foreground text-sm">No fee transactions yet</p>
+                </div>
+              ) : (
+                <div className="overflow-x-auto rounded-xl border border-border">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="border-b border-border bg-muted/30">
+                        <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground">Date</th>
+                        <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground">Reference</th>
+                        <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground">Description</th>
+                        <th className="px-3 py-2 text-right text-xs font-medium text-muted-foreground">Debit</th>
+                        <th className="px-3 py-2 text-right text-xs font-medium text-muted-foreground">Credit</th>
+                        <th className="px-3 py-2 text-right text-xs font-medium text-muted-foreground">Balance</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {ledgerEntries.map((entry, idx) => (
+                        <tr key={idx} className="border-b border-border/50 last:border-0">
+                          <td className="px-3 py-2 text-xs text-muted-foreground whitespace-nowrap">
+                            {new Date(entry.date).toLocaleDateString('en-IN')}
+                          </td>
+                          <td className="px-3 py-2 text-xs font-mono">{entry.reference}</td>
+                          <td className="px-3 py-2 text-xs truncate max-w-50">{entry.description}</td>
+                          <td className="px-3 py-2 text-xs text-right text-red-400">
+                            {entry.debit_paise > 0 ? fmtCurrency(entry.debit_paise, entry.currency) : ''}
+                          </td>
+                          <td className="px-3 py-2 text-xs text-right text-green-400">
+                            {entry.credit_paise > 0 ? fmtCurrency(entry.credit_paise, entry.currency) : ''}
+                          </td>
+                          <td className={`px-3 py-2 text-xs text-right font-medium ${entry.balance_paise > 0 ? 'text-red-400' : 'text-green-400'}`}>
+                            {fmtCurrency(entry.balance_paise, entry.currency)}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </>
+          )}
+        </div>
+      )}
+
+      {/* ─── REPORTS TAB ─────────────────────────────────── */}
+      {activeTab === 'reports' && (
+        <div>
+          <h2 className="mb-4 text-lg font-semibold">Progress Reports</h2>
+
+          {reportsLoading ? (
+            <div className="flex items-center justify-center py-16 text-muted-foreground">
+              <RefreshCw className="mr-2 h-5 w-5 animate-spin" /> Loading reports...
+            </div>
+          ) : reports.length === 0 ? (
+            <div className="rounded-xl border border-dashed border-border py-12 text-center">
+              <BarChart3 className="mx-auto mb-2 h-8 w-8 text-muted-foreground/60" />
+              <p className="text-muted-foreground text-sm">No reports available yet</p>
+              <p className="text-xs text-muted-foreground mt-1">Monthly progress reports will appear here once generated.</p>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {reports.map((report) => {
+                const id = String(report.id);
+                const isExpanded = expandedReport === id;
+                const data = report.data as Record<string, unknown>;
+                const students = (data?.students as Array<Record<string, unknown>>) || [];
+
+                return (
+                  <div key={id} className="rounded-xl border border-border bg-card overflow-hidden">
+                    <button
+                      onClick={() => setExpandedReport(isExpanded ? null : id)}
+                      className="w-full flex items-center gap-3 p-4 text-left hover:bg-muted/20 transition-colors"
+                    >
+                      <BarChart3 className="h-5 w-5 text-primary" />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium truncate">{report.title as string}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {report.report_type as string} · {new Date(report.created_at as string).toLocaleDateString('en-IN')}
+                        </p>
+                      </div>
+                      {isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                    </button>
+
+                    {isExpanded && students.length > 0 && (
+                      <div className="border-t border-border p-4 space-y-4">
+                        {students.map((student, sIdx) => {
+                          const att = student.attendance as Record<string, number> || {};
+                          const academic = student.academic as Record<string, number> || {};
+                          const fees = student.fees as Record<string, number> || {};
+
+                          return (
+                            <div key={sIdx} className="rounded-lg border border-border/50 p-3">
+                              <h4 className="text-sm font-medium mb-2">{student.student_name as string}</h4>
+                              <div className="grid grid-cols-3 gap-2 text-xs">
+                                <div className="rounded-lg bg-muted/30 p-2">
+                                  <p className="text-muted-foreground">Attendance</p>
+                                  <p className="font-bold text-green-400">{att.attendance_rate || 0}%</p>
+                                  <p className="text-[10px] text-muted-foreground">{att.present || 0}/{att.total_sessions || 0} sessions</p>
+                                </div>
+                                <div className="rounded-lg bg-muted/30 p-2">
+                                  <p className="text-muted-foreground">Academics</p>
+                                  <p className="font-bold text-primary">{academic.avg_percentage || 0}%</p>
+                                  <p className="text-[10px] text-muted-foreground">{academic.exams_taken || 0} exams</p>
+                                </div>
+                                <div className="rounded-lg bg-muted/30 p-2">
+                                  <p className="text-muted-foreground">Fees</p>
+                                  <p className={`font-bold ${(fees.overdue || 0) > 0 ? 'text-red-400' : 'text-green-400'}`}>
+                                    {(fees.pending || 0) + (fees.overdue || 0) > 0 ? `${fees.pending || 0} pending` : 'Clear'}
+                                  </p>
+                                  <p className="text-[10px] text-muted-foreground">{fees.paid || 0} paid</p>
+                                </div>
+                              </div>
+                              {(student.topics_covered as Array<Record<string, unknown>>)?.length > 0 && (
+                                <div className="mt-2">
+                                  <p className="text-[10px] text-muted-foreground uppercase mb-1">Topics Covered</p>
+                                  <div className="flex flex-wrap gap-1">
+                                    {(student.topics_covered as Array<Record<string, unknown>>).slice(0, 8).map((t, tIdx) => (
+                                      <span key={tIdx} className="text-[10px] rounded bg-primary/10 text-primary px-1.5 py-0.5">
+                                        {t.class_portion as string}
+                                      </span>
+                                    ))}
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ─── AI MONITORING TAB ─────────────────────────────── */}
+      {activeTab === 'monitoring' && (
+        <div>
+          <div className="mb-4 flex items-center justify-between">
+            <h2 className="text-lg font-semibold">AI Monitoring Reports</h2>
+            <button
+              onClick={fetchMonitorReports}
+              disabled={monitorLoading}
+              className="flex items-center gap-1 rounded-lg bg-muted px-3 py-2 text-xs font-medium hover:bg-muted/80"
+            >
+              <RefreshCw className={`h-3.5 w-3.5 ${monitorLoading ? 'animate-spin' : ''}`} />
+              Refresh
+            </button>
+          </div>
+
+          {monitorLoading && monitorReports.length === 0 ? (
+            <div className="flex items-center justify-center py-20 text-sm text-muted-foreground">
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Loading monitoring data…
+            </div>
+          ) : monitorReports.length === 0 ? (
+            <div className="rounded-lg border border-dashed p-12 text-center">
+              <Brain className="mx-auto mb-3 h-10 w-10 text-muted-foreground/50" />
+              <p className="text-sm font-medium text-muted-foreground">No monitoring reports yet</p>
+              <p className="mt-1 text-xs text-muted-foreground/70">Reports will appear here after your children attend AI-monitored sessions</p>
+            </div>
+          ) : (
+            <div className="space-y-6">
+              {/* Summary cards */}
+              {(() => {
+                const metrics = monitorReports.reduce<{ totalSessions: number; avgAttendance: number; avgAttention: number; totalAlerts: number }>(
+                  (acc, r) => {
+                    const m = (r.metrics || {}) as Record<string, number>;
+                    acc.totalSessions++;
+                    acc.avgAttendance += (m.attendance_rate || 0);
+                    acc.avgAttention += (m.avg_attention_score || 0);
+                    acc.totalAlerts += (m.alerts_count || 0);
+                    return acc;
+                  },
+                  { totalSessions: 0, avgAttendance: 0, avgAttention: 0, totalAlerts: 0 }
+                );
+                if (metrics.totalSessions > 0) {
+                  metrics.avgAttendance = Math.round(metrics.avgAttendance / metrics.totalSessions);
+                  metrics.avgAttention = Math.round(metrics.avgAttention / metrics.totalSessions);
+                }
+                return (
+                  <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                    <div className="rounded-lg border bg-card p-3 text-center">
+                      <p className="text-2xl font-bold text-primary">{metrics.totalSessions}</p>
+                      <p className="text-xs text-muted-foreground">Reports</p>
+                    </div>
+                    <div className="rounded-lg border bg-card p-3 text-center">
+                      <p className="text-2xl font-bold text-green-600">{metrics.avgAttendance}%</p>
+                      <p className="text-xs text-muted-foreground">Avg Attendance</p>
+                    </div>
+                    <div className="rounded-lg border bg-card p-3 text-center">
+                      <p className={`text-2xl font-bold ${metrics.avgAttention >= 70 ? 'text-green-600' : metrics.avgAttention >= 50 ? 'text-yellow-600' : 'text-red-600'}`}>
+                        {metrics.avgAttention}%
+                      </p>
+                      <p className="text-xs text-muted-foreground">Avg Attention</p>
+                    </div>
+                    <div className="rounded-lg border bg-card p-3 text-center">
+                      <p className={`text-2xl font-bold ${metrics.totalAlerts > 10 ? 'text-red-600' : 'text-yellow-600'}`}>
+                        {metrics.totalAlerts}
+                      </p>
+                      <p className="text-xs text-muted-foreground">Total Alerts</p>
+                    </div>
+                  </div>
+                );
+              })()}
+
+              {/* Reports grouped by child */}
+              {(() => {
+                const byChild: Record<string, Record<string, unknown>[]> = {};
+                monitorReports.forEach((r) => {
+                  const key = String(r.target_email || 'unknown');
+                  if (!byChild[key]) byChild[key] = [];
+                  byChild[key].push(r);
+                });
+                return Object.entries(byChild).map(([email, childReports]) => {
+                  const childName = String(childReports[0]?.target_name || email);
+                  return (
+                    <div key={email} className="rounded-lg border bg-card">
+                      <div className="border-b bg-muted/30 px-4 py-3">
+                        <h3 className="flex items-center gap-2 text-sm font-semibold">
+                          <Users className="h-4 w-4 text-primary" />
+                          {childName}
+                          <span className="ml-auto rounded bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
+                            {childReports.length} report{childReports.length !== 1 ? 's' : ''}
+                          </span>
+                        </h3>
+                      </div>
+                      <div className="divide-y">
+                        {childReports.map((report) => {
+                          const m = (report.metrics || {}) as Record<string, unknown>;
+                          const rId = String(report.id);
+                          const isExpanded = expandedReport === rId;
+                          return (
+                            <div key={rId} className="px-4 py-3">
+                              <button
+                                onClick={() => setExpandedReport(isExpanded ? null : rId)}
+                                className="flex w-full items-center justify-between text-left"
+                              >
+                                <div>
+                                  <p className="text-sm font-medium">
+                                    {String(report.report_type || 'session').replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())} Report
+                                  </p>
+                                  <p className="text-xs text-muted-foreground">
+                                    {report.period_start ? fmtDateBriefIST(String(report.period_start)) : ''}
+                                    {report.period_end ? ` – ${fmtDateBriefIST(String(report.period_end))}` : ''}
+                                  </p>
+                                </div>
+                                <div className="flex items-center gap-3">
+                                  {m.avg_attention_score != null && (
+                                    <span className={`rounded px-2 py-0.5 text-xs font-medium ${
+                                      Number(m.avg_attention_score) >= 70 ? 'bg-green-100 text-green-700' :
+                                      Number(m.avg_attention_score) >= 50 ? 'bg-yellow-100 text-yellow-700' :
+                                      'bg-red-100 text-red-700'
+                                    }`}>
+                                      Attention: {Number(m.avg_attention_score).toFixed(0)}%
+                                    </span>
+                                  )}
+                                  {isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                                </div>
+                              </button>
+
+                              {isExpanded && (
+                                <div className="mt-3 space-y-3 border-t pt-3">
+                                  <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+                                    {m.attendance_rate != null && (
+                                      <div className="rounded bg-muted/50 p-2 text-center">
+                                        <p className="text-sm font-bold">{Number(m.attendance_rate).toFixed(0)}%</p>
+                                        <p className="text-[10px] text-muted-foreground">Attendance</p>
+                                      </div>
+                                    )}
+                                    {m.avg_attention_score != null && (
+                                      <div className="rounded bg-muted/50 p-2 text-center">
+                                        <p className="text-sm font-bold">{Number(m.avg_attention_score).toFixed(0)}%</p>
+                                        <p className="text-[10px] text-muted-foreground">Attention</p>
+                                      </div>
+                                    )}
+                                    {m.alerts_count != null && (
+                                      <div className="rounded bg-muted/50 p-2 text-center">
+                                        <p className="text-sm font-bold">{Number(m.alerts_count)}</p>
+                                        <p className="text-[10px] text-muted-foreground">Alerts</p>
+                                      </div>
+                                    )}
+                                    {m.sessions_monitored != null && (
+                                      <div className="rounded bg-muted/50 p-2 text-center">
+                                        <p className="text-sm font-bold">{Number(m.sessions_monitored)}</p>
+                                        <p className="text-[10px] text-muted-foreground">Sessions</p>
+                                      </div>
+                                    )}
+                                  </div>
+                                  {m.overall_summary ? (
+                                    <div className="rounded-lg bg-blue-50 p-3 text-xs text-blue-800 dark:bg-blue-950/30 dark:text-blue-200">
+                                      <div className="mb-1 flex items-center gap-1 font-semibold">
+                                        <Shield className="h-3.5 w-3.5" /> AI Summary
+                                      </div>
+                                      {String(m.overall_summary)}
+                                    </div>
+                                  ) : null}
+                                  {Array.isArray(m.alert_breakdown) && (m.alert_breakdown as Array<Record<string, unknown>>).length > 0 && (
+                                    <div>
+                                      <p className="mb-1 text-xs font-medium text-muted-foreground">Alert Breakdown</p>
+                                      <div className="flex flex-wrap gap-2">
+                                        {(m.alert_breakdown as Array<Record<string, unknown>>).map((ab, i) => (
+                                          <span key={i} className="rounded-full bg-muted px-2 py-0.5 text-[10px]">
+                                            {String(ab.type || ab.alert_type || 'alert')}: {String(ab.count || 0)}
+                                          </span>
+                                        ))}
+                                      </div>
+                                    </div>
+                                  )}
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  );
+                });
+              })()}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ─── COMPLAINTS TAB ──────────────────────────────── */}
+      {activeTab === 'complaints' && (
+        <div>
+          <div className="mb-4 flex items-center justify-between">
+            <h2 className="text-lg font-semibold">Complaints & Feedback</h2>
+            <button
+              onClick={() => setShowComplaintForm(true)}
+              className="flex items-center gap-1 rounded-lg bg-primary px-3 py-2 text-xs font-medium text-primary-foreground hover:bg-primary/90"
+            >
+              <AlertCircle className="h-3.5 w-3.5" /> Submit Complaint
+            </button>
+          </div>
+
+          {/* New Complaint Form */}
+          {showComplaintForm && (
+            <div className="mb-6 rounded-xl border border-primary/30 bg-card p-4">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-sm font-semibold">New Complaint</h3>
+                <button onClick={() => setShowComplaintForm(false)}>
+                  <X className="h-4 w-4 text-muted-foreground hover:text-foreground" />
+                </button>
+              </div>
+              <div className="space-y-3">
+                <input
+                  type="text"
+                  placeholder="Subject"
+                  value={complaintForm.subject}
+                  onChange={(e) => setComplaintForm(f => ({ ...f, subject: e.target.value }))}
+                  className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm focus:border-primary focus:outline-none"
+                />
+                <div className="grid grid-cols-2 gap-3">
+                  <select
+                    value={complaintForm.category}
+                    onChange={(e) => setComplaintForm(f => ({ ...f, category: e.target.value }))}
+                    className="rounded-lg border border-border bg-background px-3 py-2 text-sm focus:border-primary focus:outline-none"
+                  >
+                    <option value="general">General</option>
+                    <option value="teaching">Teaching</option>
+                    <option value="fee">Fee Related</option>
+                    <option value="facility">Facility</option>
+                    <option value="behaviour">Behaviour</option>
+                    <option value="academic">Academic</option>
+                    <option value="other">Other</option>
+                  </select>
+                  <select
+                    value={complaintForm.priority}
+                    onChange={(e) => setComplaintForm(f => ({ ...f, priority: e.target.value }))}
+                    className="rounded-lg border border-border bg-background px-3 py-2 text-sm focus:border-primary focus:outline-none"
+                  >
+                    <option value="low">Low Priority</option>
+                    <option value="medium">Medium Priority</option>
+                    <option value="high">High Priority</option>
+                    <option value="urgent">Urgent</option>
+                  </select>
+                </div>
+                <textarea
+                  placeholder="Describe your complaint or feedback in detail..."
+                  value={complaintForm.description}
+                  onChange={(e) => setComplaintForm(f => ({ ...f, description: e.target.value }))}
+                  rows={4}
+                  className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm focus:border-primary focus:outline-none resize-none"
+                />
+                <button
+                  onClick={submitComplaint}
+                  disabled={submitting || !complaintForm.subject.trim() || !complaintForm.description.trim()}
+                  className="flex items-center gap-1 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
+                >
+                  <Send className="h-3.5 w-3.5" />
+                  {submitting ? 'Submitting...' : 'Submit Complaint'}
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Complaints List */}
+          {complaintsLoading ? (
+            <div className="flex items-center justify-center py-16 text-muted-foreground">
+              <RefreshCw className="mr-2 h-5 w-5 animate-spin" /> Loading...
+            </div>
+          ) : complaints.length === 0 ? (
+            <div className="rounded-xl border border-dashed border-border py-12 text-center">
+              <MessageSquare className="mx-auto mb-2 h-8 w-8 text-muted-foreground/60" />
+              <p className="text-muted-foreground text-sm">No complaints submitted</p>
+              <p className="text-xs text-muted-foreground mt-1">Submit a complaint using the button above.</p>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {complaints.map((complaint) => (
+                <div key={complaint.id} className="rounded-xl border border-border bg-card p-4">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1">
+                        <h3 className="text-sm font-medium truncate">{complaint.subject}</h3>
+                        <span className={`text-[10px] font-semibold uppercase border rounded px-1.5 py-0.5 ${statusBadge[complaint.status] || 'text-muted-foreground border-border'}`}>
+                          {complaint.status.replace('_', ' ')}
+                        </span>
+                      </div>
+                      <p className="text-xs text-muted-foreground line-clamp-2">{complaint.description}</p>
+                      <div className="flex gap-3 mt-2 text-[10px] text-muted-foreground">
+                        <span className="capitalize">{complaint.category}</span>
+                        <span>Priority: <span className="capitalize">{complaint.priority}</span></span>
+                        <span>{new Date(complaint.created_at).toLocaleDateString('en-IN')}</span>
+                      </div>
+                    </div>
+                  </div>
+                  {complaint.resolution && (
+                    <div className="mt-3 rounded-lg bg-green-950/30 border border-green-700/50 p-2">
+                      <p className="text-[10px] text-green-400 uppercase font-semibold mb-1">Resolution</p>
+                      <p className="text-xs text-green-300/80">{complaint.resolution}</p>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ─── REQUESTS TAB ─────────────────────────────── */}
+      {activeTab === 'requests' && (
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <h2 className="text-lg font-semibold">Session Requests</h2>
+            <div className="flex items-center gap-2">
+              <button onClick={() => setShowRequestForm(!showRequestForm)}
+                className="flex items-center gap-1.5 rounded-lg border border-primary/30 bg-primary/10 px-3 py-1.5 text-xs font-medium text-primary hover:bg-primary/20 transition">
+                <Send className="h-3.5 w-3.5" />{showRequestForm ? 'Cancel' : 'New Request'}
+              </button>
+              <button onClick={fetchSessionRequests} className="p-1.5 rounded-lg hover:bg-muted/50 transition text-muted-foreground">
+                <RefreshCw className={`h-4 w-4 ${requestsLoading ? 'animate-spin' : ''}`} />
+              </button>
+            </div>
+          </div>
+
+          {showRequestForm && (
+            <div className="rounded-xl border border-primary/30 bg-card p-4 space-y-3">
+              <h3 className="text-sm font-semibold">Submit Request on Behalf of Child</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-medium text-muted-foreground mb-1">Request Type</label>
+                  <select className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm" value={requestForm.requestType}
+                    onChange={e => setRequestForm(f => ({ ...f, requestType: e.target.value as 'reschedule' | 'cancel' }))}>
+                    <option value="reschedule">🔄 Reschedule</option>
+                    <option value="cancel">❌ Cancel</option>
+                  </select>
+                </div>
+                {requestForm.requestType === 'reschedule' && (
+                  <>
+                    <div>
+                      <label className="block text-xs font-medium text-muted-foreground mb-1">Proposed Date</label>
+                      <input type="date" className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm" value={requestForm.proposedDate}
+                        onChange={e => setRequestForm(f => ({ ...f, proposedDate: e.target.value }))} />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-muted-foreground mb-1">Proposed Time</label>
+                      <input type="time" className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm" value={requestForm.proposedTime}
+                        onChange={e => setRequestForm(f => ({ ...f, proposedTime: e.target.value }))} />
+                    </div>
+                  </>
+                )}
+                <div className="sm:col-span-2">
+                  <label className="block text-xs font-medium text-muted-foreground mb-1">Reason</label>
+                  <textarea rows={3} className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm" placeholder="Explain why you need this change…"
+                    value={requestForm.reason} onChange={e => setRequestForm(f => ({ ...f, reason: e.target.value }))} />
+                </div>
+              </div>
+              <button disabled={requestSubmitting || !requestForm.reason} onClick={submitSessionRequest}
+                className="px-4 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:opacity-90 disabled:opacity-50 transition">
+                {requestSubmitting ? 'Submitting…' : 'Submit Request'}
+              </button>
+            </div>
+          )}
+
+          {requestsLoading ? (
+            <div className="flex items-center justify-center py-10"><Loader2 className="h-6 w-6 animate-spin text-muted-foreground" /></div>
+          ) : sessionRequests.length === 0 ? (
+            <div className="text-center py-10">
+              <CalendarClock className="mx-auto mb-2 h-8 w-8 text-muted-foreground/60" />
+              <p className="text-muted-foreground text-sm">No session requests yet</p>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {sessionRequests.map(r => (
+                <div key={r.id} className="rounded-xl border border-border bg-card p-4">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-start gap-3 flex-1 min-w-0">
+                      <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${r.request_type === 'cancel' ? 'bg-red-950/30 border border-red-700/50' : 'bg-blue-950/30 border border-blue-700/50'}`}>
+                        {r.request_type === 'cancel' ? <Ban className="h-4 w-4 text-red-400" /> : <CalendarClock className="h-4 w-4 text-blue-400" />}
+                      </div>
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-2 mb-0.5">
+                          <span className="text-sm font-medium">{r.request_type === 'cancel' ? 'Cancel' : 'Reschedule'} — {r.subject || 'Session'}</span>
+                          <span className={`text-[10px] font-semibold uppercase border rounded px-1.5 py-0.5 ${statusBadge[r.status] || 'text-muted-foreground border-border'}`}>
+                            {r.status}
+                          </span>
+                        </div>
+                        <p className="text-xs text-muted-foreground">
+                          {r.batch_name && `${r.batch_name} · `}
+                          {r.session_date && fmtDateBriefIST(r.session_date)}
+                          {r.proposed_date && ` → ${fmtDateBriefIST(r.proposed_date)}`}
+                          {r.proposed_time && ` at ${r.proposed_time}`}
+                        </p>
+                        <p className="text-xs text-muted-foreground/70 mt-0.5">{r.reason}</p>
+                        {r.rejection_reason && <p className="text-xs text-red-400 mt-1">Reason: {r.rejection_reason}</p>}
+                      </div>
+                    </div>
+                    <div className="text-right shrink-0 flex flex-col items-end gap-1">
+                      <p className="text-[10px] text-muted-foreground">{new Date(r.created_at).toLocaleDateString('en-IN')}</p>
+                      {r.status === 'pending' && (
+                        <button onClick={() => withdrawSessionRequest(r.id)} className="text-[10px] text-red-400 hover:text-red-300">Withdraw</button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+    </DashboardShell>
+  );
+}

@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.stibe.screenshare",
+      "sha256_cert_fingerprints": [
+        "85:EF:A9:C6:AC:80:61:24:FE:D6:A9:8A:08:8E:BC:1B:D7:53:BB:96:63:8C:65:C4:39:FB:F0:46:C6:D1:05:CF"
+      ]
+    }
+  }
+]

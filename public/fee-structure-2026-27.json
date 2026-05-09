@@ -1,0 +1,219 @@
+{
+  "_meta": {
+    "academic_year": "2026-27",
+    "currency": "INR",
+    "fee_unit_notes": {
+      "session": "Fee is per session, per subject. Total = fee × sessions × subjects",
+      "year": "Fee is flat annual fee covering all subjects. Total = fee (single payment)"
+    },
+    "grade_notes": {
+      "8":  "8th Grade",
+      "9":  "9th Grade",
+      "10": "10th Grade",
+      "11": "11th Grade (HSS)",
+      "12": "12th Grade (HSS)"
+    },
+    "batch_type_notes": {
+      "one_to_one":    "1:1 Individual tutoring",
+      "one_to_three":  "1:3 Small group (up to 3 students)",
+      "one_to_many":   "1:15 Group class (up to 15 students)",
+      "one_to_thirty": "1:30 Large group (up to 30 students)",
+      "lecture":       "1:50 to 1:100 Lecture-style class"
+    },
+    "region_group_notes": {
+      "GCC":   "Gulf Countries: Dubai, Abu Dhabi, Sharjah, Ajman, Saudi Arabia, Qatar, Kuwait, Bahrain, Oman",
+      "Kerala": "India — Kerala State schools"
+    },
+    "generated_at": "2025-01",
+    "source": "stibe Online 2026–27 Academic Year Fee Chart"
+  },
+
+  "fee_structure": [
+
+    {
+      "category": "GCC_CBSE",
+      "region_group": "GCC",
+      "board": "CBSE",
+      "region_label": "GCC Countries (Gulf)",
+      "applicable_regions": ["Dubai", "Abu Dhabi", "Sharjah", "Ajman", "Saudi Arabia", "Qatar", "Kuwait", "Bahrain", "Oman"],
+      "batch_types": [
+        {
+          "batch_type": "one_to_one",
+          "label": "1:1 — Individual",
+          "fee_unit": "session",
+          "grades": {
+            "8":  { "label": "8th Grade",       "fee": 700,   "fee_paise": 70000   },
+            "9":  { "label": "9th Grade",        "fee": 800,   "fee_paise": 80000   },
+            "10": { "label": "10th Grade",       "fee": 900,   "fee_paise": 90000   },
+            "11": { "label": "11th Grade (HSS)", "fee": 1000,  "fee_paise": 100000  },
+            "12": { "label": "12th Grade (HSS)", "fee": 1000,  "fee_paise": 100000  }
+          }
+        },
+        {
+          "batch_type": "one_to_three",
+          "label": "1:3 — Small Group",
+          "fee_unit": "session",
+          "grades": {
+            "8":  { "label": "8th Grade",       "fee": 450,   "fee_paise": 45000   },
+            "9":  { "label": "9th Grade",        "fee": 500,   "fee_paise": 50000   },
+            "10": { "label": "10th Grade",       "fee": 550,   "fee_paise": 55000   },
+            "11": { "label": "11th Grade (HSS)", "fee": 600,   "fee_paise": 60000   },
+            "12": { "label": "12th Grade (HSS)", "fee": 600,   "fee_paise": 60000   }
+          }
+        },
+        {
+          "batch_type": "one_to_many",
+          "label": "1:15 — Group Class",
+          "fee_unit": "year",
+          "grades": {
+            "8":  { "label": "8th Grade",       "fee": 40000, "fee_paise": 4000000 },
+            "9":  { "label": "9th Grade",        "fee": 50000, "fee_paise": 5000000 },
+            "10": { "label": "10th Grade",       "fee": 60000, "fee_paise": 6000000 },
+            "11": { "label": "11th Grade (HSS)", "fee": 60000, "fee_paise": 6000000 },
+            "12": { "label": "12th Grade (HSS)", "fee": 60000, "fee_paise": 6000000 }
+          }
+        }
+      ]
+    },
+
+    {
+      "category": "KERALA_CBSE",
+      "region_group": "Kerala",
+      "board": "CBSE",
+      "region_label": "Kerala — CBSE Schools",
+      "applicable_regions": ["India"],
+      "batch_types": [
+        {
+          "batch_type": "one_to_one",
+          "label": "1:1 — Individual",
+          "fee_unit": "session",
+          "grades": {
+            "8":  { "label": "8th Grade",       "fee": 700,   "fee_paise": 70000   },
+            "9":  { "label": "9th Grade",        "fee": 800,   "fee_paise": 80000   },
+            "10": { "label": "10th Grade",       "fee": 900,   "fee_paise": 90000   },
+            "11": { "label": "11th Grade (HSS)", "fee": 1000,  "fee_paise": 100000  },
+            "12": { "label": "12th Grade (HSS)", "fee": 1000,  "fee_paise": 100000  }
+          }
+        },
+        {
+          "batch_type": "one_to_three",
+          "label": "1:3 — Small Group",
+          "fee_unit": "session",
+          "grades": {
+            "8":  { "label": "8th Grade",       "fee": 450,   "fee_paise": 45000   },
+            "9":  { "label": "9th Grade",        "fee": 500,   "fee_paise": 50000   },
+            "10": { "label": "10th Grade",       "fee": 550,   "fee_paise": 55000   },
+            "11": { "label": "11th Grade (HSS)", "fee": 600,   "fee_paise": 60000   },
+            "12": { "label": "12th Grade (HSS)", "fee": 600,   "fee_paise": 60000   }
+          }
+        },
+        {
+          "batch_type": "one_to_thirty",
+          "label": "1:30 — Large Group",
+          "fee_unit": "year",
+          "grades": {
+            "8":  { "label": "8th Grade",       "fee": 30000, "fee_paise": 3000000 },
+            "9":  { "label": "9th Grade",        "fee": 33000, "fee_paise": 3300000 },
+            "10": { "label": "10th Grade",       "fee": 36000, "fee_paise": 3600000 },
+            "11": { "label": "11th Grade (HSS)", "fee": 39000, "fee_paise": 3900000 },
+            "12": { "label": "12th Grade (HSS)", "fee": 39000, "fee_paise": 3900000 }
+          }
+        }
+      ]
+    },
+
+    {
+      "category": "KERALA_STATE",
+      "region_group": "Kerala",
+      "board": "State Board",
+      "region_label": "Kerala — State Board Schools",
+      "applicable_regions": ["India"],
+      "batch_types": [
+        {
+          "batch_type": "one_to_one",
+          "label": "1:1 — Individual",
+          "fee_unit": "session",
+          "grades": {
+            "8":  { "label": "8th Grade",       "fee": 700,   "fee_paise": 70000   },
+            "9":  { "label": "9th Grade",        "fee": 800,   "fee_paise": 80000   },
+            "10": { "label": "10th Grade",       "fee": 900,   "fee_paise": 90000   },
+            "11": { "label": "11th Grade (HSS)", "fee": 1000,  "fee_paise": 100000  },
+            "12": { "label": "12th Grade (HSS)", "fee": 1000,  "fee_paise": 100000  }
+          }
+        },
+        {
+          "batch_type": "one_to_three",
+          "label": "1:3 — Small Group",
+          "fee_unit": "session",
+          "grades": {
+            "8":  { "label": "8th Grade",       "fee": 450,   "fee_paise": 45000   },
+            "9":  { "label": "9th Grade",        "fee": 500,   "fee_paise": 50000   },
+            "10": { "label": "10th Grade",       "fee": 550,   "fee_paise": 55000   },
+            "11": { "label": "11th Grade (HSS)", "fee": 600,   "fee_paise": 60000   },
+            "12": { "label": "12th Grade (HSS)", "fee": 600,   "fee_paise": 60000   }
+          }
+        },
+        {
+          "batch_type": "one_to_many",
+          "label": "1:15 — Group Class",
+          "fee_unit": "year",
+          "grades": {
+            "8":  { "label": "8th Grade",       "fee": 20000, "fee_paise": 2000000 },
+            "9":  { "label": "9th Grade",        "fee": 25000, "fee_paise": 2500000 },
+            "10": { "label": "10th Grade",       "fee": 30000, "fee_paise": 3000000 },
+            "11": { "label": "11th Grade (HSS)", "fee": 30000, "fee_paise": 3000000 },
+            "12": { "label": "12th Grade (HSS)", "fee": 30000, "fee_paise": 3000000 }
+          }
+        },
+        {
+          "batch_type": "lecture",
+          "label": "1:50–1:100 — Lecture",
+          "fee_unit": "year",
+          "grades": {
+            "8":  { "label": "8th Grade",       "fee": 11000, "fee_paise": 1100000 },
+            "9":  { "label": "9th Grade",        "fee": 11500, "fee_paise": 1150000 },
+            "10": { "label": "10th Grade",       "fee": 12000, "fee_paise": 1200000 },
+            "11": { "label": "11th Grade (HSS)", "fee": 14000, "fee_paise": 1400000 },
+            "12": { "label": "12th Grade (HSS)", "fee": 14000, "fee_paise": 1400000 }
+          }
+        }
+      ]
+    }
+
+  ],
+
+  "region_group_map": {
+    "Dubai":        "GCC",
+    "Abu Dhabi":    "GCC",
+    "Sharjah":      "GCC",
+    "Ajman":        "GCC",
+    "Saudi Arabia": "GCC",
+    "Qatar":        "GCC",
+    "Kuwait":       "GCC",
+    "Bahrain":      "GCC",
+    "Oman":         "GCC",
+    "India":        "Kerala",
+    "Malaysia":     "Kerala",
+    "Singapore":    "Kerala",
+    "UK":           "Kerala",
+    "USA":          "Kerala",
+    "Other":        "Kerala"
+  },
+
+  "available_boards_by_region_group": {
+    "GCC":   ["CBSE"],
+    "Kerala": ["CBSE", "State Board"]
+  },
+
+  "available_batch_types_by_category": {
+    "GCC_CBSE":    ["one_to_one", "one_to_three", "one_to_many"],
+    "KERALA_CBSE": ["one_to_one", "one_to_three", "one_to_thirty"],
+    "KERALA_STATE": ["one_to_one", "one_to_three", "one_to_many", "lecture"]
+  },
+
+  "session_based_batch_types": ["one_to_one", "one_to_three"],
+  "annual_batch_types":        ["one_to_many", "one_to_thirty", "lecture"],
+
+  "eligible_grades": ["8", "9", "10", "11", "12"],
+  "hss_grades": ["11", "12"]
+}

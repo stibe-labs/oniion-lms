@@ -1,0 +1,592 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* Hide browser-native password reveal button (Edge / Chrome) */
+input::-ms-reveal,
+input::-ms-clear {
+  display: none;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   stibe BRAND THEME
+   Primary: Green (#22C55E) - from logo top
+   Accent:  Teal  (#14B8A6) - from logo bottom  
+   Gradient: Green → Teal (brand signature)
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+  /* stibe Brand Colors */
+  --color-brand-green: var(--brand-green);
+  --color-brand-green-dark: var(--brand-green-dark);
+  --color-brand-green-light: var(--brand-green-light);
+  --color-brand-teal: var(--brand-teal);
+  --color-brand-teal-dark: var(--brand-teal-dark);
+  --color-brand-teal-light: var(--brand-teal-light);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-info: var(--info);
+  --color-live: var(--live);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   LIGHT THEME (stibe Branded)
+   ───────────────────────────────────────────────────────────────────────────── */
+:root {
+  --radius: 0.625rem;
+  
+  /* stibe Brand Palette */
+  --brand-green: oklch(0.723 0.191 145);       /* #22C55E - Primary Green */
+  --brand-green-dark: oklch(0.627 0.194 145);  /* #16A34A - Darker Green */
+  --brand-green-light: oklch(0.792 0.209 148); /* #4ADE80 - Lighter Green */
+  --brand-teal: oklch(0.679 0.132 175);        /* #14B8A6 - Accent Teal */
+  --brand-teal-dark: oklch(0.600 0.130 175);   /* #0D9488 - Darker Teal */
+  --brand-teal-light: oklch(0.750 0.140 180);  /* #2DD4BF - Lighter Teal */
+  
+  /* Semantic Colors */
+  --success: oklch(0.723 0.191 145);           /* Green */
+  --warning: oklch(0.795 0.184 86);            /* Amber */
+  --info: oklch(0.623 0.214 255);              /* Blue */
+  --live: oklch(0.723 0.191 145);              /* Green pulse for live status */
+  
+  /* Core Theme */
+  --background: oklch(0.985 0 0);              /* Near white */
+  --foreground: oklch(0.145 0 0);              /* Near black */
+  --card: oklch(1 0 0);                        /* White */
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  
+  /* Primary = stibe Green */
+  --primary: oklch(0.723 0.191 145);
+  --primary-foreground: oklch(1 0 0);          /* White text on green */
+  
+  /* Secondary = stibe Teal */
+  --secondary: oklch(0.679 0.132 175);
+  --secondary-foreground: oklch(1 0 0);        /* White text on teal */
+  
+  /* Muted = Light gray with slight green tint */
+  --muted: oklch(0.96 0.005 145);
+  --muted-foreground: oklch(0.45 0.02 145);
+  
+  /* Accent = Light teal tint */
+  --accent: oklch(0.94 0.03 175);
+  --accent-foreground: oklch(0.20 0.05 175);
+  
+  --destructive: oklch(0.577 0.245 27.325);    /* Red for errors */
+  --border: oklch(0.90 0.01 145);              /* Slight green tint */
+  --input: oklch(0.95 0.005 145);
+  --ring: oklch(0.723 0.191 145);              /* Green ring on focus */
+  
+  /* Chart Colors - Brand inspired */
+  --chart-1: oklch(0.723 0.191 145);           /* Green */
+  --chart-2: oklch(0.679 0.132 175);           /* Teal */
+  --chart-3: oklch(0.623 0.214 255);           /* Blue */
+  --chart-4: oklch(0.795 0.184 86);            /* Amber */
+  --chart-5: oklch(0.645 0.246 16);            /* Orange */
+  
+  /* Sidebar - Branded */
+  --sidebar: oklch(0.145 0.02 145);            /* Dark with green tint */
+  --sidebar-foreground: oklch(0.92 0 0);
+  --sidebar-primary: oklch(0.723 0.191 145);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(0.20 0.03 145);
+  --sidebar-accent-foreground: oklch(0.92 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.723 0.191 145);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   DARK THEME (stibe Branded)
+   ───────────────────────────────────────────────────────────────────────────── */
+.dark {
+  /* stibe Brand Palette (slightly brighter for dark mode) */
+  --brand-green: oklch(0.760 0.200 148);       /* Brighter green */
+  --brand-green-dark: oklch(0.680 0.190 145);
+  --brand-green-light: oklch(0.820 0.190 150);
+  --brand-teal: oklch(0.720 0.140 178);        /* Brighter teal */
+  --brand-teal-dark: oklch(0.650 0.130 175);
+  --brand-teal-light: oklch(0.780 0.130 180);
+  
+  /* Semantic Colors */
+  --success: oklch(0.760 0.200 148);
+  --warning: oklch(0.820 0.180 86);
+  --info: oklch(0.680 0.200 255);
+  --live: oklch(0.760 0.200 148);
+  
+  /* Core Theme */
+  --background: oklch(0.12 0.01 145);          /* Very dark with green tint */
+  --foreground: oklch(0.96 0 0);               /* Near white */
+  --card: oklch(0.16 0.015 145);               /* Card background */
+  --card-foreground: oklch(0.96 0 0);
+  --popover: oklch(0.16 0.015 145);
+  --popover-foreground: oklch(0.96 0 0);
+  
+  /* Primary = stibe Green */
+  --primary: oklch(0.760 0.200 148);
+  --primary-foreground: oklch(0.12 0.02 145);  /* Dark text on green */
+  
+  /* Secondary = stibe Teal */
+  --secondary: oklch(0.720 0.140 178);
+  --secondary-foreground: oklch(0.12 0.02 145);
+  
+  /* Muted = Dark gray with green tint */
+  --muted: oklch(0.22 0.015 145);
+  --muted-foreground: oklch(0.65 0.02 145);
+  
+  /* Accent = Dark teal tint */
+  --accent: oklch(0.25 0.03 175);
+  --accent-foreground: oklch(0.92 0 0);
+  
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 12%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.760 0.200 148);
+  
+  /* Chart Colors - Brighter for dark mode */
+  --chart-1: oklch(0.760 0.200 148);           /* Green */
+  --chart-2: oklch(0.720 0.140 178);           /* Teal */
+  --chart-3: oklch(0.680 0.200 255);           /* Blue */
+  --chart-4: oklch(0.820 0.180 86);            /* Amber */
+  --chart-5: oklch(0.700 0.230 16);            /* Orange */
+  
+  /* Sidebar - Dark branded */
+  --sidebar: oklch(0.14 0.015 145);
+  --sidebar-foreground: oklch(0.92 0 0);
+  --sidebar-primary: oklch(0.760 0.200 148);
+  --sidebar-primary-foreground: oklch(0.12 0 0);
+  --sidebar-accent: oklch(0.22 0.02 145);
+  --sidebar-accent-foreground: oklch(0.92 0 0);
+  --sidebar-border: oklch(1 0 0 / 12%);
+  --sidebar-ring: oklch(0.760 0.200 148);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   stibe UTILITY CLASSES
+   ───────────────────────────────────────────────────────────────────────────── */
+
+/* Brand Gradient - Logo signature green→teal */
+.bg-brand-gradient {
+  background: linear-gradient(135deg, var(--brand-green) 0%, var(--brand-teal) 100%);
+}
+
+.text-brand-gradient {
+  background: linear-gradient(135deg, var(--brand-green) 0%, var(--brand-teal) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.border-brand-gradient {
+  border-image: linear-gradient(135deg, var(--brand-green), var(--brand-teal)) 1;
+}
+
+/* Status Badge Variants */
+.status-live {
+  background: oklch(0.760 0.200 148 / 20%);
+  color: var(--brand-green);
+  border: 1px solid oklch(0.760 0.200 148 / 40%);
+}
+
+.status-scheduled {
+  background: oklch(0.680 0.200 255 / 20%);
+  color: var(--info);
+  border: 1px solid oklch(0.680 0.200 255 / 40%);
+}
+
+.status-ended {
+  background: var(--muted);
+  color: var(--muted-foreground);
+  border: 1px solid var(--border);
+}
+
+.status-cancelled {
+  background: oklch(0.704 0.191 22 / 20%);
+  color: var(--destructive);
+  border: 1px solid oklch(0.704 0.191 22 / 40%);
+}
+
+.status-success {
+  background: oklch(0.760 0.200 148 / 20%);
+  color: var(--success);
+  border: 1px solid oklch(0.760 0.200 148 / 40%);
+}
+
+.status-warning {
+  background: oklch(0.820 0.180 86 / 20%);
+  color: var(--warning);
+  border: 1px solid oklch(0.820 0.180 86 / 40%);
+}
+
+.status-info {
+  background: oklch(0.680 0.200 255 / 20%);
+  color: var(--info);
+  border: 1px solid oklch(0.680 0.200 255 / 40%);
+}
+
+/* Live Pulse Animation */
+.live-pulse {
+  animation: livePulse 2s ease-in-out infinite;
+}
+
+@keyframes livePulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Primary Button Gradient (Optional branded button) */
+.btn-brand {
+  background: linear-gradient(135deg, var(--brand-green) 0%, var(--brand-teal) 100%);
+  color: white;
+  transition: all 0.2s ease;
+}
+
+.btn-brand:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* ── Mobile classroom hardening ────────────────────────── */
+html.classroom-active,
+html.classroom-active body {
+  overflow: hidden !important;
+  overscroll-behavior: none !important;
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  height: 100dvh !important;
+  -webkit-overflow-scrolling: auto !important;
+}
+
+/* Pseudo-fullscreen — extra iOS styling */
+html.classroom-fullscreen,
+html.classroom-fullscreen body {
+  height: 100lvh !important;
+}
+
+/* Temporary override to allow scroll-trick (collapses Safari toolbar) */
+html.classroom-scroll-trick,
+html.classroom-scroll-trick body {
+  position: static !important;
+  height: auto !important;
+  min-height: calc(100vh + 100px) !important;
+  overflow: auto !important;
+}
+
+/* Prevent Safari tap highlight & callout in classroom */
+.classroom-root {
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  overscroll-behavior: none;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   SIDEBAR ANIMATIONS
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+@keyframes sidebar-ripple {
+  0%   { transform: scale(0); opacity: 0.5; }
+  100% { transform: scale(1); opacity: 0; }
+}
+
+@keyframes sidebar-indicator {
+  0%   { height: 0; opacity: 0; }
+  60%  { height: 28px; opacity: 1; }
+  100% { height: 24px; opacity: 1; }
+}
+
+@keyframes sidebar-fade-in {
+  0%   { opacity: 0; transform: translateX(-4px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes sidebar-ring-spin {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* iOS fullscreen tip animation */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translate(-50%, 12px); }
+  to   { opacity: 1; transform: translate(-50%, 0); }
+
+/* ── Buji Chatbot Animations ─────────────────────────────── */
+@keyframes chatbot-open {
+  0%   { opacity: 0; transform: perspective(800px) scale(0.05) translateY(60px) rotateX(40deg) skewY(8deg); filter: blur(12px); }
+  20%  { opacity: 0.6; transform: perspective(800px) scale(0.4) translateY(20px) rotateX(15deg) skewY(4deg); filter: blur(4px); }
+  45%  { opacity: 0.95; transform: perspective(800px) scale(1.06) translateY(-10px) rotateX(-3deg) skewY(-1deg); filter: blur(0); }
+  65%  { transform: perspective(800px) scale(0.97) translateY(4px) rotateX(1.5deg) skewY(0.3deg); }
+  80%  { transform: perspective(800px) scale(1.02) translateY(-2px) rotateX(-0.5deg) skewY(0deg); }
+  100% { opacity: 1; transform: perspective(800px) scale(1) translateY(0) rotateX(0) skewY(0); filter: blur(0); }
+}
+
+@keyframes chatbot-close {
+  0%   { opacity: 1; transform: perspective(800px) scale(1) translateY(0) rotateX(0) skewY(0); filter: blur(0); }
+  25%  { opacity: 0.95; transform: perspective(800px) scale(1.03) translateY(-8px) rotateX(-2deg) skewY(-0.5deg); }
+  60%  { opacity: 0.5; transform: perspective(800px) scale(0.4) translateY(30px) rotateX(20deg) skewY(5deg); filter: blur(4px); }
+  100% { opacity: 0; transform: perspective(800px) scale(0.05) translateY(70px) rotateX(45deg) skewY(10deg); filter: blur(12px); }
+}
+
+@keyframes message-in {
+  0%   { opacity: 0; transform: translateY(8px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.animate-chatbot-open {
+  animation: chatbot-open 0.8s cubic-bezier(0.16, 1.2, 0.3, 1) forwards;
+}
+
+.animate-chatbot-close {
+  animation: chatbot-close 0.5s cubic-bezier(0.5, 0, 0.8, 0.1) forwards;
+}
+
+.animate-message-in {
+  animation: message-in 0.3s ease-out forwards;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.5s ease-out forwards;
+}
+
+/* Badge animations */
+@keyframes badge-in {
+  0%   { opacity: 0; transform: translateX(16px) scale(0.8); }
+  60%  { opacity: 1; transform: translateX(-3px) scale(1.02); }
+  100% { opacity: 1; transform: translateX(0) scale(1); }
+}
+
+@keyframes badge-text-in {
+  0%   { opacity: 0; transform: translateY(4px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* Buji floating hover animation */
+@keyframes buji-float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px); }
+}
+
+.buji-float {
+  animation: buji-float 3s ease-in-out infinite;
+}
+.buji-float:hover {
+  animation: buji-float 1.5s ease-in-out infinite;
+}
+
+.animate-badge-in {
+  animation: badge-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.animate-badge-text-in {
+  animation: badge-text-in 0.3s ease-out forwards;
+}
+
+/* Scrollbar for chat messages */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 4px;
+}
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgba(52, 211, 153, 0.15);
+  border-radius: 9999px;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: rgba(52, 211, 153, 0.3);
+}
+
+/* ── Buji Chat Markdown Rendering ────────────────────────────────── */
+.buji-markdown {
+  font-size: 13px;
+  line-height: 1.65;
+  color: #ecfdf5;
+  word-break: break-word;
+}
+
+.buji-markdown > *:first-child { margin-top: 0; }
+.buji-markdown > *:last-child { margin-bottom: 0; }
+
+/* Headings */
+.buji-markdown h1,
+.buji-markdown h2,
+.buji-markdown h3 {
+  font-weight: 700;
+  color: #a7f3d0;
+  margin-top: 0.9em;
+  margin-bottom: 0.4em;
+  line-height: 1.3;
+}
+.buji-markdown h1 { font-size: 1.15em; }
+.buji-markdown h2 { font-size: 1.05em; }
+.buji-markdown h3 { font-size: 0.95em; color: #6ee7b7; }
+
+/* Paragraphs */
+.buji-markdown p {
+  margin: 0.45em 0;
+}
+
+/* Bold & italic */
+.buji-markdown strong { color: #a7f3d0; font-weight: 600; }
+.buji-markdown em { color: #6ee7b7; font-style: italic; }
+
+/* Lists */
+.buji-markdown ul,
+.buji-markdown ol {
+  margin: 0.4em 0;
+  padding-left: 1.3em;
+}
+.buji-markdown ul { list-style-type: disc; }
+.buji-markdown ol { list-style-type: decimal; }
+.buji-markdown li {
+  margin: 0.2em 0;
+}
+.buji-markdown li::marker {
+  color: #34d399;
+}
+
+/* Nested lists */
+.buji-markdown ul ul,
+.buji-markdown ol ol,
+.buji-markdown ul ol,
+.buji-markdown ol ul {
+  margin: 0.15em 0;
+}
+
+/* Tables */
+.buji-markdown table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.6em 0;
+  font-size: 0.9em;
+}
+.buji-markdown th {
+  background: rgba(52, 211, 153, 0.12);
+  color: #a7f3d0;
+  font-weight: 600;
+  text-align: left;
+  padding: 0.4em 0.6em;
+  border-bottom: 1px solid rgba(52, 211, 153, 0.2);
+}
+.buji-markdown td {
+  padding: 0.35em 0.6em;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+.buji-markdown tr:hover td {
+  background: rgba(52, 211, 153, 0.04);
+}
+
+/* Inline code */
+.buji-markdown code:not(pre code) {
+  background: rgba(255, 255, 255, 0.08);
+  color: #6ee7b7;
+  padding: 0.15em 0.35em;
+  border-radius: 4px;
+  font-size: 0.88em;
+  font-family: var(--font-geist-mono), monospace;
+}
+
+/* Code blocks */
+.buji-markdown pre {
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(52, 211, 153, 0.1);
+  border-radius: 8px;
+  padding: 0.7em 0.9em;
+  margin: 0.5em 0;
+  overflow-x: auto;
+  font-size: 0.85em;
+}
+.buji-markdown pre code {
+  background: none;
+  padding: 0;
+  color: #d1fae5;
+  font-family: var(--font-geist-mono), monospace;
+}
+
+/* Block quotes */
+.buji-markdown blockquote {
+  border-left: 3px solid rgba(52, 211, 153, 0.3);
+  padding: 0.3em 0 0.3em 0.8em;
+  margin: 0.5em 0;
+  color: #a7f3d0;
+  font-style: italic;
+  background: rgba(52, 211, 153, 0.03);
+  border-radius: 0 6px 6px 0;
+}
+.buji-markdown blockquote p { margin: 0.2em 0; }
+
+/* Horizontal rule */
+.buji-markdown hr {
+  border: none;
+  border-top: 1px solid rgba(52, 211, 153, 0.15);
+  margin: 0.6em 0;
+}
+
+/* Links */
+.buji-markdown a {
+  color: #34d399;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.buji-markdown a:hover {
+  color: #6ee7b7;
+}
+}

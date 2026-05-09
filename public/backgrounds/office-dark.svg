@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080">
+  <defs>
+    <radialGradient id="g" cx="50%" cy="42%" r="75%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="55%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#020617"/>
+    </radialGradient>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#g)"/>
+  <!-- Subtle bookshelf horizontal lines -->
+  <g opacity="0.04" stroke="#94a3b8" stroke-width="1">
+    <line x1="200" y1="200" x2="1720" y2="200"/>
+    <line x1="200" y1="400" x2="1720" y2="400"/>
+    <line x1="200" y1="600" x2="1720" y2="600"/>
+    <line x1="200" y1="800" x2="1720" y2="800"/>
+    <!-- Vertical shelves -->
+    <line x1="200" y1="100" x2="200" y2="900"/>
+    <line x1="580" y1="100" x2="580" y2="900"/>
+    <line x1="960" y1="100" x2="960" y2="900"/>
+    <line x1="1340" y1="100" x2="1340" y2="900"/>
+    <line x1="1720" y1="100" x2="1720" y2="900"/>
+  </g>
+  <!-- Warm accent light from top -->
+  <ellipse cx="960" cy="0" rx="500" ry="300" fill="#fbbf24" opacity="0.015"/>
+</svg>

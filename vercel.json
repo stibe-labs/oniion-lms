@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/v1/cron/quarterly-invoices",
+      "schedule": "30 2 * * *"
+    }
+  ]
+}

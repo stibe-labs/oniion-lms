@@ -1,0 +1,1962 @@
+﻿// ═══════════════════════════════════════════════════════════════
+// Coordinator Dashboard — Batch-Session Centric (v2)
+// ═══════════════════════════════════════════════════════════════
+// Tabs: Overview, Batches, Live Sessions, Monitoring, Reports, Students
+// Data: /api/v1/batch-sessions + /api/v1/batches (not rooms)
+// ═══════════════════════════════════════════════════════════════
+
+'use client';
+
+import { useEffect, useState, useCallback, useMemo } from 'react';
+import DashboardShell from '@/components/dashboard/DashboardShell';
+import DiscontinuedStudentsPanel from '@/components/dashboard/DiscontinuedStudentsPanel';
+import ExtensionRequestsPanel from '@/components/dashboard/ExtensionRequestsPanel';
+import TeacherReportsTab from '@/components/dashboard/TeacherReportsTab';
+import SessionReportView from '@/components/dashboard/SessionReportView';
+import { fmtSmartDateIST, fmtDateTimeIST } from '@/lib/utils';
+import { useRouter } from 'next/navigation';
+import {
+  LayoutDashboard, Calendar, Clock, Users, Send, Radio, CheckCircle2,
+  XCircle, Search, RefreshCw, Eye, Loader2, ChevronDown, ChevronRight,
+  BookOpen, GraduationCap, Mail, UserCheck, UserX, AlertCircle,
+  BarChart2, Bell, Activity, CalendarClock, Briefcase, Ban,
+  FileText, AlertTriangle, Brain, Video, Zap, Trash2, Flag, Plus,
+} from 'lucide-react';
+import { cn } from '@/lib/utils';
+import {
+  PageHeader, StatCard, Card, Badge, StatusBadge,
+  RefreshButton, Button, Avatar, EmptyState, LoadingState, SearchInput, useToast, useConfirm,
+  Alert,
+} from '@/components/dashboard/shared';
+
+/* ═══ TYPES ═══ */
+
+interface Session {
+  session_id: string;
+  batch_id: string;
+  subject: string;
+  teacher_email: string | null;
+  teacher_name: string | null;
+  teacher_image?: string | null;
+  scheduled_date: string;
+  start_time: string;
+  duration_minutes: number;
+  teaching_minutes: number;
+  prep_buffer_minutes: number;
+  status: string;
+  livekit_room_name: string | null;
+  topic: string | null;
+  notes: string | null;
+  started_at: string | null;
+  ended_at: string | null;
+  cancelled_at: string | null;
+  cancel_reason: string | null;
+  created_at: string;
+  batch_name?: string;
+  batch_type?: string;
+  grade?: string;
+  section?: string;
+  student_count?: number;
+  recording_status?: string | null;
+  recording_url?: string | null;
+}
+
+interface Batch {
+  batch_id: string;
+  batch_name: string;
+  batch_type: string;
+  subjects: string[] | null;
+  grade: string;
+  section: string | null;
+  coordinator_email: string | null;
+  coordinator_name: string | null;
+  max_students: number;
+  status: string;
+  notes: string | null;
+  created_at: string;
+  student_count: number;
+  teacher_count: number;
+  teachers: { teacher_email: string; teacher_name: string; teacher_image?: string | null; subject: string }[];
+}
+
+interface Room {
+  room_id: string;
+  room_name: string;
+  subject: string;
+  grade: string;
+  section: string | null;
+  teacher_email: string | null;
+  status: string;
+  scheduled_start: string;
+  duration_minutes: number;
+  max_participants: number;
+  notes_for_teacher: string | null;
+  livekit_room_id: string | null;
+  created_at: string;
+  student_count?: number;
+  go_live_at?: string | null;
+}
+
+interface Assignment {
+  id: string;
+  participant_type: string;
+  participant_email: string;
+  participant_name: string;
+  payment_status: string;
+  notification_sent_at: string | null;
+  joined_at: string | null;
+}
+
+interface StudentPerf {
+  email: string;
+  name: string;
+  batch_id: string;
+  batch_name: string;
+  grade: string | null;
+  section: string | null;
+  total_sessions: number;
+  sessions_present: number;
+  attendance_rate: number;
+  exams_taken: number;
+  avg_exam_score: number | null;
+}
+
+interface PerfBatch {
+  id: string;
+  name: string;
+  grade: string | null;
+  section: string | null;
+  student_count: number;
+  completed_sessions: number;
+}
+
+interface MonitoringAlert {
+  id: string;
+  room_id: string | null;
+  alert_type: string;
+  severity: string;
+  title: string;
+  message: string;
+  target_email: string | null;
+  status: string;
+  created_at: string;
+}
+
+interface SessionMonitoring {
+  room_id: string;
+  total_events: number;
+  class_engagement_score: number;
+  students: Array<{
+    email: string;
+    name: string;
+    current_state: string;
+    attention_score: number;
+    looking_away_minutes: number;
+    eyes_closed_minutes: number;
+    not_in_frame_minutes: number;
+    distracted_minutes: number;
+    total_attentive_minutes: number;
+    active_alerts: number;
+  }>;
+  alerts: MonitoringAlert[];
+}
+
+interface MonitoringReport {
+  id: string;
+  report_type: string;
+  report_period: string;
+  period_start: string;
+  period_end: string;
+  target_email: string;
+  target_role: string;
+  target_name: string | null;
+  batch_name: string | null;
+  metrics: Record<string, unknown>;
+  created_at: string;
+}
+
+interface CoordinatorDashboardClientProps {
+  userName: string;
+  userEmail: string;
+  userRole: string;
+  permissions?: Record<string, boolean>;
+}
+
+type TabId = 'overview' | 'batches' | 'sessions' | 'monitoring' | 'reports' | 'students' | 'leave' | 'teacher-reports';
+
+/* ═══ HELPERS ═══ */
+
+const BATCH_TYPE_LABELS: Record<string, string> = { one_to_one: '1:1', one_to_three: '1:3', one_to_five: '1:5', one_to_many: '1:15', lecture: 'Lecture', custom: 'Custom' };
+const BATCH_TYPE_VARIANTS: Record<string, 'info' | 'primary' | 'warning' | 'default'> = { one_to_one: 'info', one_to_three: 'primary', one_to_five: 'primary', one_to_many: 'warning', lecture: 'warning', custom: 'default' };
+
+function fmtTime12(time: string): string {
+  if (!time) return '';
+  const [h, m] = time.split(':').map(Number);
+  const period = h >= 12 ? 'PM' : 'AM';
+  const h12 = h === 0 ? 12 : h > 12 ? h - 12 : h;
+  return `${h12}:${String(m).padStart(2, '0')} ${period}`;
+}
+
+function isToday(dateStr: string): boolean {
+  const today = new Date();
+  const iso = dateStr.slice(0, 10);
+  const d = new Date(iso + 'T00:00:00');
+  return d.getDate() === today.getDate() && d.getMonth() === today.getMonth() && d.getFullYear() === today.getFullYear();
+}
+
+function effectiveSessionStatus(s: Session): string {
+  if (s.status === 'live' || s.status === 'scheduled') {
+    const startMs = s.started_at
+      ? new Date(s.started_at).getTime()
+      : new Date(`${s.scheduled_date.slice(0, 10)}T${s.start_time}`).getTime();
+    const endMs = startMs + s.duration_minutes * 60_000;
+    if (Date.now() >= endMs) return 'ended';
+  }
+  return s.status;
+}
+
+/** Room-level effective status (used by monitoring tab) */
+function effectiveStatus(room: { status: string; scheduled_start: string; duration_minutes: number; go_live_at?: string | null }): string {
+  if (room.status === 'live') {
+    const start = room.go_live_at ? new Date(room.go_live_at).getTime() : new Date(room.scheduled_start).getTime();
+    const endMs = start + room.duration_minutes * 60_000;
+    if (Date.now() >= endMs) return 'ended';
+  }
+  return room.status;
+}
+
+const STATUS_BADGE: Record<string, { bg: string; text: string; dot: string; icon: typeof Radio }> = {
+  scheduled: { bg: 'bg-blue-50 border-blue-200',   text: 'text-blue-700',   dot: 'bg-blue-500',  icon: Calendar     },
+  live:      { bg: 'bg-green-50 border-green-200',  text: 'text-green-700',  dot: 'bg-green-500', icon: Radio        },
+  ended:     { bg: 'bg-gray-50 border-gray-200',    text: 'text-gray-500',   dot: 'bg-gray-400',  icon: CheckCircle2 },
+  cancelled: { bg: 'bg-red-50 border-red-200',      text: 'text-red-600',    dot: 'bg-red-500',   icon: XCircle      },
+};
+
+const SEVERITY_COLOR: Record<string, { border: string; bg: string; text: string }> = {
+  critical: { border: 'border-red-200',   bg: 'bg-red-50',   text: 'text-red-700'   },
+  warning:  { border: 'border-amber-200', bg: 'bg-amber-50', text: 'text-amber-700' },
+  info:     { border: 'border-blue-200',  bg: 'bg-blue-50',  text: 'text-blue-700'  },
+};
+
+const attColor = (s: number) => s >= 75 ? 'text-green-600' : s >= 50 ? 'text-amber-600' : 'text-red-600';
+const attBg    = (s: number) => s >= 75 ? 'bg-green-500'   : s >= 50 ? 'bg-amber-500'   : 'bg-red-500';
+
+/* ═══ MAIN COMPONENT ═══ */
+
+export default function CoordinatorDashboardClient({
+  userName, userEmail, userRole, permissions,
+}: CoordinatorDashboardClientProps) {
+  const [activeTab, setActiveTab] = useState<TabId>('overview');
+  const router = useRouter();
+  const toast = useToast();
+
+  // Re-render every 30s so effectiveSessionStatus re-evaluates
+  const [, setTick] = useState(0);
+  useEffect(() => { const id = setInterval(() => setTick(t => t + 1), 30_000); return () => clearInterval(id); }, []);
+
+  // ── Primary data: batch-sessions + batches ──
+  const [sessions, setSessions] = useState<Session[]>([]);
+  const [batches, setBatches] = useState<Batch[]>([]);
+  const [loadingSessions, setLoadingSessions] = useState(true);
+  const [loadingBatches, setLoadingBatches] = useState(true);
+
+  // ── Monitoring data (still room-centric) ──
+  const [rooms, setRooms] = useState<Room[]>([]);
+  const [loadingRooms, setLoadingRooms] = useState(false);
+  const [alerts, setAlerts] = useState<MonitoringAlert[]>([]);
+  const [loadingAlerts, setLoadingAlerts] = useState(false);
+
+  // ── Performance / Reports ──
+  const [perfStudents, setPerfStudents] = useState<StudentPerf[]>([]);
+  const [perfBatches, setPerfBatches] = useState<PerfBatch[]>([]);
+  const [loadingPerf, setLoadingPerf] = useState(false);
+  const [reports, setReports] = useState<MonitoringReport[]>([]);
+  const [loadingReports, setLoadingReports] = useState(false);
+
+  // ── End-class requests ──
+  const [endClassRequests, setEndClassRequests] = useState<{ room_id: string; room_name: string; teacher_name: string; reason: string; requested_at: string }[]>([]);
+
+  // ── Fetch functions ──
+  const fetchSessions = useCallback(async (silent?: boolean) => {
+    if (!silent) setLoadingSessions(true);
+    try {
+      const res = await fetch('/api/v1/batch-sessions');
+      const data = await res.json();
+      if (data.success) setSessions(data.data?.sessions || []);
+    } catch (err) { console.error('Failed to fetch sessions:', err); }
+    finally { setLoadingSessions(false); }
+  }, []);
+
+  const fetchBatches = useCallback(async () => {
+    setLoadingBatches(true);
+    try {
+      const res = await fetch('/api/v1/batches');
+      const data = await res.json();
+      if (data.success) setBatches(data.data?.batches || []);
+    } catch (err) { console.error('Failed to fetch batches:', err); }
+    finally { setLoadingBatches(false); }
+  }, []);
+
+  const fetchRooms = useCallback(async () => {
+    setLoadingRooms(true);
+    try {
+      const res = await fetch('/api/v1/coordinator/rooms');
+      const data = await res.json();
+      if (data.success) setRooms(data.data?.rooms || []);
+    } catch (err) { console.error('Failed to fetch rooms:', err); }
+    finally { setLoadingRooms(false); }
+  }, []);
+
+  const fetchAlerts = useCallback(async () => {
+    setLoadingAlerts(true);
+    try {
+      const res = await fetch('/api/v1/monitoring/alerts');
+      const data = await res.json();
+      if (data.success) setAlerts(data.data?.alerts || []);
+    } catch (err) { console.error('Failed to fetch alerts:', err); }
+    finally { setLoadingAlerts(false); }
+  }, []);
+
+  const fetchPerformance = useCallback(async () => {
+    setLoadingPerf(true);
+    try {
+      const res = await fetch('/api/v1/coordinator/student-performance');
+      const data = await res.json();
+      if (data.success) {
+        setPerfStudents(data.data?.students ?? []);
+        setPerfBatches(data.data?.batches ?? []);
+      }
+    } catch (err) { console.error('Failed to fetch performance:', err); }
+    finally { setLoadingPerf(false); }
+  }, []);
+
+  const fetchReports = useCallback(async () => {
+    setLoadingReports(true);
+    try {
+      const res = await fetch('/api/v1/monitoring/reports');
+      const data = await res.json();
+      if (data.success) setReports(data.data?.reports || []);
+    } catch (err) { console.error('Failed to fetch reports:', err); }
+    finally { setLoadingReports(false); }
+  }, []);
+
+  const fetchEndClassRequests = useCallback(async () => {
+    try {
+      const res = await fetch('/api/v1/coordinator/rooms');
+      const data = await res.json();
+      if (!data.success) return;
+      const liveRooms = (data.data?.rooms || []).filter((r: Room) => r.status === 'live' || effectiveStatus(r) === 'live');
+      const requests: { room_id: string; room_name: string; teacher_name: string; reason: string; requested_at: string }[] = [];
+      await Promise.all(liveRooms.map(async (r: Room) => {
+        try {
+          const reqRes = await fetch(`/api/v1/room/${r.room_id}/end-request`);
+          const reqData = await reqRes.json();
+          if (reqData?.data?.status === 'pending') {
+            requests.push({
+              room_id: r.room_id,
+              room_name: r.room_name,
+              teacher_name: reqData.data.teacher_name || r.teacher_email || 'Teacher',
+              reason: reqData.data.reason || '',
+              requested_at: reqData.data.requested_at || new Date().toISOString(),
+            });
+          }
+        } catch (e) { console.error(`[end-request] Failed to check room ${r.room_id}:`, e); }
+      }));
+      setEndClassRequests(requests);
+    } catch (err) { console.error('Failed to fetch end-class requests:', err); }
+  }, []);
+
+  const handleEndClassDecision = useCallback(async (roomId: string, action: 'approve' | 'deny') => {
+    try {
+      await fetch(`/api/v1/room/${roomId}/end-request`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action }),
+      });
+      setEndClassRequests((prev) => prev.filter((r) => r.room_id !== roomId));
+      if (action === 'approve') { fetchSessions(); fetchRooms(); }
+    } catch (err) { console.error('Failed to process end-class decision:', err); }
+  }, [fetchSessions, fetchRooms]);
+
+  // ── Initial load ──
+  useEffect(() => { fetchSessions(); fetchBatches(); fetchAlerts(); fetchRooms(); fetchEndClassRequests(); }, [fetchSessions, fetchBatches, fetchAlerts, fetchRooms, fetchEndClassRequests]);
+
+  // ── Lazy-loaded tabs ──
+  useEffect(() => {
+    if (activeTab === 'students' && perfStudents.length === 0) fetchPerformance();
+    if (activeTab === 'reports' && reports.length === 0) fetchReports();
+  }, [activeTab, perfStudents.length, reports.length, fetchPerformance, fetchReports]);
+
+  // ── Auto-refresh alerts + end-class every 30s ──
+  useEffect(() => {
+    const iv = setInterval(() => { fetchAlerts(); fetchEndClassRequests(); }, 30_000);
+    return () => clearInterval(iv);
+  }, [fetchAlerts, fetchEndClassRequests]);
+
+  // ── Auto-start polling (like AO) ──
+  useEffect(() => {
+    let mounted = true;
+    const autoStart = async () => {
+      try {
+        const res = await fetch('/api/v1/batch-sessions/auto-start', { method: 'POST' });
+        const data = await res.json();
+        if (!mounted) return;
+        if (data.success && data.data?.started > 0) {
+          toast.success(`Auto-started ${data.data.started} session${data.data.started > 1 ? 's' : ''} (prep time open)`);
+          fetchSessions(true);
+          fetchRooms();
+        }
+      } catch { /* silent */ }
+    };
+    autoStart();
+    const iv = setInterval(autoStart, 60_000);
+    return () => { mounted = false; clearInterval(iv); };
+  }, [toast, fetchSessions, fetchRooms]);
+
+  // ── Hash-based tab navigation ──
+  useEffect(() => {
+    const validTabs: TabId[] = ['overview', 'batches', 'sessions', 'monitoring', 'reports', 'students', 'leave', 'teacher-reports'];
+    const hash = window.location.hash.replace('#', '') as TabId;
+    if (hash && validTabs.includes(hash)) setActiveTab(hash);
+    const onHash = () => {
+      const h = window.location.hash.replace('#', '') as TabId;
+      if (h && validTabs.includes(h)) setActiveTab(h);
+    };
+    window.addEventListener('hashchange', onHash);
+    return () => window.removeEventListener('hashchange', onHash);
+  }, []);
+
+  useEffect(() => {
+    const h = activeTab === 'overview' ? '' : `#${activeTab}`;
+    if (window.location.hash !== h) window.history.replaceState(null, '', h || window.location.pathname);
+  }, [activeTab]);
+
+  // ── Computed stats ──
+  const loading = loadingSessions || loadingBatches;
+  const stats = useMemo(() => ({
+    totalBatches: batches.length,
+    activeBatches: batches.filter(b => b.status === 'active').length,
+    todaySessions: sessions.filter(s => isToday(s.scheduled_date) && effectiveSessionStatus(s) !== 'cancelled').length,
+    liveSessions: sessions.filter(s => effectiveSessionStatus(s) === 'live').length,
+    scheduledSessions: sessions.filter(s => effectiveSessionStatus(s) === 'scheduled').length,
+    totalStudents: batches.reduce((sum, b) => sum + Number(b.student_count || 0), 0),
+    criticalAlerts: alerts.filter((a) => a.severity === 'critical').length,
+    totalAlerts: alerts.length,
+  }), [sessions, batches, alerts]);
+
+  const dismissAlert = useCallback(async (alertId: string) => {
+    try {
+      await fetch('/api/v1/monitoring/alerts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'dismiss', alert_id: alertId }),
+      });
+      setAlerts((prev) => prev.filter((a) => a.id !== alertId));
+    } catch { /* ignore */ }
+  }, []);
+
+  const [generating, setGenerating] = useState(false);
+  const generateReport = useCallback(async (
+    targetEmail: string,
+    targetRole: 'student' | 'teacher',
+    period: 'daily' | 'weekly' | 'monthly',
+  ) => {
+    setGenerating(true);
+    const now = new Date();
+    let periodStart: string;
+    let periodEnd: string;
+    if (period === 'daily') {
+      periodStart = now.toISOString().split('T')[0];
+      periodEnd = periodStart;
+    } else if (period === 'weekly') {
+      const s = new Date(now); s.setDate(s.getDate() - 7);
+      periodStart = s.toISOString().split('T')[0];
+      periodEnd = now.toISOString().split('T')[0];
+    } else {
+      const s = new Date(now); s.setMonth(s.getMonth() - 1);
+      periodStart = s.toISOString().split('T')[0];
+      periodEnd = now.toISOString().split('T')[0];
+    }
+    try {
+      await fetch('/api/v1/monitoring/reports', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ target_email: targetEmail, target_role: targetRole, period, period_start: periodStart, period_end: periodEnd }),
+      });
+      fetchReports();
+    } catch { /* ignore */ }
+    finally { setGenerating(false); }
+  }, [fetchReports]);
+
+  const refreshAll = () => { fetchSessions(); fetchBatches(); fetchAlerts(); fetchRooms(); };
+
+  return (
+    <DashboardShell role={userRole} userName={userName} userEmail={userEmail} permissions={permissions}>
+      {!['students', 'leave', 'teacher-reports'].includes(activeTab) && (
+        <PageHeader icon={LayoutDashboard} title="Batch Coordinator" subtitle={`Welcome back, ${userName}`}>
+          <RefreshButton loading={loading} onClick={refreshAll} />
+        </PageHeader>
+      )}
+
+      {/* TabBar hidden — navigation handled by sidebar */}
+
+      {/* Critical alerts banner */}
+      {stats.criticalAlerts > 0 && activeTab !== 'monitoring' && (
+        <div className="mb-4 rounded-xl border border-red-200 bg-red-50 p-3 flex items-center gap-3">
+          <AlertTriangle className="h-5 w-5 text-red-600 shrink-0" />
+          <div className="flex-1">
+            <p className="text-sm font-semibold text-red-700">{stats.criticalAlerts} Critical Alert{stats.criticalAlerts > 1 ? 's' : ''}</p>
+            <p className="text-xs text-red-500">{alerts.find(a => a.severity === 'critical')?.message}</p>
+          </div>
+          <button onClick={() => setActiveTab('monitoring')} className="rounded-lg bg-red-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-red-700">View Alerts</button>
+        </div>
+      )}
+
+      {/* End-class requests banner */}
+      {endClassRequests.length > 0 && (
+        <div className="mb-4 space-y-2">
+          {endClassRequests.map((req) => (
+            <div key={req.room_id} className="rounded-xl border border-amber-200 bg-amber-50 p-3 flex items-center gap-3">
+              <AlertTriangle className="h-5 w-5 text-amber-600 shrink-0" />
+              <div className="flex-1">
+                <p className="text-sm font-semibold text-amber-700">End Session Request — {req.room_name}</p>
+                <p className="text-xs text-amber-500">{req.teacher_name} wants to end the session early{req.reason ? `: ${req.reason}` : ''}</p>
+              </div>
+              <div className="flex gap-2">
+                <button onClick={() => handleEndClassDecision(req.room_id, 'deny')}
+                  className="rounded-lg border border-gray-200 px-3 py-1.5 text-xs font-medium text-gray-500 hover:bg-gray-50">Deny</button>
+                <button onClick={() => handleEndClassDecision(req.room_id, 'approve')}
+                  className="rounded-lg bg-red-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-red-700">Approve End</button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {activeTab === 'overview' && (
+        <>
+          <OverviewTab stats={stats} sessions={sessions} batches={batches} loading={loading} onTab={setActiveTab} router={router} />
+          <ExtensionRequestsPanel />
+        </>
+      )}
+      {activeTab === 'batches' && <BatchesTab batches={batches} loading={loadingBatches} onRefresh={fetchBatches} />}
+      {activeTab === 'sessions' && <LiveSessionsTab sessions={sessions} loading={loadingSessions} onRefresh={() => { fetchSessions(); fetchRooms(); }} router={router} />}
+      {activeTab === 'monitoring' && <MonitoringTab alerts={alerts} loadingAlerts={loadingAlerts} onRefreshAlerts={fetchAlerts} onDismiss={dismissAlert} rooms={rooms} router={router} />}
+      {activeTab === 'reports' && <ReportsTab reports={reports} loadingReports={loadingReports} onRefresh={fetchReports} perfStudents={perfStudents} generating={generating} onGenerate={generateReport} />}
+      {activeTab === 'students' && (
+        <>
+          <StudentsTab students={perfStudents} batches={perfBatches} loading={loadingPerf} onRefresh={fetchPerformance} onGenerate={generateReport} generating={generating} />
+          <DiscontinuedStudentsPanel />
+        </>
+      )}
+      {activeTab === 'leave' && <CoordinatorLeaveTab />}
+      {activeTab === 'teacher-reports' && <TeacherReportsTab />}
+    </DashboardShell>
+  );
+}
+
+/* ═══ OVERVIEW TAB ═══ */
+
+function OverviewTab({ stats, sessions, batches, loading, onTab, router }: {
+  stats: { totalBatches: number; activeBatches: number; todaySessions: number; liveSessions: number; scheduledSessions: number; totalStudents: number; criticalAlerts: number; totalAlerts: number };
+  sessions: Session[]; batches: Batch[]; loading: boolean;
+  onTab: (t: TabId) => void; router: ReturnType<typeof useRouter>;
+}) {
+  if (loading) return <LoadingState />;
+
+  const todaySessions = sessions
+    .filter(s => isToday(s.scheduled_date) && effectiveSessionStatus(s) !== 'cancelled')
+    .sort((a, b) => a.start_time.localeCompare(b.start_time));
+
+  const liveSessions = sessions.filter(s => effectiveSessionStatus(s) === 'live');
+
+  return (
+    <div className="space-y-6">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+        <StatCard icon={BookOpen}      label="Total Batches"    value={stats.totalBatches}      variant="default" />
+        <StatCard icon={Zap}           label="Active Batches"   value={stats.activeBatches}     variant="success" />
+        <StatCard icon={Calendar}      label="Today's Sessions" value={stats.todaySessions}     variant="info" />
+        <StatCard icon={Radio}         label="Live Now"         value={stats.liveSessions}      variant="success" />
+        <StatCard icon={Clock}         label="Scheduled"        value={stats.scheduledSessions} variant="warning" />
+        <StatCard icon={GraduationCap} label="Total Students"   value={stats.totalStudents}     variant="default" />
+      </div>
+
+      {liveSessions.length > 0 && (
+        <Alert
+          variant="success"
+          message={`${liveSessions.length} session${liveSessions.length > 1 ? 's' : ''} currently live: ${liveSessions.map(s => `${s.subject} (${s.batch_name || s.batch_id})`).join(', ')}`}
+        />
+      )}
+
+      {/* Today's Agenda */}
+      <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+        <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2 mb-4">
+          <Calendar className="h-4 w-4 text-emerald-600" /> Today&apos;s Agenda
+        </h3>
+        {todaySessions.length === 0 ? (
+          <p className="text-sm text-gray-400 text-center py-8">No sessions scheduled for today</p>
+        ) : (
+          <div className="space-y-2">
+            {todaySessions.map(s => {
+              const es = effectiveSessionStatus(s);
+              return (
+              <div key={s.session_id} className="flex items-center gap-3 rounded-lg border border-gray-100 bg-gray-50/50 p-3">
+                <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg ${
+                  es === 'live' ? 'bg-green-100 text-green-600' : es === 'ended' ? 'bg-gray-100 text-gray-400' : 'bg-teal-50 text-teal-600'
+                }`}>
+                  {es === 'live' ? <Radio className="h-5 w-5" /> : es === 'ended' ? <CheckCircle2 className="h-5 w-5" /> : <Clock className="h-5 w-5" />}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="font-medium text-gray-900 text-sm">{s.subject}</span>
+                    <StatusBadge status={es} />
+                    {s.topic && <span className="text-xs text-gray-400">&mdash; {s.topic}</span>}
+                  </div>
+                  <div className="flex flex-wrap gap-3 mt-0.5 text-xs text-gray-500">
+                    <span className="flex items-center gap-1"><Clock className="h-3 w-3" />{fmtTime12(s.start_time)}</span>
+                    <span>{s.duration_minutes}m</span>
+                    {s.teacher_name && <span className="flex items-center gap-1"><Users className="h-3 w-3" />{s.teacher_name}</span>}
+                    <span className="flex items-center gap-1"><BookOpen className="h-3 w-3" />{s.batch_name || s.batch_id}</span>
+                  </div>
+                </div>
+                {es === 'live' && s.livekit_room_name && (
+                  <button onClick={() => router.push(`/classroom/${s.livekit_room_name}?mode=observe`)}
+                    className="flex items-center gap-1 rounded-lg bg-green-600 px-2.5 py-1 text-[10px] font-medium text-white hover:bg-green-700 shrink-0">
+                    <Eye className="h-3 w-3" /> Observe
+                  </button>
+                )}
+              </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
+
+      {/* Batch Summary */}
+      {batches.length > 0 && (
+        <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+          <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2 mb-4">
+            <BookOpen className="h-4 w-4 text-emerald-600" /> Batch Summary
+          </h3>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {batches.filter(b => b.status === 'active').slice(0, 6).map(b => (
+              <div key={b.batch_id} className="rounded-lg border border-gray-100 bg-gray-50/50 p-3">
+                <div className="flex items-center gap-2">
+                  <span className="font-medium text-gray-900 text-sm truncate">{b.batch_name}</span>
+                  <Badge label={BATCH_TYPE_LABELS[b.batch_type] || b.batch_type} variant={BATCH_TYPE_VARIANTS[b.batch_type] || 'default'} />
+                </div>
+                <div className="flex gap-3 mt-1 text-xs text-gray-500">
+                  <span>{b.grade}{b.section ? ` - ${b.section}` : ''}</span>
+                  <span>{b.student_count} student{b.student_count !== 1 ? 's' : ''}</span>
+                  <span>{b.teacher_count} teacher{b.teacher_count !== 1 ? 's' : ''}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Quick Actions */}
+      <Card>
+        <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2 mb-3">
+          <Zap className="h-4 w-4 text-emerald-600" /> Quick Actions
+        </h3>
+        <div className="flex flex-wrap gap-2">
+          <button onClick={() => onTab('sessions')} className="inline-flex items-center gap-1.5 rounded-lg border border-green-200 bg-green-50 px-3 py-2 text-xs font-medium text-green-700 hover:bg-green-100 transition">
+            <Eye className="h-3.5 w-3.5" /> Enter Ghost Mode
+          </button>
+          <button onClick={() => onTab('monitoring')} className="inline-flex items-center gap-1.5 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs font-medium text-amber-700 hover:bg-amber-100 transition">
+            <Bell className="h-3.5 w-3.5" /> View Alerts
+          </button>
+          <button onClick={() => onTab('students')} className="inline-flex items-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50 px-3 py-2 text-xs font-medium text-blue-700 hover:bg-blue-100 transition">
+            <Users className="h-3.5 w-3.5" /> Student Performance
+          </button>
+          <button onClick={() => onTab('reports')} className="inline-flex items-center gap-1.5 rounded-lg border border-purple-200 bg-purple-50 px-3 py-2 text-xs font-medium text-purple-700 hover:bg-purple-100 transition">
+            <BarChart2 className="h-3.5 w-3.5" /> Generate Report
+          </button>
+        </div>
+      </Card>
+
+      {/* Teacher Readiness */}
+      <TeacherReadinessWidget />
+
+      {/* Attendance Summary */}
+      <AttendanceSummaryWidget />
+
+      {/* Pending Video Requests */}
+      <PendingVideoRequestsWidget />
+    </div>
+  );
+}
+
+/* Pending Video Requests Widget — self-fetching */
+function PendingVideoRequestsWidget() {
+  const [requests, setRequests] = useState<Array<Record<string, unknown>>>([]);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    fetch('/api/v1/recording/requests?status=pending')
+      .then(r => r.json())
+      .then(d => { if (d.success) setRequests(d.data?.requests || []); })
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, []);
+  if (loading) return null;
+  if (requests.length === 0) return null;
+  return (
+    <Card>
+      <div className="flex items-center justify-between mb-3">
+        <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2">
+          <Video className="h-4 w-4 text-blue-600" /> Pending Video Requests
+          <Badge label={String(requests.length)} variant="warning" />
+        </h3>
+      </div>
+      <div className="space-y-2 max-h-48 overflow-auto">
+        {requests.slice(0, 5).map((r, i) => (
+          <div key={i} className="flex items-center gap-3 rounded-lg border border-blue-100 bg-blue-50/50 p-2.5">
+            <Video className="h-4 w-4 text-blue-500 shrink-0" />
+            <div className="flex-1 min-w-0">
+              <p className="text-xs font-medium text-gray-900 truncate">{r.student_name as string || r.student_email as string}</p>
+              <p className="text-[10px] text-gray-500 truncate">{r.room_name as string} — {r.reason as string || 'No reason'}</p>
+            </div>
+            <span className="text-[10px] text-gray-400">{fmtSmartDateIST(r.created_at as string)}</span>
+          </div>
+        ))}
+      </div>
+    </Card>
+  );
+}
+
+/* ═══ BATCHES TAB ═══ */
+
+function BatchesTab({ batches, loading, onRefresh }: {
+  batches: Batch[]; loading: boolean; onRefresh: () => void;
+}) {
+  const [filter, setFilter] = useState('all');
+  const [search, setSearch] = useState('');
+
+  const filtered = batches
+    .filter((b) => filter === 'all' || b.status === filter)
+    .filter((b) => !search || b.batch_name.toLowerCase().includes(search.toLowerCase()) || b.grade.toLowerCase().includes(search.toLowerCase()) || (b.section || '').toLowerCase().includes(search.toLowerCase()));
+
+  return (
+    <div className="space-y-4">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+        <div className="flex gap-1.5 flex-wrap">
+          {['all', 'active', 'paused', 'completed'].map((f) => (
+            <button key={f} onClick={() => setFilter(f)} className={cn('rounded-lg px-3 py-1.5 text-xs font-medium capitalize transition-colors', filter === f ? 'bg-emerald-600 text-white shadow-sm' : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50')}>{f}</button>
+          ))}
+        </div>
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+          <input type="text" placeholder="Search batches..." value={search} onChange={(e) => setSearch(e.target.value)}
+            className="w-full rounded-lg border border-gray-200 bg-white py-2 pl-10 pr-4 text-sm text-gray-900 placeholder:text-gray-400 focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-100" />
+        </div>
+        <RefreshButton loading={loading} onClick={onRefresh} />
+      </div>
+
+      {loading && batches.length === 0 ? (
+        <LoadingState />
+      ) : filtered.length === 0 ? (
+        <EmptyState icon={BookOpen} message="No batches found" />
+      ) : (
+        <div className="space-y-2">
+          {filtered.map((b) => (
+            <div key={b.batch_id} className="rounded-xl border border-gray-200 bg-white p-4 hover:border-gray-300 transition-colors shadow-sm">
+              <div className="flex items-center gap-3">
+                <div className={cn('flex h-10 w-10 shrink-0 items-center justify-center rounded-lg', b.status === 'active' ? 'bg-green-50 border border-green-200' : 'bg-gray-50 border border-gray-200')}>
+                  <BookOpen className={cn('h-5 w-5', b.status === 'active' ? 'text-green-600' : 'text-gray-400')} />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <h3 className="font-semibold text-gray-900 truncate">{b.batch_name}</h3>
+                    <Badge label={BATCH_TYPE_LABELS[b.batch_type] || b.batch_type} variant={BATCH_TYPE_VARIANTS[b.batch_type] || 'default'} />
+                    <StatusBadge status={b.status} />
+                  </div>
+                  <div className="flex flex-wrap gap-3 mt-1 text-xs text-gray-500">
+                    <span className="flex items-center gap-1"><GraduationCap className="h-3 w-3" />{b.grade}{b.section ? ` \u2014 ${b.section}` : ''}</span>
+                    <span className="flex items-center gap-1"><Users className="h-3 w-3" />{b.student_count} student{b.student_count !== 1 ? 's' : ''}</span>
+                    <span>{b.teacher_count} teacher{b.teacher_count !== 1 ? 's' : ''}</span>
+                    {b.subjects && b.subjects.length > 0 && (
+                      <span className="flex items-center gap-1"><BookOpen className="h-3 w-3" />{b.subjects.join(', ')}</span>
+                    )}
+                  </div>
+                  {b.teachers && b.teachers.length > 0 && (
+                    <div className="flex flex-wrap gap-2 mt-2">
+                      {b.teachers.map((t, i) => (
+                        <div key={i} className="flex items-center gap-1.5 rounded-full border border-gray-200 bg-gray-50 px-2 py-0.5">
+                          <Avatar name={t.teacher_name} size="sm" className="h-4 w-4 text-[8px]" />
+                          <span className="text-[10px] text-gray-600">{t.teacher_name} ({t.subject})</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ═══ LIVE SESSIONS TAB ═══ */
+
+function LiveSessionsTab({ sessions, loading, onRefresh, router }: {
+  sessions: Session[]; loading: boolean; onRefresh: () => void; router: ReturnType<typeof useRouter>;
+}) {
+  const liveSessions = sessions.filter(s => effectiveSessionStatus(s) === 'live');
+  const todayScheduled = sessions.filter(s => isToday(s.scheduled_date) && effectiveSessionStatus(s) === 'scheduled');
+  const [selectedRoom, setSelectedRoom] = useState<string | null>(null);
+  const [sessionData, setSessionData] = useState<SessionMonitoring | null>(null);
+  const [loadingSession, setLoadingSession] = useState(false);
+
+  const fetchSessionData = useCallback(async (roomId: string) => {
+    setLoadingSession(true);
+    try {
+      const res = await fetch(`/api/v1/monitoring/session/${roomId}`);
+      const data = await res.json();
+      if (data.success) setSessionData(data.data);
+    } catch { /* ignore */ }
+    finally { setLoadingSession(false); }
+  }, []);
+
+  useEffect(() => {
+    if (!selectedRoom) return;
+    fetchSessionData(selectedRoom);
+    const iv = setInterval(() => fetchSessionData(selectedRoom), 10_000);
+    return () => clearInterval(iv);
+  }, [selectedRoom, fetchSessionData]);
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2">
+          <Radio className="h-4 w-4 text-green-600 animate-pulse" /> {liveSessions.length} Live Session{liveSessions.length !== 1 ? 's' : ''}
+          {todayScheduled.length > 0 && <span className="text-xs text-gray-400 font-normal ml-2">&middot; {todayScheduled.length} scheduled today</span>}
+        </h3>
+        <RefreshButton loading={loading} onClick={onRefresh} />
+      </div>
+
+      {liveSessions.length === 0 ? (
+        <div className="space-y-4">
+          <EmptyState icon={Video} message="No live sessions — they will appear here when they go live" />
+          {todayScheduled.length > 0 && (
+            <div className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+              <h4 className="text-xs font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                <Clock className="h-3.5 w-3.5 text-blue-500" /> Upcoming Today
+              </h4>
+              <div className="space-y-2">
+                {todayScheduled.sort((a, b) => a.start_time.localeCompare(b.start_time)).map(s => (
+                  <div key={s.session_id} className="flex items-center gap-3 rounded-lg border border-blue-100 bg-blue-50/50 p-2.5">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-100"><Clock className="h-4 w-4 text-blue-600" /></div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs font-medium text-gray-900 truncate">{s.subject} &middot; {s.batch_name || s.batch_id}</p>
+                      <p className="text-[10px] text-gray-500">{fmtTime12(s.start_time)} &middot; {s.duration_minutes}m{s.teacher_name ? ` \u00b7 ${s.teacher_name}` : ''}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="grid gap-4 lg:grid-cols-3">
+          <div className="space-y-2 lg:col-span-1">
+            {liveSessions.map((s) => (
+              <button key={s.session_id} onClick={() => s.livekit_room_name && setSelectedRoom(s.livekit_room_name)}
+                className={cn('w-full rounded-xl border p-3 text-left transition-colors',
+                  selectedRoom === s.livekit_room_name ? 'border-green-300 bg-green-50' : 'border-gray-200 bg-white hover:border-green-200',
+                )}>
+                <div className="flex items-center gap-2">
+                  <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
+                  <span className="text-xs font-medium text-gray-900 truncate">{s.subject} &middot; {s.batch_name || s.batch_id}</span>
+                </div>
+                <div className="flex gap-2 mt-1 text-[10px] text-gray-500">
+                  <span>{fmtTime12(s.start_time)}</span><span>&middot;</span><span>{s.grade}</span>
+                  {(s.student_count ?? 0) > 0 && <span>&middot; {s.student_count} students</span>}
+                </div>
+                {s.teacher_name && (
+                  <div className="text-[10px] text-green-600 mt-0.5">{s.teacher_name}</div>
+                )}
+              </button>
+            ))}
+          </div>
+
+          <div className="lg:col-span-2">
+            {!selectedRoom ? (
+              <div className="rounded-xl border border-dashed border-gray-300 p-8 text-center">
+                <Activity className="mx-auto mb-2 h-8 w-8 text-gray-400" />
+                <p className="text-xs text-gray-500">Select a live session to see monitoring data</p>
+              </div>
+            ) : loadingSession && !sessionData ? (
+              <LoadingState />
+            ) : sessionData ? (
+              <div className="space-y-4">
+                {/* Engagement score */}
+                <Card>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-xs text-gray-500">Session Engagement</span>
+                    <button onClick={() => router.push(`/classroom/${selectedRoom}?mode=observe`)}
+                      className="flex items-center gap-1 rounded-lg bg-green-600 px-2.5 py-1 text-[10px] font-medium text-white hover:bg-green-700">
+                      <Eye className="h-3 w-3" /> Observe Live
+                    </button>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="flex-1 h-3 rounded-full bg-gray-100 overflow-hidden">
+                      <div className={cn('h-full rounded-full transition-all', attBg(sessionData.class_engagement_score))}
+                        style={{ width: `${sessionData.class_engagement_score}%` }} />
+                    </div>
+                    <span className={cn('text-xl font-bold', attColor(sessionData.class_engagement_score))}>{sessionData.class_engagement_score}%</span>
+                  </div>
+                </Card>
+
+                {/* Student attention */}
+                <Card>
+                  <h4 className="text-xs font-semibold text-gray-900 mb-3">Student Attention (AI)</h4>
+                  <div className="space-y-1.5 max-h-64 overflow-auto">
+                    {sessionData.students.sort((a, b) => a.attention_score - b.attention_score).map((s) => (
+                      <div key={s.email} className={cn('flex items-center gap-2 rounded-lg border px-3 py-2',
+                        s.attention_score < 30 ? 'border-red-200 bg-red-50' : s.attention_score < 60 ? 'border-amber-200 bg-amber-50' : 'border-gray-200 bg-gray-50')}>
+                        <Avatar name={s.name} size="sm" className={s.attention_score < 30 ? 'bg-red-100 text-red-700' : s.attention_score < 60 ? 'bg-amber-100 text-amber-700' : 'bg-green-100 text-green-700'} />
+                        <div className="flex-1 min-w-0">
+                          <p className="text-xs font-medium text-gray-900 truncate">{s.name}</p>
+                          <div className="flex gap-2 text-[10px] text-gray-500">
+                            {s.current_state === 'eyes_closed' && <span className="text-red-600">&#x1F634; Sleeping</span>}
+                            {s.current_state === 'looking_away' && <span className="text-amber-600">&#x1F440; Looking Away</span>}
+                            {s.current_state === 'not_in_frame' && <span className="text-amber-600">&#x1F6AB; Not in Frame</span>}
+                            {s.current_state === 'distracted' && <span className="text-amber-600">&#x1F635; Distracted</span>}
+                            {s.current_state === 'attentive' && <span className="text-green-600">&#x2705; Attentive</span>}
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-1.5 shrink-0">
+                          <div className="w-14 h-1.5 rounded-full bg-gray-100 overflow-hidden">
+                            <div className={cn('h-full rounded-full', attBg(s.attention_score))} style={{ width: `${s.attention_score}%` }} />
+                          </div>
+                          <span className={cn('text-xs font-bold w-8 text-right', attColor(s.attention_score))}>{s.attention_score}%</span>
+                        </div>
+                        {s.active_alerts > 0 && (
+                          <span className="flex h-4 w-4 items-center justify-center rounded-full bg-red-600 text-[8px] font-bold text-white">{s.active_alerts}</span>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </Card>
+
+                {sessionData.alerts.length > 0 && (
+                  <Card>
+                    <h4 className="text-xs font-semibold text-gray-900 mb-3">Session Alerts</h4>
+                    <div className="space-y-1.5">
+                      {sessionData.alerts.slice(0, 10).map((a) => {
+                        const sev = SEVERITY_COLOR[a.severity] || SEVERITY_COLOR.info;
+                        return (
+                          <div key={a.id} className={cn('rounded-lg border p-2.5', sev.border, sev.bg)}>
+                            <div className="flex items-center justify-between">
+                              <span className={cn('text-xs font-medium', sev.text)}>{a.title}</span>
+                              <span className="text-[10px] text-gray-500">{new Date(a.created_at).toLocaleTimeString()}</span>
+                            </div>
+                            <p className="text-[10px] text-gray-500 mt-0.5">{a.message}</p>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </Card>
+                )}
+              </div>
+            ) : null}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* 
+   MONITORING TAB
+    */
+
+function MonitoringTab({ alerts, loadingAlerts, onRefreshAlerts, onDismiss, rooms, router }: {
+  alerts: MonitoringAlert[]; loadingAlerts: boolean; onRefreshAlerts: () => void; onDismiss: (id: string) => void;
+  rooms: Room[]; router: ReturnType<typeof useRouter>;
+}) {
+  const [filterType, setFilterType] = useState('all');
+  const [filterSeverity, setFilterSeverity] = useState('all');
+
+  const filtered = alerts
+    .filter((a) => filterType === 'all' || a.alert_type === filterType)
+    .filter((a) => filterSeverity === 'all' || a.severity === filterSeverity);
+
+  const alertTypes = [...new Set(alerts.map((a) => a.alert_type))];
+
+  return (
+    <div className="space-y-4">
+      <div className="grid grid-cols-3 gap-3">
+        <div className="rounded-xl border border-red-200 bg-red-50 p-3">
+          <div className="flex items-center justify-between"><AlertTriangle className="h-4 w-4 text-red-600" /><span className="text-2xl font-bold text-red-700">{alerts.filter(a => a.severity === 'critical').length}</span></div>
+          <p className="text-[10px] text-gray-500 mt-1">Critical</p>
+        </div>
+        <div className="rounded-xl border border-amber-200 bg-amber-50 p-3">
+          <div className="flex items-center justify-between"><AlertCircle className="h-4 w-4 text-amber-600" /><span className="text-2xl font-bold text-amber-700">{alerts.filter(a => a.severity === 'warning').length}</span></div>
+          <p className="text-[10px] text-gray-500 mt-1">Warning</p>
+        </div>
+        <div className="rounded-xl border border-blue-200 bg-blue-50 p-3">
+          <div className="flex items-center justify-between"><Bell className="h-4 w-4 text-blue-600" /><span className="text-2xl font-bold text-blue-700">{alerts.filter(a => a.severity === 'info').length}</span></div>
+          <p className="text-[10px] text-gray-500 mt-1">Info</p>
+        </div>
+      </div>
+
+      <div className="flex flex-wrap gap-2 items-center">
+        <select value={filterType} onChange={(e) => setFilterType(e.target.value)}
+          className="rounded-lg border border-gray-200 bg-white px-2 py-1.5 text-xs text-gray-900 focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-100">
+          <option value="all">All Types</option>
+          {alertTypes.map((t) => <option key={t} value={t}>{t.replace(/_/g, ' ')}</option>)}
+        </select>
+        <select value={filterSeverity} onChange={(e) => setFilterSeverity(e.target.value)}
+          className="rounded-lg border border-gray-200 bg-white px-2 py-1.5 text-xs text-gray-900 focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-100">
+          <option value="all">All Severity</option>
+          <option value="critical">Critical</option>
+          <option value="warning">Warning</option>
+          <option value="info">Info</option>
+        </select>
+        <div className="flex-1" />
+        <RefreshButton loading={loadingAlerts} onClick={onRefreshAlerts} />
+      </div>
+
+      <div className="space-y-2">
+        {filtered.length === 0 ? (
+          <EmptyState icon={CheckCircle2} message="No active alerts — all sessions running smoothly" />
+        ) : (
+          filtered.map((alert) => {
+            const sev = SEVERITY_COLOR[alert.severity] || SEVERITY_COLOR.info;
+            const room = rooms.find((r) => r.room_id === alert.room_id);
+            return (
+              <div key={alert.id} className={cn('rounded-xl border p-4', sev.border, sev.bg)}>
+                <div className="flex items-start gap-3">
+                  <AlertTriangle className={cn('h-5 w-5 mt-0.5 shrink-0', sev.text)} />
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2">
+                      <span className={cn('text-sm font-semibold', sev.text)}>{alert.title}</span>
+                      <span className={cn('rounded-full px-2 py-0.5 text-[9px] font-bold uppercase', sev.bg, sev.text)}>{alert.severity}</span>
+                    </div>
+                    <p className="text-xs text-gray-500 mt-1">{alert.message}</p>
+                    <div className="flex items-center gap-3 mt-2 text-[10px] text-gray-500">
+                      {room && <span>{room.room_name}</span>}
+                      {alert.target_email && <span>&middot; {alert.target_email}</span>}
+                      <span>&middot; {fmtDateTimeIST(alert.created_at)}</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    {room && effectiveStatus(room) === 'live' && (
+                      <button onClick={() => router.push(`/classroom/${room.room_id}?mode=observe`)}
+                        className="flex items-center gap-1 rounded-lg bg-green-600 px-2 py-1 text-[10px] font-medium text-white hover:bg-green-700">
+                        <Eye className="h-3 w-3" /> Observe
+                      </button>
+                    )}
+                    <button onClick={() => onDismiss(alert.id)}
+                      className="flex items-center gap-1 rounded-lg border border-gray-200 px-2 py-1 text-[10px] text-gray-500 hover:text-gray-900 hover:bg-gray-50">
+                      <XCircle className="h-3 w-3" /> Dismiss
+                    </button>
+                  </div>
+                </div>
+              </div>
+            );
+          })
+        )}
+      </div>
+    </div>
+  );
+}
+
+/* 
+   REPORTS TAB
+    */
+
+function ReportsTab({ reports, loadingReports, onRefresh, perfStudents, generating, onGenerate }: {
+  reports: MonitoringReport[]; loadingReports: boolean; onRefresh: () => void;
+  perfStudents: StudentPerf[]; generating: boolean;
+  onGenerate: (email: string, role: 'student' | 'teacher', period: 'daily' | 'weekly' | 'monthly') => void;
+}) {
+  const [filterType, setFilterType] = useState('all');
+  const [filterPeriod, setFilterPeriod] = useState('all');
+
+  const filtered = reports
+    .filter((r) => filterType === 'all' || r.target_role === filterType)
+    .filter((r) => filterPeriod === 'all' || r.report_period === filterPeriod);
+
+  return (
+    <div className="space-y-4">
+      <Card>
+        <h3 className="text-xs font-semibold text-gray-900 mb-3 flex items-center gap-2"><Zap className="h-3.5 w-3.5 text-emerald-600" /> Quick Generate Report</h3>
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6">
+          {[
+            { label: 'Daily Student', role: 'student' as const, period: 'daily' as const, icon: Calendar },
+            { label: 'Weekly Student', role: 'student' as const, period: 'weekly' as const, icon: BarChart2 },
+            { label: 'Monthly Student', role: 'student' as const, period: 'monthly' as const, icon: FileText },
+            { label: 'Daily Teacher', role: 'teacher' as const, period: 'daily' as const, icon: Calendar },
+            { label: 'Weekly Teacher', role: 'teacher' as const, period: 'weekly' as const, icon: BarChart2 },
+            { label: 'Monthly Teacher', role: 'teacher' as const, period: 'monthly' as const, icon: FileText },
+          ].map((item) => {
+            const Ic = item.icon;
+            return (
+              <button key={item.label} disabled={generating}
+                onClick={() => { const s = perfStudents[0]; if (s) onGenerate(s.email, item.role, item.period); }}
+                className="flex flex-col items-center gap-1 rounded-lg border border-gray-200 bg-white px-2 py-3 text-center hover:border-emerald-300 hover:bg-emerald-50 disabled:opacity-50 transition-colors">
+                <Ic className="h-4 w-4 text-emerald-600" />
+                <span className="text-[10px] font-medium text-gray-900">{item.label}</span>
+              </button>
+            );
+          })}
+        </div>
+      </Card>
+
+      <div className="flex flex-wrap gap-2 items-center">
+        <select value={filterType} onChange={(e) => setFilterType(e.target.value)}
+          className="rounded-lg border border-gray-200 bg-white px-2 py-1.5 text-xs text-gray-900 focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-100">
+          <option value="all">All Roles</option><option value="student">Students</option><option value="teacher">Teachers</option>
+        </select>
+        <select value={filterPeriod} onChange={(e) => setFilterPeriod(e.target.value)}
+          className="rounded-lg border border-gray-200 bg-white px-2 py-1.5 text-xs text-gray-900 focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-100">
+          <option value="all">All Periods</option><option value="daily">Daily</option><option value="weekly">Weekly</option><option value="monthly">Monthly</option>
+        </select>
+        <div className="flex-1" />
+        <RefreshButton loading={loadingReports} onClick={onRefresh} />
+      </div>
+
+      {loadingReports ? (
+        <LoadingState />
+      ) : filtered.length === 0 ? (
+        <EmptyState icon={FileText} message="No reports yet — generate your first report above" />
+      ) : (
+        <div className="space-y-2">
+          {filtered.map((r) => {
+            const m = r.metrics as Record<string, unknown>;
+            const isSt = r.target_role === 'student';
+            return (
+              <Card key={r.id}>
+                <div className="flex items-start gap-3">
+                  <div className={cn('flex h-10 w-10 items-center justify-center rounded-lg', isSt ? 'bg-violet-50' : 'bg-emerald-50')}>
+                    {isSt ? <GraduationCap className="h-5 w-5 text-violet-600" /> : <BookOpen className="h-5 w-5 text-emerald-600" />}
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-semibold text-gray-900">{r.target_name || r.target_email}</span>
+                      <span className="rounded-full bg-emerald-50 border border-emerald-200 px-2 py-0.5 text-[9px] font-bold text-emerald-700 capitalize">{r.report_period}</span>
+                      <span className="rounded-full bg-gray-50 border border-gray-200 px-2 py-0.5 text-[9px] font-medium text-gray-500 capitalize">{r.target_role}</span>
+                    </div>
+                    <p className="text-[10px] text-gray-500 mt-0.5">{r.period_start} &mdash; {r.period_end}{r.batch_name && ` \u00b7 ${r.batch_name}`}</p>
+                    <div className="flex gap-3 mt-2 text-xs">
+                      {isSt && m.attendance_rate != null && <span className={cn('font-bold', attColor(m.attendance_rate as number))}>{m.attendance_rate as number}% attend.</span>}
+                      {isSt && m.avg_attention_score != null && <span className={cn('font-bold', attColor(m.avg_attention_score as number))}>{m.avg_attention_score as number}% attention</span>}
+                      {isSt && m.alerts_count != null && <span className="text-gray-500">{m.alerts_count as number} alerts</span>}
+                      {!isSt && m.sessions_conducted != null && <span className="text-gray-900 font-bold">{m.sessions_conducted as number} sessions</span>}
+                      {!isSt && m.on_time_rate != null && <span className={cn('font-bold', (m.on_time_rate as number) >= 90 ? 'text-green-600' : 'text-amber-600')}>{m.on_time_rate as number}% on-time</span>}
+                      {!isSt && m.sessions_cancelled != null && (m.sessions_cancelled as number) > 0 && <span className="text-red-600">{m.sessions_cancelled as number} cancelled</span>}
+                    </div>
+                    {m.overall_summary ? <p className="text-[11px] text-gray-500 mt-2 leading-relaxed">{String(m.overall_summary)}</p> : null}
+                  </div>
+                  <div className="text-[10px] text-gray-400 shrink-0">{fmtSmartDateIST(r.created_at)}</div>
+                </div>
+              </Card>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* 
+   STUDENTS TAB
+    */
+
+function StudentsTab({ students, batches, loading, onRefresh, onGenerate, generating }: {
+  students: StudentPerf[]; batches: PerfBatch[]; loading: boolean; onRefresh: () => void;
+  onGenerate: (email: string, role: 'student' | 'teacher', period: 'daily' | 'weekly' | 'monthly') => void; generating: boolean;
+}) {
+  const [filterBatch, setFilterBatch] = useState('');
+  const [sortBy, setSortBy] = useState<'name' | 'attendance' | 'exam'>('attendance');
+  const [search, setSearch] = useState('');
+
+  const filtered = students
+    .filter(s => !filterBatch || s.batch_id === filterBatch)
+    .filter(s => !search || s.name.toLowerCase().includes(search.toLowerCase()) || s.email.toLowerCase().includes(search.toLowerCase()))
+    .sort((a, b) => sortBy === 'name' ? a.name.localeCompare(b.name) : sortBy === 'attendance' ? b.attendance_rate - a.attendance_rate : (b.avg_exam_score ?? -1) - (a.avg_exam_score ?? -1));
+
+  return (
+    <div className="space-y-4">
+      {batches.length > 0 && (
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          {batches.map((b) => (
+            <div key={b.id} className={cn('rounded-xl border p-3 cursor-pointer transition-colors', filterBatch === b.id ? 'border-emerald-300 bg-emerald-50' : 'border-gray-200 bg-white hover:border-emerald-200')}
+              onClick={() => setFilterBatch(filterBatch === b.id ? '' : b.id)}>
+              <p className="text-xs font-semibold text-gray-900 truncate">{b.name}</p>
+              <div className="flex items-center gap-2 mt-1 text-[10px] text-gray-500">
+                {b.grade && <span>{b.grade}{b.section ? ` \u00b7 ${b.section}` : ''}</span>}
+                <span className="flex items-center gap-0.5"><Users className="h-2.5 w-2.5" /> {b.student_count}</span>
+                <span>{b.completed_sessions} sessions</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+          <input type="text" placeholder="Search students..." value={search} onChange={(e) => setSearch(e.target.value)}
+            className="w-full rounded-lg border border-gray-200 bg-white py-2 pl-10 pr-4 text-sm text-gray-900 placeholder:text-gray-400 focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-100" />
+        </div>
+        <select value={sortBy} onChange={e => setSortBy(e.target.value as 'name' | 'attendance' | 'exam')}
+          className="rounded-lg border border-gray-200 bg-white px-2 py-1.5 text-xs text-gray-900 focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-100">
+          <option value="attendance">Sort: Attendance</option><option value="exam">Sort: Exam Score</option><option value="name">Sort: Name</option>
+        </select>
+        <RefreshButton loading={loading} onClick={onRefresh} />
+      </div>
+
+      {loading ? (
+        <LoadingState />
+      ) : filtered.length === 0 ? (
+        <EmptyState icon={Users} message="No students found" />
+      ) : (
+        <div className="space-y-1.5">
+          <div className="flex items-center gap-2 px-3 py-1.5 text-[10px] text-gray-500 uppercase tracking-wide font-semibold sticky top-0 bg-white z-10 border-b border-gray-100">
+            <div className="flex-1">Student</div>
+            <div className="w-20 text-center">Batch</div>
+            <div className="w-24 text-center">Attendance</div>
+            <div className="w-16 text-center">Exams</div>
+            <div className="w-16 text-center">Avg Score</div>
+            <div className="w-20 text-center">Reports</div>
+          </div>
+          {filtered.map((s) => (
+            <div key={`${s.email}-${s.batch_id}`} className="flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2.5 hover:bg-emerald-50/30">
+              <Avatar name={s.name} size="sm" className="bg-violet-50 text-violet-700" />
+              <div className="flex-1 min-w-0">
+                <p className="text-xs font-medium text-gray-900 truncate">{s.name}</p>
+                <p className="text-[10px] text-gray-500 truncate">{s.email}</p>
+              </div>
+              <div className="w-20 text-center"><span className="text-[10px] text-gray-500 truncate">{s.batch_name}</span></div>
+              <div className="w-24">
+                <div className="flex items-center gap-1.5">
+                  <div className="flex-1 h-1.5 rounded-full bg-gray-100 overflow-hidden">
+                    <div className={cn('h-full rounded-full', attBg(s.attendance_rate))} style={{ width: `${s.attendance_rate}%` }} />
+                  </div>
+                  <span className={cn('text-xs font-bold w-8 text-right', attColor(s.attendance_rate))}>{s.attendance_rate}%</span>
+                </div>
+                <p className="text-[10px] text-gray-500 text-center">{s.sessions_present}/{s.total_sessions}</p>
+              </div>
+              <div className="w-16 text-center"><p className="text-xs font-bold text-gray-900">{s.exams_taken}</p></div>
+              <div className="w-16 text-center">
+                <p className={cn('text-sm font-bold', s.avg_exam_score != null ? attColor(s.avg_exam_score) : 'text-gray-400')}>
+                  {s.avg_exam_score != null ? `${s.avg_exam_score}%` : '\u2014'}
+                </p>
+              </div>
+              <div className="w-20 flex items-center gap-1 justify-center">
+                <button onClick={() => onGenerate(s.email, 'student', 'daily')} disabled={generating} title="Daily Report"
+                  className="rounded p-1 text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 disabled:opacity-50"><Calendar className="h-3 w-3" /></button>
+                <button onClick={() => onGenerate(s.email, 'student', 'weekly')} disabled={generating} title="Weekly Report"
+                  className="rounded p-1 text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 disabled:opacity-50"><BarChart2 className="h-3 w-3" /></button>
+                <button onClick={() => onGenerate(s.email, 'student', 'monthly')} disabled={generating} title="Monthly Report (Parent)"
+                  className="rounded p-1 text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 disabled:opacity-50"><FileText className="h-3 w-3" /></button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* 
+   ROOM CARD (used in Batches tab)
+    */
+
+function MonitorRoomCard({ room, expanded, onToggle, onRefresh, router }: {
+  room: Room; expanded: boolean; onToggle: () => void; onRefresh: () => void;
+  router: ReturnType<typeof useRouter>;
+}) {
+  const es = effectiveStatus(room);
+  const badge = STATUS_BADGE[es] ?? STATUS_BADGE.scheduled;
+  const BadgeIcon = badge.icon;
+  const [showReport, setShowReport] = useState(false);
+  return (
+    <div className="rounded-xl border border-gray-200 bg-white overflow-hidden hover:border-gray-300 transition-colors shadow-sm">
+      <div className="flex items-center gap-3 p-4 cursor-pointer select-none" onClick={onToggle}>
+        <div className={cn('flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border', badge.bg)}>
+          <BadgeIcon className={cn('h-5 w-5', badge.text)} />
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 flex-wrap">
+            <h3 className="font-semibold text-gray-900 truncate">{room.room_name}</h3>
+            <span className={cn('inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase border', badge.bg, badge.text)}>
+              <span className={cn('h-1.5 w-1.5 rounded-full', badge.dot)} />{es}
+            </span>
+            {!room.teacher_email && (
+              <span className="inline-flex items-center gap-1 rounded-full border border-amber-200 bg-amber-50 px-2 py-0.5 text-[10px] font-semibold text-amber-700">
+                <AlertCircle className="h-2.5 w-2.5" /> No teacher
+              </span>
+            )}
+          </div>
+          <div className="flex flex-wrap gap-3 mt-1 text-xs text-gray-500">
+            <span className="flex items-center gap-1"><BookOpen className="h-3 w-3" />{room.subject}</span>
+            <span className="flex items-center gap-1"><GraduationCap className="h-3 w-3" />{room.grade}{room.section ? ` \u2014 ${room.section}` : ''}</span>
+            <span className="flex items-center gap-1"><Calendar className="h-3 w-3" />{fmtSmartDateIST(room.scheduled_start)}</span>
+            <span className="flex items-center gap-1"><Clock className="h-3 w-3" />{room.duration_minutes}m</span>
+            {(room.student_count ?? 0) > 0 && <span className="flex items-center gap-1"><Users className="h-3 w-3" />{room.student_count} student{room.student_count !== 1 ? 's' : ''}</span>}
+          </div>
+        </div>
+        <div className="flex items-center gap-2 shrink-0" onClick={(e) => e.stopPropagation()}>
+          {es === 'live' && (
+            <button onClick={() => router.push(`/classroom/${room.room_id}?mode=observe`)}
+              className="flex items-center gap-1 rounded-lg bg-green-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-green-700">
+              <Eye className="h-3 w-3" /> Observe
+            </button>
+          )}
+          {es === 'ended' && (
+            <button onClick={() => setShowReport(true)}
+              className="flex items-center gap-1 rounded-lg bg-blue-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-700">
+              <FileText className="h-3 w-3" /> Report
+            </button>
+          )}
+        </div>
+        <div className="shrink-0 text-gray-400">
+          {expanded ? <ChevronDown className="h-5 w-5" /> : <ChevronRight className="h-5 w-5" />}
+        </div>
+      </div>
+      {expanded && <MonitorDetailPanel room={room} onRefresh={onRefresh} />}
+      {showReport && <SessionReportView roomId={room.room_id} onClose={() => setShowReport(false)} />}
+    </div>
+  );
+}
+
+function MonitorDetailPanel({ room, onRefresh }: { room: Room; onRefresh: () => void }) {
+  const [assignments, setAssignments] = useState<Assignment[]>([]);
+  const [loadingDetails, setLoadingDetails] = useState(true);
+  const [notifying, setNotifying] = useState(false);
+  const [msg, setMsg] = useState('');
+
+  const fetchDetails = useCallback(async () => {
+    setLoadingDetails(true);
+    try {
+      const res = await fetch(`/api/v1/coordinator/rooms/${room.room_id}`);
+      const data = await res.json();
+      if (data.success) setAssignments(data.data?.assignments || []);
+    } finally { setLoadingDetails(false); }
+  }, [room.room_id]);
+
+  useEffect(() => { fetchDetails(); }, [fetchDetails]);
+
+  const teacher = assignments.find((a) => a.participant_type === 'teacher');
+  const students = assignments.filter((a) => a.participant_type === 'student');
+  const joined = students.filter((s) => !!s.joined_at);
+  const notJoined = students.filter((s) => !s.joined_at);
+  const notNotified = students.filter((s) => !s.notification_sent_at);
+
+  const handleRemind = async () => {
+    setNotifying(true); setMsg('');
+    try {
+      const res = await fetch(`/api/v1/coordinator/rooms/${room.room_id}/notify`, { method: 'POST' });
+      const data = await res.json();
+      setMsg(data.success ? `Reminder sent to ${data.data?.sent ?? 0} participants` : `Error: ${data.error}`);
+      if (data.success) { fetchDetails(); onRefresh(); }
+    } catch { setMsg('Network error'); }
+    finally { setNotifying(false); }
+  };
+
+  return (
+    <div className="border-t border-gray-200 bg-gray-50/50 p-4">
+      {msg && (
+        <div className={cn('mb-4 rounded-lg px-3 py-2 text-xs', msg.startsWith('Reminder') ? 'bg-green-50 border border-green-200 text-green-700' : 'bg-red-50 border border-red-200 text-red-700')}>{msg}</div>
+      )}
+
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div className="space-y-2">
+          <h4 className="text-xs font-semibold uppercase tracking-wide text-gray-500">Batch Details</h4>
+          {[['Subject', room.subject], ['Grade', `${room.grade}${room.section ? ` \u2014 ${room.section}` : ''}`],
+            ['Scheduled', fmtDateTimeIST(room.scheduled_start)], ['Duration', `${room.duration_minutes} minutes`]].map(([l, v]) => (
+            <div key={l} className="flex items-start gap-2 text-sm">
+              <span className="w-24 shrink-0 text-xs text-gray-500">{l}</span>
+              <span className="text-gray-900">{v}</span>
+            </div>
+          ))}
+
+          <div className="mt-3 rounded-lg border border-gray-200 bg-white p-3">
+            <p className="mb-2 text-xs text-gray-500">Assigned Teacher</p>
+            {loadingDetails ? (
+              <div className="flex items-center gap-2 text-xs text-gray-500"><Loader2 className="h-3 w-3 animate-spin" /> Loading...</div>
+            ) : teacher ? (
+              <div className="flex items-center gap-2">
+                <Avatar name={teacher.participant_name} size="sm" className="bg-emerald-50 text-emerald-700" />
+                <div>
+                  <p className="text-sm font-medium text-gray-900">{teacher.participant_name}</p>
+                  <p className="text-xs text-gray-500">{teacher.participant_email}</p>
+                  {teacher.notification_sent_at && <p className="mt-0.5 flex items-center gap-1 text-[10px] text-emerald-600"><Mail className="h-2.5 w-2.5" /> Notified {fmtDateTimeIST(teacher.notification_sent_at)}</p>}
+                  {teacher.joined_at && <p className="mt-0.5 flex items-center gap-1 text-[10px] text-green-600"><UserCheck className="h-2.5 w-2.5" /> Joined {fmtDateTimeIST(teacher.joined_at)}</p>}
+                </div>
+              </div>
+            ) : (
+              <p className="text-xs text-amber-600 flex items-center gap-1"><AlertCircle className="h-3 w-3" /> No teacher assigned</p>
+            )}
+          </div>
+        </div>
+
+        <div className="space-y-3">
+          <div className="flex items-center justify-between">
+            <h4 className="text-xs font-semibold uppercase tracking-wide text-gray-500">Attendance</h4>
+            {effectiveStatus(room) === 'scheduled' && students.length > 0 && (
+              <button onClick={handleRemind} disabled={notifying}
+                className="flex items-center gap-1 rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-emerald-700 disabled:opacity-50">
+                {notifying ? <Loader2 className="h-3 w-3 animate-spin" /> : <Send className="h-3 w-3" />} Send Reminder
+              </button>
+            )}
+          </div>
+
+          {loadingDetails ? (
+            <div className="flex items-center gap-2 text-xs text-gray-500"><Loader2 className="h-3 w-3 animate-spin" /> Loading...</div>
+          ) : students.length === 0 ? (
+            <EmptyState icon={Users} message="No students assigned" />
+          ) : (
+            <>
+              <div className="flex gap-3 text-sm">
+                <div className="rounded-lg border border-green-200 bg-green-50 px-3 py-2 flex-1 text-center">
+                  <p className="text-xl font-bold text-green-700">{joined.length}</p><p className="text-xs text-gray-500">Joined</p>
+                </div>
+                <div className="rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 flex-1 text-center">
+                  <p className="text-xl font-bold text-gray-900">{notJoined.length}</p><p className="text-xs text-gray-500">Not joined</p>
+                </div>
+                <div className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 flex-1 text-center">
+                  <p className="text-xl font-bold text-amber-700">{notNotified.length}</p><p className="text-xs text-gray-500">Unnotified</p>
+                </div>
+              </div>
+
+              <div className="max-h-52 overflow-auto space-y-1.5">
+                {students.map((s) => (
+                  <div key={s.participant_email} className="flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2">
+                    <div className={cn('h-2 w-2 rounded-full shrink-0', s.joined_at ? 'bg-green-500' : 'bg-gray-300')} />
+                    <Avatar name={s.participant_name} size="sm" className="bg-violet-50 text-violet-700" />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs font-medium text-gray-900 truncate">{s.participant_name}</p>
+                      <p className="text-[10px] text-gray-500 truncate">{s.participant_email}</p>
+                    </div>
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      {s.joined_at ? (
+                        <span className="flex items-center gap-1 text-[10px] text-green-600"><UserCheck className="h-2.5 w-2.5" /> Joined</span>
+                      ) : (
+                        <span className="flex items-center gap-1 text-[10px] text-gray-400"><UserX className="h-2.5 w-2.5" /> Absent</span>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+/* ─── TAB: Coordinator Leave & Session Requests ─── */
+
+interface CoordLeaveRequest {
+  id: string;
+  leave_type: string;
+  start_date: string;
+  end_date: string;
+  reason: string;
+  status: string;
+  ao_status: string;
+  hr_status: string;
+  owner_status: string;
+  affected_sessions: string[];
+  sessions_managed: boolean;
+  created_at: string;
+}
+
+interface CoordSessionRequest {
+  id: string;
+  request_type: string;
+  batch_session_id: string;
+  batch_id: string;
+  reason: string;
+  proposed_date: string | null;
+  proposed_time: string | null;
+  status: string;
+  rejection_reason: string | null;
+  created_at: string;
+  batch_name?: string;
+  subject?: string;
+  session_date?: string;
+  start_time?: string;
+}
+
+function CoordinatorLeaveTab() {
+  const [subView, setSubView] = useState<'leave' | 'session-requests'>('leave');
+  const [leaveRequests, setLeaveRequests] = useState<CoordLeaveRequest[]>([]);
+  const [sessionRequests, setSessionRequests] = useState<CoordSessionRequest[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [loadingSR, setLoadingSR] = useState(false);
+  const [showForm, setShowForm] = useState(false);
+  const [showSessForm, setShowSessForm] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const { confirm } = useConfirm();
+  const [form, setForm] = useState({ leaveType: 'planned', startDate: '', endDate: '', reason: '' });
+  const [sessForm, setSessForm] = useState({ sessionId: '', batchId: '', type: 'reschedule' as 'reschedule' | 'cancel', reason: '', proposedDate: '', proposedTime: '' });
+  const [coordSessions, setCoordSessions] = useState<Array<{ session_id: string; batch_id: string; subject: string; scheduled_date: string; start_time: string; batch_name: string }>>([]);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [deleting, setDeleting] = useState(false);
+  const toast = useToast();
+
+  const fetchLeave = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await fetch('/api/v1/teacher-leave');
+      const data = await res.json();
+      if (data.success) setLeaveRequests(data.data?.requests ?? []);
+    } catch { /* */ }
+    finally { setLoading(false); }
+  }, []);
+
+  const fetchSessionRequests = useCallback(async () => {
+    setLoadingSR(true);
+    try {
+      const res = await fetch('/api/v1/session-requests');
+      const data = await res.json();
+      if (data.success) setSessionRequests(data.data?.requests ?? []);
+    } catch { /* */ }
+    finally { setLoadingSR(false); }
+  }, []);
+
+  const fetchCoordSessions = useCallback(async () => {
+    try {
+      const res = await fetch('/api/v1/batch-sessions?status=scheduled');
+      const data = await res.json();
+      if (data.success) setCoordSessions(data.data?.sessions?.map((s: { session_id: string; batch_id: string; subject: string; scheduled_date: string; start_time: string; batch_name: string }) => ({
+        session_id: s.session_id, batch_id: s.batch_id, subject: s.subject,
+        scheduled_date: s.scheduled_date, start_time: s.start_time, batch_name: s.batch_name,
+      })) ?? []);
+    } catch { /* */ }
+  }, []);
+
+  useEffect(() => { fetchLeave(); }, [fetchLeave]);
+  useEffect(() => { if (subView === 'session-requests') { fetchSessionRequests(); fetchCoordSessions(); } }, [subView, fetchSessionRequests, fetchCoordSessions]);
+
+  const submitLeave = async () => {
+    if (!form.startDate || !form.endDate || !form.reason) return;
+    setSubmitting(true);
+    try {
+      const res = await fetch('/api/v1/teacher-leave', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ leave_type: form.leaveType, start_date: form.startDate, end_date: form.endDate, reason: form.reason }),
+      });
+      const data = await res.json();
+      if (data.success) { setShowForm(false); setForm({ leaveType: 'planned', startDate: '', endDate: '', reason: '' }); fetchLeave(); }
+    } catch { /* */ } finally { setSubmitting(false); }
+  };
+
+  const submitSessionRequest = async () => {
+    if (!sessForm.sessionId || !sessForm.reason) return;
+    setSubmitting(true);
+    try {
+      const sel = coordSessions.find(s => s.session_id === sessForm.sessionId);
+      const res = await fetch('/api/v1/session-requests', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          request_type: sessForm.type,
+          batch_session_id: sessForm.sessionId,
+          batch_id: sel?.batch_id || sessForm.batchId,
+          reason: sessForm.reason,
+          proposed_date: sessForm.type === 'reschedule' ? sessForm.proposedDate : undefined,
+          proposed_time: sessForm.type === 'reschedule' ? sessForm.proposedTime : undefined,
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setShowSessForm(false);
+        setSessForm({ sessionId: '', batchId: '', type: 'reschedule', reason: '', proposedDate: '', proposedTime: '' });
+        fetchSessionRequests();
+      }
+    } catch { /* */ } finally { setSubmitting(false); }
+  };
+
+  const withdrawLeave = async (id: string) => {
+    try {
+      await fetch('/api/v1/teacher-leave', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'withdraw', leave_id: id }),
+      });
+      fetchLeave();
+    } catch { /* */ }
+  };
+
+  const withdrawSessReq = async (id: string) => {
+    try {
+      await fetch('/api/v1/session-requests', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'withdraw', request_id: id }),
+      });
+      fetchSessionRequests();
+    } catch { /* */ }
+  };
+
+  const statusIcon = (s: string) => s === 'approved' ? '✅' : s === 'rejected' ? '❌' : s === 'pending' ? '⏳' : '—';
+
+  const toggleSelect = (id: string) => {
+    const s = new Set(selectedIds);
+    if (s.has(id)) s.delete(id); else s.add(id);
+    setSelectedIds(s);
+  };
+  const toggleSelectAll = () => {
+    if (selectedIds.size === leaveRequests.length) setSelectedIds(new Set());
+    else setSelectedIds(new Set(leaveRequests.map(r => r.id)));
+  };
+  const handleDeleteSelected = async () => {
+    if (selectedIds.size === 0) return;
+    const ok = await confirm({ title: 'Delete Leave Requests', message: `Delete ${selectedIds.size} leave request${selectedIds.size > 1 ? 's' : ''}? This cannot be undone.`, confirmLabel: 'Delete', variant: 'danger' });
+    if (!ok) return;
+    setDeleting(true);
+    try {
+      const res = await fetch('/api/v1/teacher-leave', {
+        method: 'DELETE', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ leave_ids: Array.from(selectedIds) }),
+      });
+      const data = await res.json();
+      if (data.success) { toast.success(`${data.data?.deleted || selectedIds.size} leave request(s) deleted`); setSelectedIds(new Set()); fetchLeave(); }
+      else toast.error(data.error || 'Delete failed');
+    } catch { toast.error('Network error'); }
+    finally { setDeleting(false); }
+  };
+
+  if (loading) return <LoadingState />;
+
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div className="flex gap-2">
+          <button onClick={() => setSubView('leave')} className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition
+            ${subView === 'leave' ? 'bg-amber-600 text-white' : 'bg-gray-100 text-gray-500 hover:text-gray-900'}`}>
+            <Briefcase className="h-4 w-4" />Leave Requests
+          </button>
+          <button onClick={() => setSubView('session-requests')} className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition
+            ${subView === 'session-requests' ? 'bg-amber-600 text-white' : 'bg-gray-100 text-gray-500 hover:text-gray-900'}`}>
+            <CalendarClock className="h-4 w-4" />Session Requests
+          </button>
+        </div>
+      </div>
+
+      {subView === 'leave' ? (
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <h2 className="text-lg font-semibold text-gray-900">Leave Requests</h2>
+            <button onClick={() => setShowForm(!showForm)}
+              className="flex items-center gap-2 px-4 py-2 bg-amber-50 border border-amber-200 rounded-lg text-amber-700 hover:bg-amber-100 transition text-sm font-medium">
+              <Send className="h-4 w-4" />{showForm ? 'Cancel' : 'Request Leave'}
+            </button>
+          </div>
+
+          {showForm && (
+            <Card className="p-5 space-y-4 border-amber-200">
+              <h3 className="text-sm font-semibold text-gray-900">New Leave Request</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-medium text-gray-600 mb-1">Leave Type</label>
+                  <select className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" value={form.leaveType}
+                    onChange={e => setForm(f => ({ ...f, leaveType: e.target.value }))}>
+                    <option value="planned">📅 Planned</option>
+                    <option value="sick">🤒 Sick</option>
+                    <option value="personal">👤 Personal</option>
+                    <option value="emergency">🚨 Emergency</option>
+                    <option value="other">📋 Other</option>
+                  </select>
+                </div>
+                <div />
+                <div>
+                  <label className="block text-xs font-medium text-gray-600 mb-1">Start Date</label>
+                  <input type="date" className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" value={form.startDate}
+                    onChange={e => setForm(f => ({ ...f, startDate: e.target.value }))} />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-600 mb-1">End Date</label>
+                  <input type="date" className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" value={form.endDate}
+                    onChange={e => setForm(f => ({ ...f, endDate: e.target.value }))} />
+                </div>
+                <div className="sm:col-span-2">
+                  <label className="block text-xs font-medium text-gray-600 mb-1">Reason</label>
+                  <textarea rows={3} className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" placeholder="Explain your leave reason…"
+                    value={form.reason} onChange={e => setForm(f => ({ ...f, reason: e.target.value }))} />
+                </div>
+              </div>
+              <button disabled={submitting || !form.startDate || !form.endDate || !form.reason} onClick={submitLeave}
+                className="px-4 py-2 rounded-lg bg-amber-600 text-white text-sm font-medium hover:bg-amber-700 disabled:opacity-50 transition">
+                {submitting ? 'Submitting…' : 'Submit Leave Request'}
+              </button>
+            </Card>
+          )}
+
+          {leaveRequests.length === 0 ? (
+            <EmptyState icon={CalendarClock} message="No leave requests yet." />
+          ) : (
+            <div className="space-y-3">
+              {/* Selection toolbar */}
+              <div className="flex items-center justify-between p-3 rounded-lg border border-gray-200 bg-gray-50">
+                <div className="flex items-center gap-3">
+                  <input type="checkbox" checked={leaveRequests.length > 0 && selectedIds.size === leaveRequests.length}
+                    onChange={toggleSelectAll}
+                    className="h-4 w-4 rounded border-gray-300 text-amber-600 focus:ring-amber-500" />
+                  <span className="text-sm font-medium text-gray-700">
+                    {selectedIds.size > 0 ? `${selectedIds.size} selected` : 'Select all'}
+                  </span>
+                </div>
+                {selectedIds.size > 0 && (
+                  <button disabled={deleting} onClick={handleDeleteSelected}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-600 text-white text-xs font-medium hover:bg-red-700 disabled:opacity-50 transition">
+                    <Trash2 className="h-3.5 w-3.5" />
+                    {deleting ? 'Deleting\u2026' : `Delete ${selectedIds.size}`}
+                  </button>
+                )}
+              </div>
+
+              {leaveRequests.map(lr => {
+                const displayStatus = (() => {
+                  switch (lr.status) {
+                    case 'pending_ao': return { status: 'pending', label: 'Pending AO Review' };
+                    case 'pending_hr': return { status: 'warning', label: 'Pending HR Approval' };
+                    case 'approved': return { status: 'warning', label: 'Approved — Sessions Being Managed' };
+                    case 'confirmed': return { status: 'approved', label: 'Confirmed' };
+                    case 'rejected': return { status: 'rejected', label: 'Rejected' };
+                    case 'withdrawn': return { status: 'rejected', label: 'Withdrawn' };
+                    default: return { status: 'pending', label: lr.status };
+                  }
+                })();
+                return (
+                <Card key={lr.id} className={`p-4 ${selectedIds.has(lr.id) ? 'border-amber-300 bg-amber-50/30' : ''}`}>
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-start gap-3 flex-1 min-w-0">
+                      <input type="checkbox" checked={selectedIds.has(lr.id)} onChange={() => toggleSelect(lr.id)}
+                        className="mt-1.5 h-4 w-4 rounded border-gray-300 text-amber-600 focus:ring-amber-500" />
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap mb-1">
+                          <span className="text-sm font-semibold text-gray-900 capitalize">{lr.leave_type} Leave</span>
+                          <StatusBadge status={displayStatus.status} label={displayStatus.label} />
+                        </div>
+                        <p className="text-xs text-gray-500">
+                          {new Date(lr.start_date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })} \u2013 {new Date(lr.end_date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
+                          {lr.affected_sessions?.length > 0 && ` \u00b7 ${lr.affected_sessions.length} sessions affected`}
+                        </p>
+                        <p className="text-xs text-gray-400 mt-0.5">{lr.reason}</p>
+                        <div className="flex items-center gap-4 mt-2 text-[11px] text-gray-500">
+                          <span>Status: {displayStatus.label}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="text-right shrink-0 flex flex-col items-end gap-1">
+                      <p className="text-xs text-gray-400">{new Date(lr.created_at).toLocaleDateString('en-IN')}</p>
+                      {(lr.status === 'pending_ao' || lr.status === 'pending_hr') && (
+                        <button onClick={() => withdrawLeave(lr.id)} className="text-xs text-red-500 hover:text-red-700">Withdraw</button>
+                      )}
+                    </div>
+                  </div>
+                </Card>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <h2 className="text-lg font-semibold text-gray-900">Session Change Requests</h2>
+            <button onClick={() => setShowSessForm(!showSessForm)}
+              className="flex items-center gap-2 px-4 py-2 bg-blue-50 border border-blue-200 rounded-lg text-blue-700 hover:bg-blue-100 transition text-sm font-medium">
+              <Send className="h-4 w-4" />{showSessForm ? 'Cancel' : 'Request Change'}
+            </button>
+          </div>
+
+          {showSessForm && (
+            <Card className="p-5 space-y-4 border-blue-200">
+              <h3 className="text-sm font-semibold text-gray-900">New Session Change Request</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="sm:col-span-2">
+                  <label className="block text-xs font-medium text-gray-600 mb-1">Select Session</label>
+                  <select className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" value={sessForm.sessionId}
+                    onChange={e => {
+                      const sid = e.target.value;
+                      const sess = coordSessions.find(s => s.session_id === sid);
+                      setSessForm(f => ({ ...f, sessionId: sid, batchId: sess?.batch_id || '' }));
+                    }}>
+                    <option value="">Choose a session…</option>
+                    {coordSessions.map(s => (
+                      <option key={s.session_id} value={s.session_id}>
+                        {s.subject} — {s.batch_name} — {new Date(s.scheduled_date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })} at {s.start_time?.substring(0, 5)}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-600 mb-1">Request Type</label>
+                  <select className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" value={sessForm.type}
+                    onChange={e => setSessForm(f => ({ ...f, type: e.target.value as 'reschedule' | 'cancel' }))}>
+                    <option value="reschedule">📅 Reschedule</option>
+                    <option value="cancel">❌ Cancel</option>
+                  </select>
+                </div>
+                <div />
+                {sessForm.type === 'reschedule' && (
+                  <>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-600 mb-1">Proposed Date</label>
+                      <input type="date" className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" value={sessForm.proposedDate}
+                        onChange={e => setSessForm(f => ({ ...f, proposedDate: e.target.value }))} />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-600 mb-1">Proposed Time</label>
+                      <input type="time" className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" value={sessForm.proposedTime}
+                        onChange={e => setSessForm(f => ({ ...f, proposedTime: e.target.value }))} />
+                    </div>
+                  </>
+                )}
+                <div className="sm:col-span-2">
+                  <label className="block text-xs font-medium text-gray-600 mb-1">Reason</label>
+                  <textarea rows={3} className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" placeholder="Explain why…"
+                    value={sessForm.reason} onChange={e => setSessForm(f => ({ ...f, reason: e.target.value }))} />
+                </div>
+              </div>
+              <button disabled={submitting || !sessForm.sessionId || !sessForm.reason || (sessForm.type === 'reschedule' && !sessForm.proposedDate)}
+                onClick={submitSessionRequest}
+                className="px-4 py-2 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 disabled:opacity-50 transition">
+                {submitting ? 'Submitting…' : 'Submit Request'}
+              </button>
+            </Card>
+          )}
+
+          {loadingSR ? <LoadingState /> : sessionRequests.length === 0 ? (
+            <EmptyState icon={CalendarClock} message="No session requests yet." />
+          ) : (
+            <div className="space-y-3">
+              {sessionRequests.map(r => (
+                <Card key={r.id} className="p-4">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap mb-1">
+                        <span className="text-sm font-semibold text-gray-900 capitalize">{r.request_type} Request</span>
+                        <StatusBadge status={r.status} />
+                      </div>
+                      <p className="text-xs text-gray-500">
+                        {r.subject && `${r.subject} · `}
+                        {r.batch_name && `${r.batch_name} · `}
+                        {r.session_date && new Date(r.session_date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}
+                        {r.start_time && ` at ${r.start_time.substring(0, 5)}`}
+                      </p>
+                      {r.proposed_date && <p className="text-xs text-blue-500 mt-0.5">Proposed: {new Date(r.proposed_date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}{r.proposed_time ? ` at ${r.proposed_time}` : ''}</p>}
+                      <p className="text-xs text-gray-400 mt-0.5">{r.reason}</p>
+                      {r.rejection_reason && <p className="text-xs text-red-500 mt-1">Rejected: {r.rejection_reason}</p>}
+                    </div>
+                    <div className="text-right shrink-0 flex flex-col items-end gap-1">
+                      <p className="text-xs text-gray-400">{new Date(r.created_at).toLocaleDateString('en-IN')}</p>
+                      {r.status === 'pending' && (
+                        <button onClick={() => withdrawSessReq(r.id)} className="text-xs text-red-500 hover:text-red-700">Withdraw</button>
+                      )}
+                    </div>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+
+/* ═══ TEACHER READINESS WIDGET ═══ */
+
+function TeacherReadinessWidget() {
+  const [teachers, setTeachers] = useState<Array<Record<string, unknown>>>([]);
+  const [loadingT, setLoadingT] = useState(true);
+  useEffect(() => {
+    fetch('/api/v1/hr/users?role=teacher&limit=500')
+      .then(r => r.json())
+      .then(d => { if (d.success) setTeachers(d.data?.users || []); })
+      .catch(() => {})
+      .finally(() => setLoadingT(false));
+  }, []);
+  if (loadingT || teachers.length === 0) return null;
+
+  const now = Date.now();
+  const ONLINE_THRESHOLD = 15 * 60 * 1000;
+  const online = teachers.filter(t => t.last_login && (now - new Date(t.last_login as string).getTime()) < ONLINE_THRESHOLD);
+  const offline = teachers.filter(t => !t.last_login || (now - new Date(t.last_login as string).getTime()) >= ONLINE_THRESHOLD);
+
+  return (
+    <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+      <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2 mb-4">
+        <Users className="h-4 w-4 text-emerald-600" /> Teacher Readiness
+        <span className="ml-auto text-xs text-gray-400">{online.length} online &middot; {offline.length} offline</span>
+      </h3>
+      <div className="flex flex-wrap gap-2">
+        {online.map((t, i) => (
+          <div key={i} className="flex items-center gap-2 rounded-lg border border-green-200 bg-green-50 px-3 py-1.5">
+            <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
+            <span className="text-xs font-medium text-green-800">{(t.full_name as string) || (t.email as string)}</span>
+          </div>
+        ))}
+        {offline.slice(0, 10).map((t, i) => (
+          <div key={i} className="flex items-center gap-2 rounded-lg border border-gray-200 bg-gray-50 px-3 py-1.5">
+            <div className="h-2 w-2 rounded-full bg-gray-300" />
+            <span className="text-xs text-gray-500">{(t.full_name as string) || (t.email as string)}</span>
+          </div>
+        ))}
+        {offline.length > 10 && (
+          <span className="text-xs text-gray-400 self-center">+{offline.length - 10} more offline</span>
+        )}
+      </div>
+    </div>
+  );
+}
+
+
+/* ═══ ATTENDANCE SUMMARY WIDGET ═══ */
+
+function AttendanceSummaryWidget() {
+  const [summary, setSummary] = useState<{ totalStudents: number; avgAttendance: number; lowAttendance: number } | null>(null);
+  const [loadingA, setLoadingA] = useState(true);
+  useEffect(() => {
+    fetch('/api/v1/coordinator/student-performance')
+      .then(r => r.json())
+      .then(d => {
+        if (d.success && d.data?.students) {
+          const students = d.data.students as Array<{ attendance_rate: number }>;
+          const totalStudents = students.length;
+          const avgAttendance = totalStudents > 0 ? Math.round(students.reduce((s, st) => s + st.attendance_rate, 0) / totalStudents) : 0;
+          const lowAttendance = students.filter(st => st.attendance_rate < 50).length;
+          setSummary({ totalStudents, avgAttendance, lowAttendance });
+        }
+      })
+      .catch(() => {})
+      .finally(() => setLoadingA(false));
+  }, []);
+  if (loadingA || !summary) return null;
+
+  return (
+    <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+      <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2 mb-4">
+        <GraduationCap className="h-4 w-4 text-emerald-600" /> Attendance Overview
+      </h3>
+      <div className="grid grid-cols-3 gap-4">
+        <div className="text-center">
+          <p className="text-2xl font-bold text-gray-900">{summary.totalStudents}</p>
+          <p className="text-xs text-gray-500">Total Students</p>
+        </div>
+        <div className="text-center">
+          <p className={cn('text-2xl font-bold', attColor(summary.avgAttendance))}>{summary.avgAttendance}%</p>
+          <p className="text-xs text-gray-500">Avg Attendance</p>
+        </div>
+        <div className="text-center">
+          <p className={cn('text-2xl font-bold', summary.lowAttendance > 0 ? 'text-red-600' : 'text-green-600')}>{summary.lowAttendance}</p>
+          <p className="text-xs text-gray-500">Low Attendance</p>
+        </div>
+      </div>
+    </div>
+  );
+}

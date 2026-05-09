@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080">
+  <defs>
+    <radialGradient id="g" cx="50%" cy="50%" r="65%">
+      <stop offset="0%" stop-color="#374151"/>
+      <stop offset="60%" stop-color="#1f2937"/>
+      <stop offset="100%" stop-color="#111827"/>
+    </radialGradient>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#g)"/>
+  <!-- Abstract geometric pattern -->
+  <g opacity="0.03" stroke="#9ca3af" stroke-width="0.8" fill="none">
+    <polygon points="960,200 1160,320 1160,560 960,680 760,560 760,320"/>
+    <polygon points="960,300 1060,360 1060,480 960,540 860,480 860,360"/>
+    <circle cx="960" cy="440" r="180"/>
+    <circle cx="960" cy="440" r="120"/>
+  </g>
+</svg>

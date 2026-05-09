@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080">
+  <defs>
+    <radialGradient id="g" cx="48%" cy="46%" r="68%">
+      <stop offset="0%" stop-color="#3b1f2b"/>
+      <stop offset="50%" stop-color="#1a0e15"/>
+      <stop offset="100%" stop-color="#0d0710"/>
+    </radialGradient>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#g)"/>
+  <!-- Warm studio light from top-right -->
+  <ellipse cx="1300" cy="100" rx="400" ry="250" fill="#f59e0b" opacity="0.02"/>
+  <!-- Soft left fill light -->
+  <ellipse cx="200" cy="540" rx="200" ry="400" fill="#ec4899" opacity="0.01"/>
+</svg>
