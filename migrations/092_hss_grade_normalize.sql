@@ -13,6 +13,18 @@ WHERE efs_hss.grade = 'HSS'
       AND efs_src.batch_type     = efs_hss.batch_type
   );
 
+-- When both '11' and '12' exist for the same key group, both would become 'HSS' — keep one
+DELETE FROM enrollment_fee_structure e1
+WHERE e1.grade = '12'
+  AND EXISTS (
+    SELECT 1 FROM enrollment_fee_structure e2
+    WHERE e2.grade = '11'
+      AND e2.academic_year  = e1.academic_year
+      AND e2.region_group   = e1.region_group
+      AND e2.board          = e1.board
+      AND e2.batch_type     = e1.batch_type
+  );
+
 UPDATE enrollment_fee_structure
 SET grade = 'HSS'
 WHERE grade IN ('11', '12');
