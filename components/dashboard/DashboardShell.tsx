@@ -25,7 +25,7 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 import { getNavForRole, resolveActiveNav } from '@/lib/nav-config';
-import { usePlatformName, useLogoSmall } from '@/components/providers/PlatformProvider';
+import { usePlatformName, usePlatformContext } from '@/components/providers/PlatformProvider';
 
 interface NavItem {
   label: string;
@@ -210,7 +210,7 @@ export default function DashboardShell({
   const router = useRouter();
   const pathname = usePathname();
   const platformName = usePlatformName();
-  const logoSmallUrl = useLogoSmall();
+  const { logoSmallUrl, logoSidebarHeight } = usePlatformContext();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
@@ -273,7 +273,7 @@ export default function DashboardShell({
         <div className={`border-b border-gray-100 pt-[env(safe-area-inset-top)] ${collapsed ? 'px-2' : 'px-4'}`}>
         <div className={`flex h-16 items-center ${collapsed ? 'justify-center' : 'gap-3'}`}>
           <div className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-linear-to-br from-emerald-50 to-green-50 ring-1 ring-emerald-200/60 shadow-sm">
-            <img src={logoSmallUrl ?? '/logo/main.png'} alt="Logo" className="h-5 w-5 object-contain" />
+            <img src={logoSmallUrl ?? '/logo/main.png'} alt="Logo" style={{ height: logoSidebarHeight, width: logoSidebarHeight }} className="object-contain" />
             <span className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-emerald-400 ring-2 ring-white animate-pulse" />
           </div>
 
@@ -411,7 +411,7 @@ export default function DashboardShell({
               </button>
               <div className="flex items-center gap-2 flex-1 min-w-0">
                 <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-linear-to-br from-emerald-50 to-green-50 ring-1 ring-emerald-200/60">
-                  <img src="/logo/main.png" alt="Logo" className="h-4 w-4 object-contain" />
+                  <img src={logoSmallUrl ?? '/logo/main.png'} alt="Logo" className="h-4 w-4 object-contain" />
                 </div>
                 <h1 className="text-sm font-bold text-gray-900 truncate">{platformName}</h1>
               </div>

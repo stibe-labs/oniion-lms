@@ -3,7 +3,7 @@
 import { useState, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Eye, EyeOff, Loader2, ArrowRight, ArrowLeft, KeyRound, Mail, ShieldCheck } from 'lucide-react';
-import { usePlatformName } from '@/components/providers/PlatformProvider';
+import { usePlatformName, usePlatformContext } from '@/components/providers/PlatformProvider';
 
 type ForgotStep = 'login' | 'forgot-email' | 'forgot-otp' | 'forgot-newpass' | 'forgot-done';
 
@@ -12,6 +12,7 @@ export default function LoginForm() {
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get('redirect');
   const platformName = usePlatformName();
+  const { logoFullUrl, logoAuthHeight } = usePlatformContext();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -262,7 +263,7 @@ export default function LoginForm() {
     <div className="flex flex-col h-full justify-center max-w-sm mx-auto">
       {/* Logo — mobile only (desktop logo is in the page top-left) */}
       <div className="mb-6 sm:hidden">
-        <img src="/logo/full.png" alt="Logo" className="h-10 object-contain drop-shadow-lg" />
+        <img src={logoFullUrl ?? '/logo/full.png'} alt="Logo" style={{ height: logoAuthHeight }} className="object-contain drop-shadow-lg" />
       </div>
 
       {/* ═══════════════════════════════════════════ */}

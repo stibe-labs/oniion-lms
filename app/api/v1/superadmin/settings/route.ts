@@ -22,6 +22,10 @@ export async function GET(req: NextRequest) {
       logo_small_url: logos.logoSmallUrl,
       logo_full_url:  logos.logoFullUrl,
       favicon_url:    logos.faviconUrl,
+      logo_auth_height:    logos.authHeight,
+      logo_splash_height:  logos.splashHeight,
+      logo_sidebar_height: logos.sidebarHeight,
+      logo_email_height:   logos.emailHeight,
     },
   });
 }
@@ -56,6 +60,20 @@ export async function PUT(req: NextRequest) {
     );
   }
 
+  for (const key of ['logo_auth_height', 'logo_splash_height', 'logo_sidebar_height', 'logo_email_height'] as const) {
+    if (key in body) {
+      const val = parseInt(body[key], 10);
+      if (!isNaN(val) && val > 0) {
+        await db.query(
+          `INSERT INTO school_config (key, value, description)
+           VALUES ($1, $2, $3)
+           ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`,
+          [key, String(val), `Logo height (px) for ${key.replace('logo_', '').replace('_height', '')} context`]
+        );
+      }
+    }
+  }
+
   const [platformName, bujiEnabled, logos] = await Promise.all([
     getPlatformName(),
     getBujiEnabled(),
@@ -69,6 +87,10 @@ export async function PUT(req: NextRequest) {
       logo_small_url: logos.logoSmallUrl,
       logo_full_url:  logos.logoFullUrl,
       favicon_url:    logos.faviconUrl,
+      logo_auth_height:    logos.authHeight,
+      logo_splash_height:  logos.splashHeight,
+      logo_sidebar_height: logos.sidebarHeight,
+      logo_email_height:   logos.emailHeight,
     },
   });
 }

@@ -22,11 +22,15 @@ export default function SplashScreen({ children }: { children: React.ReactNode }
   const [progress, setProgress] = useState(0);
   const progressRef = useRef<ReturnType<typeof setInterval>>(null);
   const [logoUrl, setLogoUrl] = useState('/logo/full.png');
+  const [splashHeight, setSplashHeight] = useState(36);
 
   useEffect(() => {
     fetch('/api/v1/platform/config')
       .then(r => r.json())
-      .then(d => { if (d.logo_full_url) setLogoUrl(d.logo_full_url); })
+      .then(d => {
+        if (d.logo_full_url)      setLogoUrl(d.logo_full_url);
+        if (d.logo_splash_height) setSplashHeight(d.logo_splash_height);
+      })
       .catch(() => {});
   }, []);
 
@@ -86,7 +90,7 @@ export default function SplashScreen({ children }: { children: React.ReactNode }
 
           {/* Logo */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={logoUrl} alt="Logo" className="splash-logo" />
+          <img src={logoUrl} alt="Logo" className="splash-logo" style={{ height: splashHeight, width: 'auto' }} />
 
           {/* Tagline */}
           <p className="splash-tagline">

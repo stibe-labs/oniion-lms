@@ -7,7 +7,9 @@
 
 // ── Master Layout ───────────────────────────────────────────
 
-function masterLayout(body: string, recipientEmail: string, platformName: string = 'Stibe'): string {
+function masterLayout(body: string, recipientEmail: string, platformName: string = 'Stibe', logoUrl?: string, logoHeight: number = 36): string {
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://oniion.stibe.in';
+  const resolvedLogoUrl = logoUrl ?? `${appUrl}/logo/full.png`;
   return `<!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office">
 <head>
@@ -74,7 +76,7 @@ function masterLayout(body: string, recipientEmail: string, platformName: string
           <tr>
             <td class="email-header" style="background-color:#ffffff; padding:24px 32px; border-bottom:1px solid #e5e7eb;">
               <div style="display:inline-block; line-height:0;">
-                <img src="https://stibelearning.online/logo/full.png" alt="stibe" height="36" style="display:block; width:auto;" />
+                <img src="${resolvedLogoUrl}" alt="${platformName}" height="${logoHeight}" style="display:block; width:auto;" />
               </div>
             </td>
           </tr>

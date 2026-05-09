@@ -156,7 +156,7 @@ function LogoUploader({
 }
 
 export default function SuperadminClient({ user: _user }: Props) {
-  const { setPlatformName, setLogoSmallUrl, setLogoFullUrl } = usePlatformContext();
+  const { setPlatformName, setLogoSmallUrl, setLogoFullUrl, setLogoAuthHeight, setLogoSplashHeight, setLogoSidebarHeight, setLogoEmailHeight } = usePlatformContext();
   const toast = useToast();
   const [value, setValue] = useState('');
   const [loading, setLoading] = useState(false);
@@ -166,6 +166,8 @@ export default function SuperadminClient({ user: _user }: Props) {
   const [logos, setLogos] = useState<{ small: string | null; full: string | null; favicon: string | null }>({
     small: null, full: null, favicon: null,
   });
+  const [sizes, setSizes] = useState({ auth: 40, splash: 36, sidebar: 20, email: 36 });
+  const [sizesSaving, setSizesSaving] = useState(false);
 
   useEffect(() => {
     fetch('/api/v1/superadmin/settings')
@@ -178,6 +180,12 @@ export default function SuperadminClient({ user: _user }: Props) {
             small:   d.data.logo_small_url ?? null,
             full:    d.data.logo_full_url  ?? null,
             favicon: d.data.favicon_url    ?? null,
+          });
+          setSizes({
+            auth:    d.data.logo_auth_height    ?? 40,
+            splash:  d.data.logo_splash_height  ?? 36,
+            sidebar: d.data.logo_sidebar_height ?? 20,
+            email:   d.data.logo_email_height   ?? 36,
           });
         }
       })
@@ -235,6 +243,33 @@ export default function SuperadminClient({ user: _user }: Props) {
     setLogos(prev => ({ ...prev, [type]: null }));
     if (type === 'small') setLogoSmallUrl(null);
     if (type === 'full')  setLogoFullUrl(null);
+  }
+
+  async function handleSaveSizes() {
+    setSizesSaving(true);
+    try {
+      const res = await fetch('/api/v1/superadmin/settings', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          logo_auth_height:    sizes.auth,
+          logo_splash_height:  sizes.splash,
+          logo_sidebar_height: sizes.sidebar,
+          logo_email_height:   sizes.email,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) { toast.error(data.error || 'Failed to save'); return; }
+      setLogoAuthHeight(sizes.auth);
+      setLogoSplashHeight(sizes.splash);
+      setLogoSidebarHeight(sizes.sidebar);
+      setLogoEmailHeight(sizes.email);
+      toast.success('Logo sizes updated');
+    } catch {
+      toast.error('Network error');
+    } finally {
+      setSizesSaving(false);
+    }
   }
 
   return (
@@ -318,6 +353,55 @@ export default function SuperadminClient({ user: _user }: Props) {
             {bujiSaving ? 'Saving…' : bujiEnabled ? 'Enabled' : 'Disabled'}
           </span>
         </div>
+      </div>
+
+      {/* Logo Sizes */}
+      <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+        <h2 className="text-sm font-semibold text-gray-700 mb-1">Logo Display Sizes</h2>
+        <p className="text-xs text-gray-500 mb-5">
+          Adjust logo height (px) for each context. Width scales automatically.
+        </p>
+        <div className="space-y-5">
+          {([
+            { key: 'auth',    label: 'Login / Auth Screen',   desc: 'Full logo on the login page (desktop top-left & mobile)',  min: 20, max: 80,  logoUrl: logos.full  },
+            { key: 'splash',  label: 'Splash Screen',         desc: 'Full logo shown during the loading splash animation',       min: 20, max: 80,  logoUrl: logos.full  },
+            { key: 'sidebar', label: 'Dashboard Sidebar',     desc: 'Small icon logo in the sidebar navigation header',          min: 12, max: 36,  logoUrl: logos.small },
+            { key: 'email',   label: 'Email Header',          desc: 'Full logo in transactional email headers',                  min: 24, max: 60,  logoUrl: logos.full  },
+          ] as const).map(({ key, label, desc, min, max, logoUrl }) => (
+            <div key={key}>
+              <div className="flex items-center justify-between mb-1.5">
+                <div>
+                  <p className="text-xs font-medium text-gray-600">{label}</p>
+                  <p className="text-[11px] text-gray-400">{desc}</p>
+                </div>
+                <span className="text-xs font-semibold tabular-nums text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md">{sizes[key]}px</span>
+              </div>
+              <div className="flex items-center gap-3">
+                {/* Preview */}
+                <div className="shrink-0 flex items-center justify-center w-20 h-10 rounded-lg border border-gray-100 bg-gray-50">
+                  {logoUrl ? (
+                    <img src={logoUrl} alt={label} style={{ height: sizes[key], maxWidth: 72 }} className="object-contain" />
+                  ) : (
+                    <ImageIcon className="h-4 w-4 text-gray-300" />
+                  )}
+                </div>
+                {/* Slider */}
+                <input
+                  type="range"
+                  min={min}
+                  max={max}
+                  value={sizes[key]}
+                  disabled={fetching}
+                  onChange={e => setSizes(prev => ({ ...prev, [key]: parseInt(e.target.value, 10) }))}
+                  className="flex-1 h-1.5 rounded-full appearance-none bg-gray-200 accent-emerald-500 cursor-pointer disabled:opacity-50"
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+        <Button onClick={handleSaveSizes} disabled={fetching || sizesSaving} className="mt-5 w-full sm:w-auto">
+          {sizesSaving ? 'Saving…' : 'Save Sizes'}
+        </Button>
       </div>
     </div>
   );
