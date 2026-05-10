@@ -55,7 +55,7 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 }
 
 const BTN_VARIANT: Record<ButtonVariant, string> = {
-  primary:   'bg-emerald-600 text-white hover:bg-emerald-700 shadow-sm',
+  primary:   'bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm',
   secondary: 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-50',
   outline:   'bg-white text-gray-700 border border-gray-200 hover:bg-gray-50',
   ghost:     'text-gray-600 hover:bg-gray-100',
@@ -139,7 +139,7 @@ export function Input({ error, className, ...props }: InputProps) {
       className={`w-full rounded-lg border bg-white py-2 px-3 text-sm text-gray-900 placeholder:text-gray-400 outline-none transition ${
         error
           ? 'border-red-300 focus:border-red-400 focus:ring-2 focus:ring-red-100'
-          : 'border-gray-200 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100'
+          : 'border-gray-200 focus:border-primary/60 focus:ring-2 focus:ring-primary/15'
       } ${className ?? ''}`}
     />
   );
@@ -156,7 +156,7 @@ export function Textarea({ error, className, ...props }: TextareaProps) {
       className={`w-full rounded-lg border bg-white py-2 px-3 text-sm text-gray-900 placeholder:text-gray-400 outline-none transition resize-none ${
         error
           ? 'border-red-300 focus:border-red-400 focus:ring-2 focus:ring-red-100'
-          : 'border-gray-200 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100'
+          : 'border-gray-200 focus:border-primary/60 focus:ring-2 focus:ring-primary/15'
       } ${className ?? ''}`}
     />
   );
@@ -179,7 +179,7 @@ export function Select({ value, onChange, options, placeholder, error, className
       className={`w-full rounded-lg border bg-white py-2 px-3 text-sm text-gray-900 outline-none transition ${
         error
           ? 'border-red-300 focus:border-red-400 focus:ring-2 focus:ring-red-100'
-          : 'border-gray-200 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100'
+          : 'border-gray-200 focus:border-primary/60 focus:ring-2 focus:ring-primary/15'
       } ${className ?? ''}`}
     >
       {placeholder && <option value="">{placeholder}</option>}
@@ -206,7 +206,7 @@ export function SearchInput({ value, onChange, placeholder = 'Search…', classN
         placeholder={placeholder}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full rounded-lg border border-gray-200 bg-white py-2 pl-9 pr-4 text-sm text-gray-900 placeholder:text-gray-400 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100 outline-none"
+        className="w-full rounded-lg border border-gray-200 bg-white py-2 pl-9 pr-4 text-sm text-gray-900 placeholder:text-gray-400 focus:border-primary/60 focus:ring-2 focus:ring-primary/15 outline-none"
       />
     </div>
   );
@@ -238,7 +238,7 @@ export function Toggle({ checked, onChange, label, disabled, size = 'md' }: Togg
         disabled={disabled}
         onClick={() => onChange(!checked)}
         className={`relative inline-flex ${trackSize} items-center rounded-full transition-colors ${
-          checked ? 'bg-emerald-500' : 'bg-gray-300'
+          checked ? 'bg-primary' : 'bg-gray-300'
         }`}
       >
         <span className={`${dotSize} ${dotTop} absolute rounded-full bg-white shadow transition-transform ${dotPos}`} />
@@ -264,7 +264,7 @@ export function PageHeader({ icon: Icon, title, subtitle, children }: PageHeader
     <div className="flex flex-col gap-3 sm:gap-4 sm:flex-row sm:items-center sm:justify-between">
       <div>
         <h1 className="text-xl sm:text-2xl font-bold text-gray-900 flex items-center gap-2">
-          <Icon className="h-5 w-5 sm:h-6 sm:w-6 text-emerald-600" /> {title}
+          <Icon className="h-5 w-5 sm:h-6 sm:w-6 text-primary" /> {title}
         </h1>
         {subtitle && <p className="mt-0.5 sm:mt-1 text-xs sm:text-sm text-gray-500">{subtitle}</p>}
       </div>
@@ -311,7 +311,7 @@ export function TabBar({ tabs, active, onChange }: TabBarProps) {
               onClick={() => onChange(t.key)}
               className={`whitespace-nowrap inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium transition ${
                 isActive
-                  ? 'bg-emerald-600 text-white shadow-sm'
+                  ? 'bg-primary text-primary-foreground shadow-sm'
                   : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
               }`}
             >
@@ -338,7 +338,7 @@ export function UnderlineTabBar({ tabs, active, onChange }: TabBarProps) {
             key={t.key}
             onClick={() => onChange(t.key)}
             className={`inline-flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium border-b-2 transition ${
-              isActive ? 'border-emerald-600 text-emerald-700' : 'border-transparent text-gray-500 hover:text-gray-700'
+              isActive ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-700'
             }`}
           >
             {Icon && <Icon className="h-4 w-4" />}
@@ -363,7 +363,7 @@ export function FilterSelect({ value, onChange, options }: FilterSelectProps) {
     <select
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      className="rounded-lg border border-gray-200 bg-white py-2 px-3 text-sm text-gray-700 outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100"
+      className="rounded-lg border border-gray-200 bg-white py-2 px-3 text-sm text-gray-700 outline-none focus:border-primary/60 focus:ring-2 focus:ring-primary/15"
     >
       {options.map((o) => (
         <option key={o.value} value={o.value}>{o.label}</option>
@@ -385,10 +385,10 @@ export interface FormPanelProps {
 
 export function FormPanel({ title, icon: Icon, onClose, children }: FormPanelProps) {
   return (
-    <div className="rounded-xl border border-emerald-200 bg-emerald-50/50 p-6 space-y-4">
+    <div className="rounded-xl border border-primary/20 bg-primary/5 p-6 space-y-4">
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-          {Icon && <Icon className="h-5 w-5 text-emerald-600" />} {title}
+          {Icon && <Icon className="h-5 w-5 text-primary" />} {title}
         </h3>
         {onClose && (
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition">
@@ -778,9 +778,9 @@ export function TRow({
   return (
     <tr
       onClick={onClick}
-      className={`border-b border-gray-50 hover:bg-emerald-50/30 transition ${
+      className={`border-b border-gray-50 hover:bg-primary/5 transition ${
         onClick ? 'cursor-pointer' : ''
-      } ${selected ? 'bg-emerald-100/80 border-emerald-200' : ''} ${className ?? ''}`}
+      } ${selected ? 'bg-primary/10 border-primary/20' : ''} ${className ?? ''}`}
     >
       {children}
     </tr>
@@ -803,7 +803,7 @@ export function DetailPanel({ onClose, loading, emptyMessage, children }: Detail
     <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm space-y-5">
       {loading ? (
         <div className="flex items-center justify-center py-10">
-          <Loader2 className="h-6 w-6 animate-spin text-emerald-500" />
+          <Loader2 className="h-6 w-6 animate-spin text-primary" />
         </div>
       ) : children ? (
         children
@@ -848,7 +848,7 @@ const BADGE_COLORS: Record<BadgeVariant, string> = {
   warning:   'bg-amber-50 border-amber-200 text-amber-700',
   danger:    'bg-red-50 border-red-200 text-red-600',
   info:      'bg-teal-50 border-teal-200 text-teal-700',
-  primary:   'bg-emerald-50 border-emerald-200 text-emerald-700',
+  primary:   'bg-primary/10 border-primary/25 text-primary',
   secondary: 'bg-teal-50 border-teal-200 text-teal-700',
 };
 
@@ -915,13 +915,13 @@ export interface RoleConfig {
 }
 
 export const ROLE_CONFIG: Record<string, RoleConfig> = {
-  owner:             { label: 'Owner',             variant: 'primary',   icon: Shield,        color: 'text-emerald-600', bg: 'bg-emerald-50' },
+  owner:             { label: 'Owner',             variant: 'primary',   icon: Shield,        color: 'text-primary',     bg: 'bg-primary/10' },
   batch_coordinator: { label: 'Batch Coordinator', variant: 'info',      icon: MapPin,        color: 'text-teal-600',    bg: 'bg-teal-50' },
   academic_operator: { label: 'Academic Op',       variant: 'success',   icon: Building,      color: 'text-green-600',   bg: 'bg-green-50' },
   hr:                { label: 'HR',                variant: 'warning',   icon: Briefcase,     color: 'text-amber-600',   bg: 'bg-amber-50' },
   teacher:           { label: 'Teacher',           variant: 'info',      icon: BookOpen,      color: 'text-teal-600',    bg: 'bg-teal-50' },
   teacher_screen:    { label: 'Teacher Screen',    variant: 'default',   icon: BookOpen,      color: 'text-gray-600',    bg: 'bg-gray-50' },
-  student:           { label: 'Student',           variant: 'primary',   icon: GraduationCap, color: 'text-emerald-600', bg: 'bg-emerald-50' },
+  student:           { label: 'Student',           variant: 'primary',   icon: GraduationCap, color: 'text-primary',     bg: 'bg-primary/10' },
   parent:            { label: 'Parent',            variant: 'success',   icon: Users,         color: 'text-green-600',   bg: 'bg-green-50' },
   ghost:             { label: 'Ghost',             variant: 'default',   icon: Eye,           color: 'text-gray-500',    bg: 'bg-gray-50' },
   academic:          { label: 'Academic (Legacy)',  variant: 'default',   icon: GraduationCap, color: 'text-gray-600',    bg: 'bg-gray-50' },
@@ -963,7 +963,7 @@ export function Spinner({ size = 'md', className }: { size?: 'sm' | 'md' | 'lg';
   const px = sizeMap[size];
   return (
     <span className={className ?? ''} style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: px, height: px }}>
-      <span style={{ width: px, height: px, borderRadius: '50%', border: `${Math.max(2, Math.round(px / 8))}px solid #e5e7eb`, borderTopColor: '#10b981', animation: 'spinnerSpin 0.8s linear infinite', display: 'inline-block' }} />
+      <span style={{ width: px, height: px, borderRadius: '50%', border: `${Math.max(2, Math.round(px / 8))}px solid #e5e7eb`, borderTopColor: 'var(--primary)', animation: 'spinnerSpin 0.8s linear infinite', display: 'inline-block' }} />
       <style>{`@keyframes spinnerSpin{to{transform:rotate(360deg)}}`}</style>
     </span>
   );
@@ -1126,7 +1126,7 @@ export function Avatar({ name, src, size = 'md', className }: AvatarProps) {
     );
   }
   return (
-    <div className={`flex items-center justify-center rounded-full bg-emerald-50 font-bold text-emerald-700 ${sizeMap[size]} ${className ?? ''}`}>
+    <div className={`flex items-center justify-center rounded-full bg-primary/10 font-bold text-primary ${sizeMap[size]} ${className ?? ''}`}>
       {name.charAt(0).toUpperCase()}
     </div>
   );

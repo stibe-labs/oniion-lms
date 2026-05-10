@@ -3,7 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import ClientOverlays from "@/components/ui/ClientOverlays";
 import SplashScreen from "@/components/loading/SplashScreen";
 import RootProviders from "@/app/root-providers";
-import { getPlatformName, getLogoConfig } from "@/lib/platform-config";
+import { getPlatformName, getLogoConfig, getThemeConfig } from "@/lib/platform-config";
+import { buildThemeCss } from "@/lib/theme-config";
 import "./globals.css";
 import "katex/dist/katex.min.css";
 
@@ -43,13 +44,18 @@ export const viewport: Viewport = {
   viewportFit: 'cover',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const theme = await getThemeConfig();
+  const themeCss = buildThemeCss(theme);
   return (
     <html lang="en" className="dark">
+      <head>
+        <style dangerouslySetInnerHTML={{ __html: themeCss }} />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
       >

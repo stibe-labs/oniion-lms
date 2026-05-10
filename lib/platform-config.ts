@@ -7,6 +7,10 @@ export type { AuthConfig, AuthTemplate, AuthBgPattern } from './auth-config';
 export { AUTH_CONFIG_DEFAULTS } from './auth-config';
 import type { AuthConfig } from './auth-config';
 import { AUTH_CONFIG_DEFAULTS } from './auth-config';
+export type { ThemeConfig } from './theme-config';
+export { THEME_DEFAULTS } from './theme-config';
+import type { ThemeConfig } from './theme-config';
+import { THEME_DEFAULTS } from './theme-config';
 
 export async function getPlatformName(): Promise<string> {
   try {
@@ -95,6 +99,21 @@ export async function getSplashConfig(): Promise<SplashConfig> {
     };
   } catch {
     return { ...SPLASH_CONFIG_DEFAULTS };
+  }
+}
+
+export async function getThemeConfig(): Promise<ThemeConfig> {
+  try {
+    const result = await db.query<{ key: string; value: string }>(
+      `SELECT key, value FROM school_config WHERE key IN ('theme_primary', 'theme_secondary')`
+    );
+    const map = Object.fromEntries(result.rows.map(r => [r.key, r.value]));
+    return {
+      primaryColor:   map['theme_primary']   ?? THEME_DEFAULTS.primaryColor,
+      secondaryColor: map['theme_secondary']  ?? THEME_DEFAULTS.secondaryColor,
+    };
+  } catch {
+    return { ...THEME_DEFAULTS };
   }
 }
 

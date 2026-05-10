@@ -13,6 +13,7 @@ import type { AuthConfig } from '@/lib/auth-config';
 import { AUTH_CONFIG_DEFAULTS } from '@/lib/auth-config';
 import SplashConfigSection from './SplashConfigSection';
 import AuthConfigSection from './AuthConfigSection';
+import ThemeConfigSection from './ThemeConfigSection';
 
 interface Props {
   user: PortalUser;
@@ -124,7 +125,7 @@ function LogoUploader({
         )}
         {uploading && (
           <div className="absolute inset-0 flex items-center justify-center rounded-lg bg-white/70">
-            <div className="h-4 w-4 animate-spin rounded-full border-2 border-emerald-500 border-t-transparent" />
+            <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary border-t-transparent" />
           </div>
         )}
       </div>
@@ -185,6 +186,8 @@ export default function SuperadminClient({ user: _user }: Props) {
   const [sizesSaving, setSizesSaving] = useState(false);
   const [splashCfg, setSplashCfg] = useState<SplashConfig>({ ...SPLASH_CONFIG_DEFAULTS });
   const [authCfg,   setAuthCfg]   = useState<AuthConfig>({ ...AUTH_CONFIG_DEFAULTS });
+  const [themePrimary,   setThemePrimary]   = useState('');
+  const [themeSecondary, setThemeSecondary] = useState('');
 
   useEffect(() => {
     fetch('/api/v1/superadmin/settings')
@@ -227,6 +230,8 @@ export default function SuperadminClient({ user: _user }: Props) {
             showTagline: d.data.auth_show_tagline ?? true,
             bgPattern:   d.data.auth_bg_pattern  ?? 'dots',
           });
+          setThemePrimary(d.data.theme_primary     ?? '#22c55e');
+          setThemeSecondary(d.data.theme_secondary ?? '#14b8a6');
         }
       })
       .catch(() => {})
@@ -382,7 +387,7 @@ export default function SuperadminClient({ user: _user }: Props) {
             disabled={fetching || bujiSaving}
             onClick={() => handleBujiToggle(!bujiEnabled)}
             className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed ${
-              bujiEnabled ? 'bg-emerald-500 focus-visible:ring-emerald-500' : 'bg-gray-300 focus-visible:ring-gray-400'
+              bujiEnabled ? 'bg-primary focus-visible:ring-primary' : 'bg-gray-300 focus-visible:ring-gray-400'
             }`}
           >
             <span
@@ -416,7 +421,7 @@ export default function SuperadminClient({ user: _user }: Props) {
                   <p className="text-xs font-medium text-gray-600">{label}</p>
                   <p className="text-[11px] text-gray-400">{desc}</p>
                 </div>
-                <span className="text-xs font-semibold tabular-nums text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md">{sizes[key]}px</span>
+                <span className="text-xs font-semibold tabular-nums text-primary bg-primary/10 px-2 py-0.5 rounded-md">{sizes[key]}px</span>
               </div>
               <div className="flex items-center gap-3">
                 {/* Preview */}
@@ -435,7 +440,7 @@ export default function SuperadminClient({ user: _user }: Props) {
                   value={sizes[key]}
                   disabled={fetching}
                   onChange={e => setSizes(prev => ({ ...prev, [key]: parseInt(e.target.value, 10) }))}
-                  className="flex-1 h-1.5 rounded-full appearance-none bg-gray-200 accent-emerald-500 cursor-pointer disabled:opacity-50"
+                  className="flex-1 h-1.5 rounded-full appearance-none bg-gray-200 [accent-color:var(--primary)] cursor-pointer disabled:opacity-50"
                 />
               </div>
             </div>
@@ -451,6 +456,9 @@ export default function SuperadminClient({ user: _user }: Props) {
 
       {/* Auth Screen Design */}
       {!fetching && <AuthConfigSection initial={authCfg} logoFullUrl={logos.full} logoAuthHeight={sizes.auth} />}
+
+      {/* Brand Theme Colors */}
+      {!fetching && <ThemeConfigSection initialPrimary={themePrimary} initialSecondary={themeSecondary} />}
     </div>
   );
 }

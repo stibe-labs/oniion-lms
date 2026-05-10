@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { verifyAuth } from '@/lib/auth';
-import { getPlatformName, getBujiEnabled, getLogoConfig, getSplashConfig, getAuthConfig } from '@/lib/platform-config';
+import { getPlatformName, getBujiEnabled, getLogoConfig, getSplashConfig, getAuthConfig, getThemeConfig } from '@/lib/platform-config';
 
 export async function GET(req: NextRequest) {
   const user = await verifyAuth(req);
@@ -9,8 +9,8 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ success: false, error: 'Forbidden' }, { status: 403 });
   }
 
-  const [platformName, bujiEnabled, logos, splash, auth] = await Promise.all([
-    getPlatformName(), getBujiEnabled(), getLogoConfig(), getSplashConfig(), getAuthConfig(),
+  const [platformName, bujiEnabled, logos, splash, auth, theme] = await Promise.all([
+    getPlatformName(), getBujiEnabled(), getLogoConfig(), getSplashConfig(), getAuthConfig(), getThemeConfig(),
   ]);
   return NextResponse.json({
     success: true,
@@ -43,6 +43,8 @@ export async function GET(req: NextRequest) {
       auth_subheadline:     auth.subheadline,
       auth_show_tagline:    auth.showTagline,
       auth_bg_pattern:      auth.bgPattern,
+      theme_primary:        theme.primaryColor,
+      theme_secondary:      theme.secondaryColor,
     },
   });
 }
@@ -135,6 +137,16 @@ export async function PUT(req: NextRequest) {
       `INSERT INTO school_config (key, value, description) VALUES ('auth_show_tagline', $1, 'Auth screen tagline visible') ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`,
       [body.auth_show_tagline ? 'true' : 'false']
     );
+  }
+
+  // Theme colors
+  for (const key of ['theme_primary', 'theme_secondary'] as const) {
+    if (key in body && typeof body[key] === 'string' && /^#[0-9a-fA-F]{6}$/.test(body[key])) {
+      await db.query(
+        `INSERT INTO school_config (key, value, description) VALUES ($1, $2, $3) ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`,
+        [key, body[key], `Theme color - ${key}`]
+      );
+    }
   }
 
   return NextResponse.json({ success: true });
