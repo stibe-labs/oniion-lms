@@ -956,10 +956,10 @@ export function CreateUserModal({
                 <CheckCircle className="h-5 w-5 text-white" />
               </div>
               <h2 className="text-white font-bold text-lg">Account Created</h2>
-              <p className="text-primary/60 text-xs mt-1">Credentials issued successfully</p>
+              <p className="text-white/60 text-xs mt-1">Credentials issued successfully</p>
             </div>
             <div className="flex-1" />
-            <button onClick={onClose} className="mt-4 text-primary/60 hover:text-white text-xs flex items-center gap-2 transition">
+            <button onClick={onClose} className="mt-4 text-white/60 hover:text-white text-xs flex items-center gap-2 transition">
               <X className="h-3.5 w-3.5" /> Close
             </button>
           </div>
@@ -1007,7 +1007,7 @@ export function CreateUserModal({
               <RoleIcon className="h-5 w-5 text-white" />
             </div>
             <h2 className="text-white font-bold text-lg">{roleLabel}</h2>
-            <p className="text-primary/60 text-xs mt-1">Step {stepIdx + 1} of {STEPS.length}</p>
+            <p className="text-white/60 text-xs mt-1">Step {stepIdx + 1} of {STEPS.length}</p>
           </div>
 
           <div className="space-y-1 flex-1">
@@ -1021,11 +1021,11 @@ export function CreateUserModal({
                   type="button"
                   onClick={() => { if (idx < stepIdx) setStepIdx(idx); }}
                   className={`w-full flex items-center gap-3 px-3 py-3.5 rounded-xl transition-all text-left ${
-                    isCurrent ? 'bg-white/20 text-white shadow-lg shadow-black/10' : isDone ? 'text-primary/60 hover:bg-white/10 cursor-pointer' : 'text-primary/50 cursor-default'
+                    isCurrent ? 'bg-white/20 text-white shadow-lg shadow-black/10' : isDone ? 'text-white/70 hover:bg-white/10 cursor-pointer' : 'text-white/40 cursor-default'
                   }`}
                 >
                   <div className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 ${
-                    isDone ? 'bg-primary text-emerald-900' : isCurrent ? 'bg-white text-primary' : 'bg-primary/30 text-primary/80/70'
+                    isDone ? 'bg-white/30 text-white' : isCurrent ? 'bg-white text-primary' : 'bg-white/15 text-white/50'
                   }`}>
                     {isDone ? <Check className="h-4 w-4" /> : <StepIcon className="h-4 w-4" />}
                   </div>
@@ -1038,7 +1038,7 @@ export function CreateUserModal({
             })}
           </div>
 
-          <button onClick={onClose} className="mt-4 text-primary/60 hover:text-white text-xs flex items-center gap-2 transition">
+          <button onClick={onClose} className="mt-4 text-white/60 hover:text-white text-xs flex items-center gap-2 transition">
             <X className="h-3.5 w-3.5" /> Cancel &amp; Close
           </button>
         </div>
