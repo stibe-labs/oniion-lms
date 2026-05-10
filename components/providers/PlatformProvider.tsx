@@ -49,17 +49,43 @@ const PlatformContext = createContext<PlatformContextType>({
   setAuthConfig:           () => {},
 });
 
-export function PlatformProvider({ children, initialName = 'Stibe' }: { children: React.ReactNode; initialName?: string }) {
+interface PlatformProviderProps {
+  children:                   React.ReactNode;
+  initialName?:               string;
+  initialLogoSmallUrl?:       string | null;
+  initialLogoFullUrl?:        string | null;
+  initialFaviconUrl?:         string | null;
+  initialLoadingCharacterUrl?: string | null;
+  initialLogoAuthHeight?:     number;
+  initialLogoSplashHeight?:   number;
+  initialLogoSidebarHeight?:  number;
+  initialLogoEmailHeight?:    number;
+  initialAuthConfig?:         AuthConfig;
+}
+
+export function PlatformProvider({
+  children,
+  initialName                = 'Stibe',
+  initialLogoSmallUrl        = null,
+  initialLogoFullUrl         = null,
+  initialFaviconUrl          = null,
+  initialLoadingCharacterUrl = null,
+  initialLogoAuthHeight      = 40,
+  initialLogoSplashHeight    = 36,
+  initialLogoSidebarHeight   = 20,
+  initialLogoEmailHeight     = 36,
+  initialAuthConfig,
+}: PlatformProviderProps) {
   const [platformName,         setPlatformName]         = useState(initialName);
-  const [logoSmallUrl,         setLogoSmallUrl]         = useState<string | null>(null);
-  const [logoFullUrl,          setLogoFullUrl]          = useState<string | null>(null);
-  const [faviconUrl,           setFaviconUrl]           = useState<string | null>(null);
-  const [loadingCharacterUrl,  setLoadingCharacterUrl]  = useState<string | null>(null);
-  const [logoAuthHeight,       setLogoAuthHeight]       = useState(40);
-  const [logoSplashHeight,     setLogoSplashHeight]     = useState(36);
-  const [logoSidebarHeight,    setLogoSidebarHeight]    = useState(20);
-  const [logoEmailHeight,      setLogoEmailHeight]      = useState(36);
-  const [authConfig,           setAuthConfig]           = useState<AuthConfig>({ ...AUTH_CONFIG_DEFAULTS });
+  const [logoSmallUrl,         setLogoSmallUrl]         = useState<string | null>(initialLogoSmallUrl);
+  const [logoFullUrl,          setLogoFullUrl]          = useState<string | null>(initialLogoFullUrl);
+  const [faviconUrl,           setFaviconUrl]           = useState<string | null>(initialFaviconUrl);
+  const [loadingCharacterUrl,  setLoadingCharacterUrl]  = useState<string | null>(initialLoadingCharacterUrl);
+  const [logoAuthHeight,       setLogoAuthHeight]       = useState(initialLogoAuthHeight);
+  const [logoSplashHeight,     setLogoSplashHeight]     = useState(initialLogoSplashHeight);
+  const [logoSidebarHeight,    setLogoSidebarHeight]    = useState(initialLogoSidebarHeight);
+  const [logoEmailHeight,      setLogoEmailHeight]      = useState(initialLogoEmailHeight);
+  const [authConfig,           setAuthConfig]           = useState<AuthConfig>(initialAuthConfig ?? { ...AUTH_CONFIG_DEFAULTS });
 
   useEffect(() => {
     fetch('/api/v1/platform/config')
