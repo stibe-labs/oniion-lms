@@ -49,6 +49,17 @@ const EDU_SYMBOLS = Array.from({ length: 12 }, (_, i) => ({
   char:     EDU_CHARS[i % EDU_CHARS.length],
 }));
 
+// ── Sparkle star positions (SSR-safe) ─────────────────────────────────────────
+
+const SPARKLES = [
+  { x: 88.5, y: 8,   size: 22, delay: 0,   dur: 3.8, opacity: 0.72 },
+  { x: 92,   y: 13,  size: 11, delay: 1.3, dur: 4.2, opacity: 0.5  },
+  { x: 94.5, y: 9.5, size: 16, delay: 0.7, dur: 3.4, opacity: 0.62 },
+  { x: 6.5,  y: 79,  size: 19, delay: 2.1, dur: 4,   opacity: 0.6  },
+  { x: 10,   y: 86,  size: 10, delay: 2.9, dur: 3.6, opacity: 0.42 },
+  { x: 4.5,  y: 83,  size: 14, delay: 1.5, dur: 4.5, opacity: 0.52 },
+];
+
 // ── CSS keyframes ──────────────────────────────────────────────────────────────
 
 const KEYFRAMES = `
@@ -84,6 +95,10 @@ const KEYFRAMES = `
   0%, 100% { transform: translate(0%,   0%) scale(1);    }
   40%       { transform: translate(-5%, 3%) scale(1.07); }
   70%       { transform: translate(3%, -2%) scale(0.96); }
+}
+@keyframes sparkle {
+  0%, 100% { opacity: 0.22; transform: scale(0.82) rotate(0deg);  }
+  50%       { opacity: 1;    transform: scale(1.18) rotate(18deg); }
 }
 `;
 
@@ -166,6 +181,26 @@ function EduField({ color, count = 12 }: { color: string; count?: number }) {
           }}>
             {s.char}
           </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ── 4-pointed sparkle stars ────────────────────────────────────────────────────
+
+function SparkleField() {
+  return (
+    <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', overflow: 'hidden' }}>
+      {SPARKLES.map((s, i) => (
+        <div key={i} style={{
+          position: 'absolute', left: `${s.x}%`, top: `${s.y}%`,
+          width: s.size, height: s.size, opacity: s.opacity,
+          animation: `sparkle ${s.dur}s ${s.delay}s ease-in-out infinite`,
+        }}>
+          <div style={{ position: 'absolute', top: '50%', left: 0, right: 0, height: 1.5, background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.95), transparent)', transform: 'translateY(-50%)' }} />
+          <div style={{ position: 'absolute', left: '50%', top: 0, bottom: 0, width: 1.5, background: 'linear-gradient(180deg, transparent, rgba(255,255,255,0.95), transparent)', transform: 'translateX(-50%)' }} />
+          <div style={{ position: 'absolute', top: '50%', left: '50%', width: 3.5, height: 3.5, borderRadius: '50%', background: 'white', transform: 'translate(-50%,-50%)', boxShadow: '0 0 5px 2px rgba(255,255,255,0.65)' }} />
         </div>
       ))}
     </div>
@@ -302,30 +337,49 @@ function BoldShell({ children, cfg, logoUrl, logoHeight }: P) {
   );
 }
 
-// DARK — deep space constellation + star particles + glowing card + accent quote
+// DARK — deep space aurora + sparkle stars + cardless form
 function DarkShell({ children, cfg, logoUrl, logoHeight }: P) {
   const a = cfg.accentColor;
   return (
     <div style={{
       minHeight: '100dvh',
-      background: `radial-gradient(ellipse at 22% 18%, ${a}1c 0, transparent 52%),
-                   radial-gradient(ellipse at 80% 80%, ${a}12 0, transparent 48%),
-                   #060c16`,
+      background: '#0c0d16',
       position: 'relative', overflow: 'hidden',
       display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '28px 16px',
     }}>
       <style>{KEYFRAMES}</style>
-      <ParticleField color={a} count={18} />
-      <ParticleField color="rgba(255,255,255,0.82)" count={18} />
-      <EduField color={a} count={9} />
-      <div style={{ position: 'absolute', top: '48%', left: '50%', transform: 'translate(-50%,-50%)', width: 580, height: 400, borderRadius: '50%', background: `radial-gradient(ellipse, ${a}12 0, transparent 68%)`, animation: 'glow 7s ease-in-out infinite', pointerEvents: 'none' }} />
-      <div style={{ position: 'relative', zIndex: 1, width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 28 }}>
-        <Card accent={a} glass>
-          <AuthLogo url={logoUrl} height={logoHeight} />
+
+      {/* Aurora nebula orbs */}
+      <div style={{ position: 'absolute', top: '-22%', left: '14%', width: '54%', height: '60%', borderRadius: '50%', background: 'radial-gradient(ellipse, rgba(110,70,220,0.52) 0, rgba(80,45,200,0.22) 45%, transparent 70%)', filter: 'blur(70px)', animation: 'mesh-a 22s ease-in-out infinite', pointerEvents: 'none' }} />
+      <div style={{ position: 'absolute', top: '-18%', left: '42%', width: '46%', height: '52%', borderRadius: '50%', background: 'radial-gradient(ellipse, rgba(55,85,235,0.38) 0, transparent 65%)', filter: 'blur(58px)', animation: 'mesh-b 26s ease-in-out infinite', pointerEvents: 'none' }} />
+      <div style={{ position: 'absolute', top: '4%', right: '-10%', width: '38%', height: '58%', borderRadius: '50%', background: 'radial-gradient(ellipse, rgba(185,55,145,0.32) 0, transparent 65%)', filter: 'blur(65px)', animation: 'mesh-a 19s 3.5s ease-in-out infinite', pointerEvents: 'none' }} />
+      <div style={{ position: 'absolute', bottom: '-10%', left: '20%', width: '40%', height: '35%', borderRadius: '50%', background: 'radial-gradient(ellipse, rgba(30,120,220,0.18) 0, transparent 65%)', filter: 'blur(60px)', pointerEvents: 'none' }} />
+
+      {/* White star particles */}
+      <ParticleField color="rgba(255,255,255,0.8)" count={24} />
+      {/* Subtle accent particles */}
+      <ParticleField color={a} count={10} />
+      {/* Sparkle stars in corners */}
+      <SparkleField />
+      {/* Faint edu symbols */}
+      <EduField color={`${a}55`} count={7} />
+
+      {/* Cardless centered form */}
+      <div style={{ position: 'relative', zIndex: 1, width: '100%', maxWidth: 430 }}>
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 28 }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={logoUrl} alt="Logo" style={{
+            height: logoHeight, width: 'auto', objectFit: 'contain',
+            filter: 'brightness(0) invert(1)',
+            opacity: 0.9,
+          }} />
+        </div>
+        <div style={{ animation: 'card-in 0.7s cubic-bezier(0.22,1,0.36,1) both' }}>
           {children}
-        </Card>
-        <div style={{ width: '100%', maxWidth: 390, padding: '0 4px' }}>
-          <QuoteCycler textColor="rgba(255,255,255,0.5)" authorColor={a} label="DAILY WISDOM" />
+        </div>
+        {/* Quote below the form */}
+        <div style={{ marginTop: 36, paddingTop: 22, borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+          <QuoteCycler textColor="rgba(255,255,255,0.38)" authorColor={a} label="DAILY WISDOM" />
         </div>
       </div>
     </div>
