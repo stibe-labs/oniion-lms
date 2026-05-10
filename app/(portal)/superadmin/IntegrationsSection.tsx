@@ -123,19 +123,6 @@ const SERVICES: ServiceDef[] = [
     ],
   },
   {
-    id: 'facebook',
-    title: 'Facebook / Meta Ads',
-    desc: 'Lead generation and ad campaign integration',
-    Icon: Facebook,
-    iconBg: 'bg-blue-50',
-    iconFg: 'text-blue-700',
-    fields: [
-      { key: 'integration_fb_page_id', label: 'Page ID', placeholder: '1234567890' },
-      { key: 'integration_fb_page_token', label: 'Page Access Token', secret: true, placeholder: 'EAAxxxxxxxx...' },
-      { key: 'integration_fb_ad_account_id', label: 'Ad Account ID', placeholder: 'act_1234567890' },
-    ],
-  },
-  {
     id: 'crm',
     title: 'CRM Webhook',
     desc: 'Webhook notifications for demo and enrollment lifecycle events',
