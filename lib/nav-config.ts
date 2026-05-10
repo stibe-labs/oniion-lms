@@ -45,6 +45,10 @@ import {
   Radio,
   Tv,
   Settings,
+  Settings2,
+  Palette,
+  Sparkles,
+  Plug,
   type LucideIcon,
 } from 'lucide-react';
 
@@ -54,6 +58,8 @@ export interface NavItemConfig {
   icon: LucideIcon;
   /** If set, this nav item is only shown when the user has this permission */
   permissionKey?: string;
+  /** If set, renders a section divider label above this item in the sidebar */
+  sectionLabel?: string;
 }
 
 /* ── Per-role nav definitions ── */
@@ -166,8 +172,11 @@ const SALES_NAV: NavItemConfig[] = [
 ];
 
 const SUPERADMIN_NAV: NavItemConfig[] = [
-  { label: 'Dashboard',          href: '/superadmin',           icon: LayoutDashboard },
-  { label: 'Platform Settings',  href: '/superadmin/settings',  icon: Settings },
+  { label: 'Overview',      href: '/superadmin',                          icon: LayoutDashboard },
+  { label: 'General',       href: '/superadmin/settings#general',         icon: Settings2,  sectionLabel: 'Settings' },
+  { label: 'Branding',      href: '/superadmin/settings#branding',        icon: Palette },
+  { label: 'Appearance',    href: '/superadmin/settings#appearance',      icon: Sparkles },
+  { label: 'Integrations',  href: '/superadmin/settings#integrations',    icon: Plug },
 ];
 
 const ROLE_NAV: Record<string, NavItemConfig[]> = {

@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter, usePathname } from 'next/navigation';
-import { useState, useRef, useCallback, useEffect } from 'react';
+import { useState, useRef, useCallback, useEffect, Fragment } from 'react';
 import {
   LogOut, Menu, X, LayoutDashboard, BookOpen, Users, GraduationCap,
   Eye, Shield, UserCheck, ChevronLeft, PanelLeftClose, PanelLeftOpen,
@@ -10,7 +10,7 @@ import {
 import { getNavForRole, resolveActiveNav } from '@/lib/nav-config';
 import { usePlatformName, usePlatformContext } from '@/components/providers/PlatformProvider';
 
-interface NavItem { label: string; href: string; icon: LucideIcon; active?: boolean; }
+interface NavItem { label: string; href: string; icon: LucideIcon; active?: boolean; sectionLabel?: string; }
 
 interface DashboardShellProps {
   role: string;
@@ -237,21 +237,27 @@ export default function DashboardShell({
 
         {/* ── Navigation ── */}
         <nav className={`relative flex-1 overflow-y-auto overflow-x-hidden py-3 space-y-0.5 ${collapsed ? 'px-1.5' : 'px-3'}`}>
-          {!collapsed && (
+          {!collapsed && !navItems.some(n => n.sectionLabel) && (
             <p className="px-3 pt-1 pb-2 text-[9px] font-bold uppercase tracking-[0.15em] text-slate-600">
               Menu
             </p>
           )}
           {navItems.map((item, i) => (
-            <SidebarNavItem
-              key={`${item.href}-${item.label}`}
-              item={item}
-              collapsed={collapsed}
-              index={i}
-              onNavigate={() => setSidebarOpen(false)}
-              currentPathname={pathname}
-              badge={navBadges?.[item.href]}
-            />
+            <Fragment key={`${item.href}-${item.label}`}>
+              {!collapsed && item.sectionLabel && (
+                <p className="px-3 pt-4 pb-1.5 text-[9px] font-bold uppercase tracking-[0.15em] text-slate-600">
+                  {item.sectionLabel}
+                </p>
+              )}
+              <SidebarNavItem
+                item={item}
+                collapsed={collapsed}
+                index={i}
+                onNavigate={() => setSidebarOpen(false)}
+                currentPathname={pathname}
+                badge={navBadges?.[item.href]}
+              />
+            </Fragment>
           ))}
         </nav>
 

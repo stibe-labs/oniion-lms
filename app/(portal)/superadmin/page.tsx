@@ -1,15 +1,15 @@
 import { requireRole } from '@/lib/auth-utils';
 import DashboardShell from '@/components/dashboard/DashboardShell';
-import SuperadminClient from './SuperadminClient';
+import SuperadminOverview from './SuperadminOverview';
 
-export const metadata = { title: 'Superadmin · Platform Settings' };
+export const metadata = { title: 'Superadmin · Overview' };
 
 export default async function SuperadminPage() {
   const user = await requireRole('superadmin');
 
   return (
     <DashboardShell role={user.role} userName={user.name} userEmail={user.id}>
-      <SuperadminClient user={user} />
+      <SuperadminOverview user={user} />
     </DashboardShell>
   );
 }

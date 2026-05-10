@@ -6,8 +6,7 @@ import { useToast } from '@/components/dashboard/shared';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
-  Upload, X, ImageIcon, Settings2, Palette,
-  Sparkles, Plug, ToggleLeft,
+  Upload, X, ImageIcon,
 } from 'lucide-react';
 import type { PortalUser } from '@/types';
 import type { SplashConfig } from '@/lib/splash-config';
@@ -23,8 +22,21 @@ import IntegrationsSection from './IntegrationsSection';
 
 interface Props { user: PortalUser }
 
-type TabId = 'general' | 'branding' | 'appearance' | 'integrations';
+type Section = 'general' | 'branding' | 'appearance' | 'integrations';
 type LogoType = 'small' | 'full' | 'favicon' | 'character';
+
+function getSection(hash: string): Section {
+  const h = hash.replace('#', '');
+  if (h === 'branding' || h === 'appearance' || h === 'integrations') return h;
+  return 'general';
+}
+
+const SECTION_META: Record<Section, { title: string; description: string }> = {
+  general:      { title: 'General',      description: 'Configure platform name, AI assistant, and feature flags.' },
+  branding:     { title: 'Branding',     description: 'Upload logos, set brand colors, and configure theme.' },
+  appearance:   { title: 'Appearance',   description: 'Customize the splash screen and login page layout.' },
+  integrations: { title: 'Integrations', description: 'Connect external services — credentials stored in DB, no restart required.' },
+};
 
 interface LogoSlot {
   type: LogoType;
@@ -40,13 +52,6 @@ const LOGO_SLOTS: LogoSlot[] = [
   { type: 'small',     label: 'Small Logo',        description: 'Square icon logo in the sidebar navigation.',           hint: 'PNG/SVG, transparent bg, square 1:1. Max 2 MB' },
   { type: 'favicon',   label: 'Favicon',           description: 'Icon shown in the browser tab.',                        hint: 'PNG or ICO, 32×32 or 64×64 px. Max 2 MB' },
   { type: 'character', label: 'Loading Character', description: 'Mascot in loading states, splash screen, and chatbot.', hint: 'Animated GIF or PNG, square, transparent. Max 5 MB' },
-];
-
-const TABS: { id: TabId; label: string; icon: React.ElementType }[] = [
-  { id: 'general',      label: 'General',      icon: Settings2  },
-  { id: 'branding',     label: 'Branding',      icon: Palette    },
-  { id: 'appearance',   label: 'Appearance',    icon: Sparkles   },
-  { id: 'integrations', label: 'Integrations',  icon: Plug       },
 ];
 
 // ── Shared sub-components ──────────────────────────────────────
@@ -220,7 +225,14 @@ export default function SuperadminClient({ user: _user }: Props) {
   } = usePlatformContext();
   const toast = useToast();
 
-  const [activeTab, setActiveTab] = useState<TabId>('general');
+  const [section, setSection] = useState<Section>('general');
+
+  useEffect(() => {
+    setSection(getSection(window.location.hash));
+    const onHash = () => setSection(getSection(window.location.hash));
+    window.addEventListener('hashchange', onHash);
+    return () => window.removeEventListener('hashchange', onHash);
+  }, []);
 
   // ── State ─────────────────────────────────────────────────
   const [platformName, setPlatformNameLocal] = useState('');
@@ -370,40 +382,15 @@ export default function SuperadminClient({ user: _user }: Props) {
   return (
     <div className="max-w-3xl">
 
-      {/* ── Page header ── */}
-      <div className="mb-6">
-        <h1 className="text-xl font-bold text-gray-900 tracking-tight">Platform Settings</h1>
-        <p className="text-sm text-gray-500 mt-1">
-          Configure platform identity, branding, appearance, and service integrations.
-        </p>
-      </div>
-
-      {/* ── Tab bar ── */}
-      <div className="border-b border-gray-200 mb-8">
-        <nav className="-mb-px flex gap-0">
-          {TABS.map(tab => {
-            const active = activeTab === tab.id;
-            return (
-              <button
-                key={tab.id}
-                type="button"
-                onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-2 px-5 py-3 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
-                  active
-                    ? 'border-primary text-primary'
-                    : 'border-transparent text-gray-500 hover:text-gray-800 hover:border-gray-300'
-                }`}
-              >
-                <tab.icon className="h-4 w-4" />
-                {tab.label}
-              </button>
-            );
-          })}
-        </nav>
+      {/* ── Section header ── */}
+      <div className="mb-7">
+        <p className="text-[11px] font-semibold text-primary uppercase tracking-widest mb-1">Settings</p>
+        <h1 className="text-xl font-bold text-gray-900 tracking-tight">{SECTION_META[section].title}</h1>
+        <p className="text-sm text-gray-500 mt-1">{SECTION_META[section].description}</p>
       </div>
 
       {/* ── General ── */}
-      {activeTab === 'general' && (
+      {section === 'general' && (
         <div className="space-y-5">
           <SettingsCard
             title="Platform Name"
@@ -438,7 +425,7 @@ export default function SuperadminClient({ user: _user }: Props) {
       )}
 
       {/* ── Branding ── */}
-      {activeTab === 'branding' && (
+      {section === 'branding' && (
         <div className="space-y-5">
           <SettingsCard
             title="Brand Assets"
@@ -520,7 +507,7 @@ export default function SuperadminClient({ user: _user }: Props) {
       )}
 
       {/* ── Appearance ── */}
-      {activeTab === 'appearance' && (
+      {section === 'appearance' && (
         <div className="space-y-6">
           {!fetching && (
             <SplashConfigSection
@@ -541,7 +528,7 @@ export default function SuperadminClient({ user: _user }: Props) {
       )}
 
       {/* ── Integrations ── */}
-      {activeTab === 'integrations' && (
+      {section === 'integrations' && (
         <div className="space-y-4">
           <div className="mb-2">
             <p className="text-xs text-gray-400">
