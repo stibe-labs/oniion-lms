@@ -50,6 +50,7 @@ import {
   Database, Save, Send, Table2, FolderOpen, Upload, Check,
   CalendarClock, Ban, ClipboardList, Briefcase, UserPlus, ArrowRightLeft, Flag,
   Sparkles, Loader2, Globe, MoreVertical, CreditCard, UserCheck, BarChart3, Tv, ArchiveRestore,
+  DollarSign, IndianRupee,
 } from 'lucide-react';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid,
@@ -592,6 +593,165 @@ function getDatesForDays(days: string[], startDate: string, count: number, unit:
   return dates;
 }
 
+// --- Teacher Rates Panel ------------------------------------
+interface TeacherRateRow {
+  email: string;
+  full_name: string;
+  per_hour_rate: number | null;
+  subjects: string[] | null;
+  total_sessions: number;
+  total_earned_paise: number;
+}
+
+function AOTeacherRatesPanel() {
+  const toast = useToast();
+  const [rates, setRates] = useState<TeacherRateRow[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [editingEmail, setEditingEmail] = useState<string | null>(null);
+  const [rateInput, setRateInput] = useState('');
+  const [saving, setSaving] = useState(false);
+
+  const fetchRates = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await fetch('/api/v1/payroll?resource=teacher_rates');
+      const data = await res.json();
+      if (data.success) setRates(data.data.teachers || []);
+    } finally { setLoading(false); }
+  }, []);
+
+  useEffect(() => { fetchRates(); }, [fetchRates]);
+
+  function startEdit(t: TeacherRateRow) {
+    setEditingEmail(t.email);
+    setRateInput(t.per_hour_rate ? String(t.per_hour_rate) : '');
+  }
+
+  async function saveRate(email: string) {
+    const val = parseFloat(rateInput);
+    if (isNaN(val) || val < 0) { toast.error('Enter a valid rate'); return; }
+    setSaving(true);
+    try {
+      const res = await fetch(`/api/v1/hr/users/${encodeURIComponent(email)}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ per_hour_rate: Math.round(val) }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) { toast.error(data.error || 'Failed to save'); return; }
+      toast.success('Rate updated');
+      setEditingEmail(null);
+      fetchRates();
+    } catch { toast.error('Network error'); }
+    finally { setSaving(false); }
+  }
+
+  const money = (paise: number) => `₹${(paise / 100).toLocaleString('en-IN', { minimumFractionDigits: 0 })}`;
+
+  return (
+    <div className="rounded-xl border border-gray-200 bg-white shadow-sm">
+      <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
+        <div className="flex items-center gap-2">
+          <IndianRupee className="h-4 w-4 text-primary" />
+          <h3 className="text-sm font-semibold text-gray-900">Teacher Pay Rates</h3>
+          <span className="text-xs text-gray-400">— set per-hour salary for each teacher</span>
+        </div>
+        <RefreshButton loading={loading} onClick={fetchRates} />
+      </div>
+
+      {loading ? (
+        <div className="p-6"><LoadingState /></div>
+      ) : rates.length === 0 ? (
+        <div className="p-6"><EmptyState icon={DollarSign} message="No active teachers" /></div>
+      ) : (
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-100 bg-gray-50/60">
+                <th className="px-4 py-2.5 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">Teacher</th>
+                <th className="px-4 py-2.5 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">Subjects</th>
+                <th className="px-4 py-2.5 text-right text-xs font-semibold text-gray-500 uppercase tracking-wide">Rate / hr</th>
+                <th className="px-4 py-2.5 text-center text-xs font-semibold text-gray-500 uppercase tracking-wide">Sessions</th>
+                <th className="px-4 py-2.5 text-right text-xs font-semibold text-gray-500 uppercase tracking-wide">Total Earned</th>
+                <th className="px-4 py-2.5" />
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-50">
+              {rates.map(t => (
+                <tr key={t.email} className="hover:bg-gray-50/60 transition-colors">
+                  <td className="px-4 py-3">
+                    <div className="flex items-center gap-2.5">
+                      <Avatar name={t.full_name || t.email} size="sm" />
+                      <div>
+                        <p className="font-medium text-gray-900 text-sm leading-tight">{t.full_name}</p>
+                        <p className="text-xs text-gray-400 leading-tight">{t.email}</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-4 py-3 text-xs text-gray-500 max-w-[160px]">
+                    {t.subjects?.join(', ') || <span className="text-gray-300">—</span>}
+                  </td>
+                  <td className="px-4 py-3 text-right">
+                    {editingEmail === t.email ? (
+                      <div className="flex items-center justify-end gap-1.5">
+                        <span className="text-gray-400 text-xs">₹</span>
+                        <input
+                          type="number"
+                          value={rateInput}
+                          onChange={e => setRateInput(e.target.value)}
+                          onKeyDown={e => { if (e.key === 'Enter') saveRate(t.email); if (e.key === 'Escape') setEditingEmail(null); }}
+                          className="w-20 rounded-lg border border-primary/40 px-2 py-1 text-sm text-right font-mono focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                          autoFocus
+                          min={0}
+                        />
+                        <span className="text-gray-400 text-xs">/hr</span>
+                        <button
+                          onClick={() => saveRate(t.email)}
+                          disabled={saving}
+                          className="flex items-center justify-center h-6 w-6 rounded-md bg-primary text-white hover:bg-primary/90 disabled:opacity-50 transition-colors"
+                        >
+                          <Check className="h-3.5 w-3.5" />
+                        </button>
+                        <button
+                          onClick={() => setEditingEmail(null)}
+                          className="flex items-center justify-center h-6 w-6 rounded-md bg-gray-100 text-gray-500 hover:bg-gray-200 transition-colors"
+                        >
+                          <X className="h-3.5 w-3.5" />
+                        </button>
+                      </div>
+                    ) : t.per_hour_rate ? (
+                      <span className="font-semibold text-primary">₹{t.per_hour_rate}/hr</span>
+                    ) : (
+                      <span className="text-xs text-red-400 font-medium bg-red-50 px-2 py-0.5 rounded-full">Not set</span>
+                    )}
+                  </td>
+                  <td className="px-4 py-3 text-center text-sm text-gray-600">{t.total_sessions}</td>
+                  <td className="px-4 py-3 text-right text-sm font-semibold text-gray-800">
+                    {t.total_earned_paise > 0 ? money(t.total_earned_paise) : <span className="text-gray-300">—</span>}
+                  </td>
+                  <td className="px-4 py-3 text-right">
+                    {editingEmail !== t.email && (
+                      <button
+                        onClick={() => startEdit(t)}
+                        className="inline-flex items-center gap-1 text-xs text-gray-400 hover:text-primary hover:bg-primary/5 px-2 py-1 rounded-lg transition-colors"
+                      >
+                        <Pencil className="h-3 w-3" /> Edit
+                      </button>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <div className="px-4 py-2.5 border-t border-gray-100 text-xs text-gray-400">
+            {rates.length} teacher{rates.length !== 1 ? 's' : ''} · Salary = rate/hr × (session minutes ÷ 60)
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 // --- Tab Config ---------------------------------------------
 type AOTab = 'overview' | 'batches' | 'sessions' | 'students' | 'teachers' | 'materials' | 'exam-topics' | 'monitoring' | 'requests' | 'demo' | 'teacher-reports' | 'payments' | 'conference' | 'open-classroom' | 'todays-live' | 'settings';
 
@@ -940,7 +1100,10 @@ export default function AcademicOperatorDashboardClient({ userName, userEmail, u
         )}
         {visitedTabs.current.has('teachers') && (
           <div style={{ display: tab === 'teachers' ? 'contents' : 'none' }}>
-            <UsersTab role="teacher" label="Teachers" hideCreate hideActions active={tab === 'teachers'} />
+            <UsersTab role="teacher" label="Teachers" active={tab === 'teachers'} />
+            <div className="mt-6">
+              <AOTeacherRatesPanel />
+            </div>
           </div>
         )}
         {tab === 'requests' && (
