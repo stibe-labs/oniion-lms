@@ -15,6 +15,7 @@ import {
   CheckCircle, ChevronLeft, ChevronRight, X, Database,
   AlertCircle, BookOpen, ChevronDown,
 } from 'lucide-react';
+import { WizardShell, WizardFooterDots } from '@/components/dashboard/WizardShell';
 
 // ── Constants ────────────────────────────────────────────────
 
@@ -1037,66 +1038,35 @@ export function CreateBatchWizard({
   // ── Wizard overlay ─────────────────────────────────────────
   return (
     <>
-      <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4" onClick={onClose}>
-        <div className="bg-white rounded-2xl shadow-2xl w-full max-w-5xl max-h-[92vh] flex overflow-hidden" onClick={e => e.stopPropagation()}>
-          {/* Left sidebar */}
-          <div className="w-60 bg-linear-to-b from-primary via-primary/90 to-secondary p-6 flex flex-col shrink-0">
-            <div className="mb-8">
-              <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center mb-3">
-                <Database className="h-5 w-5 text-white" />
-              </div>
-              <h2 className="text-white font-bold text-lg">New Batch</h2>
-              <p className="text-white/60 text-xs mt-1">Step {stepIdx + 1} of {wizardSteps.length}</p>
+      <WizardShell
+        open={true}
+        onClose={onClose}
+        title="New Batch"
+        icon={Database}
+        steps={wizardSteps.map(s => ({ label: s.label }))}
+        currentStep={stepIdx}
+        footer={
+          <>
+            <div>{stepIdx > 0 && <Button variant="outline" icon={ChevronLeft} onClick={goPrev} size="md">Back</Button>}</div>
+            <WizardFooterDots total={wizardSteps.length} current={stepIdx} />
+            <div>
+              {wizardStep !== 'review' ? (
+                <Button variant="primary" iconRight={ChevronRight} onClick={goNext} disabled={!canGoNext()} size="lg">Continue</Button>
+              ) : (
+                <Button variant="primary" icon={CheckCircle} onClick={submitBatch} disabled={!canSubmit || creating} size="lg">
+                  {creating ? 'Creating…' : 'Create Batch'}
+                </Button>
+              )}
             </div>
-            <div className="space-y-1 flex-1">
-              {wizardSteps.map((step, idx) => {
-                const isDone = idx < stepIdx;
-                const isCurrent = idx === stepIdx;
-                return (
-                  <div key={step.key}
-                    className={`flex items-center gap-3 px-3 py-3 rounded-xl transition-all ${
-                      isCurrent ? 'bg-white/20 text-white shadow-lg shadow-black/10' : isDone ? 'text-white/70' : 'text-white/40'
-                    }`}
-                  >
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold shrink-0 ${
-                      isDone ? 'bg-white/30 text-white' : isCurrent ? 'bg-white text-primary' : 'bg-white/15 text-white/50'
-                    }`}>
-                      {isDone ? '✓' : idx + 1}
-                    </div>
-                    <span className="text-sm font-medium">{step.label}</span>
-                  </div>
-                );
-              })}
-            </div>
-            <button onClick={onClose} className="mt-4 text-white/60 hover:text-white text-xs flex items-center gap-2 transition">
-              <X className="h-3.5 w-3.5" /> Cancel &amp; Close
-            </button>
-          </div>
-
-          {/* Right content */}
-          <div className="flex-1 flex flex-col overflow-hidden">
-            <div className="px-10 pt-8 pb-6 flex-1 overflow-y-auto">
-              {wizardStep === 'template' && renderTemplateStep()}
-              {wizardStep === 'students' && renderStudentsStep()}
-              {wizardStep === 'details' && renderDetailsStep()}
-              {wizardStep === 'teachers' && renderTeachersStep()}
-              {wizardStep === 'review' && renderReviewStep()}
-            </div>
-            <div className="px-10 py-5 border-t bg-gray-50/80 flex items-center justify-between">
-              <div>{stepIdx > 0 && <Button variant="ghost" icon={ChevronLeft} onClick={goPrev} size="md">Back</Button>}</div>
-              <div className="flex items-center gap-3">
-                {wizardStep !== 'review' ? (
-                  <Button variant="primary" iconRight={ChevronRight} onClick={goNext} disabled={!canGoNext()} size="lg">Continue</Button>
-                ) : (
-                  <Button variant="primary" icon={CheckCircle} onClick={submitBatch} disabled={!canSubmit || creating} size="lg">
-                    {creating ? 'Creating…' : 'Create Batch'}
-                  </Button>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+          </>
+        }
+      >
+        {wizardStep === 'template' && renderTemplateStep()}
+        {wizardStep === 'students' && renderStudentsStep()}
+        {wizardStep === 'details' && renderDetailsStep()}
+        {wizardStep === 'teachers' && renderTeachersStep()}
+        {wizardStep === 'review' && renderReviewStep()}
+      </WizardShell>
 
       {/* Create User Modal (for parents) */}
       <CreateUserModal

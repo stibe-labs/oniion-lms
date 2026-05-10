@@ -16,6 +16,7 @@ import {
   ChevronDown, ChevronLeft, ChevronRight, X, GraduationCap, Users, User, BookOpen, Shield, Ghost,
   FileText, Camera,
 } from 'lucide-react';
+import { WizardShell, WizardFooterDots } from '@/components/dashboard/WizardShell';
 
 // ─── Constants ──────────────────────────────────────────────
 
@@ -948,35 +949,25 @@ export function CreateUserModal({
   // ── Credentials screen (after creation) ──
   if (created) {
     return (
-      <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4" onClick={onClose}>
-        <div className="bg-white rounded-2xl shadow-2xl w-full max-w-5xl max-h-[92vh] flex overflow-hidden" onClick={e => e.stopPropagation()}>
-          <div className="w-60 bg-linear-to-b from-primary via-primary/90 to-secondary p-6 flex flex-col shrink-0">
-            <div className="mb-8">
-              <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center mb-3">
-                <CheckCircle className="h-5 w-5 text-white" />
-              </div>
-              <h2 className="text-white font-bold text-lg">Account Created</h2>
-              <p className="text-white/60 text-xs mt-1">Credentials issued successfully</p>
-            </div>
-            <div className="flex-1" />
-            <button onClick={onClose} className="mt-4 text-white/60 hover:text-white text-xs flex items-center gap-2 transition">
-              <X className="h-3.5 w-3.5" /> Close
-            </button>
-          </div>
-          <div className="flex-1 flex flex-col overflow-hidden">
-            <div className="px-10 pt-8 pb-6 flex-1 overflow-y-auto">
-              <CredentialsPanel
-                name={created.name}
-                email={created.email}
-                password={created.password}
-                role={role}
-                onDone={onClose}
-                onAddAnother={() => { setCreated(null); resetForm(); setStepIdx(0); }}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
+      <WizardShell
+        open={true}
+        onClose={onClose}
+        title="Account Created"
+        subtitle="Credentials issued successfully"
+        icon={CheckCircle}
+        steps={STEPS.map(s => ({ label: s.label, desc: s.desc, icon: s.icon }))}
+        currentStep={STEPS.length - 1}
+        footer={<div className="flex gap-3 w-full"><Button variant="outline" className="flex-1" onClick={() => { setCreated(null); resetForm(); setStepIdx(0); }}>Add Another</Button><Button className="flex-1" onClick={onClose}>Done</Button></div>}
+      >
+        <CredentialsPanel
+          name={created.name}
+          email={created.email}
+          password={created.password}
+          role={role}
+          onDone={onClose}
+          onAddAnother={() => { setCreated(null); resetForm(); setStepIdx(0); }}
+        />
+      </WizardShell>
     );
   }
 
@@ -993,95 +984,39 @@ export function CreateUserModal({
     );
   }
 
-  // ── Full-screen step-by-step overlay (same design as batch wizard) ──
+  // ── Full-screen step-by-step overlay ──
   return (
-    <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4" onClick={onClose}>
-      <div
-        className="bg-white rounded-2xl shadow-2xl w-full max-w-5xl max-h-[92vh] flex overflow-hidden"
-        onClick={e => e.stopPropagation()}
-      >
-        {/* ── Left sidebar — step indicator ── */}
-        <div className="w-60 bg-linear-to-b from-primary via-primary/90 to-secondary p-6 flex flex-col shrink-0">
-          <div className="mb-8">
-            <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center mb-3">
-              <RoleIcon className="h-5 w-5 text-white" />
-            </div>
-            <h2 className="text-white font-bold text-lg">{roleLabel}</h2>
-            <p className="text-white/60 text-xs mt-1">Step {stepIdx + 1} of {STEPS.length}</p>
+    <WizardShell
+      open={true}
+      onClose={onClose}
+      title={roleLabel}
+      icon={RoleIcon}
+      steps={STEPS.map(s => ({ label: s.label, desc: s.desc, icon: s.icon as React.ComponentType<React.SVGProps<SVGSVGElement>> & { displayName?: string } }))}
+      currentStep={stepIdx}
+      onStepClick={idx => setStepIdx(idx)}
+      footer={
+        <>
+          <div>{stepIdx > 0 && <Button variant="outline" icon={ChevronLeft} onClick={goPrev} size="md">Back</Button>}</div>
+          <WizardFooterDots total={STEPS.length} current={stepIdx} />
+          <div>
+            {currentStep !== 'review' ? (
+              <Button variant="primary" iconRight={ChevronRight} onClick={goNext} disabled={!canGoNext()} size="lg">Continue</Button>
+            ) : (
+              <Button variant="primary" icon={UserPlus} loading={submitting} disabled={submitting || emailStatus === 'taken' || !form.full_name.trim() || !form.email.trim()} onClick={handleSubmit} size="lg">
+                Create &amp; Send Credentials
+              </Button>
+            )}
           </div>
-
-          <div className="space-y-1 flex-1">
-            {STEPS.map((step, idx) => {
-              const isDone = idx < stepIdx;
-              const isCurrent = idx === stepIdx;
-              const StepIcon = step.icon;
-              return (
-                <button
-                  key={step.key}
-                  type="button"
-                  onClick={() => { if (idx < stepIdx) setStepIdx(idx); }}
-                  className={`w-full flex items-center gap-3 px-3 py-3.5 rounded-xl transition-all text-left ${
-                    isCurrent ? 'bg-white/20 text-white shadow-lg shadow-black/10' : isDone ? 'text-white/70 hover:bg-white/10 cursor-pointer' : 'text-white/40 cursor-default'
-                  }`}
-                >
-                  <div className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 ${
-                    isDone ? 'bg-white/30 text-white' : isCurrent ? 'bg-white text-primary' : 'bg-white/15 text-white/50'
-                  }`}>
-                    {isDone ? <Check className="h-4 w-4" /> : <StepIcon className="h-4 w-4" />}
-                  </div>
-                  <div>
-                    <span className="text-sm font-medium block">{step.label}</span>
-                    <span className="text-[10px] opacity-70">{step.desc}</span>
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-
-          <button onClick={onClose} className="mt-4 text-white/60 hover:text-white text-xs flex items-center gap-2 transition">
-            <X className="h-3.5 w-3.5" /> Cancel &amp; Close
-          </button>
-        </div>
-
-        {/* ── Right content area — one step at a time ── */}
-        <div className="flex-1 flex flex-col overflow-hidden">
-          <div className="px-10 pt-8 pb-6 flex-1 overflow-y-auto">
-            {currentStep === 'basic' && renderBasicStep()}
-            {currentStep === 'teaching' && renderTeachingStep()}
-            {currentStep === 'academic' && renderAcademicStep()}
-            {currentStep === 'guardian' && renderGuardianStep()}
-            {currentStep === 'notes' && renderNotesStep()}
-            {currentStep === 'review' && renderReviewStep()}
-          </div>
-
-          {/* ── Footer navigation (matches batch wizard) ── */}
-          <div className="px-10 py-5 border-t bg-gray-50/80 flex items-center justify-between">
-            <div>
-              {stepIdx > 0 && (
-                <Button variant="ghost" icon={ChevronLeft} onClick={goPrev} size="md">Back</Button>
-              )}
-            </div>
-            <div className="flex items-center gap-3">
-              {currentStep !== 'review' ? (
-                <Button variant="primary" iconRight={ChevronRight} onClick={goNext} disabled={!canGoNext()} size="lg">
-                  Continue
-                </Button>
-              ) : (
-                <Button
-                  variant="primary"
-                  icon={UserPlus}
-                  loading={submitting}
-                  disabled={submitting || emailStatus === 'taken' || !form.full_name.trim() || !form.email.trim()}
-                  onClick={handleSubmit}
-                  size="lg"
-                >
-                  Create &amp; Send Credentials
-                </Button>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+        </>
+      }
+    >
+      {/* ── Step content ── */}
+      {currentStep === 'basic' && renderBasicStep()}
+      {currentStep === 'teaching' && renderTeachingStep()}
+      {currentStep === 'academic' && renderAcademicStep()}
+      {currentStep === 'guardian' && renderGuardianStep()}
+      {currentStep === 'notes' && renderNotesStep()}
+      {currentStep === 'review' && renderReviewStep()}
+    </WizardShell>
   );
 }

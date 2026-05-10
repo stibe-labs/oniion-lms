@@ -3,6 +3,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { Button, FormField, FormGrid, Input, Select, Alert } from '@/components/dashboard/shared';
 import { UserPlus, ChevronRight, ChevronLeft, CheckCircle2, Loader2, IndianRupee, X } from 'lucide-react';
+import { WizardShell, WizardFooterDots } from '@/components/dashboard/WizardShell';
 import { FeeBreakdownCard } from '@/components/dashboard/FeeBreakdownCard';
 import { computeFeeBreakdown, fmtPaise } from '@/lib/fee-display';
 import {
@@ -565,55 +566,40 @@ export default function ManualEnrollModal({ open, onClose, onSuccess }: ManualEn
 
   if (!open) return null;
 
+  const wizardStepDefs = STEP_LABELS.map(l => ({ label: l }));
+
   return (
-    <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4" onClick={handleClose}>
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-5xl max-h-[92vh] flex overflow-hidden" onClick={e => e.stopPropagation()}>
-
-        {/* Left sidebar */}
-        <div className="w-60 bg-linear-to-b from-primary via-primary/90 to-secondary p-6 flex flex-col shrink-0">
-          <div className="mb-8">
-            <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center mb-3">
-              <UserPlus className="h-5 w-5 text-white" />
+    <WizardShell
+      open={open}
+      onClose={handleClose}
+      title="Enroll Student"
+      icon={UserPlus}
+      steps={wizardStepDefs}
+      currentStep={success ? STEP_LABELS.length - 1 : step}
+      footer={
+        !success ? (
+          <>
+            <div>{step > 0 && <Button variant="outline" icon={ChevronLeft} onClick={prevStep} disabled={loading}>Back</Button>}</div>
+            <WizardFooterDots total={STEP_LABELS.length} current={step} />
+            <div>
+              {step < LAST_STEP ? (
+                <Button iconRight={ChevronRight} onClick={nextStep}>Continue</Button>
+              ) : (
+                <Button onClick={handleSubmit} disabled={loading} icon={loading ? Loader2 : UserPlus}>
+                  {loading ? 'Enrolling…' : 'Enroll Student'}
+                </Button>
+              )}
             </div>
-            <h2 className="text-white font-bold text-lg">Enroll Student</h2>
-            {!success && <p className="text-white/60 text-xs mt-1">Step {step + 1} of {STEP_LABELS.length}</p>}
+          </>
+        ) : (
+          <div className="flex gap-3 w-full">
+            <Button variant="outline" className="flex-1" onClick={() => reset()}>Enroll Another</Button>
+            <Button className="flex-1" onClick={handleClose}>Done</Button>
           </div>
-          {!success ? (
-            <div className="space-y-1 flex-1">
-              {STEP_LABELS.map((label, idx) => {
-                const isDone = idx < step;
-                const isCurrent = idx === step;
-                return (
-                  <div key={label}
-                    className={`flex items-center gap-3 px-3 py-3 rounded-xl transition-all ${
-                      isCurrent ? 'bg-white/20 text-white shadow-lg shadow-black/10' : isDone ? 'text-white/70' : 'text-white/40'
-                    }`}
-                  >
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold shrink-0 ${
-                      isDone ? 'bg-white/30 text-white' : isCurrent ? 'bg-white text-primary' : 'bg-white/15 text-white/50'
-                    }`}>
-                      {isDone ? '✓' : idx + 1}
-                    </div>
-                    <span className="text-sm font-medium">{label}</span>
-                  </div>
-                );
-              })}
-            </div>
-          ) : (
-            <div className="flex-1 flex items-center justify-center">
-              <div className="w-14 h-14 rounded-full bg-white/20 flex items-center justify-center">
-                <CheckCircle2 className="w-8 h-8 text-white" />
-              </div>
-            </div>
-          )}
-          <button onClick={handleClose} className="mt-4 text-white/60 hover:text-white text-xs flex items-center gap-2 transition">
-            <X className="h-3.5 w-3.5" /> Cancel &amp; Close
-          </button>
-        </div>
-
-        {/* Right content */}
-        <div className="flex-1 flex flex-col overflow-hidden">
-          <div className="px-10 pt-8 pb-6 flex-1 overflow-y-auto">
+        )
+      }
+    >
+      <div className="pb-2">
 
         {success ? (
           <div className="text-center py-6 space-y-4">
@@ -661,10 +647,6 @@ export default function ManualEnrollModal({ open, onClose, onSuccess }: ManualEn
               <span className="font-semibold">{success.sessions_credited} free session credits</span> allocated — student can join {success.sessions_credited} classes.
             </div>
           )}
-          <div className="flex gap-3 pt-2">
-            <Button variant="outline" className="flex-1" onClick={() => reset()}>Enroll Another</Button>
-            <Button className="flex-1" onClick={handleClose}>Done</Button>
-          </div>
         </div>
       ) : (
         <div className="space-y-5">
@@ -1301,29 +1283,7 @@ export default function ManualEnrollModal({ open, onClose, onSuccess }: ManualEn
 
         </div>
       )}
-
-          </div>
-          {/* Footer navigation */}
-          {!success && (
-            <div className="px-10 py-5 border-t bg-gray-50/80 flex items-center justify-between">
-              <div>
-                {step > 0 && (
-                  <Button variant="outline" icon={ChevronLeft} onClick={prevStep} disabled={loading}>Back</Button>
-                )}
-              </div>
-              <div>
-                {step < LAST_STEP ? (
-                  <Button iconRight={ChevronRight} onClick={nextStep}>Continue</Button>
-                ) : (
-                  <Button onClick={handleSubmit} disabled={loading} icon={loading ? Loader2 : UserPlus}>
-                    {loading ? 'Enrolling…' : 'Enroll Student'}
-                  </Button>
-                )}
-              </div>
-            </div>
-          )}
-        </div>
       </div>
-    </div>
+    </WizardShell>
   );
 }

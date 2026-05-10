@@ -16,6 +16,7 @@ import {
   Eye, X, Check, FileText, Star, Globe,
   CreditCard, ShieldCheck, CircleDollarSign, UserCheck,
 } from 'lucide-react';
+import { WizardShell, WizardFooterDots } from '@/components/dashboard/WizardShell';
 import {
   istToRegionTime, groupStudentsByTimezone,
   REGION_FLAGS, REGION_TZ_LABELS,
@@ -977,85 +978,32 @@ export default function AutoScheduleModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4" onClick={closeWizard}>
-      <div
-        className="bg-white rounded-2xl shadow-2xl w-full max-w-5xl max-h-[92vh] flex overflow-hidden"
-        onClick={e => e.stopPropagation()}
-      >
-        {/* ── Left sidebar — step indicator ── */}
-        <div className="w-60 bg-linear-to-b from-primary via-primary/90 to-secondary p-6 flex flex-col shrink-0">
-          <div className="mb-8">
-            <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center mb-3">
-              <CalendarDays className="h-5 w-5 text-white" />
+    <WizardShell
+      open={true}
+      onClose={closeWizard}
+      title="Auto-Schedule"
+      icon={CalendarDays}
+      steps={WIZARD_STEPS.map(s => ({ label: s.label }))}
+      currentStep={stepIdx}
+      footer={
+        wizardStep !== 'done' ? (
+          <>
+            <div>{stepIdx > 0 && <Button variant="outline" icon={ChevronLeft} onClick={goPrev} size="md">Back</Button>}</div>
+            <WizardFooterDots total={WIZARD_STEPS.length} current={stepIdx} />
+            <div className="flex items-center gap-3">
+              {wizardStep === 'calendar' && <Button variant="primary" iconRight={ChevronRight} onClick={goNext} disabled={!canGoNext()} size="lg">Continue</Button>}
+              {wizardStep === 'configure' && <Button variant="primary" iconRight={Eye} onClick={fetchPreview} disabled={previewLoading} size="lg">{previewLoading ? 'Loading Preview…' : 'Preview Sessions'}</Button>}
+              {wizardStep === 'preview' && <Button variant="primary" icon={Sparkles} onClick={createSessions} disabled={creating} size="lg">{creating ? 'Creating…' : `Create ${preview?.total_sessions || ''} Sessions`}</Button>}
             </div>
-            <h2 className="text-white font-bold text-lg">Auto-Schedule</h2>
-            <p className="text-white/60 text-xs mt-1">Step {stepIdx + 1} of {WIZARD_STEPS.length}</p>
-          </div>
-          <div className="space-y-1 flex-1">
-            {WIZARD_STEPS.map((step, idx) => {
-              const isDone = idx < stepIdx;
-              const isCurrent = idx === stepIdx;
-              return (
-                <div
-                  key={step.key}
-                  className={`flex items-center gap-3 px-3 py-3 rounded-xl transition-all ${
-                    isCurrent ? 'bg-white/20 text-white shadow-lg shadow-black/10' : isDone ? 'text-white/70' : 'text-white/40'
-                  }`}
-                >
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold shrink-0 ${
-                    isDone ? 'bg-white/30 text-white' : isCurrent ? 'bg-white text-primary' : 'bg-white/15 text-white/50'
-                  }`}>
-                    {isDone ? <Check className="h-4 w-4" /> : idx + 1}
-                  </div>
-                  <span className="text-sm font-medium">{step.label}</span>
-                </div>
-              );
-            })}
-          </div>
-          <button onClick={closeWizard} className="mt-4 text-white/60 hover:text-white text-xs flex items-center gap-2 transition">
-            <X className="h-3.5 w-3.5" /> Cancel & Close
-          </button>
-        </div>
-
-        {/* ── Right content area ── */}
-        <div className="flex-1 flex flex-col overflow-hidden">
-          <div className="px-10 pt-8 pb-6 flex-1 overflow-y-auto">
-            {wizardStep === 'calendar' && renderCalendarStep()}
-            {wizardStep === 'configure' && renderConfigureStep()}
-            {wizardStep === 'preview' && renderPreviewStep()}
-            {wizardStep === 'done' && renderDoneStep()}
-          </div>
-
-          {/* ── Footer navigation ── */}
-          {wizardStep !== 'done' && (
-            <div className="px-10 py-5 border-t bg-gray-50/80 flex items-center justify-between">
-              <div>
-                {stepIdx > 0 && (
-                  <Button variant="ghost" icon={ChevronLeft} onClick={goPrev} size="md">Back</Button>
-                )}
-              </div>
-              <div className="flex items-center gap-3">
-                {wizardStep === 'calendar' && (
-                  <Button variant="primary" iconRight={ChevronRight} onClick={goNext} disabled={!canGoNext()} size="lg">
-                    Continue
-                  </Button>
-                )}
-                {wizardStep === 'configure' && (
-                  <Button variant="primary" iconRight={Eye} onClick={fetchPreview} disabled={previewLoading} size="lg">
-                    {previewLoading ? 'Loading Preview…' : 'Preview Sessions'}
-                  </Button>
-                )}
-                {wizardStep === 'preview' && (
-                  <Button variant="primary" icon={Sparkles} onClick={createSessions} disabled={creating} size="lg">
-                    {creating ? 'Creating…' : `Create ${preview?.total_sessions || ''} Sessions`}
-                  </Button>
-                )}
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
+          </>
+        ) : <div />
+      }
+    >
+      {wizardStep === 'calendar' && renderCalendarStep()}
+      {wizardStep === 'configure' && renderConfigureStep()}
+      {wizardStep === 'preview' && renderPreviewStep()}
+      {wizardStep === 'done' && renderDoneStep()}
+    </WizardShell>
   );
 }
 

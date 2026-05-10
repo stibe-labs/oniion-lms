@@ -29,6 +29,7 @@ import {
 } from 'lucide-react';
 import ImageCropModal from '@/components/dashboard/ImageCropModal';
 import { CreateBatchWizard } from '@/components/dashboard/CreateBatchWizard';
+import { WizardShell, WizardFooterDots } from '@/components/dashboard/WizardShell';
 import { usePlatformName } from '@/components/providers/PlatformProvider';
 import {
   GRADES, BOARDS, STUDENT_REGIONS,
@@ -2033,51 +2034,29 @@ function EditTeacherModal({ user, onClose, onSaved }: { user: UserRow; onClose: 
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4" onClick={onClose}>
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-5xl max-h-[92vh] flex overflow-hidden" onClick={e => e.stopPropagation()}>
-
-        {/* Sidebar */}
-        <div className="w-60 bg-linear-to-b from-primary via-primary/90 to-secondary p-6 flex flex-col shrink-0">
-          <div className="mb-8">
-            <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center mb-3">
-              <GraduationCap className="h-5 w-5 text-white" />
-            </div>
-            <h2 className="text-white font-bold text-lg">Edit Teacher</h2>
-            <p className="text-white/60 text-xs mt-1">Step {stepIdx + 1} of {STEPS.length}</p>
+    <WizardShell
+      open={true}
+      onClose={onClose}
+      title="Edit Teacher"
+      icon={GraduationCap}
+      steps={STEPS.map(s => ({ label: s.label, desc: s.desc, icon: s.icon }))}
+      currentStep={stepIdx}
+      onStepClick={idx => setStepIdx(idx)}
+      footer={
+        <>
+          <div>{stepIdx > 0 && <Button variant="outline" icon={ChevronLeft} onClick={() => setStepIdx(s => s - 1)}>Back</Button>}</div>
+          <WizardFooterDots total={STEPS.length} current={stepIdx} />
+          <div>
+            {stepIdx < STEPS.length - 1
+              ? <Button variant="primary" iconRight={ChevronRight} onClick={() => setStepIdx(s => s + 1)} size="lg">Continue</Button>
+              : <Button variant="primary" icon={Save} onClick={handleSave} loading={saving} size="lg">Save Changes</Button>
+            }
           </div>
-          <div className="space-y-1 flex-1">
-            {STEPS.map((step, idx) => {
-              const isDone = idx < stepIdx;
-              const isCurrent = idx === stepIdx;
-              const StepIcon = step.icon;
-              return (
-                <button key={step.key} type="button"
-                  onClick={() => { if (idx < stepIdx) setStepIdx(idx); }}
-                  className={`w-full flex items-center gap-3 px-3 py-3.5 rounded-xl transition-all text-left ${
-                    isCurrent ? 'bg-white/20 text-white shadow-lg shadow-black/10' : isDone ? 'text-white/70 hover:bg-white/10 cursor-pointer' : 'text-white/40 cursor-default'
-                  }`}>
-                  <div className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 ${
-                    isDone ? 'bg-white/30 text-white' : isCurrent ? 'bg-white text-primary' : 'bg-white/15 text-white/50'
-                  }`}>
-                    {isDone ? <CheckCircle className="h-4 w-4" /> : <StepIcon className="h-4 w-4" />}
-                  </div>
-                  <div>
-                    <span className="text-sm font-medium block">{step.label}</span>
-                    <span className="text-[10px] opacity-70">{step.desc}</span>
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-          <button onClick={onClose} className="mt-4 text-white/60 hover:text-white text-xs flex items-center gap-2 transition">
-            Cancel &amp; Close
-          </button>
-        </div>
-
-        {/* Content */}
-        <div className="flex-1 flex flex-col overflow-hidden">
-          <div className="px-10 pt-8 pb-6 flex-1 overflow-y-auto space-y-6">
-            {error && <Alert variant="error" message={error} onDismiss={() => setError('')} />}
+        </>
+      }
+    >
+      <div className="space-y-6">
+        {error && <Alert variant="error" message={error} onDismiss={() => setError('')} />}
 
             {currentStep === 'basic' && (
               <>
@@ -2228,26 +2207,8 @@ function EditTeacherModal({ user, onClose, onSaved }: { user: UserRow; onClose: 
                 </FormField>
               </>
             )}
-          </div>
-
-          {/* Footer nav */}
-          <div className="px-10 py-5 border-t bg-gray-50/80 flex items-center justify-between">
-            <div>
-              {stepIdx > 0 && (
-                <Button variant="ghost" icon={ChevronLeft} onClick={() => setStepIdx(s => s - 1)}>Back</Button>
-              )}
-            </div>
-            <div className="flex items-center gap-3">
-              {stepIdx < STEPS.length - 1 ? (
-                <Button variant="primary" iconRight={ChevronRight} onClick={() => setStepIdx(s => s + 1)} size="lg">Continue</Button>
-              ) : (
-                <Button variant="primary" icon={Save} onClick={handleSave} loading={saving} size="lg">Save Changes</Button>
-              )}
-            </div>
-          </div>
-        </div>
       </div>
-    </div>
+    </WizardShell>
   );
 }
 
@@ -2368,51 +2329,29 @@ function EditStudentModal({ user, onClose, onSaved }: { user: UserRow; onClose: 
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4" onClick={onClose}>
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-5xl max-h-[92vh] flex overflow-hidden" onClick={e => e.stopPropagation()}>
-
-        {/* Sidebar */}
-        <div className="w-60 bg-linear-to-b from-primary via-primary/90 to-secondary p-6 flex flex-col shrink-0">
-          <div className="mb-8">
-            <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center mb-3">
-              <GraduationCap className="h-5 w-5 text-white" />
-            </div>
-            <h2 className="text-white font-bold text-lg">Edit Student</h2>
-            <p className="text-white/60 text-xs mt-1">Step {stepIdx + 1} of {STEPS.length}</p>
+    <WizardShell
+      open={true}
+      onClose={onClose}
+      title="Edit Student"
+      icon={GraduationCap}
+      steps={STEPS.map(s => ({ label: s.label, desc: s.desc, icon: s.icon }))}
+      currentStep={stepIdx}
+      onStepClick={idx => setStepIdx(idx)}
+      footer={
+        <>
+          <div>{stepIdx > 0 && <Button variant="outline" icon={ChevronLeft} onClick={() => setStepIdx(s => s - 1)}>Back</Button>}</div>
+          <WizardFooterDots total={STEPS.length} current={stepIdx} />
+          <div>
+            {stepIdx < STEPS.length - 1
+              ? <Button variant="primary" iconRight={ChevronRight} onClick={() => setStepIdx(s => s + 1)} size="lg">Continue</Button>
+              : <Button variant="primary" icon={Save} onClick={handleSave} loading={saving} size="lg">Save Changes</Button>
+            }
           </div>
-          <div className="space-y-1 flex-1">
-            {STEPS.map((step, idx) => {
-              const isDone = idx < stepIdx;
-              const isCurrent = idx === stepIdx;
-              const StepIcon = step.icon;
-              return (
-                <button key={step.key} type="button"
-                  onClick={() => { if (idx < stepIdx) setStepIdx(idx); }}
-                  className={`w-full flex items-center gap-3 px-3 py-3.5 rounded-xl transition-all text-left ${
-                    isCurrent ? 'bg-white/20 text-white shadow-lg shadow-black/10' : isDone ? 'text-white/70 hover:bg-white/10 cursor-pointer' : 'text-white/40 cursor-default'
-                  }`}>
-                  <div className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 ${
-                    isDone ? 'bg-white/30 text-white' : isCurrent ? 'bg-white text-primary' : 'bg-white/15 text-white/50'
-                  }`}>
-                    {isDone ? <CheckCircle className="h-4 w-4" /> : <StepIcon className="h-4 w-4" />}
-                  </div>
-                  <div>
-                    <span className="text-sm font-medium block">{step.label}</span>
-                    <span className="text-[10px] opacity-70">{step.desc}</span>
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-          <button onClick={onClose} className="mt-4 text-white/60 hover:text-white text-xs flex items-center gap-2 transition">
-            Cancel &amp; Close
-          </button>
-        </div>
-
-        {/* Content */}
-        <div className="flex-1 flex flex-col overflow-hidden">
-          <div className="px-10 pt-8 pb-6 flex-1 overflow-y-auto space-y-6">
-            {error && <Alert variant="error" message={error} onDismiss={() => setError('')} />}
+        </>
+      }
+    >
+      <div className="space-y-6">
+        {error && <Alert variant="error" message={error} onDismiss={() => setError('')} />}
 
             {currentStep === 'basic' && (
               <>
@@ -2539,26 +2478,8 @@ function EditStudentModal({ user, onClose, onSaved }: { user: UserRow; onClose: 
                 </FormField>
               </>
             )}
-          </div>
-
-          {/* Footer nav */}
-          <div className="px-10 py-5 border-t bg-gray-50/80 flex items-center justify-between">
-            <div>
-              {stepIdx > 0 && (
-                <Button variant="ghost" icon={ChevronLeft} onClick={() => setStepIdx(s => s - 1)}>Back</Button>
-              )}
-            </div>
-            <div className="flex items-center gap-3">
-              {stepIdx < STEPS.length - 1 ? (
-                <Button variant="primary" iconRight={ChevronRight} onClick={() => setStepIdx(s => s + 1)} size="lg">Continue</Button>
-              ) : (
-                <Button variant="primary" icon={Save} onClick={handleSave} loading={saving} size="lg">Save Changes</Button>
-              )}
-            </div>
-          </div>
-        </div>
       </div>
-    </div>
+    </WizardShell>
   );
 }
 
