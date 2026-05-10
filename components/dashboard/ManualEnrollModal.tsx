@@ -576,7 +576,7 @@ export default function ManualEnrollModal({ open, onClose, onSuccess }: ManualEn
               <UserPlus className="h-5 w-5 text-white" />
             </div>
             <h2 className="text-white font-bold text-lg">Enroll Student</h2>
-            {!success && <p className="text-primary/60 text-xs mt-1">Step {step + 1} of {STEP_LABELS.length}</p>}
+            {!success && <p className="text-white/60 text-xs mt-1">Step {step + 1} of {STEP_LABELS.length}</p>}
           </div>
           {!success ? (
             <div className="space-y-1 flex-1">
@@ -586,11 +586,11 @@ export default function ManualEnrollModal({ open, onClose, onSuccess }: ManualEn
                 return (
                   <div key={label}
                     className={`flex items-center gap-3 px-3 py-3 rounded-xl transition-all ${
-                      isCurrent ? 'bg-white/20 text-white shadow-lg shadow-black/10' : isDone ? 'text-primary/60' : 'text-primary/50'
+                      isCurrent ? 'bg-white/20 text-white shadow-lg shadow-black/10' : isDone ? 'text-white/70' : 'text-white/40'
                     }`}
                   >
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold shrink-0 ${
-                      isDone ? 'bg-primary text-emerald-900' : isCurrent ? 'bg-white text-primary' : 'bg-primary/30 text-primary/80/70'
+                      isDone ? 'bg-white/30 text-white' : isCurrent ? 'bg-white text-primary' : 'bg-white/15 text-white/50'
                     }`}>
                       {isDone ? '✓' : idx + 1}
                     </div>
@@ -606,7 +606,7 @@ export default function ManualEnrollModal({ open, onClose, onSuccess }: ManualEn
               </div>
             </div>
           )}
-          <button onClick={handleClose} className="mt-4 text-primary/60 hover:text-white text-xs flex items-center gap-2 transition">
+          <button onClick={handleClose} className="mt-4 text-white/60 hover:text-white text-xs flex items-center gap-2 transition">
             <X className="h-3.5 w-3.5" /> Cancel &amp; Close
           </button>
         </div>
