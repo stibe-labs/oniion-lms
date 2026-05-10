@@ -113,13 +113,16 @@ export async function POST(
     } catch { /* fallback to defaults */ }
 
     // Optional time gate: teachers can go live early only when explicitly allowed.
-    // Admin roles can still trigger go-live regardless of scheduled time.
+    // A 30-minute prep window is always permitted regardless of the setting.
+    // Admin roles can still trigger go-live at any time.
     const isDemoRoom = actualRoomId.startsWith('demo_');
     const schedMs = room.scheduled_start ? new Date(String(room.scheduled_start)).getTime() : NaN;
-    const beforeSchedule = !isNaN(schedMs) && Date.now() < schedMs;
-    if (!isAdmin && !isDemoRoom && beforeSchedule && !allowGoLiveBeforeSchedule) {
+    const PREP_WINDOW_MS = 30 * 60 * 1000; // 30 min early always allowed
+    const beforePrepWindow = !isNaN(schedMs) && Date.now() < schedMs - PREP_WINDOW_MS;
+    if (!isAdmin && !isDemoRoom && beforePrepWindow && !allowGoLiveBeforeSchedule) {
+      const minsUntilPrep = Math.ceil((schedMs - PREP_WINDOW_MS - Date.now()) / 60000);
       return NextResponse.json<ApiResponse>(
-        { success: false, error: 'Go Live is allowed only at scheduled time. Contact Academic Operator to allow early start.' },
+        { success: false, error: `Go Live opens 30 minutes before the scheduled time (${minsUntilPrep} min to go). Contact Academic Operator to allow earlier start.` },
         { status: 403 }
       );
     }
