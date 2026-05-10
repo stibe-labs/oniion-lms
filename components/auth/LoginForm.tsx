@@ -238,8 +238,18 @@ export default function LoginForm() {
       {forgotStep === 'login' && (
         <>
           <div className="mb-8">
-            <h1 className="text-2xl font-bold tracking-tight text-gray-900 mb-1.5">Welcome back</h1>
-            <p className="text-gray-500 text-[15px]">Sign in to continue to your dashboard</p>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 7, marginBottom: 12 }}>
+              <span style={{ display: 'inline-block', width: 6, height: 6, borderRadius: '50%', background: accentColor, boxShadow: `0 0 0 3px ${accentColor}28` }} />
+              <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: 2, textTransform: 'uppercase' as const, color: `${accentColor}99` }}>
+                Secure Sign In
+              </span>
+            </div>
+            <h1 style={{ fontSize: 27, fontWeight: 800, letterSpacing: -0.4, color: '#0f172a', margin: '0 0 8px', lineHeight: 1.2 }}>
+              Welcome back
+            </h1>
+            <p style={{ color: '#94a3b8', fontSize: 14, margin: 0, lineHeight: 1.6 }}>
+              Sign in to continue your learning journey
+            </p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -462,14 +472,18 @@ export default function LoginForm() {
       {/* ══ FORGOT: SUCCESS ════════════════════════════════════════════════════ */}
       {forgotStep === 'forgot-done' && (
         <div className="text-center py-6">
-          <div
-            className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6"
-            style={{ background: `${accentColor}18` }}
-          >
+          <div style={{
+            width: 68, height: 68, borderRadius: 22,
+            background: `${accentColor}14`,
+            boxShadow: `0 0 0 8px ${accentColor}0a, 0 0 0 16px ${accentColor}05`,
+            display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px',
+          }}>
             <ShieldCheck className="size-8" style={{ color: accentColor }} />
           </div>
-          <h1 className="text-2xl font-bold tracking-tight text-gray-900 mb-2">Password updated</h1>
-          <p className="text-gray-500 text-[14px] mb-8 leading-relaxed">
+          <h1 style={{ fontSize: 24, fontWeight: 800, letterSpacing: -0.3, color: '#0f172a', margin: '0 0 10px' }}>
+            Password updated
+          </h1>
+          <p className="text-gray-400 text-[14px] mb-8 leading-relaxed">
             Your password has been reset. You can now sign in with your new password.
           </p>
           <button
@@ -489,8 +503,8 @@ export default function LoginForm() {
       )}
 
       {/* Footer */}
-      <p className="mt-8 text-center text-xs text-gray-400">
-        {platformName} · Empowering education
+      <p style={{ marginTop: 28, textAlign: 'center', fontSize: 11, color: '#cbd5e1', letterSpacing: 0.3 }}>
+        {platformName} &middot; Empowering education
       </p>
     </div>
   );
