@@ -380,7 +380,7 @@ export default function SuperadminClient({ user: _user }: Props) {
 
   // ── Render ────────────────────────────────────────────────
   return (
-    <div className="max-w-3xl">
+    <div className={section === 'integrations' ? 'max-w-2xl' : 'max-w-3xl'}>
 
       {/* ── Section header ── */}
       <div className="mb-7">
@@ -529,18 +529,7 @@ export default function SuperadminClient({ user: _user }: Props) {
 
       {/* ── Integrations ── */}
       {section === 'integrations' && (
-        <div className="space-y-4">
-          <div className="mb-2">
-            <p className="text-xs text-gray-400">
-              Values saved here override environment variables at runtime — no server restart required.
-              <span className="ml-1.5 inline-flex items-center text-[10px] font-semibold px-1.5 py-0.5 rounded bg-primary/10 text-primary border border-primary/20">DB</span>
-              {' '}= from database,{' '}
-              <span className="inline-flex items-center text-[10px] font-semibold px-1.5 py-0.5 rounded bg-gray-100 text-gray-500 border border-gray-200">ENV</span>
-              {' '}= from environment.
-            </p>
-          </div>
-          <IntegrationsSection />
-        </div>
+        <IntegrationsSection />
       )}
 
     </div>
