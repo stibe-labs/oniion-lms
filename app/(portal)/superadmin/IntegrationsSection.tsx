@@ -419,30 +419,15 @@ export default function IntegrationsSection() {
   }
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-start justify-between">
-        <div>
-          <h2 className="text-base font-semibold">Integrations</h2>
-          <p className="text-sm text-muted-foreground mt-0.5">
-            Configure external services. Values saved here override environment variables.
-            <span className="ml-1.5 inline-flex items-center gap-1 text-[10px] font-semibold px-1.5 py-0.5 rounded bg-primary/10 text-primary border border-primary/20">DB</span>
-            {' = from database, '}
-            <span className="inline-flex items-center gap-1 text-[10px] font-semibold px-1.5 py-0.5 rounded bg-muted text-muted-foreground border border-border">ENV</span>
-            {' = from environment.'}
-          </p>
-        </div>
-      </div>
-
-      <div className="space-y-3">
-        {SERVICES.map(svc => (
-          <ServiceCard
-            key={svc.id}
-            service={svc}
-            sourceMap={sourceMap}
-            onSaved={fetchConfig}
-          />
-        ))}
-      </div>
+    <div className="space-y-3">
+      {SERVICES.map(svc => (
+        <ServiceCard
+          key={svc.id}
+          service={svc}
+          sourceMap={sourceMap}
+          onSaved={fetchConfig}
+        />
+      ))}
     </div>
   );
 }
