@@ -12,13 +12,13 @@ export default function LoginForm() {
   const searchParams = useSearchParams();
   const redirectTo   = searchParams.get('redirect');
   const platformName = usePlatformName();
-  const { accentColor, template } = useAuthConfig();
+  const { accentColor, template, textColor } = useAuthConfig();
 
   const isDark = template === 'dark';
 
   // ── Theme tokens ───────────────────────────────────────────────────────────
   const T = {
-    heading:     isDark ? '#ffffff'                   : '#0f172a',
+    heading:     isDark ? '#ffffff'                   : (textColor || '#0f172a'),
     subtitle:    isDark ? 'rgba(255,255,255,0.38)'    : '#94a3b8',
     badgeDot:    isDark ? 'rgba(255,255,255,0.55)'    : accentColor,
     badgeText:   isDark ? 'rgba(255,255,255,0.4)'     : `${accentColor}99`,
@@ -38,7 +38,7 @@ export default function LoginForm() {
     resend:      isDark ? 'rgba(255,255,255,0.35)'    : '#9ca3af',
     footer:      isDark ? 'rgba(255,255,255,0.16)'    : '#cbd5e1',
     successBg:   isDark ? `${accentColor}18`          : `${accentColor}14`,
-    successHead: isDark ? '#ffffff'                   : '#0f172a',
+    successHead: isDark ? '#ffffff'                   : (textColor || '#0f172a'),
     successSub:  isDark ? 'rgba(255,255,255,0.42)'    : '#94a3b8',
   };
 

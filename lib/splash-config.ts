@@ -15,6 +15,7 @@ export interface SplashConfig {
   taglineLetterSpacing: number;         // px: 0–12
   accentColor:         string;
   bgColor:             string;
+  textColor:           string;          // hex — tagline/text ('' = auto)
   showQuotes:          boolean;
   quotes:              string[];
 }
@@ -27,8 +28,9 @@ export const SPLASH_CONFIG_DEFAULTS: SplashConfig = {
   taglineSize:          13,
   taglineWeight:        'semibold',
   taglineLetterSpacing: 4,
-  accentColor:          '#10b981',
+  accentColor:          '#22c55e',
   bgColor:              '#fafbfc',
+  textColor:            '',
   showQuotes:           false,
   quotes:               [],
 };

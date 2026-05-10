@@ -192,6 +192,7 @@ export default function AuthConfigSection({ initial, logoFullUrl, logoAuthHeight
           auth_template:     cfg.template,
           auth_accent_color: cfg.accentColor,
           auth_bg_color:     cfg.bgColor,
+          auth_text_color:   cfg.textColor,
           auth_headline:     cfg.headline,
           auth_subheadline:  cfg.subheadline,
           auth_show_tagline: cfg.showTagline,
@@ -220,7 +221,7 @@ export default function AuthConfigSection({ initial, logoFullUrl, logoAuthHeight
         <div className="flex items-start justify-between">
           <div>
             <h2 className="text-sm font-semibold text-gray-700 mb-0.5 flex items-center gap-2">
-              <Layout className="h-4 w-4 text-emerald-500" />
+              <Layout className="h-4 w-4 text-primary" />
               Auth Screen Design
             </h2>
             <p className="text-xs text-gray-500">Customize the login, forgot-password, and reset-password screens.</p>
@@ -244,10 +245,10 @@ export default function AuthConfigSection({ initial, logoFullUrl, logoAuthHeight
                 key={t.id}
                 type="button"
                 onClick={() => set('template', t.id)}
-                className={`rounded-lg border-2 p-2 text-left transition-all ${cfg.template === t.id ? 'border-emerald-500 shadow-sm shadow-emerald-100' : 'border-gray-200 hover:border-gray-300'}`}
+                className={`rounded-lg border-2 p-2 text-left transition-all ${cfg.template === t.id ? 'border-primary shadow-sm shadow-primary/10' : 'border-gray-200 hover:border-gray-300'}`}
               >
                 <TemplateThumbnail id={t.id} accent={accent} bg={cfg.bgColor} />
-                <p className={`mt-2 text-[11px] font-semibold ${cfg.template === t.id ? 'text-emerald-600' : 'text-gray-600'}`}>{t.label}</p>
+                <p className={`mt-2 text-[11px] font-semibold ${cfg.template === t.id ? 'text-primary' : 'text-gray-600'}`}>{t.label}</p>
                 <p className="text-[10px] text-gray-400 leading-tight mt-0.5">{t.desc}</p>
               </button>
             ))}
@@ -268,7 +269,7 @@ export default function AuthConfigSection({ initial, logoFullUrl, logoAuthHeight
               <div>
                 <p className="text-xs font-medium text-gray-700">Accent Color</p>
                 <p className="text-[10px] text-gray-400">Buttons, input focus, labels</p>
-                <p className="text-[10px] text-gray-400 font-mono">{cfg.accentColor}</p>
+                <p className="text-[10px] text-primary font-mono">{cfg.accentColor}</p>
               </div>
             </label>
             {(cfg.template === 'classic' || cfg.template === 'minimal' || cfg.template === 'bold') && (
@@ -286,6 +287,21 @@ export default function AuthConfigSection({ initial, logoFullUrl, logoAuthHeight
                 </div>
               </label>
             )}
+            {cfg.template !== 'dark' && (
+              <label className="flex items-center gap-3 cursor-pointer">
+                <input
+                  type="color"
+                  value={cfg.textColor || '#0f172a'}
+                  onChange={e => set('textColor', e.target.value)}
+                  className="h-9 w-14 rounded cursor-pointer border border-gray-200 p-0.5"
+                />
+                <div>
+                  <p className="text-xs font-medium text-gray-700">Heading Text Color</p>
+                  <p className="text-[10px] text-gray-400">Login form heading & success text</p>
+                  <p className="text-[10px] text-gray-400 font-mono">{cfg.textColor || '#0f172a (default)'}</p>
+                </div>
+              </label>
+            )}
           </div>
         </div>
 
@@ -299,7 +315,7 @@ export default function AuthConfigSection({ initial, logoFullUrl, logoAuthHeight
                 key={p.id}
                 type="button"
                 onClick={() => set('bgPattern', p.id)}
-                className={`px-3 py-1.5 rounded-lg border text-xs font-medium transition-all ${cfg.bgPattern === p.id ? 'border-emerald-500 bg-emerald-50 text-emerald-700' : 'border-gray-200 text-gray-500 hover:border-gray-300'}`}
+                className={`px-3 py-1.5 rounded-lg border text-xs font-medium transition-all ${cfg.bgPattern === p.id ? 'border-primary bg-primary/10 text-primary' : 'border-gray-200 text-gray-500 hover:border-gray-300'}`}
               >
                 {p.label}
               </button>
@@ -319,7 +335,7 @@ export default function AuthConfigSection({ initial, logoFullUrl, logoAuthHeight
               role="switch"
               aria-checked={cfg.showTagline}
               onClick={() => set('showTagline', !cfg.showTagline)}
-              className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors focus:outline-none ${cfg.showTagline ? 'bg-emerald-500' : 'bg-gray-300'}`}
+              className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors focus:outline-none ${cfg.showTagline ? 'bg-primary' : 'bg-gray-300'}`}
             >
               <span className={`pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow transition duration-200 ${cfg.showTagline ? 'translate-x-4' : 'translate-x-0'}`} />
             </button>

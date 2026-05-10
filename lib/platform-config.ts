@@ -77,8 +77,9 @@ export async function getSplashConfig(): Promise<SplashConfig> {
       `SELECT key, value FROM school_config WHERE key IN (
         'splash_template', 'splash_progress_style', 'splash_loading_anim',
         'splash_tagline', 'splash_tagline_size', 'splash_tagline_weight', 'splash_tagline_letter_spacing',
-        'splash_accent_color', 'splash_bg_color',
-        'splash_show_quotes', 'splash_quotes'
+        'splash_accent_color', 'splash_bg_color', 'splash_text_color',
+        'splash_show_quotes', 'splash_quotes',
+        'theme_primary'
       )`
     );
     const map = Object.fromEntries(result.rows.map(r => [r.key, r.value]));
@@ -92,8 +93,9 @@ export async function getSplashConfig(): Promise<SplashConfig> {
       taglineSize:          parseInt(map['splash_tagline_size'] ?? '13', 10),
       taglineWeight:        (map['splash_tagline_weight'] ?? 'semibold') as SplashTaglineWeight,
       taglineLetterSpacing: parseInt(map['splash_tagline_letter_spacing'] ?? '4', 10),
-      accentColor:          map['splash_accent_color']  ?? '#10b981',
+      accentColor:          map['splash_accent_color'] || map['theme_primary'] || SPLASH_CONFIG_DEFAULTS.accentColor,
       bgColor:              map['splash_bg_color']      ?? '#fafbfc',
+      textColor:            map['splash_text_color']    ?? '',
       showQuotes:           map['splash_show_quotes'] === 'true',
       quotes,
     };
@@ -105,12 +107,14 @@ export async function getSplashConfig(): Promise<SplashConfig> {
 export async function getThemeConfig(): Promise<ThemeConfig> {
   try {
     const result = await db.query<{ key: string; value: string }>(
-      `SELECT key, value FROM school_config WHERE key IN ('theme_primary', 'theme_secondary')`
+      `SELECT key, value FROM school_config WHERE key IN ('theme_primary', 'theme_secondary', 'theme_text_color', 'theme_muted_color')`
     );
     const map = Object.fromEntries(result.rows.map(r => [r.key, r.value]));
     return {
-      primaryColor:   map['theme_primary']   ?? THEME_DEFAULTS.primaryColor,
-      secondaryColor: map['theme_secondary']  ?? THEME_DEFAULTS.secondaryColor,
+      primaryColor:   map['theme_primary']      ?? THEME_DEFAULTS.primaryColor,
+      secondaryColor: map['theme_secondary']     ?? THEME_DEFAULTS.secondaryColor,
+      textColor:      map['theme_text_color']    ?? '',
+      mutedColor:     map['theme_muted_color']   ?? '',
     };
   } catch {
     return { ...THEME_DEFAULTS };
@@ -121,15 +125,17 @@ export async function getAuthConfig(): Promise<AuthConfig> {
   try {
     const result = await db.query<{ key: string; value: string }>(
       `SELECT key, value FROM school_config WHERE key IN (
-        'auth_template', 'auth_accent_color', 'auth_bg_color',
-        'auth_headline', 'auth_subheadline', 'auth_show_tagline', 'auth_bg_pattern'
+        'auth_template', 'auth_accent_color', 'auth_bg_color', 'auth_text_color',
+        'auth_headline', 'auth_subheadline', 'auth_show_tagline', 'auth_bg_pattern',
+        'theme_primary'
       )`
     );
     const map = Object.fromEntries(result.rows.map(r => [r.key, r.value]));
     return {
       template:    (map['auth_template']    ?? 'classic') as AuthConfig['template'],
-      accentColor:  map['auth_accent_color'] ?? '#10b981',
+      accentColor:  map['auth_accent_color'] || map['theme_primary'] || AUTH_CONFIG_DEFAULTS.accentColor,
       bgColor:      map['auth_bg_color']     ?? '#f0fdf4',
+      textColor:    map['auth_text_color']   ?? '',
       headline:     map['auth_headline']     ?? 'Empowering every learner',
       subheadline:  map['auth_subheadline']  ?? 'Sign in to continue learning',
       showTagline:  map['auth_show_tagline'] !== 'false',

@@ -7,6 +7,7 @@ export interface AuthConfig {
   template:    AuthTemplate;
   accentColor: string;   // hex — buttons, labels, highlights
   bgColor:     string;   // hex — background for classic/minimal
+  textColor:   string;   // hex — heading/body text ('' = auto dark)
   headline:    string;   // brand headline shown in split panel
   subheadline: string;   // brand subheadline
   showTagline: boolean;  // show headline/subheadline in brand panel
@@ -15,8 +16,9 @@ export interface AuthConfig {
 
 export const AUTH_CONFIG_DEFAULTS: AuthConfig = {
   template:    'classic',
-  accentColor: '#10b981',
+  accentColor: '#22c55e',
   bgColor:     '#f0fdf4',
+  textColor:   '',
   headline:    'Empowering every learner',
   subheadline: 'Sign in to continue learning',
   showTagline: true,

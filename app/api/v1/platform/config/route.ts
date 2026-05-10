@@ -1,12 +1,13 @@
 import { NextResponse } from 'next/server';
-import { getPlatformName, getLogoConfig, getSplashConfig, getAuthConfig } from '@/lib/platform-config';
+import { getPlatformName, getLogoConfig, getSplashConfig, getAuthConfig, getThemeConfig } from '@/lib/platform-config';
 
 export async function GET() {
-  const [platformName, logos, splash, auth] = await Promise.all([
+  const [platformName, logos, splash, auth, theme] = await Promise.all([
     getPlatformName(),
     getLogoConfig(),
     getSplashConfig(),
     getAuthConfig(),
+    getThemeConfig(),
   ]);
   return NextResponse.json({
     platform_name:          platformName,
@@ -27,14 +28,17 @@ export async function GET() {
     splash_tagline_letter_spacing: splash.taglineLetterSpacing,
     splash_accent_color:    splash.accentColor,
     splash_bg_color:        splash.bgColor,
+    splash_text_color:      splash.textColor,
     splash_show_quotes:     splash.showQuotes,
     splash_quotes:          splash.quotes,
     auth_template:          auth.template,
     auth_accent_color:      auth.accentColor,
     auth_bg_color:          auth.bgColor,
+    auth_text_color:        auth.textColor,
     auth_headline:          auth.headline,
     auth_subheadline:       auth.subheadline,
     auth_show_tagline:      auth.showTagline,
     auth_bg_pattern:        auth.bgPattern,
+    theme_primary:          theme.primaryColor,
   });
 }

@@ -130,7 +130,7 @@ function ClassicTemplate({ cfg, progress, logoUrl, logoHeight, displayText, char
       )}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={logoUrl} alt="Logo" style={{ height: logoHeight, width: 'auto', objectFit: 'contain', pointerEvents: 'none' }} />
-      <AnimatedTagline text={displayText} color={accent} fontSize={cfg.taglineSize} fontWeight={TAGLINE_WEIGHT_MAP[cfg.taglineWeight]} letterSpacing={cfg.taglineLetterSpacing} />
+      <AnimatedTagline text={displayText} color={cfg.textColor || accent} fontSize={cfg.taglineSize} fontWeight={TAGLINE_WEIGHT_MAP[cfg.taglineWeight]} letterSpacing={cfg.taglineLetterSpacing} />
       <div style={{ marginTop: 2 }}>
         <ProgressIndicator style={cfg.progressStyle} progress={progress} accent={accent} />
       </div>
@@ -146,7 +146,7 @@ function MinimalTemplate({ cfg, progress, logoUrl, logoHeight, displayText }: Te
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 18 }}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={logoUrl} alt="Logo" style={{ height: logoHeight * 1.4, width: 'auto', objectFit: 'contain', animation: 'splashFadeUp 0.6s ease-out forwards' }} />
-        <p style={{ margin: 0, fontSize: cfg.taglineSize, fontWeight: TAGLINE_WEIGHT_MAP[cfg.taglineWeight], color: '#9ca3af', letterSpacing: cfg.taglineLetterSpacing, textTransform: 'uppercase', fontFamily: 'system-ui', animation: 'splashFadeUp 0.6s 0.2s ease-out both' }}>{displayText}</p>
+        <p style={{ margin: 0, fontSize: cfg.taglineSize, fontWeight: TAGLINE_WEIGHT_MAP[cfg.taglineWeight], color: cfg.textColor || '#9ca3af', letterSpacing: cfg.taglineLetterSpacing, textTransform: 'uppercase', fontFamily: 'system-ui', animation: 'splashFadeUp 0.6s 0.2s ease-out both' }}>{displayText}</p>
       </div>
       {/* thin bar pinned to bottom */}
       <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, height: 3, background: '#f3f4f6' }}>
@@ -167,7 +167,7 @@ function BoldTemplate({ cfg, progress, logoUrl, logoHeight, displayText }: Templ
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={logoUrl} alt="Logo" style={{ height: logoHeight * 1.6, width: 'auto', objectFit: 'contain', position: 'relative', filter: 'drop-shadow(0 4px 24px rgba(0,0,0,0.2))', animation: 'splashScale 0.5s cubic-bezier(.22,1,.36,1) forwards' }} />
       </div>
-      <p style={{ margin: 0, fontSize: cfg.taglineSize, fontWeight: TAGLINE_WEIGHT_MAP[cfg.taglineWeight], color: '#fff', letterSpacing: cfg.taglineLetterSpacing, textTransform: 'uppercase', fontFamily: 'system-ui', textShadow: '0 2px 8px rgba(0,0,0,0.2)', animation: 'splashFadeUp 0.5s 0.3s ease-out both' }}>{displayText}</p>
+      <p style={{ margin: 0, fontSize: cfg.taglineSize, fontWeight: TAGLINE_WEIGHT_MAP[cfg.taglineWeight], color: cfg.textColor || '#fff', letterSpacing: cfg.taglineLetterSpacing, textTransform: 'uppercase', fontFamily: 'system-ui', textShadow: '0 2px 8px rgba(0,0,0,0.2)', animation: 'splashFadeUp 0.5s 0.3s ease-out both' }}>{displayText}</p>
       <div style={{ marginTop: 8, animation: 'splashFadeUp 0.5s 0.5s ease-out both' }}>
         <ProgressIndicator style={cfg.progressStyle} progress={progress} accent="#ffffff" />
       </div>
@@ -190,7 +190,7 @@ function DarkTemplate({ cfg, progress, logoUrl, logoHeight, displayText, charact
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={logoUrl} alt="Logo" style={{ height: logoHeight, width: 'auto', objectFit: 'contain', position: 'relative', filter: `drop-shadow(0 0 12px ${accent}66)` }} />
       </div>
-      <p style={{ margin: 0, fontSize: cfg.taglineSize, fontWeight: TAGLINE_WEIGHT_MAP[cfg.taglineWeight], color: '#64748b', letterSpacing: cfg.taglineLetterSpacing, textTransform: 'uppercase', fontFamily: 'system-ui' }}>{displayText}</p>
+      <p style={{ margin: 0, fontSize: cfg.taglineSize, fontWeight: TAGLINE_WEIGHT_MAP[cfg.taglineWeight], color: cfg.textColor || '#64748b', letterSpacing: cfg.taglineLetterSpacing, textTransform: 'uppercase', fontFamily: 'system-ui' }}>{displayText}</p>
       <ProgressIndicator style={cfg.progressStyle} progress={progress} accent={accent} />
       <style>{`@keyframes splashPulseGlow{from{opacity:.1;transform:scale(.9)}to{opacity:.25;transform:scale(1.1)}}`}</style>
     </div>
@@ -203,7 +203,7 @@ function BrandedTemplate({ cfg, progress, logoUrl, logoHeight, displayText }: Te
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 18 }}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={logoUrl} alt="Logo" style={{ height: logoHeight * 1.5, width: 'auto', objectFit: 'contain', filter: 'brightness(0) invert(1)', animation: 'splashFadeUp 0.5s ease-out forwards' }} />
-      <p style={{ margin: 0, fontSize: cfg.taglineSize, fontWeight: TAGLINE_WEIGHT_MAP[cfg.taglineWeight], color: 'rgba(255,255,255,0.7)', letterSpacing: cfg.taglineLetterSpacing, textTransform: 'uppercase', fontFamily: 'system-ui' }}>{displayText}</p>
+      <p style={{ margin: 0, fontSize: cfg.taglineSize, fontWeight: TAGLINE_WEIGHT_MAP[cfg.taglineWeight], color: cfg.textColor || 'rgba(255,255,255,0.7)', letterSpacing: cfg.taglineLetterSpacing, textTransform: 'uppercase', fontFamily: 'system-ui' }}>{displayText}</p>
       <ProgressIndicator style={cfg.progressStyle} progress={progress} accent="rgba(255,255,255,0.9)" />
       <style>{`@keyframes splashFadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}`}</style>
     </div>
@@ -245,7 +245,7 @@ export default function SplashScreen({ children }: { children: React.ReactNode }
   const [cfg, setCfg]             = useState<SplashConfig>({
     template: 'classic', progressStyle: 'bar', loadingAnim: 'character',
     tagline: 'Crafting Future', taglineSize: 13, taglineWeight: 'semibold', taglineLetterSpacing: 4,
-    accentColor: '#10b981', bgColor: '#fafbfc',
+    accentColor: '#22c55e', bgColor: '#fafbfc', textColor: '',
     showQuotes: false, quotes: [],
   });
   const [displayText, setDisplayText] = useState('Crafting Future');
@@ -266,8 +266,9 @@ export default function SplashScreen({ children }: { children: React.ReactNode }
           taglineSize:          d.splash_tagline_size  ?? 13,
           taglineWeight:        d.splash_tagline_weight ?? 'semibold',
           taglineLetterSpacing: d.splash_tagline_letter_spacing ?? 4,
-          accentColor:          d.splash_accent_color  ?? '#10b981',
+          accentColor:          d.splash_accent_color || d.theme_primary || '#22c55e',
           bgColor:              d.splash_bg_color       ?? '#fafbfc',
+          textColor:            d.splash_text_color     ?? '',
           showQuotes:           d.splash_show_quotes    ?? false,
           quotes:               d.splash_quotes         ?? [],
         };

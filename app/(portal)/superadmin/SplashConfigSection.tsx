@@ -233,6 +233,7 @@ export default function SplashConfigSection({ initial, logoFullUrl, characterUrl
           splash_tagline_letter_spacing: cfg.taglineLetterSpacing,
           splash_accent_color:           cfg.accentColor,
           splash_bg_color:               cfg.bgColor,
+          splash_text_color:             cfg.textColor,
           splash_show_quotes:            cfg.showQuotes,
           splash_quotes:                 cfg.quotes,
         }),
@@ -259,7 +260,7 @@ export default function SplashConfigSection({ initial, logoFullUrl, characterUrl
         <div className="flex items-start justify-between">
           <div>
             <h2 className="text-sm font-semibold text-gray-700 mb-0.5 flex items-center gap-2">
-              <Sparkles className="h-4 w-4 text-emerald-500" />
+              <Sparkles className="h-4 w-4 text-primary" />
               Splash Screen Design
             </h2>
             <p className="text-xs text-gray-500">Customize the first-load screen shown to users. Changes take effect on next fresh tab open.</p>
@@ -283,10 +284,10 @@ export default function SplashConfigSection({ initial, logoFullUrl, characterUrl
                 key={t.id}
                 type="button"
                 onClick={() => set('template', t.id)}
-                className={`rounded-lg border-2 p-2 text-left transition-all ${cfg.template === t.id ? 'border-emerald-500 shadow-sm shadow-emerald-100' : 'border-gray-200 hover:border-gray-300'}`}
+                className={`rounded-lg border-2 p-2 text-left transition-all ${cfg.template === t.id ? 'border-primary shadow-sm shadow-primary/10' : 'border-gray-200 hover:border-gray-300'}`}
               >
                 <TemplateThumbnail id={t.id} accent={accent} bg={cfg.bgColor} />
-                <p className={`mt-2 text-[11px] font-semibold ${cfg.template === t.id ? 'text-emerald-600' : 'text-gray-600'}`}>{t.label}</p>
+                <p className={`mt-2 text-[11px] font-semibold ${cfg.template === t.id ? 'text-primary' : 'text-gray-600'}`}>{t.label}</p>
                 <p className="text-[10px] text-gray-400 leading-tight mt-0.5">{t.desc}</p>
               </button>
             ))}
@@ -302,7 +303,7 @@ export default function SplashConfigSection({ initial, logoFullUrl, characterUrl
                 key={p.id}
                 type="button"
                 onClick={() => set('progressStyle', p.id)}
-                className={`flex items-center gap-2 rounded-lg border px-3 py-2 text-xs font-medium transition-all ${cfg.progressStyle === p.id ? 'border-emerald-500 bg-emerald-50 text-emerald-700' : 'border-gray-200 text-gray-500 hover:border-gray-300'}`}
+                className={`flex items-center gap-2 rounded-lg border px-3 py-2 text-xs font-medium transition-all ${cfg.progressStyle === p.id ? 'border-primary bg-primary/10 text-primary' : 'border-gray-200 text-gray-500 hover:border-gray-300'}`}
                 style={{ color: cfg.progressStyle === p.id ? accent : undefined }}
               >
                 <span style={{ color: cfg.progressStyle === p.id ? accent : '#9ca3af' }}>{p.preview}</span>
@@ -321,7 +322,7 @@ export default function SplashConfigSection({ initial, logoFullUrl, characterUrl
                 key={a.id}
                 type="button"
                 onClick={() => set('loadingAnim', a.id)}
-                className={`flex items-start gap-3 rounded-lg border p-3 text-left transition-all w-52 ${cfg.loadingAnim === a.id ? 'border-emerald-500 bg-emerald-50' : 'border-gray-200 hover:border-gray-300'}`}
+                className={`flex items-start gap-3 rounded-lg border p-3 text-left transition-all w-52 ${cfg.loadingAnim === a.id ? 'border-primary bg-primary/10' : 'border-gray-200 hover:border-gray-300'}`}
               >
                 {a.id === 'character' && characterUrl ? (
                   // eslint-disable-next-line @next/next/no-img-element
@@ -332,7 +333,7 @@ export default function SplashConfigSection({ initial, logoFullUrl, characterUrl
                   <span className="h-10 w-10 shrink-0 flex items-center justify-center text-gray-300 text-xl">—</span>
                 )}
                 <div>
-                  <p className={`text-xs font-semibold ${cfg.loadingAnim === a.id ? 'text-emerald-700' : 'text-gray-600'}`}>{a.label}</p>
+                  <p className={`text-xs font-semibold ${cfg.loadingAnim === a.id ? 'text-primary' : 'text-gray-600'}`}>{a.label}</p>
                   <p className="text-[10px] text-gray-400 leading-tight mt-0.5">{a.desc}</p>
                   {a.id === 'character' && !characterUrl && (
                     <p className="text-[10px] text-amber-500 mt-0.5">Upload a character in Logos above</p>
@@ -366,6 +367,19 @@ export default function SplashConfigSection({ initial, logoFullUrl, characterUrl
                 </div>
               </label>
             )}
+            <label className="flex items-center gap-3 cursor-pointer">
+              <input
+                type="color"
+                value={cfg.textColor || (cfg.template === 'bold' || cfg.template === 'branded' ? '#ffffff' : cfg.template === 'dark' ? '#64748b' : cfg.accentColor)}
+                onChange={e => set('textColor', e.target.value)}
+                className="h-9 w-14 rounded cursor-pointer border border-gray-200 p-0.5"
+              />
+              <div>
+                <p className="text-xs font-medium text-gray-700">Tagline Text Color</p>
+                <p className="text-[10px] text-gray-400">Overrides per-template default</p>
+                <p className="text-[10px] text-gray-400 font-mono">{cfg.textColor || '(template default)'}</p>
+              </div>
+            </label>
           </div>
         </div>
 
@@ -387,7 +401,7 @@ export default function SplashConfigSection({ initial, logoFullUrl, characterUrl
             <div>
               <div className="flex items-center justify-between mb-1.5">
                 <p className="text-xs font-medium text-gray-600">Font Size</p>
-                <span className="text-xs font-semibold tabular-nums text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md">{cfg.taglineSize}px</span>
+                <span className="text-xs font-semibold tabular-nums text-primary bg-primary/10 px-2 py-0.5 rounded-md">{cfg.taglineSize}px</span>
               </div>
               <input
                 type="range"
@@ -395,7 +409,7 @@ export default function SplashConfigSection({ initial, logoFullUrl, characterUrl
                 max={32}
                 value={cfg.taglineSize}
                 onChange={e => set('taglineSize', parseInt(e.target.value, 10))}
-                className="w-full max-w-xs h-1.5 rounded-full appearance-none bg-gray-200 accent-emerald-500 cursor-pointer"
+                className="w-full max-w-xs h-1.5 rounded-full appearance-none bg-gray-200 [accent-color:var(--primary)] cursor-pointer"
               />
             </div>
 
@@ -408,7 +422,7 @@ export default function SplashConfigSection({ initial, logoFullUrl, characterUrl
                     key={w}
                     type="button"
                     onClick={() => set('taglineWeight', w)}
-                    className={`px-3 py-1.5 rounded-lg border text-xs transition-all capitalize ${cfg.taglineWeight === w ? 'border-emerald-500 bg-emerald-50 text-emerald-700' : 'border-gray-200 text-gray-500 hover:border-gray-300'}`}
+                    className={`px-3 py-1.5 rounded-lg border text-xs transition-all capitalize ${cfg.taglineWeight === w ? 'border-primary bg-primary/10 text-primary' : 'border-gray-200 text-gray-500 hover:border-gray-300'}`}
                     style={{ fontWeight: TAGLINE_WEIGHT_MAP[w] }}
                   >
                     {w.charAt(0).toUpperCase() + w.slice(1)}
@@ -421,7 +435,7 @@ export default function SplashConfigSection({ initial, logoFullUrl, characterUrl
             <div>
               <div className="flex items-center justify-between mb-1.5">
                 <p className="text-xs font-medium text-gray-600">Letter Spacing</p>
-                <span className="text-xs font-semibold tabular-nums text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md">{cfg.taglineLetterSpacing}px</span>
+                <span className="text-xs font-semibold tabular-nums text-primary bg-primary/10 px-2 py-0.5 rounded-md">{cfg.taglineLetterSpacing}px</span>
               </div>
               <input
                 type="range"
@@ -429,7 +443,7 @@ export default function SplashConfigSection({ initial, logoFullUrl, characterUrl
                 max={12}
                 value={cfg.taglineLetterSpacing}
                 onChange={e => set('taglineLetterSpacing', parseInt(e.target.value, 10))}
-                className="w-full max-w-xs h-1.5 rounded-full appearance-none bg-gray-200 accent-emerald-500 cursor-pointer"
+                className="w-full max-w-xs h-1.5 rounded-full appearance-none bg-gray-200 [accent-color:var(--primary)] cursor-pointer"
               />
             </div>
 
@@ -451,7 +465,7 @@ export default function SplashConfigSection({ initial, logoFullUrl, characterUrl
               role="switch"
               aria-checked={cfg.showQuotes}
               onClick={() => set('showQuotes', !cfg.showQuotes)}
-              className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors focus:outline-none ${cfg.showQuotes ? 'bg-emerald-500' : 'bg-gray-300'}`}
+              className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors focus:outline-none ${cfg.showQuotes ? 'bg-primary' : 'bg-gray-300'}`}
             >
               <span className={`pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow transition duration-200 ${cfg.showQuotes ? 'translate-x-4' : 'translate-x-0'}`} />
             </button>

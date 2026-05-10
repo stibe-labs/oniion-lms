@@ -103,8 +103,9 @@ export function PlatformProvider({
         if (d.auth_template) {
           setAuthConfig({
             template:    d.auth_template    ?? 'classic',
-            accentColor: d.auth_accent_color ?? '#10b981',
+            accentColor: d.auth_accent_color ?? '#22c55e',
             bgColor:     d.auth_bg_color     ?? '#f0fdf4',
+            textColor:   d.auth_text_color   ?? '',
             headline:    d.auth_headline     ?? 'Empowering every learner',
             subheadline: d.auth_subheadline  ?? 'Sign in to continue learning',
             showTagline: d.auth_show_tagline !== false,

@@ -188,6 +188,8 @@ export default function SuperadminClient({ user: _user }: Props) {
   const [authCfg,   setAuthCfg]   = useState<AuthConfig>({ ...AUTH_CONFIG_DEFAULTS });
   const [themePrimary,   setThemePrimary]   = useState('');
   const [themeSecondary, setThemeSecondary] = useState('');
+  const [themeTextColor,  setThemeTextColor]  = useState('');
+  const [themeMutedColor, setThemeMutedColor] = useState('');
 
   useEffect(() => {
     fetch('/api/v1/superadmin/settings')
@@ -218,6 +220,7 @@ export default function SuperadminClient({ user: _user }: Props) {
             taglineLetterSpacing: d.data.splash_tagline_letter_spacing  ?? 4,
             accentColor:          d.data.splash_accent_color            ?? '#10b981',
             bgColor:              d.data.splash_bg_color                ?? '#fafbfc',
+            textColor:            d.data.splash_text_color              ?? '',
             showQuotes:           d.data.splash_show_quotes             ?? false,
             quotes:               d.data.splash_quotes                  ?? [],
           });
@@ -225,13 +228,16 @@ export default function SuperadminClient({ user: _user }: Props) {
             template:    d.data.auth_template    ?? 'classic',
             accentColor: d.data.auth_accent_color ?? '#10b981',
             bgColor:     d.data.auth_bg_color    ?? '#f0fdf4',
+            textColor:   d.data.auth_text_color  ?? '',
             headline:    d.data.auth_headline    ?? 'Empowering every learner',
             subheadline: d.data.auth_subheadline ?? 'Sign in to continue learning',
             showTagline: d.data.auth_show_tagline ?? true,
             bgPattern:   d.data.auth_bg_pattern  ?? 'dots',
           });
-          setThemePrimary(d.data.theme_primary     ?? '#22c55e');
-          setThemeSecondary(d.data.theme_secondary ?? '#14b8a6');
+          setThemePrimary(d.data.theme_primary       ?? '#22c55e');
+          setThemeSecondary(d.data.theme_secondary  ?? '#14b8a6');
+          setThemeTextColor(d.data.theme_text_color  ?? '');
+          setThemeMutedColor(d.data.theme_muted_color ?? '');
         }
       })
       .catch(() => {})
@@ -458,7 +464,7 @@ export default function SuperadminClient({ user: _user }: Props) {
       {!fetching && <AuthConfigSection initial={authCfg} logoFullUrl={logos.full} logoAuthHeight={sizes.auth} />}
 
       {/* Brand Theme Colors */}
-      {!fetching && <ThemeConfigSection initialPrimary={themePrimary} initialSecondary={themeSecondary} />}
+      {!fetching && <ThemeConfigSection initialPrimary={themePrimary} initialSecondary={themeSecondary} initialTextColor={themeTextColor} initialMutedColor={themeMutedColor} />}
     </div>
   );
 }

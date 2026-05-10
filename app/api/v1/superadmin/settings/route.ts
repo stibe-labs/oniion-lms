@@ -45,6 +45,10 @@ export async function GET(req: NextRequest) {
       auth_bg_pattern:      auth.bgPattern,
       theme_primary:        theme.primaryColor,
       theme_secondary:      theme.secondaryColor,
+      theme_text_color:     theme.textColor,
+      theme_muted_color:    theme.mutedColor,
+      auth_text_color:      auth.textColor,
+      splash_text_color:    splash.textColor,
     },
   });
 }
@@ -124,7 +128,7 @@ export async function PUT(req: NextRequest) {
   }
 
   // Auth screen config string fields
-  for (const key of ['auth_template', 'auth_accent_color', 'auth_bg_color', 'auth_headline', 'auth_subheadline', 'auth_bg_pattern'] as const) {
+  for (const key of ['auth_template', 'auth_accent_color', 'auth_bg_color', 'auth_headline', 'auth_subheadline', 'auth_bg_pattern', 'splash_text_color'] as const) {
     if (key in body && typeof body[key] === 'string') {
       await db.query(
         `INSERT INTO school_config (key, value, description) VALUES ($1, $2, $3) ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`,
@@ -139,13 +143,18 @@ export async function PUT(req: NextRequest) {
     );
   }
 
-  // Theme colors
-  for (const key of ['theme_primary', 'theme_secondary'] as const) {
-    if (key in body && typeof body[key] === 'string' && /^#[0-9a-fA-F]{6}$/.test(body[key])) {
-      await db.query(
-        `INSERT INTO school_config (key, value, description) VALUES ($1, $2, $3) ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`,
-        [key, body[key], `Theme color - ${key}`]
-      );
+  // Theme colors (hex only, empty string = reset to default)
+  for (const key of ['theme_primary', 'theme_secondary', 'theme_text_color', 'theme_muted_color', 'auth_text_color', 'splash_text_color'] as const) {
+    if (key in body) {
+      const val = body[key] as string;
+      if (val === '') {
+        await db.query(`DELETE FROM school_config WHERE key = $1`, [key]);
+      } else if (typeof val === 'string' && /^#[0-9a-fA-F]{6}$/.test(val)) {
+        await db.query(
+          `INSERT INTO school_config (key, value, description) VALUES ($1, $2, $3) ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`,
+          [key, val, `Theme color - ${key}`]
+        );
+      }
     }
   }
 
