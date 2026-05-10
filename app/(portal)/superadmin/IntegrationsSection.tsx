@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
   Eye, EyeOff, Video, Mail, MessageCircle, CreditCard,
-  Brain, Youtube, Facebook, Webhook, ChevronDown,
+  Brain, Youtube, Webhook, ChevronDown,
   Loader2, CheckCircle2, AlertCircle, RefreshCw,
 } from 'lucide-react';
 
@@ -210,10 +210,14 @@ function FieldRow({
   onChange,
 }: {
   field: FieldDef;
-  source?: { source: 'db' | 'env'; hasDbValue: boolean };
+  source?: { source: 'db' | 'env'; hasDbValue: boolean; displayValue: string };
   value: string;
   onChange: (v: string) => void;
 }) {
+  const secretPlaceholder = source?.hasDbValue
+    ? '••••••••  (saved — type to replace)'
+    : field.placeholder;
+
   return (
     <div>
       <div className="flex items-center justify-between mb-1.5">
@@ -227,7 +231,7 @@ function FieldRow({
         <SecretInput
           value={value}
           onChange={onChange}
-          placeholder={field.placeholder}
+          placeholder={secretPlaceholder}
         />
       ) : (
         <Input
@@ -244,7 +248,20 @@ function FieldRow({
 // ── Service Card ────────────────────────────────────────────
 
 interface SourceMap {
-  [key: string]: { source: 'db' | 'env'; hasDbValue: boolean };
+  [key: string]: { source: 'db' | 'env'; hasDbValue: boolean; displayValue: string };
+}
+
+function initValues(service: ServiceDef, sourceMap: SourceMap): Record<string, string> {
+  const init: Record<string, string> = {};
+  for (const field of service.fields) {
+    const src = sourceMap[field.key];
+    // Pre-fill non-secret fields with their stored display value.
+    // Secret fields start empty — placeholder indicates "saved".
+    if (src && !field.secret && src.displayValue) {
+      init[field.key] = src.displayValue;
+    }
+  }
+  return init;
 }
 
 function ServiceCard({
@@ -258,29 +275,48 @@ function ServiceCard({
 }) {
   const toast = useToast();
   const [open, setOpen] = useState(false);
-  const [values, setValues] = useState<Record<string, string>>({});
+  const [values, setValues] = useState<Record<string, string>>(() => initValues(service, sourceMap));
   const [dirty, setDirty] = useState(false);
   const [saving, setSaving] = useState(false);
   const [test, setTest] = useState<TestResult>({ status: 'idle' });
+
+  // Re-sync non-secret fields when sourceMap refreshes after save
+  useEffect(() => {
+    if (!dirty) {
+      setValues(initValues(service, sourceMap));
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sourceMap]);
 
   function handleChange(key: string, val: string) {
     setValues(v => ({ ...v, [key]: val }));
     setDirty(true);
   }
 
+  function handleDiscard() {
+    setValues(initValues(service, sourceMap));
+    setDirty(false);
+  }
+
   async function handleSave() {
     setSaving(true);
     try {
+      // Skip empty secret fields — empty = "no change", not "delete"
+      const payload: Record<string, string> = {};
+      for (const [key, val] of Object.entries(values)) {
+        const field = service.fields.find(f => f.key === key);
+        if (field?.secret && !val.trim()) continue;
+        payload[key] = val;
+      }
       const res = await fetch('/api/v1/superadmin/integrations', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(values),
+        body: JSON.stringify(payload),
       });
       const data = await res.json();
       if (!data.success) throw new Error(data.error || 'Save failed');
       toast.success(`${service.title} saved`);
       setDirty(false);
-      setValues({});
       onSaved();
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Save failed');
@@ -364,7 +400,7 @@ function ServiceCard({
               <Button
                 size="sm"
                 variant="ghost"
-                onClick={() => { setValues({}); setDirty(false); }}
+                onClick={handleDiscard}
                 className="text-gray-500"
               >
                 Discard
@@ -420,8 +456,8 @@ export default function IntegrationsSection() {
       const d = await res.json();
       if (d.success) {
         const map: SourceMap = {};
-        for (const [k, v] of Object.entries(d.data as Record<string, { source: 'db' | 'env'; hasDbValue: boolean }>)) {
-          map[k] = { source: v.source, hasDbValue: v.hasDbValue };
+        for (const [k, v] of Object.entries(d.data as Record<string, { source: 'db' | 'env'; hasDbValue: boolean; value: string }>)) {
+          map[k] = { source: v.source, hasDbValue: v.hasDbValue, displayValue: v.value };
         }
         setSourceMap(map);
       }
