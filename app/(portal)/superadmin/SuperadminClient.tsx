@@ -6,8 +6,8 @@ import { useToast } from '@/components/dashboard/shared';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
-  Upload, X, ImageIcon, Building2, ToggleLeft, Palette,
-  Sparkles, Layout, Plug, ChevronRight, Settings2,
+  Upload, X, ImageIcon, Settings2, Palette,
+  Sparkles, Plug, ToggleLeft,
 } from 'lucide-react';
 import type { PortalUser } from '@/types';
 import type { SplashConfig } from '@/lib/splash-config';
@@ -23,8 +23,7 @@ import IntegrationsSection from './IntegrationsSection';
 
 interface Props { user: PortalUser }
 
-type TabId = 'identity' | 'features' | 'logos' | 'colors' | 'splash' | 'login' | 'integrations';
-
+type TabId = 'general' | 'branding' | 'appearance' | 'integrations';
 type LogoType = 'small' | 'full' | 'favicon' | 'character';
 
 interface LogoSlot {
@@ -37,63 +36,25 @@ interface LogoSlot {
 // ── Static data ────────────────────────────────────────────────
 
 const LOGO_SLOTS: LogoSlot[] = [
-  { type: 'full',      label: 'Full Logo',          description: 'Wide logo on login page and public pages.',               hint: 'PNG/SVG, transparent bg, landscape. Max 2 MB' },
-  { type: 'small',     label: 'Small Logo',          description: 'Square icon logo in the sidebar navigation.',             hint: 'PNG/SVG, transparent bg, square 1:1. Max 2 MB' },
-  { type: 'favicon',   label: 'Favicon',             description: 'Icon shown in the browser tab.',                          hint: 'PNG or ICO, 32×32 or 64×64 px. Max 2 MB' },
-  { type: 'character', label: 'Loading Character',   description: 'Mascot in loading states, splash screen, and chatbot.',   hint: 'Animated GIF or PNG, square, transparent. Max 5 MB' },
+  { type: 'full',      label: 'Full Logo',        description: 'Wide logo on login page and public pages.',             hint: 'PNG/SVG, transparent bg, landscape. Max 2 MB' },
+  { type: 'small',     label: 'Small Logo',        description: 'Square icon logo in the sidebar navigation.',           hint: 'PNG/SVG, transparent bg, square 1:1. Max 2 MB' },
+  { type: 'favicon',   label: 'Favicon',           description: 'Icon shown in the browser tab.',                        hint: 'PNG or ICO, 32×32 or 64×64 px. Max 2 MB' },
+  { type: 'character', label: 'Loading Character', description: 'Mascot in loading states, splash screen, and chatbot.', hint: 'Animated GIF or PNG, square, transparent. Max 5 MB' },
 ];
 
-const NAV: { label: string; items: { id: TabId; label: string; icon: React.ElementType }[] }[] = [
-  {
-    label: 'General',
-    items: [
-      { id: 'identity',     label: 'Platform Identity', icon: Building2  },
-      { id: 'features',     label: 'Features',          icon: ToggleLeft },
-    ],
-  },
-  {
-    label: 'Branding',
-    items: [
-      { id: 'logos',  label: 'Logos & Assets', icon: ImageIcon },
-      { id: 'colors', label: 'Brand Colors',   icon: Palette   },
-    ],
-  },
-  {
-    label: 'Appearance',
-    items: [
-      { id: 'splash', label: 'Splash Screen', icon: Sparkles },
-      { id: 'login',  label: 'Login Screen',  icon: Layout   },
-    ],
-  },
-  {
-    label: 'Integrations',
-    items: [
-      { id: 'integrations', label: 'Services', icon: Plug },
-    ],
-  },
+const TABS: { id: TabId; label: string; icon: React.ElementType }[] = [
+  { id: 'general',      label: 'General',      icon: Settings2  },
+  { id: 'branding',     label: 'Branding',      icon: Palette    },
+  { id: 'appearance',   label: 'Appearance',    icon: Sparkles   },
+  { id: 'integrations', label: 'Integrations',  icon: Plug       },
 ];
 
 // ── Shared sub-components ──────────────────────────────────────
 
-function SectionHeader({ icon: Icon, title, subtitle }: { icon: React.ElementType; title: string; subtitle: string }) {
-  return (
-    <div className="mb-7">
-      <div className="flex items-center gap-3 mb-1.5">
-        <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-primary/10 shrink-0">
-          <Icon className="h-[18px] w-[18px] text-primary" />
-        </div>
-        <h1 className="text-[17px] font-semibold text-gray-900 tracking-tight">{title}</h1>
-      </div>
-      <p className="text-sm text-gray-500 pl-12">{subtitle}</p>
-    </div>
-  );
-}
-
-function SettingsCard({ title, description, children, footer }: {
+function SettingsCard({ title, description, children }: {
   title?: string;
   description?: string;
   children: React.ReactNode;
-  footer?: React.ReactNode;
 }) {
   return (
     <div className="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden">
@@ -104,12 +65,31 @@ function SettingsCard({ title, description, children, footer }: {
         </div>
       )}
       <div className="px-6 py-5">{children}</div>
-      {footer && <div className="px-6 py-4 border-t border-gray-100 bg-gray-50/60">{footer}</div>}
     </div>
   );
 }
 
-function Toggle({ enabled, onChange, disabled }: { enabled: boolean; onChange: (v: boolean) => void; disabled?: boolean }) {
+function SettingsRow({ label, description, control }: {
+  label: string;
+  description?: string;
+  control: React.ReactNode;
+}) {
+  return (
+    <div className="flex items-center justify-between gap-6 py-4 first:pt-0 last:pb-0 [&+&]:border-t [&+&]:border-gray-100">
+      <div className="flex-1 min-w-0">
+        <p className="text-sm font-medium text-gray-800">{label}</p>
+        {description && <p className="text-xs text-gray-500 mt-0.5 leading-relaxed">{description}</p>}
+      </div>
+      <div className="shrink-0">{control}</div>
+    </div>
+  );
+}
+
+function Toggle({ enabled, onChange, disabled }: {
+  enabled: boolean;
+  onChange: (v: boolean) => void;
+  disabled?: boolean;
+}) {
   return (
     <button
       type="button"
@@ -240,9 +220,9 @@ export default function SuperadminClient({ user: _user }: Props) {
   } = usePlatformContext();
   const toast = useToast();
 
-  const [activeTab, setActiveTab] = useState<TabId>('identity');
+  const [activeTab, setActiveTab] = useState<TabId>('general');
 
-  // ── Settings state ────────────────────────────────────────
+  // ── State ─────────────────────────────────────────────────
   const [platformName, setPlatformNameLocal] = useState('');
   const [platformNameLoading, setPlatformNameLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
@@ -388,281 +368,194 @@ export default function SuperadminClient({ user: _user }: Props) {
 
   // ── Render ────────────────────────────────────────────────
   return (
-    <div className="flex min-h-full">
+    <div className="max-w-3xl">
 
-      {/* ── Left sidebar nav ── */}
-      <aside className="w-[220px] shrink-0 border-r border-gray-200 bg-white flex flex-col self-stretch">
-        {/* Header */}
-        <div className="px-5 pt-6 pb-5 border-b border-gray-100">
-          <div className="flex items-center gap-2.5 mb-0.5">
-            <div className="flex items-center justify-center w-7 h-7 rounded-lg bg-primary/10">
-              <Settings2 className="h-3.5 w-3.5 text-primary" />
-            </div>
-            <span className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">Superadmin</span>
-          </div>
-          <p className="text-sm font-semibold text-gray-900 pl-9">Platform Settings</p>
-        </div>
+      {/* ── Page header ── */}
+      <div className="mb-6">
+        <h1 className="text-xl font-bold text-gray-900 tracking-tight">Platform Settings</h1>
+        <p className="text-sm text-gray-500 mt-1">
+          Configure platform identity, branding, appearance, and service integrations.
+        </p>
+      </div>
 
-        {/* Navigation */}
-        <nav className="flex-1 px-3 py-4 overflow-y-auto space-y-5">
-          {NAV.map(group => (
-            <div key={group.label}>
-              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.1em] px-2.5 mb-1.5">
-                {group.label}
-              </p>
-              <div className="space-y-0.5">
-                {group.items.map(item => {
-                  const active = activeTab === item.id;
-                  return (
-                    <button
-                      key={item.id}
-                      type="button"
-                      onClick={() => setActiveTab(item.id)}
-                      className={`w-full flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-sm transition-all ${
-                        active
-                          ? 'bg-primary/10 text-primary font-semibold'
-                          : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 font-medium'
-                      }`}
-                    >
-                      <item.icon className={`h-4 w-4 shrink-0 ${active ? 'text-primary' : 'text-gray-400'}`} />
-                      <span className="flex-1 text-left">{item.label}</span>
-                      {active && <ChevronRight className="h-3 w-3 opacity-50 shrink-0" />}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          ))}
+      {/* ── Tab bar ── */}
+      <div className="border-b border-gray-200 mb-8">
+        <nav className="-mb-px flex gap-0">
+          {TABS.map(tab => {
+            const active = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => setActiveTab(tab.id)}
+                className={`flex items-center gap-2 px-5 py-3 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
+                  active
+                    ? 'border-primary text-primary'
+                    : 'border-transparent text-gray-500 hover:text-gray-800 hover:border-gray-300'
+                }`}
+              >
+                <tab.icon className="h-4 w-4" />
+                {tab.label}
+              </button>
+            );
+          })}
         </nav>
-      </aside>
+      </div>
 
-      {/* ── Main content ── */}
-      <main className="flex-1 bg-[#f7f8fa] overflow-y-auto">
-        <div className="px-8 py-8 max-w-[720px]">
-
-          {/* ── Identity ── */}
-          {activeTab === 'identity' && (
-            <div className="space-y-5">
-              <SectionHeader
-                icon={Building2}
-                title="Platform Identity"
-                subtitle="Configure the name and public-facing identity of your platform."
-              />
-
-              <SettingsCard
-                title="Platform Name"
-                description="Shown across the dashboard, email templates, and the browser tab title."
-              >
-                <form onSubmit={savePlatformName} className="flex items-end gap-3">
-                  <div className="flex-1">
-                    <label className="block text-xs font-medium text-gray-500 mb-1.5">Display name</label>
-                    <Input
-                      value={platformName}
-                      onChange={e => setPlatformNameLocal(e.target.value)}
-                      disabled={fetching || platformNameLoading}
-                      placeholder="e.g. Oniion Learning"
-                      className="w-full"
-                    />
-                  </div>
-                  <Button
-                    type="submit"
-                    disabled={fetching || platformNameLoading || !platformName.trim()}
-                    className="shrink-0"
-                  >
-                    {platformNameLoading ? 'Saving…' : 'Save'}
-                  </Button>
-                </form>
-              </SettingsCard>
-            </div>
-          )}
-
-          {/* ── Features ── */}
-          {activeTab === 'features' && (
-            <div className="space-y-5">
-              <SectionHeader
-                icon={ToggleLeft}
-                title="Features"
-                subtitle="Enable or disable optional platform capabilities."
-              />
-
-              <SettingsCard>
-                <div className="flex items-start justify-between gap-6">
-                  <div className="flex-1">
-                    <p className="text-sm font-semibold text-gray-800">Buji AI Chatbot</p>
-                    <p className="text-xs text-gray-500 mt-1 leading-relaxed">
-                      Show the Buji AI assistant on the login page and student dashboard.
-                      When disabled, the chatbot is hidden for all users.
-                    </p>
-                  </div>
-                  <div className="flex flex-col items-end gap-1.5 shrink-0">
-                    <Toggle
-                      enabled={bujiEnabled}
-                      disabled={fetching || bujiSaving}
-                      onChange={saveBuji}
-                    />
-                    <span className="text-[11px] text-gray-400">
-                      {bujiSaving ? 'Saving…' : bujiEnabled ? 'Enabled' : 'Disabled'}
-                    </span>
-                  </div>
-                </div>
-              </SettingsCard>
-            </div>
-          )}
-
-          {/* ── Logos & Assets ── */}
-          {activeTab === 'logos' && (
-            <div className="space-y-5">
-              <SectionHeader
-                icon={ImageIcon}
-                title="Logos & Assets"
-                subtitle="Upload brand assets and configure how they appear across the platform."
-              />
-
-              {/* Logo uploads */}
-              <SettingsCard
-                title="Brand Assets"
-                description="PNG, JPG, SVG, or WebP. Max 2 MB each (5 MB for character)."
-              >
-                <div className="divide-y divide-gray-100">
-                  {LOGO_SLOTS.map((slot, i) => (
-                    <div key={slot.type} className={i > 0 ? 'pt-5 mt-5' : ''}>
-                      <div className="flex items-center gap-2 mb-3">
-                        <p className="text-xs font-semibold text-gray-700">{slot.label}</p>
-                        <span className="text-[10px] text-gray-400">—</span>
-                        <p className="text-[11px] text-gray-400 flex-1">{slot.description}</p>
-                      </div>
-                      <LogoUploader
-                        slot={slot}
-                        currentUrl={logos[slot.type]}
-                        onUploaded={url => handleLogoUploaded(slot.type, url)}
-                        onRemoved={() => handleLogoRemoved(slot.type)}
-                      />
-                    </div>
-                  ))}
-                </div>
-              </SettingsCard>
-
-              {/* Logo sizes */}
-              <SettingsCard
-                title="Display Sizes"
-                description="Logo height in pixels per context. Width scales automatically to preserve aspect ratio."
-              >
-                <div className="space-y-6">
-                  {([
-                    { key: 'auth'    as const, label: 'Login Screen',     desc: 'Full logo on the auth/login page',              min: 20, max: 80, logoUrl: logos.full  },
-                    { key: 'splash'  as const, label: 'Splash Screen',    desc: 'Full logo shown during initial loading',         min: 20, max: 80, logoUrl: logos.full  },
-                    { key: 'sidebar' as const, label: 'Sidebar',          desc: 'Small icon logo in the sidebar nav header',      min: 12, max: 36, logoUrl: logos.small },
-                    { key: 'email'   as const, label: 'Email Header',     desc: 'Full logo in transactional email headers',       min: 24, max: 60, logoUrl: logos.full  },
-                  ]).map(({ key, label, desc, min, max, logoUrl }) => (
-                    <div key={key}>
-                      <div className="flex items-center justify-between mb-2">
-                        <div>
-                          <p className="text-xs font-semibold text-gray-700">{label}</p>
-                          <p className="text-[11px] text-gray-400 mt-0.5">{desc}</p>
-                        </div>
-                        <span className="text-xs font-mono font-bold text-primary bg-primary/10 px-2.5 py-1 rounded-lg tabular-nums">
-                          {sizes[key]}px
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <div className="shrink-0 flex items-center justify-center w-16 h-10 rounded-lg border border-gray-100 bg-gray-50">
-                          {logoUrl
-                            ? <img src={logoUrl} alt={label} style={{ height: sizes[key], maxWidth: 56 }} className="object-contain" />
-                            : <ImageIcon className="h-3.5 w-3.5 text-gray-300" />
-                          }
-                        </div>
-                        <input
-                          type="range"
-                          min={min}
-                          max={max}
-                          value={sizes[key]}
-                          disabled={fetching}
-                          onChange={e => setSizes(prev => ({ ...prev, [key]: parseInt(e.target.value, 10) }))}
-                          className="flex-1 h-1.5 rounded-full appearance-none bg-gray-200 [accent-color:var(--primary)] cursor-pointer disabled:opacity-50"
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                <div className="mt-6 pt-5 border-t border-gray-100">
-                  <Button onClick={saveSizes} disabled={fetching || sizesSaving}>
-                    {sizesSaving ? 'Saving…' : 'Save Sizes'}
-                  </Button>
-                </div>
-              </SettingsCard>
-            </div>
-          )}
-
-          {/* ── Brand Colors ── */}
-          {activeTab === 'colors' && (
-            <div className="space-y-5">
-              <SectionHeader
-                icon={Palette}
-                title="Brand Colors"
-                subtitle="Set your primary and accent colors. Changes preview live across the dashboard."
-              />
-              {!fetching && (
-                <ThemeConfigSection
-                  initialPrimary={themePrimary}
-                  initialSecondary={themeSecondary}
-                  initialTextColor={themeTextColor}
-                  initialMutedColor={themeMutedColor}
+      {/* ── General ── */}
+      {activeTab === 'general' && (
+        <div className="space-y-5">
+          <SettingsCard
+            title="Platform Name"
+            description="Displayed across the dashboard, email templates, and the browser tab title."
+          >
+            <form onSubmit={savePlatformName} className="flex items-end gap-3">
+              <div className="flex-1">
+                <label className="block text-xs font-medium text-gray-500 mb-1.5">Display name</label>
+                <Input
+                  value={platformName}
+                  onChange={e => setPlatformNameLocal(e.target.value)}
+                  disabled={fetching || platformNameLoading}
+                  placeholder="e.g. Oniion Learning"
                 />
-              )}
-            </div>
-          )}
+              </div>
+              <Button type="submit" disabled={fetching || platformNameLoading || !platformName.trim()} className="shrink-0">
+                {platformNameLoading ? 'Saving…' : 'Save'}
+              </Button>
+            </form>
+          </SettingsCard>
 
-          {/* ── Splash Screen ── */}
-          {activeTab === 'splash' && (
-            <div className="space-y-5">
-              <SectionHeader
-                icon={Sparkles}
-                title="Splash Screen"
-                subtitle="Customize the first-load screen shown while the app initializes."
-              />
-              {!fetching && (
-                <SplashConfigSection
-                  initial={splashCfg}
-                  logoFullUrl={logos.full}
-                  characterUrl={logos.character}
-                  splashLogoHeight={sizes.splash}
-                />
-              )}
-            </div>
-          )}
-
-          {/* ── Login Screen ── */}
-          {activeTab === 'login' && (
-            <div className="space-y-5">
-              <SectionHeader
-                icon={Layout}
-                title="Login Screen"
-                subtitle="Choose a template and customize colors for the authentication page."
-              />
-              {!fetching && (
-                <AuthConfigSection
-                  initial={authCfg}
-                  logoFullUrl={logos.full}
-                  logoAuthHeight={sizes.auth}
-                />
-              )}
-            </div>
-          )}
-
-          {/* ── Integrations ── */}
-          {activeTab === 'integrations' && (
-            <div className="space-y-5">
-              <SectionHeader
-                icon={Plug}
-                title="Services & Integrations"
-                subtitle="Connect external services. Values saved here override environment variables at runtime — no restart required."
-              />
-              <IntegrationsSection />
-            </div>
-          )}
-
+          <SettingsCard title="Features" description="Enable or disable optional platform capabilities.">
+            <SettingsRow
+              label="Buji AI Chatbot"
+              description="Show the Buji AI assistant on the login page and student dashboard. When disabled, the chatbot is hidden for all users."
+              control={
+                <Toggle enabled={bujiEnabled} disabled={fetching || bujiSaving} onChange={saveBuji} />
+              }
+            />
+          </SettingsCard>
         </div>
-      </main>
+      )}
+
+      {/* ── Branding ── */}
+      {activeTab === 'branding' && (
+        <div className="space-y-5">
+          <SettingsCard
+            title="Brand Assets"
+            description="Upload logos and the loading mascot. PNG, JPG, SVG, or WebP. Max 2 MB each (5 MB for character)."
+          >
+            <div className="divide-y divide-gray-100">
+              {LOGO_SLOTS.map((slot, i) => (
+                <div key={slot.type} className={i > 0 ? 'pt-5 mt-5' : ''}>
+                  <div className="mb-3">
+                    <p className="text-xs font-semibold text-gray-700">{slot.label}</p>
+                    <p className="text-[11px] text-gray-400 mt-0.5">{slot.description}</p>
+                  </div>
+                  <LogoUploader
+                    slot={slot}
+                    currentUrl={logos[slot.type]}
+                    onUploaded={url => handleLogoUploaded(slot.type, url)}
+                    onRemoved={() => handleLogoRemoved(slot.type)}
+                  />
+                </div>
+              ))}
+            </div>
+          </SettingsCard>
+
+          <SettingsCard
+            title="Logo Display Sizes"
+            description="Logo height in pixels per context. Width scales automatically to preserve aspect ratio."
+          >
+            <div className="space-y-6">
+              {([
+                { key: 'auth'    as const, label: 'Login Screen',  desc: 'Full logo on the auth/login page',         min: 20, max: 80, logoUrl: logos.full  },
+                { key: 'splash'  as const, label: 'Splash Screen', desc: 'Full logo shown during initial loading',    min: 20, max: 80, logoUrl: logos.full  },
+                { key: 'sidebar' as const, label: 'Sidebar',       desc: 'Small icon logo in the sidebar nav header', min: 12, max: 36, logoUrl: logos.small },
+                { key: 'email'   as const, label: 'Email Header',  desc: 'Full logo in transactional email headers',  min: 24, max: 60, logoUrl: logos.full  },
+              ]).map(({ key, label, desc, min, max, logoUrl }) => (
+                <div key={key}>
+                  <div className="flex items-center justify-between mb-2">
+                    <div>
+                      <p className="text-xs font-semibold text-gray-700">{label}</p>
+                      <p className="text-[11px] text-gray-400 mt-0.5">{desc}</p>
+                    </div>
+                    <span className="text-xs font-mono font-bold text-primary bg-primary/10 px-2.5 py-1 rounded-lg tabular-nums">{sizes[key]}px</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="shrink-0 flex items-center justify-center w-16 h-10 rounded-lg border border-gray-100 bg-gray-50">
+                      {logoUrl
+                        ? <img src={logoUrl} alt={label} style={{ height: sizes[key], maxWidth: 56 }} className="object-contain" />
+                        : <ImageIcon className="h-3.5 w-3.5 text-gray-300" />
+                      }
+                    </div>
+                    <input
+                      type="range"
+                      min={min}
+                      max={max}
+                      value={sizes[key]}
+                      disabled={fetching}
+                      onChange={e => setSizes(prev => ({ ...prev, [key]: parseInt(e.target.value, 10) }))}
+                      className="flex-1 h-1.5 rounded-full appearance-none bg-gray-200 [accent-color:var(--primary)] cursor-pointer disabled:opacity-50"
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="mt-6 pt-5 border-t border-gray-100">
+              <Button onClick={saveSizes} disabled={fetching || sizesSaving}>
+                {sizesSaving ? 'Saving…' : 'Save Sizes'}
+              </Button>
+            </div>
+          </SettingsCard>
+
+          {!fetching && (
+            <ThemeConfigSection
+              initialPrimary={themePrimary}
+              initialSecondary={themeSecondary}
+              initialTextColor={themeTextColor}
+              initialMutedColor={themeMutedColor}
+            />
+          )}
+        </div>
+      )}
+
+      {/* ── Appearance ── */}
+      {activeTab === 'appearance' && (
+        <div className="space-y-6">
+          {!fetching && (
+            <SplashConfigSection
+              initial={splashCfg}
+              logoFullUrl={logos.full}
+              characterUrl={logos.character}
+              splashLogoHeight={sizes.splash}
+            />
+          )}
+          {!fetching && (
+            <AuthConfigSection
+              initial={authCfg}
+              logoFullUrl={logos.full}
+              logoAuthHeight={sizes.auth}
+            />
+          )}
+        </div>
+      )}
+
+      {/* ── Integrations ── */}
+      {activeTab === 'integrations' && (
+        <div className="space-y-4">
+          <div className="mb-2">
+            <p className="text-xs text-gray-400">
+              Values saved here override environment variables at runtime — no server restart required.
+              <span className="ml-1.5 inline-flex items-center text-[10px] font-semibold px-1.5 py-0.5 rounded bg-primary/10 text-primary border border-primary/20">DB</span>
+              {' '}= from database,{' '}
+              <span className="inline-flex items-center text-[10px] font-semibold px-1.5 py-0.5 rounded bg-gray-100 text-gray-500 border border-gray-200">ENV</span>
+              {' '}= from environment.
+            </p>
+          </div>
+          <IntegrationsSection />
+        </div>
+      )}
+
     </div>
   );
 }
