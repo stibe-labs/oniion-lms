@@ -45,13 +45,13 @@ interface Props {
 function ServiceStatus({ name, status, icon: Icon }: { name: string; status: string; icon: typeof Server }) {
   const isOk = status === 'ok' || status === 'connected' || status === 'healthy';
   return (
-    <div className={`rounded-xl border p-4 flex items-center gap-4 ${isOk ? 'border-green-200 bg-green-50/50' : 'border-red-200 bg-red-50/50'}`}>
-      <div className={`rounded-lg p-2.5 ${isOk ? 'bg-green-100' : 'bg-red-100'}`}>
-        <Icon className={`h-5 w-5 ${isOk ? 'text-green-700' : 'text-red-700'}`} />
+    <div className={`rounded-xl border p-4 flex items-center gap-4 ${isOk ? 'border-primary/20 bg-primary/5/50' : 'border-red-200 bg-red-50/50'}`}>
+      <div className={`rounded-lg p-2.5 ${isOk ? 'bg-primary/10' : 'bg-red-100'}`}>
+        <Icon className={`h-5 w-5 ${isOk ? 'text-primary' : 'text-red-700'}`} />
       </div>
       <div className="flex-1 min-w-0">
         <p className="text-sm font-medium text-gray-900">{name}</p>
-        <p className={`text-xs ${isOk ? 'text-green-600' : 'text-red-600'}`}>{status}</p>
+        <p className={`text-xs ${isOk ? 'text-primary' : 'text-red-600'}`}>{status}</p>
       </div>
       {isOk ? <CheckCircle className="h-5 w-5 text-green-500 shrink-0" /> : <XCircle className="h-5 w-5 text-red-500 shrink-0" />}
     </div>
@@ -111,13 +111,13 @@ export default function SystemClient({ userName, userEmail, userRole }: Props) {
         </PageHeader>
 
         {/* Status banner */}
-        <div className={`rounded-xl border p-4 flex items-center gap-4 ${allOk ? 'border-green-200 bg-green-50' : 'border-amber-200 bg-amber-50'}`}>
+        <div className={`rounded-xl border p-4 flex items-center gap-4 ${allOk ? 'border-primary/20 bg-primary/5' : 'border-amber-200 bg-amber-50'}`}>
           {allOk ? (
             <>
-              <CheckCircle className="h-6 w-6 text-green-600 shrink-0" />
+              <CheckCircle className="h-6 w-6 text-primary shrink-0" />
               <div>
                 <p className="text-sm font-semibold text-green-800">All Systems Operational</p>
-                <p className="text-xs text-green-600">Last checked: {health?.timestamp ? new Date(health.timestamp).toLocaleString('en-IN') : '—'}</p>
+                <p className="text-xs text-primary">Last checked: {health?.timestamp ? new Date(health.timestamp).toLocaleString('en-IN') : '—'}</p>
               </div>
             </>
           ) : (
@@ -244,12 +244,12 @@ export default function SystemClient({ userName, userEmail, userRole }: Props) {
               </h3>
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 {[
-                  { role: 'Owner',             level: 'Top-level',         desc: 'Full system access, all dashboards, HR, finance, reports, ghost mode',              color: 'border-emerald-200 bg-emerald-50' },
+                  { role: 'Owner',             level: 'Top-level',         desc: 'Full system access, all dashboards, HR, finance, reports, ghost mode',              color: 'border-primary/20 bg-primary/5' },
                   { role: 'HR',                level: 'Senior Management', desc: 'User management, payroll, teacher cancellation final approval',                      color: 'border-teal-200 bg-teal-50' },
-                  { role: 'Academic Operator', level: 'Management',        desc: 'Academic monitoring, room management, join logs, cancellation approval',            color: 'border-green-200 bg-green-50' },
+                  { role: 'Academic Operator', level: 'Management',        desc: 'Academic monitoring, room management, join logs, cancellation approval',            color: 'border-primary/20 bg-primary/5' },
                   { role: 'Batch Coordinator', level: 'Operational',       desc: 'Batch management, scheduling, admissions, attendance, teacher oversight',           color: 'border-teal-200 bg-teal-50' },
-                  { role: 'Teacher',           level: 'Academic Staff',    desc: 'Conduct sessions, mark attendance, update portions, manage exams, rejoin control',  color: 'border-emerald-200 bg-emerald-50' },
-                  { role: 'Student',           level: 'End User',          desc: 'Attend sessions, take exams, view results, submit feedback',                          color: 'border-green-200 bg-green-50' },
+                  { role: 'Teacher',           level: 'Academic Staff',    desc: 'Conduct sessions, mark attendance, update portions, manage exams, rejoin control',  color: 'border-primary/20 bg-primary/5' },
+                  { role: 'Student',           level: 'End User',          desc: 'Attend sessions, take exams, view results, submit feedback',                          color: 'border-primary/20 bg-primary/5' },
                   { role: 'Parent',            level: 'Guardian',          desc: 'View attendance, fees, exam results, academic progress, submit complaints',         color: 'border-teal-200 bg-teal-50' },
                   { role: 'Ghost',             level: 'Observer',          desc: 'Invisible classroom observation, monitoring live sessions',                          color: 'border-gray-200 bg-gray-50' },
                 ].map((r) => (

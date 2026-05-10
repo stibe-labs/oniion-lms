@@ -199,7 +199,7 @@ export default function SessionCalendar({
     if (isMonth) {
       return (
         <div className="flex items-center gap-1 px-1 py-0.5 text-[10px] leading-tight overflow-hidden w-full">
-          {es === 'live' && <span className="flex-shrink-0 h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse" />}
+          {es === 'live' && <span className="flex-shrink-0 h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />}
           {es === 'cancelled' && <span className="flex-shrink-0 h-1.5 w-1.5 rounded-full bg-red-400" />}
           <span className="truncate font-medium">{session.subject}</span>
           <span className="truncate text-gray-500 hidden sm:inline">· {fmtTime12(session.start_time)}</span>
@@ -211,7 +211,7 @@ export default function SessionCalendar({
     return (
       <div className="px-1.5 py-1 text-[11px] leading-tight overflow-hidden w-full h-full">
         <div className="flex items-center gap-1">
-          {es === 'live' && <span className="flex-shrink-0 h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse" />}
+          {es === 'live' && <span className="flex-shrink-0 h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />}
           <span className="font-semibold truncate">{session.subject}</span>
         </div>
         <div className="text-[10px] opacity-75 truncate">{session.batch_name}</div>
@@ -324,11 +324,11 @@ export default function SessionCalendar({
       <div className="flex flex-wrap items-center gap-3 mt-3 px-1">
         <span className="text-[10px] text-gray-400 font-medium uppercase tracking-wide">Status:</span>
         <div className="flex items-center gap-1.5 text-[11px] text-gray-600">
-          <span className="h-2.5 w-2.5 rounded-sm border-2 border-emerald-500 bg-emerald-50" />
+          <span className="h-2.5 w-2.5 rounded-sm border-2 border-primary bg-primary/5" />
           Scheduled
         </div>
         <div className="flex items-center gap-1.5 text-[11px] text-gray-600">
-          <span className="h-2.5 w-2.5 rounded-sm border-2 border-green-500 bg-green-50 animate-pulse" />
+          <span className="h-2.5 w-2.5 rounded-sm border-2 border-primary bg-primary/5 animate-pulse" />
           Live
         </div>
         <div className="flex items-center gap-1.5 text-[11px] text-gray-600">
@@ -436,15 +436,15 @@ export default function SessionCalendar({
       <style>{`
         .session-calendar .fc {
           --fc-border-color: #e5e7eb;
-          --fc-today-bg-color: #f0fdf4;
-          --fc-now-indicator-color: #10b981;
+          --fc-today-bg-color: color-mix(in oklab, var(--primary) 8%, transparent);
+          --fc-now-indicator-color: var(--primary);
           --fc-button-bg-color: #f9fafb;
           --fc-button-border-color: #d1d5db;
           --fc-button-text-color: #374151;
           --fc-button-hover-bg-color: #f3f4f6;
           --fc-button-hover-border-color: #9ca3af;
-          --fc-button-active-bg-color: #10b981;
-          --fc-button-active-border-color: #059669;
+          --fc-button-active-bg-color: var(--primary);
+          --fc-button-active-border-color: var(--primary);
           --fc-button-active-text-color: #fff;
           font-family: var(--font-geist-sans), system-ui, sans-serif;
           font-size: 13px;
@@ -508,7 +508,7 @@ export default function SessionCalendar({
         .session-calendar .fc .fc-more-link {
           font-size: 10px;
           font-weight: 600;
-          color: #10b981;
+          color: var(--primary);
         }
       `}</style>
     </div>

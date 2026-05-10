@@ -123,7 +123,7 @@ export default function SessionMaterialsPanel({ sessionId, teacherEmail, lightMo
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="File label (optional)"
-              className="w-full rounded-lg bg-white border border-gray-200 px-3 py-2 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-400/30 focus:border-teal-400"
+              className="w-full rounded-lg bg-white border border-gray-200 px-3 py-2 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-400/30 focus:border-secondary"
             />
 
             {error && <p className="text-xs text-red-500">{error}</p>}

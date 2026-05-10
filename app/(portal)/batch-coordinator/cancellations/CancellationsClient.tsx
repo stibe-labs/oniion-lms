@@ -50,7 +50,7 @@ const STATUS_COLORS: Record<string, string> = {
   admin_approved: 'bg-blue-500/20 text-blue-400',
   academic_approved: 'bg-indigo-500/20 text-indigo-400',
   hr_approved: 'bg-violet-500/20 text-violet-400',
-  approved: 'bg-green-500/20 text-green-400',
+  approved: 'bg-primary/20 text-primary',
   rejected: 'bg-red-500/20 text-red-400',
 };
 
@@ -190,7 +190,7 @@ export default function CancellationsClient({ userName, userEmail, userRole }: P
                   {/* Approval chain display for teacher_initiated */}
                   {req.cancellation_type === 'teacher_initiated' && req.coordinator_decision && (
                     <div className="mt-2 flex items-center gap-2 text-xs text-muted-foreground">
-                      <CheckCircle2 className="h-3 w-3 text-green-400" />
+                      <CheckCircle2 className="h-3 w-3 text-primary" />
                       Coordinator: {req.coordinator_decision}
                       {req.admin_decision && <><span>→</span> Admin: {req.admin_decision}</>}
                     </div>
@@ -202,7 +202,7 @@ export default function CancellationsClient({ userName, userEmail, userRole }: P
                       <button
                         onClick={() => handleAction(req.id, 'approve')}
                         disabled={actionLoading === req.id}
-                        className="flex items-center gap-1 rounded-lg bg-green-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-green-500 disabled:opacity-50"
+                        className="flex items-center gap-1 rounded-lg bg-primary px-3 py-1.5 text-xs font-medium text-white hover:bg-primary disabled:opacity-50"
                       >
                         {actionLoading === req.id ? (
                           <Loader2 className="h-3 w-3 animate-spin" />
@@ -224,7 +224,7 @@ export default function CancellationsClient({ userName, userEmail, userRole }: P
                     </>
                   )}
                   {req.status === 'approved' && (
-                    <span className="flex items-center gap-1 text-xs text-green-400">
+                    <span className="flex items-center gap-1 text-xs text-primary">
                       <CheckCircle2 className="h-3.5 w-3.5" /> Approved
                     </span>
                   )}

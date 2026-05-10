@@ -190,7 +190,7 @@ export default function OpenClassroomDetail({
   if (loading) {
     return (
       <div className="bg-white rounded-xl border border-gray-200 shadow-lg p-12 text-center">
-        <Loader2 className="w-6 h-6 text-emerald-500 animate-spin mx-auto" />
+        <Loader2 className="w-6 h-6 text-primary animate-spin mx-auto" />
         <p className="text-sm text-gray-400 mt-2">Loading classroom details…</p>
       </div>
     );
@@ -226,11 +226,11 @@ export default function OpenClassroomDetail({
   return (
     <div className="bg-white rounded-xl border border-gray-200 shadow-lg overflow-hidden">
       {/* Header */}
-      <div className="bg-gradient-to-r from-emerald-600 to-teal-600 px-5 py-4 text-white flex items-start justify-between">
+      <div className="bg-gradient-to-r from-primary to-secondary px-5 py-4 text-white flex items-start justify-between">
         <div className="min-w-0 flex-1">
-          <p className="text-emerald-200 text-[10px] font-medium uppercase tracking-wide">Open Classroom Details</p>
+          <p className="text-primary/60 text-[10px] font-medium uppercase tracking-wide">Open Classroom Details</p>
           <h2 className="text-lg font-bold leading-tight mt-0.5 truncate">{String(c.title)}</h2>
-          <div className="flex flex-wrap items-center gap-3 text-xs text-emerald-100 mt-1.5">
+          <div className="flex flex-wrap items-center gap-3 text-xs text-primary/40 mt-1.5">
             {c.teacher_name ? <span>🧑‍🏫 {String(c.teacher_name)}</span> : null}
             {c.scheduled_at ? <span>📅 {fmt(String(c.scheduled_at))}</span> : null}
             <span>⏱ {c.duration_minutes ? `${String(c.duration_minutes)} min` : 'Unlimited'}</span>
@@ -253,7 +253,7 @@ export default function OpenClassroomDetail({
             <button key={s.id} onClick={() => setActiveSection(s.id)}
               className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition ${
                 activeSection === s.id
-                  ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                  ? 'bg-primary/5 text-primary border border-primary/20'
                   : 'text-gray-500 hover:bg-gray-50 border border-transparent'
               }`}>
               <s.icon className="w-3.5 h-3.5" />
@@ -340,7 +340,7 @@ export default function OpenClassroomDetail({
                           <td className="px-3 py-2">
                             <p className="font-medium text-gray-800">{p.name}</p>
                             {attnPct !== null && (
-                              <span className={`text-[10px] ${attnPct >= 70 ? 'text-emerald-600' : attnPct >= 40 ? 'text-amber-600' : 'text-red-600'}`}>
+                              <span className={`text-[10px] ${attnPct >= 70 ? 'text-primary' : attnPct >= 40 ? 'text-amber-600' : 'text-red-600'}`}>
                                 {attnPct}% attentive
                               </span>
                             )}
@@ -351,7 +351,7 @@ export default function OpenClassroomDetail({
                           </td>
                           <td className="px-3 py-2">
                             <span className={`inline-flex px-1.5 py-0.5 rounded-full text-[10px] font-medium border ${
-                              p.payment_status === 'paid' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' :
+                              p.payment_status === 'paid' ? 'bg-primary/5 text-primary border-primary/20' :
                               p.payment_status === 'pending' ? 'bg-amber-50 text-amber-700 border-amber-200' :
                               'bg-gray-50 text-gray-500 border-gray-200'
                             }`}>
@@ -398,7 +398,7 @@ export default function OpenClassroomDetail({
                           </td>
                           <td className="px-3 py-2">
                             <span className={`inline-flex px-1.5 py-0.5 rounded-full text-[10px] font-medium border ${
-                              a.status === 'present' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' :
+                              a.status === 'present' ? 'bg-primary/5 text-primary border-primary/20' :
                               a.status === 'late' ? 'bg-amber-50 text-amber-700 border-amber-200' :
                               'bg-red-50 text-red-600 border-red-200'
                             }`}>
@@ -422,7 +422,7 @@ export default function OpenClassroomDetail({
                       {data.attendance_logs.map((log, i) => (
                         <div key={i} className="flex items-center gap-2 text-[11px] px-3 py-1.5 rounded hover:bg-gray-50">
                           <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${
-                            log.event_type === 'join' || log.event_type === 'rejoin' ? 'bg-emerald-500' :
+                            log.event_type === 'join' || log.event_type === 'rejoin' ? 'bg-primary' :
                             log.event_type === 'leave' ? 'bg-red-400' :
                             'bg-gray-400'
                           }`} />
@@ -457,13 +457,13 @@ export default function OpenClassroomDetail({
                       <div key={a.student_email} className="border border-gray-100 rounded-lg p-3 space-y-2">
                         <div className="flex items-center justify-between">
                           <p className="text-xs font-semibold text-gray-800">{participant?.name || a.student_email}</p>
-                          <span className={`text-xs font-bold ${attnPct >= 70 ? 'text-emerald-600' : attnPct >= 40 ? 'text-amber-600' : 'text-red-600'}`}>
+                          <span className={`text-xs font-bold ${attnPct >= 70 ? 'text-primary' : attnPct >= 40 ? 'text-amber-600' : 'text-red-600'}`}>
                             {attnPct}%
                           </span>
                         </div>
                         {/* Attention bar */}
                         <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
-                          <div className="h-full bg-emerald-500 rounded-full transition-all" style={{ width: `${attnPct}%` }} />
+                          <div className="h-full bg-primary rounded-full transition-all" style={{ width: `${attnPct}%` }} />
                         </div>
                         <div className="flex flex-wrap gap-2 text-[10px] text-gray-500">
                           <span>⏱ {durStr(totalSec)} tracked</span>
@@ -518,7 +518,7 @@ export default function OpenClassroomDetail({
                             <td className="px-3 py-1.5 text-gray-700">{p?.name || m.student_email || '—'}</td>
                             <td className="px-3 py-1.5">
                               <span className={`inline-flex px-1.5 py-0.5 rounded text-[10px] font-medium ${
-                                m.event_type === 'attentive' ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'
+                                m.event_type === 'attentive' ? 'bg-primary/5 text-primary' : 'bg-amber-50 text-amber-700'
                               }`}>{m.event_type}</span>
                             </td>
                             <td className="px-3 py-1.5 text-right text-gray-600">{m.event_count}</td>
@@ -566,7 +566,7 @@ export default function OpenClassroomDetail({
                           <td className="px-3 py-2 text-right text-gray-700 font-medium">{e.score}/{e.total_questions}</td>
                           <td className="px-3 py-2 text-right">
                             <span className={`font-bold ${
-                              Number(e.percentage) >= 70 ? 'text-emerald-600' :
+                              Number(e.percentage) >= 70 ? 'text-primary' :
                               Number(e.percentage) >= 40 ? 'text-amber-600' : 'text-red-600'
                             }`}>
                               {Math.round(Number(e.percentage))}%
@@ -587,7 +587,7 @@ export default function OpenClassroomDetail({
                               <div className="space-y-3">
                                 {e.answers.map((ans, qi) => (
                                   <div key={qi} className={`rounded-lg border px-4 py-3 ${
-                                    ans.is_correct ? 'border-emerald-200 bg-emerald-50/60' :
+                                    ans.is_correct ? 'border-primary/20 bg-primary/5/60' :
                                     ans.selected_option === null ? 'border-gray-200 bg-gray-50' :
                                     'border-red-200 bg-red-50/50'
                                   }`}>
@@ -597,7 +597,7 @@ export default function OpenClassroomDetail({
                                         {ans.question_text}
                                       </p>
                                       <span className={`shrink-0 text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                                        ans.is_correct ? 'text-emerald-700 bg-emerald-100' :
+                                        ans.is_correct ? 'text-primary bg-primary/10' :
                                         ans.selected_option === null ? 'text-gray-500 bg-gray-200' :
                                         'text-red-700 bg-red-100'
                                       }`}>
@@ -608,14 +608,14 @@ export default function OpenClassroomDetail({
                                       {ans.options.map((opt, oi) => (
                                         <div key={oi} className={`text-[10px] px-2.5 py-1.5 rounded-md border flex items-center gap-1.5 ${
                                           oi === ans.correct_answer
-                                            ? 'border-emerald-400 bg-emerald-100 text-emerald-800 font-semibold'
+                                            ? 'border-primary bg-primary/10 text-primary font-semibold'
                                             : oi === ans.selected_option && !ans.is_correct
                                             ? 'border-red-400 bg-red-100 text-red-800'
                                             : 'border-gray-200 text-gray-600'
                                         }`}>
                                           <span className="font-bold text-gray-400 shrink-0">{'ABCD'[oi]}.</span>
                                           <span className="flex-1">{opt}</span>
-                                          {oi === ans.correct_answer && <CheckCircle2 className="w-3 h-3 text-emerald-500 shrink-0" />}
+                                          {oi === ans.correct_answer && <CheckCircle2 className="w-3 h-3 text-primary shrink-0" />}
                                           {oi === ans.selected_option && !ans.is_correct && <Ban className="w-3 h-3 text-red-400 shrink-0" />}
                                         </div>
                                       ))}
@@ -669,7 +669,7 @@ export default function OpenClassroomDetail({
                           <td className="px-3 py-2 text-gray-500">{fmt(s.shared_at)}</td>
                           <td className="px-3 py-2">
                             {joined ? (
-                              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+                              <CheckCircle2 className="w-3.5 h-3.5 text-primary" />
                             ) : (
                               <span className="text-gray-300">—</span>
                             )}
@@ -713,7 +713,7 @@ function LinkRow({ label, url, field, copiedField, onCopy }: {
       <input readOnly value={url} className="flex-1 min-w-0 text-[11px] text-gray-600 bg-transparent outline-none truncate" />
       <button onClick={() => onCopy(url, field)}
         className="shrink-0 p-1 rounded hover:bg-gray-200 transition">
-        {copiedField === field ? <Check className="w-3 h-3 text-emerald-500" /> : <Copy className="w-3 h-3 text-gray-400" />}
+        {copiedField === field ? <Check className="w-3 h-3 text-primary" /> : <Copy className="w-3 h-3 text-gray-400" />}
       </button>
       <a href={url} target="_blank" rel="noreferrer" className="shrink-0 p-1 rounded hover:bg-gray-200 transition">
         <ExternalLink className="w-3 h-3 text-gray-400" />

@@ -92,7 +92,7 @@ function useRipple() {
       width: `${size}px`,
       height: `${size}px`,
       borderRadius: '50%',
-      background: 'rgba(34,197,94,0.15)',
+      background: 'color-mix(in oklab, var(--primary) 15%, transparent)',
       transform: 'scale(0)',
       animation: 'sidebar-ripple 500ms ease-out forwards',
       pointerEvents: 'none',
@@ -146,7 +146,7 @@ function SidebarNavItem({
         ${collapsed ? 'justify-center px-2 py-2.5' : 'px-3 py-2.5'}
         ${
           item.active
-            ? 'bg-emerald-50 text-emerald-700 shadow-sm shadow-emerald-100'
+            ? 'bg-primary/10 text-primary shadow-sm shadow-primary/10'
             : 'text-gray-500 hover:bg-gray-50 hover:text-gray-800 hover:shadow-sm'
         }
       `}
@@ -155,7 +155,7 @@ function SidebarNavItem({
     >
       {/* Active indicator bar */}
       {item.active && (
-        <span className="absolute left-0 top-1/2 -translate-y-1/2 h-6 w-1 rounded-r-full bg-emerald-500 shadow-[0_0_8px_rgba(34,197,94,0.35)] animate-[sidebar-indicator_300ms_ease-out]" />
+        <span className="absolute left-0 top-1/2 -translate-y-1/2 h-6 w-1 rounded-r-full bg-primary animate-[sidebar-indicator_300ms_ease-out]" />
       )}
 
       {/* Icon wrapper — relative so badge can sit on top in collapsed mode */}
@@ -164,13 +164,13 @@ function SidebarNavItem({
           flex items-center justify-center rounded-lg transition-all duration-200
           ${collapsed ? 'h-8 w-8' : 'h-7 w-7'}
           ${item.active
-            ? 'bg-emerald-100 shadow-sm shadow-emerald-200'
+            ? 'bg-primary/15 shadow-sm shadow-primary/20'
             : 'group-hover:bg-gray-100'
           }
         `}>
           <item.icon
             className={`h-4 w-4 transition-transform duration-200
-              ${item.active ? 'text-emerald-600 scale-110' : 'text-gray-400 group-hover:text-gray-600 group-hover:scale-110'}
+              ${item.active ? 'text-primary scale-110' : 'text-gray-400 group-hover:text-gray-600 group-hover:scale-110'}
             `}
           />
         </span>
@@ -191,7 +191,7 @@ function SidebarNavItem({
               {badge! > 99 ? '99+' : badge}
             </span>
           ) : item.active ? (
-            <span className="ml-auto h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_6px_rgba(34,197,94,0.5)] animate-pulse" />
+            <span className="ml-auto h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
           ) : null}
         </>
       )}
@@ -272,9 +272,9 @@ export default function DashboardShell({
         {/* ── Brand ── pt-[env(safe-area-inset-top)] for iPhone PWA homescreen mode */}
         <div className={`border-b border-gray-100 pt-[env(safe-area-inset-top)] ${collapsed ? 'px-2' : 'px-4'}`}>
         <div className={`flex h-16 items-center ${collapsed ? 'justify-center' : 'gap-3'}`}>
-          <div className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-linear-to-br from-emerald-50 to-green-50 ring-1 ring-emerald-200/60 shadow-sm">
+          <div className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary/5 ring-1 ring-primary/20 shadow-sm">
             <img src={logoSmallUrl ?? '/logo/main.png'} alt="Logo" style={{ height: logoSidebarHeight, width: logoSidebarHeight }} className="object-contain" />
-            <span className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-emerald-400 ring-2 ring-white animate-pulse" />
+            <span className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-primary ring-2 ring-white animate-pulse" />
           </div>
 
           {!collapsed && (
@@ -327,16 +327,16 @@ export default function DashboardShell({
         <div className={`border-t border-gray-100 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] ${collapsed ? 'flex flex-col items-center' : ''}`}>
           <button
             onClick={() => { if (role === 'owner') { router.push('/owner/admins'); } setSidebarOpen(false); }}
-            className={`flex items-center w-full rounded-xl p-1.5 -m-1.5 transition-all duration-200 hover:bg-emerald-50/80 active:scale-[0.98] ${collapsed ? 'justify-center' : 'gap-3'}`}
+            className={`flex items-center w-full rounded-xl p-1.5 -m-1.5 transition-all duration-200 hover:bg-primary/5 active:scale-[0.98] ${collapsed ? 'justify-center' : 'gap-3'}`}
             title={collapsed ? `${userName}` : userName}
           >
             {/* Animated avatar */}
             <div className="relative group">
-              <div className="absolute -inset-0.5 rounded-full bg-linear-to-r from-emerald-400 to-green-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-[2px]" />
+              <div className="absolute -inset-0.5 rounded-full bg-primary opacity-0 group-hover:opacity-40 transition-opacity duration-300 blur-[2px]" />
               {profileImage ? (
                 <img src={profileImage} alt={userName} className="relative h-9 w-9 rounded-full object-cover shadow-sm ring-2 ring-white" />
               ) : (
-                <div className="relative flex h-9 w-9 items-center justify-center rounded-full bg-linear-to-br from-emerald-500 to-green-500 text-xs font-bold text-white shadow-sm">
+                <div className="relative flex h-9 w-9 items-center justify-center rounded-full bg-primary text-xs font-bold text-white shadow-sm">
                   {initials}
                 </div>
               )}
@@ -410,14 +410,14 @@ export default function DashboardShell({
                 <Menu className="h-5 w-5" />
               </button>
               <div className="flex items-center gap-2 flex-1 min-w-0">
-                <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-linear-to-br from-emerald-50 to-green-50 ring-1 ring-emerald-200/60">
+                <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-primary/5 ring-1 ring-primary/20">
                   <img src={logoSmallUrl ?? '/logo/main.png'} alt="Logo" className="h-4 w-4 object-contain" />
                 </div>
                 <h1 className="text-sm font-bold text-gray-900 truncate">{platformName}</h1>
               </div>
               <button
                 onClick={() => { if (role === 'owner') { router.push('/owner/admins'); } }}
-                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-emerald-500 to-green-500 text-[11px] font-bold text-white ring-2 ring-emerald-100 active:scale-95 transition-transform overflow-hidden"
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary text-[11px] font-bold text-white ring-2 ring-primary/20 active:scale-95 transition-transform overflow-hidden"
               >
                 {profileImage ? (
                   <img src={profileImage} alt={userName} className="h-full w-full object-cover" />

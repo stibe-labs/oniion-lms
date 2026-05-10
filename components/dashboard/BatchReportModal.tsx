@@ -120,19 +120,19 @@ function fmtSec(sec: number) {
 
 function gradeColor(g: string | null) {
   if (!g) return 'bg-gray-100 text-gray-500';
-  if (g === 'A') return 'bg-emerald-100 text-emerald-700';
+  if (g === 'A') return 'bg-primary/10 text-primary';
   if (g === 'B') return 'bg-teal-100 text-teal-700';
   if (g === 'C') return 'bg-amber-100 text-amber-700';
   if (g === 'D') return 'bg-orange-100 text-orange-700';
   return 'bg-red-100 text-red-700';
 }
 function attColor(rate: number) {
-  if (rate >= 75) return 'text-emerald-600';
+  if (rate >= 75) return 'text-primary';
   if (rate >= 50) return 'text-amber-600';
   return 'text-red-600';
 }
 function attColorBg(rate: number) {
-  if (rate >= 75) return 'bg-emerald-500';
+  if (rate >= 75) return 'bg-primary';
   if (rate >= 50) return 'bg-amber-500';
   return 'bg-red-500';
 }
@@ -343,13 +343,13 @@ export default function BatchReportModal({ batchId, sessions, onClose }: Props) 
             <div className="flex items-start justify-between gap-3">
               <div>
                 <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
-                  <FileText className="h-5 w-5 text-emerald-600" />
+                  <FileText className="h-5 w-5 text-primary" />
                   Generate Batch Report
                 </h2>
                 <p className="text-sm text-gray-500 mt-0.5">Select ended sessions to include.</p>
               </div>
               {endedSessions.length > 0 && (
-                <button onClick={toggleAll} className="shrink-0 flex items-center gap-1.5 text-xs font-medium text-emerald-700 hover:text-emerald-900 mt-1">
+                <button onClick={toggleAll} className="shrink-0 flex items-center gap-1.5 text-xs font-medium text-primary hover:text-emerald-900 mt-1">
                   {allSelected ? <CheckSquare className="h-4 w-4" /> : <Square className="h-4 w-4" />}
                   {allSelected ? 'Deselect All' : 'Select All'}
                 </button>
@@ -363,15 +363,15 @@ export default function BatchReportModal({ batchId, sessions, onClose }: Props) 
                   const checked = selected.has(s.session_id);
                   return (
                     <button key={s.session_id} onClick={() => toggleOne(s.session_id)}
-                      className={`w-full text-left rounded-xl border px-4 py-3 flex items-start gap-3 transition-all ${checked ? 'border-emerald-300 bg-emerald-50 ring-1 ring-emerald-200' : 'border-gray-200 bg-white hover:border-gray-300'}`}
+                      className={`w-full text-left rounded-xl border px-4 py-3 flex items-start gap-3 transition-all ${checked ? 'border-emerald-300 bg-primary/5 ring-1 ring-primary/20' : 'border-gray-200 bg-white hover:border-gray-300'}`}
                     >
-                      <span className={`mt-0.5 shrink-0 ${checked ? 'text-emerald-600' : 'text-gray-400'}`}>
+                      <span className={`mt-0.5 shrink-0 ${checked ? 'text-primary' : 'text-gray-400'}`}>
                         {checked ? <CheckSquare className="h-4 w-4" /> : <Square className="h-4 w-4" />}
                       </span>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 flex-wrap">
                           <span className="text-sm font-semibold text-gray-900">{s.subject}</span>
-                          <span className={`text-[10px] font-bold rounded-full px-2 py-0.5 ${checked ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-gray-500'}`}>Ended</span>
+                          <span className={`text-[10px] font-bold rounded-full px-2 py-0.5 ${checked ? 'bg-primary/10 text-primary' : 'bg-gray-100 text-gray-500'}`}>Ended</span>
                         </div>
                         <p className="text-xs text-gray-500 mt-0.5">
                           {fmtDate(s.scheduled_date)} · {fmtTime12(s.start_time)}
@@ -396,8 +396,8 @@ export default function BatchReportModal({ batchId, sessions, onClose }: Props) 
         {/* ── Step 2: Loading ────────────────────────────────────────────────── */}
         {step === 'loading' && (
           <div className="flex flex-col items-center justify-center py-20 gap-4">
-            <div className="w-14 h-14 rounded-2xl bg-emerald-50 flex items-center justify-center animate-pulse">
-              <BarChart3 className="h-7 w-7 text-emerald-600" />
+            <div className="w-14 h-14 rounded-2xl bg-primary/5 flex items-center justify-center animate-pulse">
+              <BarChart3 className="h-7 w-7 text-primary" />
             </div>
             <p className="text-sm font-medium text-gray-700">Generating report…</p>
             <p className="text-xs text-gray-400">Aggregating attendance, AI monitoring & exams</p>
@@ -439,9 +439,9 @@ export default function BatchReportModal({ batchId, sessions, onClose }: Props) 
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5 no-print">
                 {[
                   { label: 'Sessions',       value: report.overallStats.totalSessions,                                                 icon: Calendar,   color: 'text-teal-600 bg-teal-50' },
-                  { label: 'Students',        value: report.overallStats.totalStudents,                                                icon: Users,      color: 'text-emerald-600 bg-emerald-50' },
+                  { label: 'Students',        value: report.overallStats.totalStudents,                                                icon: Users,      color: 'text-primary bg-primary/5' },
                   { label: 'Total Class Time',value: fmtDuration(report.overallStats.totalClassTimeMin),                              icon: Clock,      color: 'text-sky-600 bg-sky-50' },
-                  { label: 'Avg Attendance',  value: `${report.overallStats.avgAttendanceRate}%`,                                     icon: TrendingUp, color: report.overallStats.avgAttendanceRate >= 75 ? 'text-emerald-600 bg-emerald-50' : report.overallStats.avgAttendanceRate >= 50 ? 'text-amber-600 bg-amber-50' : 'text-red-600 bg-red-50' },
+                  { label: 'Avg Attendance',  value: `${report.overallStats.avgAttendanceRate}%`,                                     icon: TrendingUp, color: report.overallStats.avgAttendanceRate >= 75 ? 'text-primary bg-primary/5' : report.overallStats.avgAttendanceRate >= 50 ? 'text-amber-600 bg-amber-50' : 'text-red-600 bg-red-50' },
                   { label: 'Avg Exam Score',  value: report.overallStats.avgExamScore != null ? `${report.overallStats.avgExamScore}%` : '—', icon: Award, color: 'text-purple-600 bg-purple-50' },
                 ].map(({ label, value, icon: Icon, color }) => (
                   <div key={label} className="rounded-xl border border-gray-200 bg-white p-4 flex items-center gap-3">
@@ -473,7 +473,7 @@ export default function BatchReportModal({ batchId, sessions, onClose }: Props) 
               {/* ── Session Summary ───────────────────────────────────────── */}
               <div>
                 <h3 className="text-sm font-bold text-gray-800 mb-2 flex items-center gap-2 no-print">
-                  <BookOpen className="h-4 w-4 text-emerald-600" /> Session Summary
+                  <BookOpen className="h-4 w-4 text-primary" /> Session Summary
                 </h3>
                 <div className="hidden print-section-title">1. Session Summary</div>
                 <div className="rounded-xl border border-gray-200 overflow-hidden">
@@ -552,7 +552,7 @@ export default function BatchReportModal({ batchId, sessions, onClose }: Props) 
               {/* ── Student Performance (with AI monitoring) ──────────────── */}
               <div className="print-break">
                 <h3 className="text-sm font-bold text-gray-800 mb-1 flex items-center gap-2 no-print">
-                  <Users className="h-4 w-4 text-emerald-600" /> Student Performance
+                  <Users className="h-4 w-4 text-primary" /> Student Performance
                   <span className="text-xs font-normal text-gray-400">
                     {report.overallStats.avgExamScore != null ? '· Grade = 60% exam + 40% attendance' : '· Grade = attendance only'}
                   </span>
@@ -575,13 +575,13 @@ export default function BatchReportModal({ batchId, sessions, onClose }: Props) 
                     <TableWrapper>
                       <THead>
                         <TH>
-                          <button onClick={() => handleSort('name')} className="flex items-center gap-1 hover:text-emerald-700 no-print">
+                          <button onClick={() => handleSort('name')} className="flex items-center gap-1 hover:text-primary no-print">
                             Student {sortKey === 'name' && (sortAsc ? <ChevronUp className="h-3 w-3"/> : <ChevronDown className="h-3 w-3"/>)}
                           </button>
                           <span className="hidden print-show">Student</span>
                         </TH>
                         <TH>
-                          <button onClick={() => handleSort('attendance')} className="flex items-center gap-1 hover:text-emerald-700 no-print">
+                          <button onClick={() => handleSort('attendance')} className="flex items-center gap-1 hover:text-primary no-print">
                             Attend. {sortKey === 'attendance' && (sortAsc ? <ChevronUp className="h-3 w-3"/> : <ChevronDown className="h-3 w-3"/>)}
                           </button>
                           <span className="hidden print-show">Attend.</span>
@@ -593,13 +593,13 @@ export default function BatchReportModal({ batchId, sessions, onClose }: Props) 
                         <TH className="text-orange-600">Distract.</TH>
                         <TH className="text-gray-600">Inactive</TH>
                         <TH>
-                          <button onClick={() => handleSort('exam')} className="flex items-center gap-1 hover:text-emerald-700 no-print">
+                          <button onClick={() => handleSort('exam')} className="flex items-center gap-1 hover:text-primary no-print">
                             Exam {sortKey === 'exam' && (sortAsc ? <ChevronUp className="h-3 w-3"/> : <ChevronDown className="h-3 w-3"/>)}
                           </button>
                           <span className="hidden print-show">Exam</span>
                         </TH>
                         <TH>
-                          <button onClick={() => handleSort('grade')} className="flex items-center gap-1 hover:text-emerald-700 no-print">
+                          <button onClick={() => handleSort('grade')} className="flex items-center gap-1 hover:text-primary no-print">
                             Grade {sortKey === 'grade' && (sortAsc ? <ChevronUp className="h-3 w-3"/> : <ChevronDown className="h-3 w-3"/>)}
                           </button>
                           <span className="hidden print-show">Grade</span>
@@ -685,7 +685,7 @@ export default function BatchReportModal({ batchId, sessions, onClose }: Props) 
                                 <div className="flex items-center gap-2">
                                   {st.exams.length > 0 ? (
                                     <button onClick={() => setExpandedStudent(expandedStudent === st.email ? null : st.email)}
-                                      className="flex items-center gap-1 text-xs font-medium text-emerald-700 hover:text-emerald-900">
+                                      className="flex items-center gap-1 text-xs font-medium text-primary hover:text-emerald-900">
                                       {st.exams.length} exam{st.exams.length !== 1 ? 's' : ''}
                                       {expandedStudent === st.email ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
                                     </button>
@@ -729,7 +729,7 @@ export default function BatchReportModal({ batchId, sessions, onClose }: Props) 
                                         <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">AI Monitoring Breakdown</p>
                                         <div className="space-y-1.5">
                                           {[
-                                            { label: 'Engaged / Attentive',  val: fmtSec(st.monitoring.engagedSec),       cls: 'text-emerald-700' },
+                                            { label: 'Engaged / Attentive',  val: fmtSec(st.monitoring.engagedSec),       cls: 'text-primary' },
                                             { label: 'Writing Notes',        val: `${st.monitoring.writingNotesCount}× · ${fmtSec(st.monitoring.writingNotesSec)}`, cls: 'text-sky-700' },
                                             { label: 'Tab Switches',         val: `${st.monitoring.tabSwitchCount}× · ${fmtSec(st.monitoring.tabSwitchedSec)}`, cls: st.monitoring.tabSwitchCount >= 5 ? 'text-red-600' : 'text-amber-600' },
                                             { label: 'Phone Detected',       val: fmtSec(st.monitoring.phoneDetectedSec),  cls: 'text-red-600' },
@@ -1040,15 +1040,15 @@ function IndividualStudentReport({
                   label: 'Attendance',
                   value: `${student.attendance.rate}%`,
                   sub: `${student.attendance.present}P / ${student.attendance.absent}A${student.attendance.late > 0 ? ` / ${student.attendance.late}L` : ''}`,
-                  color: student.attendance.rate >= 75 ? 'border-emerald-200 bg-emerald-50' : student.attendance.rate >= 50 ? 'border-amber-200 bg-amber-50' : 'border-red-200 bg-red-50',
-                  textColor: student.attendance.rate >= 75 ? 'text-emerald-700' : student.attendance.rate >= 50 ? 'text-amber-700' : 'text-red-700',
+                  color: student.attendance.rate >= 75 ? 'border-primary/20 bg-primary/5' : student.attendance.rate >= 50 ? 'border-amber-200 bg-amber-50' : 'border-red-200 bg-red-50',
+                  textColor: student.attendance.rate >= 75 ? 'text-primary' : student.attendance.rate >= 50 ? 'text-amber-700' : 'text-red-700',
                 },
                 {
                   label: 'Avg Exam Score',
                   value: student.avgExamScore != null ? `${student.avgExamScore}%` : '—',
                   sub: `${student.exams.length} exam${student.exams.length !== 1 ? 's' : ''} taken`,
-                  color: student.avgExamScore == null ? 'border-gray-200 bg-gray-50' : student.avgExamScore >= 75 ? 'border-emerald-200 bg-emerald-50' : student.avgExamScore >= 50 ? 'border-amber-200 bg-amber-50' : 'border-red-200 bg-red-50',
-                  textColor: student.avgExamScore == null ? 'text-gray-500' : student.avgExamScore >= 75 ? 'text-emerald-700' : student.avgExamScore >= 50 ? 'text-amber-700' : 'text-red-700',
+                  color: student.avgExamScore == null ? 'border-gray-200 bg-gray-50' : student.avgExamScore >= 75 ? 'border-primary/20 bg-primary/5' : student.avgExamScore >= 50 ? 'border-amber-200 bg-amber-50' : 'border-red-200 bg-red-50',
+                  textColor: student.avgExamScore == null ? 'text-gray-500' : student.avgExamScore >= 75 ? 'text-primary' : student.avgExamScore >= 50 ? 'text-amber-700' : 'text-red-700',
                 },
                 {
                   label: 'Overall Grade',
@@ -1144,7 +1144,7 @@ function IndividualStudentReport({
                 <div className="sr-section-title">AI Monitoring Breakdown</div>
                 <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
                   {[
-                    { label: 'Engaged / Attentive', val: fmtSec(student.monitoring.engagedSec), color: 'text-emerald-700', bg: 'bg-emerald-50 border-emerald-200' },
+                    { label: 'Engaged / Attentive', val: fmtSec(student.monitoring.engagedSec), color: 'text-primary', bg: 'bg-primary/5 border-primary/20' },
                     { label: 'Writing Notes', val: `${student.monitoring.writingNotesCount}× · ${fmtSec(student.monitoring.writingNotesSec)}`, color: 'text-sky-700', bg: 'bg-sky-50 border-sky-200' },
                     { label: 'Tab Switches', val: `${student.monitoring.tabSwitchCount}× · ${fmtSec(student.monitoring.tabSwitchedSec)}`, color: student.monitoring.tabSwitchCount >= 5 ? 'text-red-700' : 'text-amber-700', bg: student.monitoring.tabSwitchCount >= 5 ? 'bg-red-50 border-red-200' : 'bg-amber-50 border-amber-200' },
                     { label: 'Phone Detected', val: fmtSec(student.monitoring.phoneDetectedSec), color: student.monitoring.phoneDetectedSec >= 120 ? 'text-red-700' : 'text-orange-700', bg: student.monitoring.phoneDetectedSec >= 120 ? 'bg-red-50 border-red-200' : 'bg-orange-50 border-orange-200' },

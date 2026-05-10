@@ -913,7 +913,7 @@ export default function CoordinatorLiveView({
           {studentAttention.size > 0 && (
             <span className={cn(
               'flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-bold',
-              avgEngagement >= 70 ? 'bg-green-600/20 text-green-400' :
+              avgEngagement >= 70 ? 'bg-primary/20 text-primary' :
               avgEngagement >= 40 ? 'bg-amber-600/20 text-amber-400' :
               'bg-red-600/20 text-red-400',
             )}>
@@ -950,7 +950,7 @@ export default function CoordinatorLiveView({
 
           {/* ── Right action cluster: audio + sidebar + leave ── */}
           <div className="flex items-center gap-1">
-            <span className="flex items-center gap-1.5 rounded-full bg-emerald-600/20 px-2.5 py-1 text-xs text-emerald-400">
+            <span className="flex items-center gap-1.5 rounded-full bg-primary/20 px-2.5 py-1 text-xs text-primary">
               <svg className="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
               Invisible
             </span>
@@ -1056,7 +1056,7 @@ export default function CoordinatorLiveView({
                 {hasScreenShare && teacher && (
                   <div className="relative rounded-xl overflow-hidden bg-[#292a2d] flex-1" style={{ maxHeight: 200 }}>
                     <WhiteboardComposite teacher={teacher} teacherScreenDevice={screenDevice} preferLaptopScreen={screenSourcePref === 'laptop'} className="h-full w-full rounded-xl" />
-                    <div className="absolute top-1.5 left-1.5 z-10 rounded-full bg-emerald-600/80 px-2 py-0.5 text-[9px] text-white font-semibold flex items-center gap-1">
+                    <div className="absolute top-1.5 left-1.5 z-10 rounded-full bg-primary/80 px-2 py-0.5 text-[9px] text-white font-semibold flex items-center gap-1">
                       <svg className="h-2.5 w-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
                       Screen Share
                     </div>
@@ -1112,7 +1112,7 @@ export default function CoordinatorLiveView({
                             'absolute top-1.5 right-1.5 z-10 flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[9px] font-bold backdrop-blur-sm shadow-sm pointer-events-none',
                             isSleeping ? 'bg-red-600/80 text-white' :
                             isLowAtt ? 'bg-amber-500/80 text-white' :
-                            'bg-green-600/70 text-white'
+                            'bg-primary/70 text-white'
                           )}>
                             {isSleeping ? (
                               <svg className="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}><path d="M2 4h4l2-2"/><path d="M6 8h4l2-2"/><path d="M10 12h4l2-2"/></svg>
@@ -1222,7 +1222,7 @@ export default function CoordinatorLiveView({
                             'absolute top-1.5 right-1.5 z-10 flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[9px] font-bold backdrop-blur-sm shadow-sm pointer-events-none',
                             isSleeping ? 'bg-red-600/80 text-white' :
                             isLowAtt ? 'bg-amber-500/80 text-white' :
-                            'bg-green-600/70 text-white'
+                            'bg-primary/70 text-white'
                           )}>
                             {isSleeping ? (
                               <svg className="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}><path d="M2 4h4l2-2"/><path d="M6 8h4l2-2"/><path d="M10 12h4l2-2"/></svg>
@@ -1578,11 +1578,11 @@ export default function CoordinatorLiveView({
                     <div className="flex items-center gap-2 mt-1">
                       <div className="flex-1 h-2 rounded-full bg-[#3c4043] overflow-hidden">
                         <div
-                          className={cn('h-full rounded-full transition-all', avgEngagement >= 70 ? 'bg-green-500' : avgEngagement >= 40 ? 'bg-amber-500' : 'bg-red-500')}
+                          className={cn('h-full rounded-full transition-all', avgEngagement >= 70 ? 'bg-primary' : avgEngagement >= 40 ? 'bg-amber-500' : 'bg-red-500')}
                           style={{ width: `${avgEngagement}%` }}
                         />
                       </div>
-                      <span className={cn('text-sm font-bold', avgEngagement >= 70 ? 'text-green-400' : avgEngagement >= 40 ? 'text-amber-400' : 'text-red-400')}>
+                      <span className={cn('text-sm font-bold', avgEngagement >= 70 ? 'text-primary' : avgEngagement >= 40 ? 'text-amber-400' : 'text-red-400')}>
                         {avgEngagement}%
                       </span>
                     </div>
@@ -1612,7 +1612,7 @@ export default function CoordinatorLiveView({
                             🎓 {att.name.replace(' (Teacher)', '')}
                           </span>
                           <span className={cn('text-xs font-bold',
-                            att.attentionScore >= 70 ? 'text-green-400' :
+                            att.attentionScore >= 70 ? 'text-primary' :
                             att.attentionScore >= 40 ? 'text-amber-400' : 'text-red-400',
                           )}>{att.attentionScore}%</span>
                         </div>
@@ -1644,7 +1644,7 @@ export default function CoordinatorLiveView({
                         inactive:       { label: 'Inactive', color: 'text-amber-400' },
                         distracted:     { label: 'Distracted', color: 'text-amber-400' },
                         low_engagement: { label: 'Low Engagement', color: 'text-amber-400' },
-                        attentive:      { label: 'Attentive', color: 'text-green-400' },
+                        attentive:      { label: 'Attentive', color: 'text-primary' },
                         writing_notes:  { label: '📝 Writing', color: 'text-blue-400' },
                         brief_absence:  { label: 'Briefly Away', color: 'text-sky-400' },
                         low_visibility: { label: 'Low Visibility', color: 'text-slate-400' },
@@ -1663,7 +1663,7 @@ export default function CoordinatorLiveView({
                           <div className="flex items-center justify-between">
                             <span className="text-xs font-medium text-[#e8eaed] truncate">{att.name}</span>
                             <span className={cn('text-xs font-bold',
-                              att.attentionScore >= 70 ? 'text-green-400' :
+                              att.attentionScore >= 70 ? 'text-primary' :
                               att.attentionScore >= 40 ? 'text-amber-400' : 'text-red-400',
                             )}>{att.attentionScore}%</span>
                           </div>

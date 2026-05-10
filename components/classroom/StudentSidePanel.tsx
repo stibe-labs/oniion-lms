@@ -117,7 +117,7 @@ function IcPause({ className }: { className?: string }) {
 }
 
 const STATUS_CFG: Record<string, { bg: string; text: string; border: string; label: string }> = {
-  present:    { bg: 'bg-emerald-500/10', text: 'text-emerald-400', border: 'border-emerald-500/30', label: 'On Time' },
+  present:    { bg: 'bg-primary/10', text: 'text-primary', border: 'border-primary/30', label: 'On Time' },
   late:       { bg: 'bg-amber-500/10',   text: 'text-amber-400',   border: 'border-amber-500/30',   label: 'Late' },
   absent:     { bg: 'bg-red-500/10',     text: 'text-red-400',     border: 'border-red-500/30',     label: 'Absent' },
   left_early: { bg: 'bg-blue-500/10',    text: 'text-blue-400',    border: 'border-blue-500/30',    label: 'Left Early' },
@@ -251,7 +251,7 @@ export default function StudentSidePanel(props: StudentSidePanelProps) {
               <div className="rounded-lg bg-[#1c1f26] p-4 border border-white/[0.06]">
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-2">
-                    <div className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    <div className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
                     <span className="text-[10px] font-semibold text-[#8b8fa3] uppercase tracking-widest">Active Duration</span>
                   </div>
                   {(() => {
@@ -277,7 +277,7 @@ export default function StudentSidePanel(props: StudentSidePanelProps) {
                 <StatCard icon={<IcRefresh className="w-3.5 h-3.5 text-[#8b8fa3]" />} label="Connections"
                   value={record.join_count === 1 ? '1 (stable)' : `${record.join_count} (${record.join_count - 1} rejoin${record.join_count > 2 ? 's' : ''})`}
                   warn={record.join_count > 1} />
-                <StatCard icon={record.late_join ? <IcClock className="w-3.5 h-3.5 text-amber-400" /> : <IcCheck className="w-3.5 h-3.5 text-emerald-400" />}
+                <StatCard icon={record.late_join ? <IcClock className="w-3.5 h-3.5 text-amber-400" /> : <IcCheck className="w-3.5 h-3.5 text-primary" />}
                   label="Punctuality"
                   value={record.late_join ? `Late by ${fmtDuration(record.late_by_sec)}` : 'On Time'}
                   warn={record.late_join} />
@@ -289,7 +289,7 @@ export default function StudentSidePanel(props: StudentSidePanelProps) {
               {record.leave_approved !== null && (
                 <div className={cn('rounded-lg px-3 py-2 text-xs flex items-center gap-2 border',
                   record.leave_approved
-                    ? 'bg-emerald-500/5 text-emerald-400 border-emerald-500/20'
+                    ? 'bg-primary/5 text-primary border-primary/20'
                     : 'bg-red-500/5 text-red-400 border-red-500/20',
                 )}>
                   {record.leave_approved ? <IcCheck className="w-3.5 h-3.5" /> : <IcX className="w-3.5 h-3.5" />}
@@ -331,9 +331,9 @@ export default function StudentSidePanel(props: StudentSidePanelProps) {
                             <div key={i} className="relative flex items-start gap-2.5 pb-3 last:pb-0">
                               <div className={cn(
                                 'absolute -left-[16px] top-[5px] h-2 w-2 rounded-full ring-2 ring-[#1c1f26]',
-                                isJoin ? 'bg-emerald-400' : isLeave ? 'bg-red-400' :
+                                isJoin ? 'bg-primary' : isLeave ? 'bg-red-400' :
                                 log.event_type === 'late_join' ? 'bg-amber-400' :
-                                log.event_type === 'leave_approved' ? 'bg-emerald-400' :
+                                log.event_type === 'leave_approved' ? 'bg-primary' :
                                 log.event_type === 'leave_denied' ? 'bg-red-400' : 'bg-[#8b8fa3]',
                               )} />
                               <div className="flex-1 min-w-0">

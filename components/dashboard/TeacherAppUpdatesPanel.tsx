@@ -276,7 +276,7 @@ export default function TeacherAppUpdatesPanel() {
         <div className="flex items-start justify-between gap-3">
           <div>
             <div className="flex items-center gap-2">
-              <Smartphone className="h-5 w-5 text-emerald-600" />
+              <Smartphone className="h-5 w-5 text-primary" />
               <h3 className="text-lg font-semibold text-gray-900">Teacher App Updates</h3>
             </div>
             <p className="mt-1 text-sm text-gray-500">
@@ -292,9 +292,9 @@ export default function TeacherAppUpdatesPanel() {
         />
 
         {latest && (
-          <div className="rounded-xl border border-emerald-200 bg-emerald-50/70 p-4">
+          <div className="rounded-xl border border-primary/20 bg-primary/5/70 p-4">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="rounded-full bg-emerald-600 px-2.5 py-1 text-xs font-semibold text-white">Latest Live</span>
+              <span className="rounded-full bg-primary px-2.5 py-1 text-xs font-semibold text-white">Latest Live</span>
               {latest.is_force_update && (
                 <span className="rounded-full bg-amber-500 px-2.5 py-1 text-xs font-semibold text-white">Force Update</span>
               )}
@@ -318,7 +318,7 @@ export default function TeacherAppUpdatesPanel() {
               value={versionName}
               onChange={(e) => setVersionName(e.target.value)}
               placeholder="1.0.1"
-              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100"
+              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/15"
             />
           </div>
           <div>
@@ -328,7 +328,7 @@ export default function TeacherAppUpdatesPanel() {
               onChange={(e) => setVersionCode(e.target.value)}
               placeholder="2"
               inputMode="numeric"
-              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100"
+              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/15"
             />
           </div>
         </div>
@@ -340,7 +340,7 @@ export default function TeacherAppUpdatesPanel() {
             onChange={(e) => setReleaseNotes(e.target.value)}
             rows={3}
             placeholder="What changed in this update?"
-            className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100"
+            className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/15"
           />
         </div>
 
@@ -351,7 +351,7 @@ export default function TeacherAppUpdatesPanel() {
                 type="checkbox"
                 checked={forceUpdate}
                 onChange={(e) => setForceUpdate(e.target.checked)}
-                className="h-4 w-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
+                className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
               />
               <span className="flex items-center gap-2">
                 <ShieldAlert className="h-4 w-4 text-amber-500" />
@@ -365,13 +365,13 @@ export default function TeacherAppUpdatesPanel() {
                 type="file"
                 accept=".apk,application/vnd.android.package-archive"
                 onChange={(e) => handleFileChange(e.target.files?.[0] || null)}
-                className="block text-sm text-gray-600 file:mr-4 file:rounded-lg file:border-0 file:bg-emerald-50 file:px-4 file:py-2 file:font-medium file:text-emerald-700 hover:file:bg-emerald-100"
+                className="block text-sm text-gray-600 file:mr-4 file:rounded-lg file:border-0 file:bg-primary/5 file:px-4 file:py-2 file:font-medium file:text-primary hover:file:bg-primary/10"
               />
               {selectedFile && (
                 <p className="mt-2 text-xs text-gray-500 flex items-center gap-1.5">
-                  {apkParsing && <Loader2 className="h-3 w-3 animate-spin text-emerald-600" />}
+                  {apkParsing && <Loader2 className="h-3 w-3 animate-spin text-primary" />}
                   {selectedFile.name} · {formatSize(selectedFile.size)}
-                  {apkParsing && <span className="text-emerald-600">Reading version…</span>}
+                  {apkParsing && <span className="text-primary">Reading version…</span>}
                 </p>
               )}
             </div>
@@ -390,7 +390,7 @@ export default function TeacherAppUpdatesPanel() {
 
       <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
         <div className="mb-4 flex items-center gap-2">
-          <Sparkles className="h-4 w-4 text-emerald-600" />
+          <Sparkles className="h-4 w-4 text-primary" />
           <h4 className="text-sm font-semibold uppercase tracking-wide text-gray-600">Release History</h4>
         </div>
 
@@ -410,7 +410,7 @@ export default function TeacherAppUpdatesPanel() {
                   <div className="min-w-0">
                     <div className="flex flex-wrap items-center gap-2">
                       {release.is_latest && (
-                        <span className="rounded-full bg-emerald-600 px-2 py-0.5 text-[11px] font-semibold text-white">Latest</span>
+                        <span className="rounded-full bg-primary px-2 py-0.5 text-[11px] font-semibold text-white">Latest</span>
                       )}
                       {release.is_force_update && (
                         <span className="rounded-full bg-amber-500 px-2 py-0.5 text-[11px] font-semibold text-white">Force Update</span>

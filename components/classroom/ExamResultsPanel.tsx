@@ -218,9 +218,9 @@ export default function ExamResultsPanel({
 
   // ── Helpers ──
   const gradeColor = (pct: number) =>
-    pct >= 75 ? 'text-emerald-400' : pct >= 50 ? 'text-teal-400' : pct >= 35 ? 'text-amber-400' : 'text-red-400';
+    pct >= 75 ? 'text-primary' : pct >= 50 ? 'text-secondary' : pct >= 35 ? 'text-amber-400' : 'text-red-400';
   const gradeBg = (pct: number) =>
-    pct >= 75 ? 'bg-emerald-900/30' : pct >= 50 ? 'bg-teal-900/30' : pct >= 35 ? 'bg-amber-900/30' : 'bg-red-900/30';
+    pct >= 75 ? 'bg-primary/10' : pct >= 50 ? 'bg-teal-900/30' : pct >= 35 ? 'bg-amber-900/30' : 'bg-red-900/30';
   const fmtTime = (s: number) => s >= 60 ? `${Math.floor(s / 60)}m ${s % 60}s` : `${s}s`;
   const fmtAt = (ts?: number) => ts ? new Date(ts).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }) : '—';
 
@@ -317,7 +317,7 @@ export default function ExamResultsPanel({
                           </span>
                           <span className="text-[10px] text-[#e8eaed] truncate flex-1">{s.name}</span>
                           {completed && (
-                            <span className="text-[8px] text-emerald-400 bg-emerald-900/30 px-1 py-0.5 rounded shrink-0">Done</span>
+                            <span className="text-[8px] text-primary bg-primary/10 px-1 py-0.5 rounded shrink-0">Done</span>
                           )}
                         </button>
                       );
@@ -374,8 +374,8 @@ export default function ExamResultsPanel({
                     <div className="flex items-center justify-between gap-2">
                       <span className="text-[10px] text-[#e8eaed] truncate">{s.name}</span>
                       <div className="flex items-center gap-1">
-                        {result ? <span className="text-[8px] bg-emerald-900/40 text-emerald-300 px-1 py-0.5 rounded">Completed</span> : null}
-                        {t?.started_at && !result ? <span className="text-[8px] bg-teal-900/40 text-teal-300 px-1 py-0.5 rounded">In Exam</span> : null}
+                        {result ? <span className="text-[8px] bg-primary/15 text-primary/80 px-1 py-0.5 rounded">Completed</span> : null}
+                        {t?.started_at && !result ? <span className="text-[8px] bg-secondary/15 text-secondary/80 px-1 py-0.5 rounded">In Exam</span> : null}
                         {t?.waiting_camera ? <span className="text-[8px] bg-amber-900/40 text-amber-300 px-1 py-0.5 rounded">Camera Needed</span> : null}
                         {!t?.reached_at && !result ? <span className="text-[8px] bg-[#3c4043] text-[#9aa0a6] px-1 py-0.5 rounded">Not Reached</span> : null}
                       </div>
@@ -453,7 +453,7 @@ export default function ExamResultsPanel({
                           <p className="text-[8px] text-[#9aa0a6]">Avg</p>
                         </div>
                         <div className="text-center">
-                          <p className="text-sm font-bold text-emerald-400">{topCorrect}</p>
+                          <p className="text-sm font-bold text-primary">{topCorrect}</p>
                           <p className="text-[8px] text-[#9aa0a6]">Top</p>
                         </div>
                       </div>
@@ -470,8 +470,8 @@ export default function ExamResultsPanel({
                   rs.forEach(r => { gradeMap[r.grade_letter] = (gradeMap[r.grade_letter] || 0) + 1; });
                   const GRADE_ORDER = ['A+', 'A', 'B+', 'B', 'C', 'D', 'F'];
                   const gradeColors: Record<string, string> = {
-                    'A+': 'bg-emerald-900/50 text-emerald-300', 'A': 'bg-emerald-900/30 text-emerald-400',
-                    'B+': 'bg-teal-900/50 text-teal-300', 'B': 'bg-teal-900/30 text-teal-400',
+                    'A+': 'bg-primary/20 text-primary/80', 'A': 'bg-primary/10 text-primary',
+                    'B+': 'bg-secondary/20 text-secondary/80', 'B': 'bg-teal-900/30 text-secondary',
                     'C': 'bg-amber-900/40 text-amber-300', 'D': 'bg-orange-900/40 text-orange-300',
                     'F': 'bg-red-900/40 text-red-300',
                   };
@@ -485,7 +485,7 @@ export default function ExamResultsPanel({
                       <div className="grid grid-cols-3 gap-1.5 text-[9px]">
                         <div className="rounded bg-[#3c4043]/60 px-1.5 py-1.5 text-center">
                           <p className="text-[#9aa0a6]">Pass Rate</p>
-                          <p className={cn('font-bold text-[12px]', rs.length && passCount / rs.length >= 0.6 ? 'text-emerald-400' : 'text-amber-400')}>
+                          <p className={cn('font-bold text-[12px]', rs.length && passCount / rs.length >= 0.6 ? 'text-primary' : 'text-amber-400')}>
                             {rs.length ? Math.round(passCount / rs.length * 100) : 0}%
                           </p>
                           <p className="text-[#9aa0a6] text-[8px]">{passCount}/{rs.length}</p>
@@ -561,7 +561,7 @@ export default function ExamResultsPanel({
                             <div className="flex-1 min-w-0">
                               <p className="text-[11px] font-medium text-[#e8eaed] truncate">{r.student_name}</p>
                               <div className="flex items-center gap-2 text-[9px] text-[#9aa0a6]">
-                                <span className="flex items-center gap-0.5"><IcCheck className="h-2.5 w-2.5 text-emerald-400" />{correctCount}</span>
+                                <span className="flex items-center gap-0.5"><IcCheck className="h-2.5 w-2.5 text-primary" />{correctCount}</span>
                                 <span className="flex items-center gap-0.5"><IcX className="h-2.5 w-2.5 text-red-400" />{wrongCount}</span>
                                 <span className="flex items-center gap-0.5"><IcMinus className="h-2.5 w-2.5 text-[#9aa0a6]" />{r.skipped}</span>
                                 <span>{fmtTime(r.time_taken_seconds)}</span>
@@ -602,7 +602,7 @@ export default function ExamResultsPanel({
                                   <div key={qIdx} className={cn(
                                     'rounded overflow-hidden',
                                     a.selected_option === null ? 'bg-[#3c4043]/40'
-                                      : a.is_correct ? 'bg-emerald-900/15' : 'bg-red-900/15'
+                                      : a.is_correct ? 'bg-primary/5' : 'bg-red-900/15'
                                   )}>
                                     <button
                                       onClick={() => setExpandedQuestion(isQExp ? null : qKey)}
@@ -611,13 +611,13 @@ export default function ExamResultsPanel({
                                       <span className={cn(
                                         'flex h-4 w-4 items-center justify-center rounded-full text-[8px] font-bold shrink-0',
                                         a.selected_option === null ? 'bg-[#3c4043] text-[#9aa0a6]'
-                                          : a.is_correct ? 'bg-emerald-900/60 text-emerald-400' : 'bg-red-900/60 text-red-400'
+                                          : a.is_correct ? 'bg-primary/20 text-primary' : 'bg-red-900/60 text-red-400'
                                       )}>{qIdx + 1}</span>
                                       <span className="flex-1 text-[10px] text-[#e8eaed]/80 truncate">{a.question_text}</span>
                                       {a.selected_option === null ? (
                                         <IcMinus className="h-3 w-3 text-[#9aa0a6] shrink-0" />
                                       ) : a.is_correct ? (
-                                        <IcCheck className="h-3 w-3 text-emerald-400 shrink-0" />
+                                        <IcCheck className="h-3 w-3 text-primary shrink-0" />
                                       ) : (
                                         <IcX className="h-3 w-3 text-red-400 shrink-0" />
                                       )}
@@ -631,7 +631,7 @@ export default function ExamResultsPanel({
                                           return (
                                             <div key={oIdx} className={cn(
                                               'flex items-center gap-1.5 rounded px-2 py-1 text-[10px]',
-                                              isCorrect ? 'bg-emerald-900/30 text-emerald-300'
+                                              isCorrect ? 'bg-primary/10 text-primary/80'
                                                 : isSelected ? 'bg-red-900/30 text-red-300'
                                                 : 'text-[#9aa0a6]'
                                             )}>
@@ -688,8 +688,8 @@ export default function ExamResultsPanel({
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center p-6 text-center">
-            <div className="h-8 w-8 border-2 border-teal-400 border-t-transparent rounded-full animate-spin mx-auto mb-3" />
-            <p className="text-xs font-medium text-teal-400 mb-1">Exam in Progress</p>
+            <div className="h-8 w-8 border-2 border-secondary border-t-transparent rounded-full animate-spin mx-auto mb-3" />
+            <p className="text-xs font-medium text-secondary mb-1">Exam in Progress</p>
             <p className="text-[10px] text-[#9aa0a6]">Waiting for students to complete…</p>
             <button onClick={fetchResults} className="mt-3 flex items-center gap-1 text-[10px] text-[#8ab4f8] hover:text-[#aecbfa]">
               <IcRefresh className="h-3 w-3" /> Refresh

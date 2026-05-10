@@ -132,7 +132,7 @@ function TypewriterText({ text, speed = 12, onDone }: { text: string; speed?: nu
         {displayed}
       </ReactMarkdown>
       {charCount < text.length && (
-        <span className="inline-block w-[2px] h-[14px] bg-emerald-400/80 ml-0.5 align-middle animate-pulse" />
+        <span className="inline-block w-[2px] h-[14px] bg-primary/80 ml-0.5 align-middle animate-pulse" />
       )}
     </div>
   );
@@ -523,20 +523,20 @@ export default function BujiChatbot({ userEmail, userName, userContext, enabled 
           {/* Speech bubble on TOP — near Buji's mouth */}
           {badgeVisible && (
             <div className="relative mb-1 animate-badge-in">
-              <div className="relative bg-white/95 dark:bg-emerald-950/90 backdrop-blur-md rounded-2xl px-3.5 py-2 shadow-lg shadow-black/10 dark:shadow-black/30 border border-emerald-200/50 dark:border-emerald-500/20 min-w-[130px] max-w-[170px]">
+              <div className="relative bg-white/95 dark:bg-primary/30 backdrop-blur-md rounded-2xl px-3.5 py-2 shadow-lg shadow-black/10 dark:shadow-black/30 border border-primary/20/50 dark:border-primary/20 min-w-[130px] max-w-[170px]">
                 {badgePhase === 'text' ? (
-                  <p className="text-[12px] font-medium text-emerald-800 dark:text-emerald-200 animate-badge-text-in leading-snug text-center">
+                  <p className="text-[12px] font-medium text-primary dark:text-primary/60 animate-badge-text-in leading-snug text-center">
                     {BADGE_MESSAGES[badgeIndex]}
                   </p>
                 ) : (
                   <div className="flex gap-1 py-0.5 justify-center">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500/70 animate-bounce" style={{ animationDelay: '0ms' }} />
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500/70 animate-bounce" style={{ animationDelay: '150ms' }} />
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500/70 animate-bounce" style={{ animationDelay: '300ms' }} />
+                    <span className="w-1.5 h-1.5 rounded-full bg-primary/70 animate-bounce" style={{ animationDelay: '0ms' }} />
+                    <span className="w-1.5 h-1.5 rounded-full bg-primary/70 animate-bounce" style={{ animationDelay: '150ms' }} />
+                    <span className="w-1.5 h-1.5 rounded-full bg-primary/70 animate-bounce" style={{ animationDelay: '300ms' }} />
                   </div>
                 )}
               </div>
-              <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-white/95 dark:bg-emerald-950/90 border-r border-b border-emerald-200/50 dark:border-emerald-500/20 transform rotate-45" />
+              <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-white/95 dark:bg-primary/30 border-r border-b border-primary/20/50 dark:border-primary/20 transform rotate-45" />
             </div>
           )}
 
@@ -546,14 +546,14 @@ export default function BujiChatbot({ userEmail, userName, userContext, enabled 
             className="group cursor-pointer relative shrink-0 buji-float"
             aria-label="Chat with Buji"
           >
-            <div className="absolute inset-0 rounded-full bg-emerald-400/0 group-hover:bg-emerald-400/10 transition-all duration-500 scale-110 blur-xl pointer-events-none" />
-            <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-20 h-4 bg-black/10 dark:bg-emerald-400/10 rounded-full blur-lg group-hover:w-24 group-hover:bg-emerald-400/15 transition-all duration-300" />
+            <div className="absolute inset-0 rounded-full bg-primary/0 group-hover:bg-primary/10 transition-all duration-500 scale-110 blur-xl pointer-events-none" />
+            <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-20 h-4 bg-black/10 dark:bg-primary/10 rounded-full blur-lg group-hover:w-24 group-hover:bg-primary/15 transition-all duration-300" />
             <div className="relative w-28 h-28 sm:w-36 sm:h-36 group-hover:scale-115 group-active:scale-90 transition-transform duration-300 ease-out drop-shadow-[0_6px_20px_rgba(16,185,129,0.3)] group-hover:drop-shadow-[0_8px_30px_rgba(16,185,129,0.5)]">
               {characterUrl ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={characterUrl} alt="AI Assistant" className="w-full h-full object-contain" loading="eager" />
               ) : (
-                <div className="w-full h-full rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center">
+                <div className="w-full h-full rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
                   <span className="text-white text-4xl font-bold">AI</span>
                 </div>
               )}
@@ -567,7 +567,7 @@ export default function BujiChatbot({ userEmail, userName, userContext, enabled 
       {/* ── Chat Window ──────────────────────────────────── */}
       {isOpen && (
         <div
-          className={`${chatWindowClass} border border-emerald-500/20 shadow-2xl shadow-black/40 transition-all duration-300 ease-out ${
+          className={`${chatWindowClass} border border-primary/20 shadow-2xl shadow-black/40 transition-all duration-300 ease-out ${
             isAnimatingClose
               ? 'animate-chatbot-close'
               : isAnimatingOpen
@@ -582,22 +582,22 @@ export default function BujiChatbot({ userEmail, userName, userContext, enabled 
               className={`absolute inset-0 bg-black/50 transition-opacity duration-300 ${sidebarOpen ? 'opacity-100' : 'opacity-0'}`}
               onClick={() => setSidebarOpen(false)}
             />
-            <div className={`absolute top-0 left-0 bottom-0 w-[280px] max-w-[80%] bg-gradient-to-b from-emerald-950 via-gray-950 to-gray-950 border-r border-emerald-500/20 flex flex-col shadow-2xl shadow-black/60 transition-transform duration-300 ease-out ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-              <div className="flex items-center justify-between px-4 py-3 border-b border-emerald-500/15 shrink-0">
+            <div className={`absolute top-0 left-0 bottom-0 w-[280px] max-w-[80%] bg-gradient-to-b from-emerald-950 via-gray-950 to-gray-950 border-r border-primary/20 flex flex-col shadow-2xl shadow-black/60 transition-transform duration-300 ease-out ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+              <div className="flex items-center justify-between px-4 py-3 border-b border-primary/15 shrink-0">
                 <div className="flex items-center gap-2">
-                  <div className="w-7 h-7 rounded-full overflow-hidden border border-emerald-400/30 bg-emerald-950 flex items-center justify-center">
+                  <div className="w-7 h-7 rounded-full overflow-hidden border border-primary/30 bg-primary/30 flex items-center justify-center">
                     {characterUrl ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img src={characterUrl} alt="" className="w-full h-full object-cover" />
                     ) : (
-                      <span className="text-emerald-400 text-[10px] font-bold">AI</span>
+                      <span className="text-primary text-[10px] font-bold">AI</span>
                     )}
                   </div>
                   <span className="text-sm font-semibold text-white">AI Assistant</span>
                 </div>
                 <button
                   onClick={() => setSidebarOpen(false)}
-                  className="p-1.5 rounded-lg hover:bg-white/10 text-emerald-200/50 hover:text-white transition-colors cursor-pointer"
+                  className="p-1.5 rounded-lg hover:bg-white/10 text-primary/60/50 hover:text-white transition-colors cursor-pointer"
                   aria-label="Close sidebar"
                 >
                   <X className="w-4 h-4" />
@@ -606,7 +606,7 @@ export default function BujiChatbot({ userEmail, userName, userContext, enabled 
               <div className="px-3 py-3">
                 <button
                   onClick={startNewChat}
-                  className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/20 hover:border-emerald-400/30 text-emerald-200 text-sm font-medium transition-all cursor-pointer"
+                  className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl bg-primary/15 hover:bg-primary/25 border border-primary/20 hover:border-primary/30 text-primary/60 text-sm font-medium transition-all cursor-pointer"
                 >
                   <Plus className="w-4 h-4" />
                   New Chat
@@ -615,13 +615,13 @@ export default function BujiChatbot({ userEmail, userName, userContext, enabled 
               <div className="flex-1 overflow-y-auto scrollbar-thin">
                 {conversations.length === 0 ? (
                   <div className="px-4 py-8 text-center">
-                    <p className="text-xs text-emerald-200/30">No conversations yet</p>
+                    <p className="text-xs text-primary/30">No conversations yet</p>
                   </div>
                 ) : (
                   <div className="pb-2">
                     {grouped.map(group => (
                       <div key={group.label}>
-                        <div className="px-4 py-2 text-[10px] font-semibold uppercase tracking-wider text-emerald-400/40">
+                        <div className="px-4 py-2 text-[10px] font-semibold uppercase tracking-wider text-primary/40">
                           {group.label}
                         </div>
                         {group.items.map(convo => (
@@ -629,21 +629,21 @@ export default function BujiChatbot({ userEmail, userName, userContext, enabled 
                             key={convo.id}
                             className={`group flex items-center gap-2 mx-2 px-3 py-2.5 rounded-xl cursor-pointer transition-all duration-150 ${
                               convo.id === activeConvoId
-                                ? 'bg-emerald-500/15 border border-emerald-500/20'
+                                ? 'bg-primary/15 border border-primary/20'
                                 : 'hover:bg-white/5 border border-transparent'
                             } ${deletingId === convo.id ? 'opacity-0 scale-95 transition-all duration-200' : ''}`}
                             onClick={() => switchToConversation(convo)}
                           >
-                            <MessageSquare className="w-3.5 h-3.5 text-emerald-400/40 shrink-0" />
+                            <MessageSquare className="w-3.5 h-3.5 text-primary/40 shrink-0" />
                             <div className="flex-1 min-w-0">
-                              <p className="text-[12px] text-emerald-50 truncate leading-snug">{convo.title}</p>
-                              <p className="text-[10px] text-emerald-200/30 mt-0.5">
+                              <p className="text-[12px] text-primary/20 truncate leading-snug">{convo.title}</p>
+                              <p className="text-[10px] text-primary/30 mt-0.5">
                                 {convo.messages.length} msg{convo.messages.length !== 1 ? 's' : ''} · {formatTimeAgo(convo.updatedAt)}
                               </p>
                             </div>
                             <button
                               onClick={(e) => { e.stopPropagation(); deleteConversation(convo.id); }}
-                              className="p-1 rounded-md opacity-0 group-hover:opacity-100 hover:bg-red-500/15 text-emerald-200/30 hover:text-red-400 transition-all cursor-pointer"
+                              className="p-1 rounded-md opacity-0 group-hover:opacity-100 hover:bg-red-500/15 text-primary/30 hover:text-red-400 transition-all cursor-pointer"
                               aria-label="Delete"
                             >
                               <Trash2 className="w-3 h-3" />
@@ -655,27 +655,27 @@ export default function BujiChatbot({ userEmail, userName, userContext, enabled 
                   </div>
                 )}
               </div>
-              <div className="px-4 py-3 border-t border-emerald-500/10 shrink-0">
-                <p className="text-[10px] text-emerald-200/20 text-center">{conversations.length} conversation{conversations.length !== 1 ? 's' : ''}</p>
+              <div className="px-4 py-3 border-t border-primary/10 shrink-0">
+                <p className="text-[10px] text-primary/60/20 text-center">{conversations.length} conversation{conversations.length !== 1 ? 's' : ''}</p>
               </div>
             </div>
           </div>
 
           {/* ── Header ─────────────────────────────────── */}
-          <div className="relative flex items-center gap-2 px-3 py-3 bg-gradient-to-r from-emerald-900/95 via-emerald-950/95 to-teal-950/95 backdrop-blur-xl border-b border-emerald-500/15 shrink-0">
+          <div className="relative flex items-center gap-2 px-3 py-3 bg-gradient-to-r from-primary/95 via-primary/90 to-secondary/90 backdrop-blur-xl border-b border-primary/15 shrink-0">
             <button
               onClick={() => setSidebarOpen(s => !s)}
-              className="p-1.5 rounded-lg hover:bg-white/10 text-emerald-200/60 hover:text-white transition-colors cursor-pointer"
+              className="p-1.5 rounded-lg hover:bg-white/10 text-primary/60/60 hover:text-white transition-colors cursor-pointer"
               aria-label="Toggle sidebar"
             >
               <Menu className="w-5 h-5" />
             </button>
-            <div className="w-9 h-9 rounded-full overflow-hidden border border-emerald-400/40 bg-emerald-950 shrink-0 flex items-center justify-center">
+            <div className="w-9 h-9 rounded-full overflow-hidden border border-primary/40 bg-primary/30 shrink-0 flex items-center justify-center">
               {characterUrl ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={characterUrl} alt="" className="w-full h-full object-cover" />
               ) : (
-                <span className="text-emerald-400 text-xs font-bold">AI</span>
+                <span className="text-primary text-xs font-bold">AI</span>
               )}
             </div>
             <div className="flex-1 min-w-0">
@@ -683,7 +683,7 @@ export default function BujiChatbot({ userEmail, userName, userContext, enabled 
                 <h3 className="text-sm font-semibold text-white leading-tight">AI Assistant</h3>
                 <span className="inline-flex items-center rounded-full bg-amber-400/20 border border-amber-400/40 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-amber-300">Demo</span>
               </div>
-              <p className="text-[11px] text-emerald-300/70 flex items-center gap-1.5">
+              <p className="text-[11px] text-primary/80/70 flex items-center gap-1.5">
                 {loading ? (
                   <>
                     <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
@@ -691,7 +691,7 @@ export default function BujiChatbot({ userEmail, userName, userContext, enabled 
                   </>
                 ) : (
                   <>
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-primary" />
                     {platformName} AI Assistant
                   </>
                 )}
@@ -700,7 +700,7 @@ export default function BujiChatbot({ userEmail, userName, userContext, enabled 
             <div className="flex items-center gap-1">
               <button
                 onClick={startNewChat}
-                className="p-1.5 rounded-lg hover:bg-white/10 text-emerald-200/60 hover:text-white transition-colors cursor-pointer"
+                className="p-1.5 rounded-lg hover:bg-white/10 text-primary/60/60 hover:text-white transition-colors cursor-pointer"
                 aria-label="New chat"
                 title="New chat"
               >
@@ -708,7 +708,7 @@ export default function BujiChatbot({ userEmail, userName, userContext, enabled 
               </button>
               <button
                 onClick={() => setIsFullscreen((f) => !f)}
-                className="p-1.5 rounded-lg hover:bg-white/10 text-emerald-200/60 hover:text-white transition-colors cursor-pointer"
+                className="p-1.5 rounded-lg hover:bg-white/10 text-primary/60/60 hover:text-white transition-colors cursor-pointer"
                 aria-label={isFullscreen ? 'Exit fullscreen' : 'Fullscreen'}
               >
                 {isFullscreen ? <Shrink className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
@@ -719,7 +719,7 @@ export default function BujiChatbot({ userEmail, userName, userContext, enabled 
                   setBujiState('idle');
                   setTypingMsgIndex(null);
                 }}
-                className="p-1.5 rounded-lg hover:bg-white/10 text-emerald-200/60 hover:text-white transition-colors cursor-pointer"
+                className="p-1.5 rounded-lg hover:bg-white/10 text-primary/60/60 hover:text-white transition-colors cursor-pointer"
                 aria-label="Close"
               >
                 <X className="w-4 h-4" />
@@ -732,16 +732,16 @@ export default function BujiChatbot({ userEmail, userName, userContext, enabled 
                 {/* Welcome message */}
                 {messages.length === 0 && (
                   <div className="flex flex-col items-center justify-center h-full text-center px-4 animate-fade-in">
-                    <div className="w-28 h-28 rounded-2xl overflow-hidden mb-4 border border-emerald-500/20 shadow-lg shadow-emerald-500/10 bg-emerald-950/50 flex items-center justify-center">
+                    <div className="w-28 h-28 rounded-2xl overflow-hidden mb-4 border border-primary/20 shadow-lg shadow-emerald-500/10 bg-primary/30/50 flex items-center justify-center">
                       {characterUrl ? (
                         // eslint-disable-next-line @next/next/no-img-element
                         <img src={characterUrl} alt="" className="w-full h-full object-cover" />
                       ) : (
-                        <span className="text-emerald-400 text-3xl font-bold">AI</span>
+                        <span className="text-primary text-3xl font-bold">AI</span>
                       )}
                     </div>
                     <h4 className="text-lg font-semibold text-white mb-1.5">{userName ? `Hi ${userName.split(' ')[0]}! 👋` : "Hi, I'm Buji! 👋"}</h4>
-                    <p className="text-sm text-emerald-200/60 mb-5 max-w-[280px]">
+                    <p className="text-sm text-primary/60/60 mb-5 max-w-[280px]">
                       {userName ? `Your personal ${platformName} AI assistant. I know your classes, exams, and schedule!` : `Your ${platformName} AI assistant. Ask me anything about our live classes, demo sessions, or enrollment!`}
                     </p>
                     <div className="flex flex-wrap justify-center gap-2">
@@ -759,7 +759,7 @@ export default function BujiChatbot({ userEmail, userName, userContext, enabled 
                         <button
                           key={q}
                           onClick={() => handleQuickAction(q)}
-                          className="px-3 py-1.5 rounded-full text-xs font-medium bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 hover:bg-emerald-500/20 hover:border-emerald-400/30 transition-all duration-200 cursor-pointer"
+                          className="px-3 py-1.5 rounded-full text-xs font-medium bg-primary/10 border border-primary/20 text-primary/80 hover:bg-primary/20 hover:border-primary/30 transition-all duration-200 cursor-pointer"
                         >
                           {q}
                         </button>
@@ -771,7 +771,7 @@ export default function BujiChatbot({ userEmail, userName, userContext, enabled 
                       <div className="mt-6 w-full max-w-[300px]">
                         <button
                           onClick={() => setSidebarOpen(true)}
-                          className="flex items-center gap-2 text-[11px] text-emerald-300/40 hover:text-emerald-300/70 transition-colors cursor-pointer mx-auto mb-2"
+                          className="flex items-center gap-2 text-[11px] text-primary/80/40 hover:text-primary/80/70 transition-colors cursor-pointer mx-auto mb-2"
                         >
                           <MessageSquare className="w-3 h-3" />
                           Recent conversations
@@ -781,11 +781,11 @@ export default function BujiChatbot({ userEmail, userName, userContext, enabled 
                             <button
                               key={convo.id}
                               onClick={() => switchToConversation(convo)}
-                              className="w-full flex items-center gap-2 px-3 py-2 rounded-lg bg-white/3 hover:bg-white/6 border border-white/5 hover:border-emerald-500/15 text-left transition-all cursor-pointer"
+                              className="w-full flex items-center gap-2 px-3 py-2 rounded-lg bg-white/3 hover:bg-white/6 border border-white/5 hover:border-primary/15 text-left transition-all cursor-pointer"
                             >
-                              <MessageSquare className="w-3 h-3 text-emerald-400/30 shrink-0" />
-                              <span className="text-[11px] text-emerald-100/50 truncate flex-1">{convo.title}</span>
-                              <span className="text-[9px] text-emerald-200/20 shrink-0">{formatTimeAgo(convo.updatedAt)}</span>
+                              <MessageSquare className="w-3 h-3 text-primary/30 shrink-0" />
+                              <span className="text-[11px] text-primary/40/50 truncate flex-1">{convo.title}</span>
+                              <span className="text-[9px] text-primary/60/20 shrink-0">{formatTimeAgo(convo.updatedAt)}</span>
                             </button>
                           ))}
                         </div>
@@ -802,20 +802,20 @@ export default function BujiChatbot({ userEmail, userName, userContext, enabled 
                   >
                     {/* Buji avatar — shows last-2s thinking during typewriter */}
                     {msg.role === 'assistant' && (
-                      <div className="w-7 h-7 rounded-full overflow-hidden border border-emerald-500/30 shrink-0 mt-0.5 bg-emerald-950 flex items-center justify-center">
+                      <div className="w-7 h-7 rounded-full overflow-hidden border border-primary/30 shrink-0 mt-0.5 bg-primary/30 flex items-center justify-center">
                         {characterUrl ? (
                           // eslint-disable-next-line @next/next/no-img-element
                           <img src={characterUrl} alt="" className="w-full h-full object-cover" />
                         ) : (
-                          <span className="text-emerald-400 text-[9px] font-bold">AI</span>
+                          <span className="text-primary text-[9px] font-bold">AI</span>
                         )}
                       </div>
                     )}
                     <div
                       className={`max-w-[80%] px-3.5 py-2.5 rounded-2xl text-[13px] leading-relaxed ${
                         msg.role === 'user'
-                          ? 'bg-emerald-600/80 text-white rounded-br-md'
-                          : 'bg-white/12 text-emerald-50 border border-white/8 rounded-bl-md'
+                          ? 'bg-primary/80 text-white rounded-br-md'
+                          : 'bg-white/12 text-primary/20 border border-white/8 rounded-bl-md'
                       }`}
                     >
                       {msg.fileName && (
@@ -848,19 +848,19 @@ export default function BujiChatbot({ userEmail, userName, userContext, enabled 
                 {/* Typing indicator — bouncing dots while waiting for API */}
                 {loading && (
                   <div className="flex gap-2.5 justify-start animate-message-in">
-                    <div className="w-7 h-7 rounded-full overflow-hidden border border-emerald-500/30 shrink-0 mt-0.5 bg-emerald-950 flex items-center justify-center">
+                    <div className="w-7 h-7 rounded-full overflow-hidden border border-primary/30 shrink-0 mt-0.5 bg-primary/30 flex items-center justify-center">
                       {characterUrl ? (
                         // eslint-disable-next-line @next/next/no-img-element
                         <img src={characterUrl} alt="" className="w-full h-full object-cover" />
                       ) : (
-                        <span className="text-emerald-400 text-[9px] font-bold">AI</span>
+                        <span className="text-primary text-[9px] font-bold">AI</span>
                       )}
                     </div>
                     <div className="px-4 py-3 rounded-2xl rounded-bl-md bg-white/8 border border-white/5">
                       <div className="flex gap-1.5">
-                        <span className="w-2 h-2 rounded-full bg-emerald-400/70 animate-bounce" style={{ animationDelay: '0ms' }} />
-                        <span className="w-2 h-2 rounded-full bg-emerald-400/70 animate-bounce" style={{ animationDelay: '150ms' }} />
-                        <span className="w-2 h-2 rounded-full bg-emerald-400/70 animate-bounce" style={{ animationDelay: '300ms' }} />
+                        <span className="w-2 h-2 rounded-full bg-primary/70 animate-bounce" style={{ animationDelay: '0ms' }} />
+                        <span className="w-2 h-2 rounded-full bg-primary/70 animate-bounce" style={{ animationDelay: '150ms' }} />
+                        <span className="w-2 h-2 rounded-full bg-primary/70 animate-bounce" style={{ animationDelay: '300ms' }} />
                       </div>
                     </div>
                   </div>
@@ -870,20 +870,20 @@ export default function BujiChatbot({ userEmail, userName, userContext, enabled 
               </div>
 
               {/* ── Input Area ─────────────────────────────── */}
-              <div className="border-t border-emerald-500/10 bg-gray-950 shrink-0">
+              <div className="border-t border-primary/10 bg-gray-950 shrink-0">
                 {pendingFile && (
                   <div className="px-3 pt-2.5 flex items-center gap-2">
                     {pendingFile.type.startsWith('image/') && pendingPreview ? (
-                      <img src={pendingPreview} alt="" className="w-14 h-14 rounded-lg object-cover border border-emerald-500/20" />
+                      <img src={pendingPreview} alt="" className="w-14 h-14 rounded-lg object-cover border border-primary/20" />
                     ) : (
-                      <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white/5 border border-emerald-500/15">
-                        <FileText className="w-4 h-4 text-emerald-400" />
-                        <span className="text-xs text-emerald-200/70 truncate max-w-[200px]">{pendingFile.name}</span>
+                      <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white/5 border border-primary/15">
+                        <FileText className="w-4 h-4 text-primary" />
+                        <span className="text-xs text-primary/60/70 truncate max-w-[200px]">{pendingFile.name}</span>
                       </div>
                     )}
                     <button
                       onClick={() => { if (pendingPreview) URL.revokeObjectURL(pendingPreview); setPendingFile(null); setPendingPreview(null); }}
-                      className="p-1 rounded-full hover:bg-white/10 text-emerald-200/50 hover:text-white transition-colors cursor-pointer"
+                      className="p-1 rounded-full hover:bg-white/10 text-primary/60/50 hover:text-white transition-colors cursor-pointer"
                       aria-label="Remove file"
                     >
                       <X className="w-3.5 h-3.5" />
@@ -902,7 +902,7 @@ export default function BujiChatbot({ userEmail, userName, userContext, enabled 
                     <button
                       onClick={() => fileInputRef.current?.click()}
                       disabled={loading}
-                      className="h-10 w-10 rounded-xl bg-white/5 border border-emerald-500/15 hover:bg-white/10 hover:border-emerald-400/30 disabled:opacity-30 disabled:pointer-events-none flex items-center justify-center text-emerald-300/60 hover:text-emerald-200 transition-all duration-200 cursor-pointer shrink-0"
+                      className="h-10 w-10 rounded-xl bg-white/5 border border-primary/15 hover:bg-white/10 hover:border-primary/30 disabled:opacity-30 disabled:pointer-events-none flex items-center justify-center text-primary/80/60 hover:text-primary/60 transition-all duration-200 cursor-pointer shrink-0"
                       aria-label="Attach file"
                     >
                       <Paperclip className="w-4 h-4" />
@@ -916,18 +916,18 @@ export default function BujiChatbot({ userEmail, userName, userContext, enabled 
                       placeholder={pendingFile ? 'Add a message or send...' : 'Ask Buji anything...'}
                       disabled={loading}
                       maxLength={500}
-                      className="flex-1 h-10 px-4 rounded-xl bg-white/5 border border-emerald-500/15 text-white text-sm placeholder:text-emerald-200/30 outline-none focus:border-emerald-400/40 focus:ring-1 focus:ring-emerald-400/20 transition-all duration-200 disabled:opacity-50"
+                      className="flex-1 h-10 px-4 rounded-xl bg-white/5 border border-primary/15 text-white text-sm placeholder:text-primary/30 outline-none focus:border-primary/40 focus:ring-1 focus:ring-emerald-400/20 transition-all duration-200 disabled:opacity-50"
                     />
                     <button
                       onClick={handleSend}
                       disabled={(!input.trim() && !pendingFile) || loading}
-                      className="h-10 w-10 rounded-xl bg-emerald-600 hover:bg-emerald-500 disabled:opacity-30 disabled:pointer-events-none flex items-center justify-center text-white transition-all duration-200 active:scale-95 cursor-pointer shrink-0"
+                      className="h-10 w-10 rounded-xl bg-primary hover:bg-primary disabled:opacity-30 disabled:pointer-events-none flex items-center justify-center text-white transition-all duration-200 active:scale-95 cursor-pointer shrink-0"
                       aria-label="Send message"
                     >
                       <Send className="w-4 h-4" />
                     </button>
                   </div>
-                  <p className="text-[10px] text-emerald-200/25 text-center mt-1.5">
+                  <p className="text-[10px] text-primary/60/25 text-center mt-1.5">
                     Powered by {platformName} AI
                   </p>
                 </div>

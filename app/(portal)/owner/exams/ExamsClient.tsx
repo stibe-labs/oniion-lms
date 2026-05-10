@@ -415,7 +415,7 @@ export default function ExamsClient({ userName, userEmail, userRole }: Props) {
                             {q.options && (
                               <div className="mt-2 grid grid-cols-2 gap-1.5">
                                 {(q.options as string[]).map((opt, oi) => (
-                                  <span key={oi} className={`text-xs rounded px-2 py-1 ${opt === q.correct_answer ? 'bg-green-50 text-green-700 font-medium' : 'bg-gray-50 text-gray-600'}`}>
+                                  <span key={oi} className={`text-xs rounded px-2 py-1 ${opt === q.correct_answer ? 'bg-primary/5 text-primary font-medium' : 'bg-gray-50 text-gray-600'}`}>
                                     {String.fromCharCode(65 + oi)}. {opt}
                                   </span>
                                 ))}

@@ -93,7 +93,7 @@ export default function SessionExamDialog({
       <div className="flex min-h-full items-end sm:items-center justify-center p-2 sm:p-4">
       <div className="w-full max-w-md rounded-2xl bg-[#2d2e30] shadow-2xl ring-1 ring-white/10 overflow-hidden flex flex-col">
         {/* Header — compact on landscape mobile */}
-        <div className="bg-linear-to-r from-teal-500 to-emerald-500 px-4 sm:px-6 py-3 sm:py-4 text-center shrink-0">
+        <div className="bg-linear-to-r from-secondary to-primary px-4 sm:px-6 py-3 sm:py-4 text-center shrink-0">
           <div className="text-2xl sm:text-4xl mb-1 sm:mb-2">📝</div>
           <h2 className="text-base sm:text-xl font-bold text-white">Session Exam</h2>
           <p className="text-xs sm:text-sm text-white/80 mt-0.5 sm:mt-1 truncate">{subject} — {topicTitle}</p>
@@ -122,8 +122,8 @@ export default function SessionExamDialog({
                   </p>
                 </div>
               </div>
-              <div className="bg-teal-500/10 rounded-xl px-3 sm:px-4 py-2 sm:py-3 border border-teal-500/20">
-                <p className="text-xs text-teal-300 font-medium">
+              <div className="bg-secondary/10 rounded-xl px-3 sm:px-4 py-2 sm:py-3 border border-secondary/20">
+                <p className="text-xs text-secondary/80 font-medium">
                   ⏱ {questionCount || '?'} questions · 1 minute each · {questionCount || '?'} minutes total
                 </p>
               </div>
@@ -151,8 +151,8 @@ export default function SessionExamDialog({
                 </div>
               </div>
               {examOpened && (
-                <div className="bg-emerald-500/10 rounded-xl px-3 sm:px-4 py-2 sm:py-3 border border-emerald-500/20 text-center">
-                  <p className="text-xs text-emerald-300 font-medium">
+                <div className="bg-primary/10 rounded-xl px-3 sm:px-4 py-2 sm:py-3 border border-primary/20 text-center">
+                  <p className="text-xs text-primary/80 font-medium">
                     ✅ Starting exam… Good luck!
                   </p>
                 </div>
@@ -171,7 +171,7 @@ export default function SessionExamDialog({
           {role === 'student' && !examOpened && (
             <button
               onClick={handleStartExam}
-              className="w-full rounded-xl px-4 py-2.5 sm:py-3 text-sm font-bold text-white transition-colors bg-linear-to-r from-teal-500 to-emerald-500 hover:from-teal-400 hover:to-emerald-400"
+              className="w-full rounded-xl px-4 py-2.5 sm:py-3 text-sm font-bold text-white transition-colors bg-linear-to-r from-secondary to-primary hover:from-secondary/90 hover:to-primary/90"
             >
               {autoStartCountdown > 0
                 ? `🚀 Start Exam (auto-starts in ${autoStartCountdown}s)`

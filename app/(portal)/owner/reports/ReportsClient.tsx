@@ -52,8 +52,8 @@ const REPORT_TYPES = [
 ];
 
 const VARIANT_ICON_COLORS: Record<string, string> = {
-  primary: 'text-emerald-600',
-  success: 'text-green-600',
+  primary: 'text-primary',
+  success: 'text-primary',
   warning: 'text-amber-600',
   danger: 'text-red-600',
   info: 'text-teal-600',
@@ -170,7 +170,7 @@ export default function ReportsClient({ userName, userEmail, userRole }: Props) 
         {/* Student Reports Browser */}
         <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
           <h3 className="text-sm font-semibold text-gray-900 mb-4 flex items-center gap-2">
-            <GraduationCap className="h-4 w-4 text-emerald-600" />
+            <GraduationCap className="h-4 w-4 text-primary" />
             Individual Student Reports
           </h3>
           <StudentReportsBrowser />

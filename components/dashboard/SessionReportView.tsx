@@ -133,7 +133,7 @@ function fmtDuration(sec: number) {
 
 function attColor(rate: number | null) {
   if (rate == null) return 'text-gray-400';
-  if (rate >= 75) return 'text-emerald-600';
+  if (rate >= 75) return 'text-primary';
   if (rate >= 50) return 'text-amber-600';
   return 'text-red-600';
 }
@@ -155,7 +155,7 @@ function gradeFromScore(pct: number) {
 function Badge({ children, color }: { children: React.ReactNode; color: string }) {
   const colors: Record<string, string> = {
     red: 'bg-red-50 text-red-700 ring-1 ring-inset ring-red-200',
-    green: 'bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-200',
+    green: 'bg-primary/5 text-primary ring-1 ring-inset ring-primary/20',
     yellow: 'bg-amber-50 text-amber-700 ring-1 ring-inset ring-amber-200',
     blue: 'bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-200',
     gray: 'bg-slate-50 text-slate-600 ring-1 ring-inset ring-slate-200',
@@ -179,7 +179,7 @@ function Section({ title, icon: Icon, children, defaultOpen = true, accent = 'in
   const [open, setOpen] = useState(defaultOpen);
   const accents: Record<string, { iconBg: string; iconText: string; bar: string }> = {
     indigo:  { iconBg: 'bg-indigo-50',  iconText: 'text-indigo-600',  bar: 'before:bg-indigo-500' },
-    emerald: { iconBg: 'bg-emerald-50', iconText: 'text-emerald-600', bar: 'before:bg-emerald-500' },
+    emerald: { iconBg: 'bg-primary/5', iconText: 'text-primary', bar: 'before:bg-primary' },
     amber:   { iconBg: 'bg-amber-50',   iconText: 'text-amber-600',   bar: 'before:bg-amber-500' },
     rose:    { iconBg: 'bg-rose-50',    iconText: 'text-rose-600',    bar: 'before:bg-rose-500' },
     purple:  { iconBg: 'bg-purple-50',  iconText: 'text-purple-600',  bar: 'before:bg-purple-500' },
@@ -308,7 +308,7 @@ function SessionStudentReportOverlay({
                 label: 'Attendance',
                 value: student.status === 'present' ? 'Present' : student.status === 'late' ? 'Late' : 'Absent',
                 sub: student.is_late && student.late_by_sec > 0 ? `Late by ${fmtDuration(student.late_by_sec)}` : student.status === 'absent' ? 'Did not join' : 'On time',
-                color: student.status === 'present' ? 'border-emerald-200 bg-emerald-50 text-emerald-700' : student.status === 'late' ? 'border-amber-200 bg-amber-50 text-amber-700' : 'border-red-200 bg-red-50 text-red-700',
+                color: student.status === 'present' ? 'border-primary/20 bg-primary/5 text-primary' : student.status === 'late' ? 'border-amber-200 bg-amber-50 text-amber-700' : 'border-red-200 bg-red-50 text-red-700',
               },
               {
                 label: 'Time in Class',
@@ -321,7 +321,7 @@ function SessionStudentReportOverlay({
                 value: fmtPct(student.attention_avg),
                 sub: 'AI monitored average',
                 color: student.attention_avg == null ? 'border-gray-200 bg-gray-50 text-gray-500'
-                  : student.attention_avg >= 75 ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
+                  : student.attention_avg >= 75 ? 'border-primary/20 bg-primary/5 text-primary'
                   : student.attention_avg >= 50 ? 'border-amber-200 bg-amber-50 text-amber-700'
                   : 'border-red-200 bg-red-50 text-red-700',
               },
@@ -330,7 +330,7 @@ function SessionStudentReportOverlay({
                 value: exams.length > 0 ? `${exams[0].score}%` : '—',
                 sub: exams.length > 0 ? `${exams[0].correct}/${exams[0].total} · ${exams[0].topic}` : 'No exam this session',
                 color: exams.length === 0 ? 'border-gray-200 bg-gray-50 text-gray-500'
-                  : exams[0].score >= 75 ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
+                  : exams[0].score >= 75 ? 'border-primary/20 bg-primary/5 text-primary'
                   : exams[0].score >= 50 ? 'border-amber-200 bg-amber-50 text-amber-700'
                   : 'border-red-200 bg-red-50 text-red-700',
               },
@@ -447,7 +447,7 @@ function SessionStudentReportOverlay({
                   {exams.map((ex, i) => (
                     <tr key={i} className="border-t border-gray-100">
                       <td className="px-3 py-2 font-medium text-gray-800">{ex.topic}</td>
-                      <td className={`px-3 py-2 font-bold ${ex.score >= 75 ? 'text-emerald-600' : ex.score >= 50 ? 'text-amber-600' : 'text-red-600'}`}>{ex.score}%</td>
+                      <td className={`px-3 py-2 font-bold ${ex.score >= 75 ? 'text-primary' : ex.score >= 50 ? 'text-amber-600' : 'text-red-600'}`}>{ex.score}%</td>
                       <td className="px-3 py-2 text-gray-600">{ex.correct}/{ex.total}</td>
                       <td className="px-3 py-2 text-gray-600">{fmtDuration(ex.time_sec)}</td>
                       <td className="px-3 py-2 font-bold text-gray-800">{gradeFromScore(ex.score)}</td>
@@ -466,8 +466,8 @@ function SessionStudentReportOverlay({
                 {hwSubs.map((sub, i) => (
                   <div key={i} className="flex items-center justify-between gap-3 rounded-lg border border-gray-200 px-3 py-2 text-xs">
                     <span className="font-medium text-gray-800">{sub.hw_title}</span>
-                    <span className={`font-semibold ${sub.completion_status === 'completed' ? 'text-emerald-600' : sub.completion_status === 'partial' ? 'text-amber-600' : 'text-red-600'}`}>{sub.completion_status}</span>
-                    {sub.delay_days > 0 ? <span className="text-red-500">{sub.delay_days}d late</span> : <span className="text-emerald-600">On time</span>}
+                    <span className={`font-semibold ${sub.completion_status === 'completed' ? 'text-primary' : sub.completion_status === 'partial' ? 'text-amber-600' : 'text-red-600'}`}>{sub.completion_status}</span>
+                    {sub.delay_days > 0 ? <span className="text-red-500">{sub.delay_days}d late</span> : <span className="text-primary">On time</span>}
                     <span className="font-bold text-gray-700">{sub.grade || '—'}</span>
                   </div>
                 ))}
@@ -524,7 +524,7 @@ function KpiCard({ label, value, sub, alert, icon: Icon, tone = 'indigo' }: {
 }) {
   const tones: Record<string, { iconBg: string; iconText: string }> = {
     indigo:  { iconBg: 'bg-indigo-50',  iconText: 'text-indigo-600' },
-    emerald: { iconBg: 'bg-emerald-50', iconText: 'text-emerald-600' },
+    emerald: { iconBg: 'bg-primary/5', iconText: 'text-primary' },
     amber:   { iconBg: 'bg-amber-50',   iconText: 'text-amber-600' },
     rose:    { iconBg: 'bg-rose-50',    iconText: 'text-rose-600' },
     purple:  { iconBg: 'bg-purple-50',  iconText: 'text-purple-600' },
@@ -679,12 +679,12 @@ export default function SessionReportView({
                 {/* Hero Card */}
                 <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-6 text-white shadow-lg">
                   <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-indigo-500/10 blur-3xl" />
-                  <div className="absolute -left-10 -bottom-10 h-48 w-48 rounded-full bg-emerald-500/10 blur-3xl" />
+                  <div className="absolute -left-10 -bottom-10 h-48 w-48 rounded-full bg-primary/10 blur-3xl" />
                   <div className="relative flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                     <div className="min-w-0 flex-1">
                       <div className="flex flex-wrap items-center gap-2 mb-3">
-                        <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/20 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-emerald-300 ring-1 ring-inset ring-emerald-500/30">
-                          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                        <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/20 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-primary/80 ring-1 ring-inset ring-primary/30">
+                          <span className="h-1.5 w-1.5 rounded-full bg-primary" />
                           Session Ended
                         </span>
                         {s.batch_type && (
@@ -729,9 +729,9 @@ export default function SessionReportView({
                     <div className="relative mt-5 rounded-xl bg-white/5 backdrop-blur-sm p-4 ring-1 ring-inset ring-white/10">
                       {s.session_topic && (
                         <div className="flex items-start gap-2">
-                          <BookOpen className="h-4 w-4 text-emerald-300 mt-0.5 shrink-0" />
+                          <BookOpen className="h-4 w-4 text-primary/80 mt-0.5 shrink-0" />
                           <div className="min-w-0">
-                            <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-300">Topic</p>
+                            <p className="text-[10px] font-bold uppercase tracking-wider text-primary/80">Topic</p>
                             <p className="text-sm font-semibold text-white">{s.session_topic}</p>
                           </div>
                         </div>
@@ -875,7 +875,7 @@ export default function SessionReportView({
                     <div className="max-h-60 overflow-y-auto space-y-1">
                       {s.join_leave_log.map((l, i) => (
                         <div key={i} className="flex items-center gap-2 text-xs py-1 border-b border-gray-100">
-                          <span className={`w-2 h-2 rounded-full shrink-0 ${l.event === 'join' || l.event === 'rejoin' ? 'bg-emerald-500' : 'bg-red-400'}`} />
+                          <span className={`w-2 h-2 rounded-full shrink-0 ${l.event === 'join' || l.event === 'rejoin' ? 'bg-primary' : 'bg-red-400'}`} />
                           <span className="text-gray-400 w-16 shrink-0">{fmtTime(l.at)}</span>
                           <span className="font-medium text-gray-700">{l.name || l.email}</span>
                           <Badge color={l.event === 'join' || l.event === 'rejoin' ? 'green' : l.event === 'leave' ? 'red' : 'gray'}>{l.event}</Badge>
@@ -930,9 +930,9 @@ export default function SessionReportView({
                   <Section title={`Exam Results (${s.exam_results.length} submissions)`} icon={Award} defaultOpen={true} accent="indigo">
                     {s.exam_summary && (
                       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 mb-4">
-                        <div className="rounded-lg bg-emerald-50 border border-emerald-100 p-3 text-center">
-                          <div className="text-[10px] font-bold uppercase tracking-wider text-emerald-700">Class Avg</div>
-                          <div className="text-2xl font-bold text-emerald-700 mt-1">{s.exam_summary.class_avg}%</div>
+                        <div className="rounded-lg bg-primary/5 border border-primary/15 p-3 text-center">
+                          <div className="text-[10px] font-bold uppercase tracking-wider text-primary">Class Avg</div>
+                          <div className="text-2xl font-bold text-primary mt-1">{s.exam_summary.class_avg}%</div>
                         </div>
                         <div className="rounded-lg bg-blue-50 border border-blue-100 p-3 text-center">
                           <div className="text-[10px] font-bold uppercase tracking-wider text-blue-700">Pass Rate</div>
@@ -959,7 +959,7 @@ export default function SessionReportView({
                             <div key={i} className="flex items-center gap-2 text-xs">
                               <span className="min-w-[140px] truncate font-medium text-gray-700">{t.topic}</span>
                               <div className="flex-1 h-2 rounded-full bg-gray-200 overflow-hidden">
-                                <div className={`h-full ${t.avg >= 75 ? 'bg-emerald-500' : t.avg >= 50 ? 'bg-amber-500' : 'bg-red-500'}`} style={{ width: `${t.avg}%` }} />
+                                <div className={`h-full ${t.avg >= 75 ? 'bg-primary' : t.avg >= 50 ? 'bg-amber-500' : 'bg-red-500'}`} style={{ width: `${t.avg}%` }} />
                               </div>
                               <span className="w-12 text-right font-bold text-gray-800">{t.avg}%</span>
                               <span className="w-12 text-right text-gray-400">n={t.attempts}</span>
@@ -985,7 +985,7 @@ export default function SessionReportView({
                             <tr key={i} className="border-t border-gray-100">
                               <td className="px-3 py-2 font-medium text-gray-800">{e.student}</td>
                               <td className="px-3 py-2 text-gray-600">{e.topic}</td>
-                              <td className="px-3 py-2"><span className={`font-bold ${e.score >= 75 ? 'text-emerald-600' : e.score >= 50 ? 'text-amber-600' : 'text-red-600'}`}>{e.score}%</span></td>
+                              <td className="px-3 py-2"><span className={`font-bold ${e.score >= 75 ? 'text-primary' : e.score >= 50 ? 'text-amber-600' : 'text-red-600'}`}>{e.score}%</span></td>
                               <td className="px-3 py-2 text-gray-600">{e.correct}/{e.total}</td>
                               <td className="px-3 py-2 text-gray-600">{fmtDuration(e.time_sec)}</td>
                               <td className="px-3 py-2 font-bold text-gray-800">{gradeFromScore(e.score)}</td>
@@ -1020,7 +1020,7 @@ export default function SessionReportView({
                   <Section title={`Doubts & Questions (${s.doubts.total} · ${s.doubts.answered} answered · ${s.doubts.open} open)`} icon={HelpCircle} defaultOpen={s.doubts.open > 0} accent="amber">
                     <div className="space-y-2">
                       {s.doubts.list.map((d, i) => (
-                        <div key={i} className={`rounded-xl border p-3 text-xs ${d.status === 'answered' ? 'bg-emerald-50 border-emerald-200' : d.status === 'open' ? 'bg-amber-50 border-amber-200' : 'bg-gray-50 border-gray-200'}`}>
+                        <div key={i} className={`rounded-xl border p-3 text-xs ${d.status === 'answered' ? 'bg-primary/5 border-primary/20' : d.status === 'open' ? 'bg-amber-50 border-amber-200' : 'bg-gray-50 border-gray-200'}`}>
                           <div className="flex items-center gap-2 mb-1">
                             <Badge color={d.status === 'answered' ? 'green' : d.status === 'open' ? 'yellow' : 'gray'}>{d.status}</Badge>
                             {d.subject && <span className="text-gray-500">{d.subject}</span>}
@@ -1030,7 +1030,7 @@ export default function SessionReportView({
                           <p className="text-gray-800">{d.text}</p>
                           {d.reply && (
                             <div className="mt-2 pl-3 border-l-2 border-emerald-300">
-                              <p className="text-[11px] text-emerald-700 font-semibold">Teacher reply ({d.replied_by || ''}{d.replied_at ? ` · ${fmtTime(d.replied_at)}` : ''}):</p>
+                              <p className="text-[11px] text-primary font-semibold">Teacher reply ({d.replied_by || ''}{d.replied_at ? ` · ${fmtTime(d.replied_at)}` : ''}):</p>
                               <p className="text-gray-700 mt-0.5">{d.reply}</p>
                             </div>
                           )}
@@ -1133,7 +1133,7 @@ export default function SessionReportView({
                                     <tr key={si} className="border-t border-gray-100">
                                       <td className="px-3 py-1.5 font-medium text-gray-800">{sub.student}</td>
                                       <td className="px-3 py-1.5"><Badge color={sub.completion_status === 'completed' ? 'green' : sub.completion_status === 'partial' ? 'yellow' : 'red'}>{sub.completion_status}</Badge></td>
-                                      <td className="px-3 py-1.5">{sub.delay_days > 0 ? <span className="text-red-500">{sub.delay_days}d late</span> : <span className="text-emerald-600">On time</span>}</td>
+                                      <td className="px-3 py-1.5">{sub.delay_days > 0 ? <span className="text-red-500">{sub.delay_days}d late</span> : <span className="text-primary">On time</span>}</td>
                                       <td className="px-3 py-1.5 text-gray-600">{sub.file_count > 0 ? `${sub.file_count} file${sub.file_count > 1 ? 's' : ''}` : '—'}</td>
                                       <td className="px-3 py-1.5 font-bold text-gray-800">{sub.grade || '—'}</td>
                                     </tr>

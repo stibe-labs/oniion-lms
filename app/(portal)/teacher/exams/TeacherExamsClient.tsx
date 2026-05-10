@@ -97,8 +97,8 @@ interface Props {
 // ── Helpers ─────────────────────────────────────────────────
 
 const GRADE_STYLE: Record<string, string> = {
-  'A+': 'bg-emerald-100 text-emerald-700 border-emerald-200',
-  'A':  'bg-emerald-100 text-emerald-700 border-emerald-200',
+  'A+': 'bg-primary/10 text-primary border-primary/20',
+  'A':  'bg-primary/10 text-primary border-primary/20',
   'B+': 'bg-blue-100   text-blue-700    border-blue-200',
   'B':  'bg-blue-100   text-blue-700    border-blue-200',
   'C+': 'bg-amber-100  text-amber-700   border-amber-200',
@@ -204,7 +204,7 @@ export default function TeacherExamsClient({ userName, userEmail, userRole }: Pr
               onClick={() => setTab(t.key)}
               className={`flex items-center gap-1.5 px-3 sm:px-4 py-2.5 text-xs sm:text-sm font-medium border-b-2 -mb-px transition-colors whitespace-nowrap
                 ${tab === t.key
-                  ? 'border-emerald-500 text-emerald-600'
+                  ? 'border-primary text-primary'
                   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}
             >
               <t.icon className="h-3.5 w-3.5" />
@@ -381,9 +381,9 @@ function OverviewTab({ examList, results, monthly, batches }: {
             {recentExams.map(exam => {
               const passRate = exam.student_count > 0 ? Math.round((Number(exam.pass_count) / Number(exam.student_count)) * 100) : 0;
               return (
-                <div key={exam.topic_id} className="flex items-center gap-3 p-3 rounded-xl border border-gray-100 hover:border-emerald-200 hover:bg-emerald-50/30 transition-colors">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-100 shrink-0">
-                    <GraduationCap className="h-4 w-4 text-emerald-600" />
+                <div key={exam.topic_id} className="flex items-center gap-3 p-3 rounded-xl border border-gray-100 hover:border-primary/20 hover:bg-primary/5/30 transition-colors">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 shrink-0">
+                    <GraduationCap className="h-4 w-4 text-primary" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium text-gray-900 truncate">{exam.topic_title}</p>
@@ -397,13 +397,13 @@ function OverviewTab({ examList, results, monthly, batches }: {
                       <p className="text-[10px] text-gray-400">students</p>
                     </div>
                     <div className="text-center">
-                      <p className={`font-bold ${Number(exam.avg_percentage) >= 60 ? 'text-emerald-600' : Number(exam.avg_percentage) >= 40 ? 'text-amber-600' : 'text-red-600'}`}>
+                      <p className={`font-bold ${Number(exam.avg_percentage) >= 60 ? 'text-primary' : Number(exam.avg_percentage) >= 40 ? 'text-amber-600' : 'text-red-600'}`}>
                         {Number(exam.avg_percentage)}%
                       </p>
                       <p className="text-[10px] text-gray-400">avg</p>
                     </div>
                     <div className="text-center">
-                      <p className={`font-bold ${passRate >= 70 ? 'text-emerald-600' : passRate >= 50 ? 'text-amber-600' : 'text-red-600'}`}>
+                      <p className={`font-bold ${passRate >= 70 ? 'text-primary' : passRate >= 50 ? 'text-amber-600' : 'text-red-600'}`}>
                         {passRate}%
                       </p>
                       <p className="text-[10px] text-gray-400">pass</p>
@@ -425,7 +425,7 @@ function OverviewTab({ examList, results, monthly, batches }: {
             </h4>
             <div className="space-y-2">
               {topPerformers.map((s, i) => (
-                <div key={s.email} className="flex items-center gap-3 p-2 rounded-lg hover:bg-emerald-50/30">
+                <div key={s.email} className="flex items-center gap-3 p-2 rounded-lg hover:bg-primary/5/30">
                   <span className={`flex h-6 w-6 items-center justify-center rounded-full text-[10px] font-bold shrink-0 ${i === 0 ? 'bg-amber-100 text-amber-700' : i === 1 ? 'bg-gray-100 text-gray-600' : 'bg-orange-50 text-orange-600'}`}>
                     {i + 1}
                   </span>
@@ -434,7 +434,7 @@ function OverviewTab({ examList, results, monthly, batches }: {
                     <p className="text-sm font-medium text-gray-800 truncate">{s.name}</p>
                     <p className="text-[10px] text-gray-400">{s.exams} exams</p>
                   </div>
-                  <span className="text-sm font-bold text-emerald-600">{s.avg}%</span>
+                  <span className="text-sm font-bold text-primary">{s.avg}%</span>
                 </div>
               ))}
             </div>
@@ -495,7 +495,7 @@ function ExamHistoryTab({ examList, results, batches }: {
           <select
             value={subjectFilter}
             onChange={e => setSubjectFilter(e.target.value)}
-            className="rounded-lg border border-gray-200 px-3 py-1.5 text-xs text-gray-700 bg-white focus:border-emerald-400 focus:outline-none focus:ring-1 focus:ring-emerald-300"
+            className="rounded-lg border border-gray-200 px-3 py-1.5 text-xs text-gray-700 bg-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-emerald-300"
           >
             <option value="all">All Subjects</option>
             {subjects.map(s => <option key={s} value={s}>{s}</option>)}
@@ -519,8 +519,8 @@ function ExamHistoryTab({ examList, results, batches }: {
                   onClick={() => setExpandedExam(isExpanded ? null : exam.topic_id)}
                   className="w-full flex items-center gap-3 p-4 hover:bg-gray-50 transition-colors text-left"
                 >
-                  <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-100 shrink-0">
-                    <GraduationCap className="h-4 w-4 text-emerald-600" />
+                  <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 shrink-0">
+                    <GraduationCap className="h-4 w-4 text-primary" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-semibold text-gray-900 truncate">{exam.topic_title}</p>
@@ -561,7 +561,7 @@ function ExamHistoryTab({ examList, results, batches }: {
                           {examResults
                             .sort((a, b) => Number(b.percentage) - Number(a.percentage))
                             .map((r, i) => (
-                            <TRow key={r.id} className={i === 0 ? 'bg-emerald-50/50' : Number(r.percentage) < 40 ? 'bg-red-50/30' : ''}>
+                            <TRow key={r.id} className={i === 0 ? 'bg-primary/5/50' : Number(r.percentage) < 40 ? 'bg-red-50/30' : ''}>
                               <td className="px-4 py-2.5">
                                 <div className="flex items-center gap-2">
                                   <Avatar name={r.student_name} size="sm" />
@@ -575,7 +575,7 @@ function ExamHistoryTab({ examList, results, batches }: {
                               </td>
                               <td className="px-4 py-2.5 text-sm font-mono font-semibold text-gray-700">{r.score}/{r.total_marks}</td>
                               <td className="px-4 py-2.5">
-                                <span className={`text-sm font-bold ${Number(r.percentage) >= 75 ? 'text-emerald-600' : Number(r.percentage) >= 40 ? 'text-amber-600' : 'text-red-600'}`}>
+                                <span className={`text-sm font-bold ${Number(r.percentage) >= 75 ? 'text-primary' : Number(r.percentage) >= 40 ? 'text-amber-600' : 'text-red-600'}`}>
                                   {Number(r.percentage)}%
                                 </span>
                               </td>
@@ -677,7 +677,7 @@ function MarksheetsTab({ results, batches }: {
           <select
             value={selectedBatch}
             onChange={e => { setSelectedBatch(e.target.value); setSelectedStudent(null); }}
-            className="rounded-lg border border-gray-200 px-3 py-1.5 text-xs text-gray-700 bg-white focus:border-emerald-400 focus:outline-none focus:ring-1 focus:ring-emerald-300"
+            className="rounded-lg border border-gray-200 px-3 py-1.5 text-xs text-gray-700 bg-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-emerald-300"
           >
             {batchOptions.map(b => <option key={b.id} value={b.id}>{b.name}</option>)}
           </select>
@@ -713,7 +713,7 @@ function MarksheetsTab({ results, batches }: {
                     <p className="text-[10px] text-gray-400">Exams</p>
                   </div>
                   <div>
-                    <p className={`text-sm font-bold ${student.avgPct >= 60 ? 'text-emerald-600' : student.avgPct >= 40 ? 'text-amber-600' : 'text-red-600'}`}>
+                    <p className={`text-sm font-bold ${student.avgPct >= 60 ? 'text-primary' : student.avgPct >= 40 ? 'text-amber-600' : 'text-red-600'}`}>
                       {student.avgPct}%
                     </p>
                     <p className="text-[10px] text-gray-400">Avg</p>
@@ -723,7 +723,7 @@ function MarksheetsTab({ results, batches }: {
                     <p className="text-[10px] text-gray-400">Score</p>
                   </div>
                   <div>
-                    <p className={`text-sm font-bold ${student.passCount === student.examCount ? 'text-emerald-600' : 'text-amber-600'}`}>
+                    <p className={`text-sm font-bold ${student.passCount === student.examCount ? 'text-primary' : 'text-amber-600'}`}>
                       {student.passCount}/{student.examCount}
                     </p>
                     <p className="text-[10px] text-gray-400">Passed</p>
@@ -761,7 +761,7 @@ function MarksheetsTab({ results, batches }: {
                   <p className="text-[10px] text-gray-500">Total Exams</p>
                 </div>
                 <div>
-                  <p className={`text-lg font-bold ${selectedStudentData.avgPct >= 60 ? 'text-emerald-600' : selectedStudentData.avgPct >= 40 ? 'text-amber-600' : 'text-red-600'}`}>
+                  <p className={`text-lg font-bold ${selectedStudentData.avgPct >= 60 ? 'text-primary' : selectedStudentData.avgPct >= 40 ? 'text-amber-600' : 'text-red-600'}`}>
                     {selectedStudentData.avgPct}%
                   </p>
                   <p className="text-[10px] text-gray-500">Average</p>
@@ -771,7 +771,7 @@ function MarksheetsTab({ results, batches }: {
                   <p className="text-[10px] text-gray-500">Total Score</p>
                 </div>
                 <div>
-                  <p className={`text-lg font-bold ${selectedStudentData.passCount === selectedStudentData.examCount ? 'text-emerald-600' : 'text-amber-600'}`}>
+                  <p className={`text-lg font-bold ${selectedStudentData.passCount === selectedStudentData.examCount ? 'text-primary' : 'text-amber-600'}`}>
                     {selectedStudentData.passCount}/{selectedStudentData.examCount}
                   </p>
                   <p className="text-[10px] text-gray-500">Passed</p>
@@ -810,7 +810,7 @@ function MarksheetsTab({ results, batches }: {
                       <td className="px-4 py-2.5 text-xs text-gray-600">{r.subject}</td>
                       <td className="px-4 py-2.5 text-sm font-mono font-semibold text-gray-700">{r.score}/{r.total_marks}</td>
                       <td className="px-4 py-2.5">
-                        <span className={`text-sm font-bold ${Number(r.percentage) >= 75 ? 'text-emerald-600' : Number(r.percentage) >= 40 ? 'text-amber-600' : 'text-red-600'}`}>
+                        <span className={`text-sm font-bold ${Number(r.percentage) >= 75 ? 'text-primary' : Number(r.percentage) >= 40 ? 'text-amber-600' : 'text-red-600'}`}>
                           {Number(r.percentage)}%
                         </span>
                       </td>
@@ -1055,8 +1055,8 @@ function AnalyticsTab({ results, examList, batches }: {
           )}
           {cheatingInsights.offenderList.length === 0 && cheatingInsights.tabSwitchers === 0 && (
             <div className="flex items-center gap-2 py-4 justify-center">
-              <ShieldCheck className="w-5 h-5 text-emerald-500" />
-              <p className="text-sm text-emerald-600 font-medium">All exams completed with full integrity</p>
+              <ShieldCheck className="w-5 h-5 text-primary" />
+              <p className="text-sm text-primary font-medium">All exams completed with full integrity</p>
             </div>
           )}
         </Card>
@@ -1069,7 +1069,7 @@ function AnalyticsTab({ results, examList, batches }: {
 // ── Helper Components ────────────────────────────────────────
 
 function Stat({ label, value, color }: { label: string; value: string | number; color?: string }) {
-  const colorClass = color === 'emerald' ? 'text-emerald-600' : color === 'amber' ? 'text-amber-600' : color === 'red' ? 'text-red-600' : 'text-gray-800';
+  const colorClass = color === 'emerald' ? 'text-primary' : color === 'amber' ? 'text-amber-600' : color === 'red' ? 'text-red-600' : 'text-gray-800';
   return (
     <div className="text-center hidden sm:block">
       <p className={`text-xs font-bold ${colorClass}`}>{value}</p>

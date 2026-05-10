@@ -345,7 +345,7 @@ export default function TeacherDemoTab() {
             onClick={() => setFilter(key)}
             className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
               filter === key
-                ? 'bg-emerald-600 text-white shadow-sm'
+                ? 'bg-primary text-white shadow-sm'
                 : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
             }`}
           >
@@ -385,7 +385,7 @@ export default function TeacherDemoTab() {
               {/* Student info */}
               <div className="space-y-2">
                 <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-full bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold text-sm">
+                  <div className="h-10 w-10 rounded-full bg-primary/5 text-primary flex items-center justify-center font-bold text-sm">
                     {(req.student_name || '?').charAt(0).toUpperCase()}
                   </div>
                   <div>
@@ -453,7 +453,7 @@ export default function TeacherDemoTab() {
                     <button
                       onClick={() => joinDemoRoom(req.room_id!)}
                       disabled={joiningRoom === req.room_id}
-                      className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 text-white px-4 py-2 text-sm font-bold hover:bg-emerald-700 transition-colors animate-pulse disabled:opacity-50"
+                      className="inline-flex items-center gap-1.5 rounded-lg bg-primary text-white px-4 py-2 text-sm font-bold hover:bg-primary/90 transition-colors animate-pulse disabled:opacity-50"
                     >
                       <PlayCircle className="h-4 w-4" />
                       {joiningRoom === req.room_id ? 'Joining…' : 'Start Demo'}
@@ -471,7 +471,7 @@ export default function TeacherDemoTab() {
                   <button
                     onClick={() => joinDemoRoom(req.room_id!)}
                     disabled={joiningRoom === req.room_id}
-                    className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 text-white px-3 py-1.5 text-sm font-medium hover:bg-emerald-700 transition-colors animate-pulse disabled:opacity-50"
+                    className="inline-flex items-center gap-1.5 rounded-lg bg-primary text-white px-3 py-1.5 text-sm font-medium hover:bg-primary/90 transition-colors animate-pulse disabled:opacity-50"
                   >
                     <PlayCircle className="h-4 w-4" />
                     {joiningRoom === req.room_id ? 'Joining…' : 'Join Live Demo'}
@@ -480,7 +480,7 @@ export default function TeacherDemoTab() {
                 {req.status === 'completed' && req.room_id && (
                   <button
                     onClick={() => toggleSummary(req.room_id!)}
-                    className="inline-flex items-center gap-1.5 text-sm text-emerald-600 hover:text-emerald-700 font-medium transition-colors"
+                    className="inline-flex items-center gap-1.5 text-sm text-primary hover:text-primary font-medium transition-colors"
                   >
                     {expandedSummary === req.room_id ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
                     {expandedSummary === req.room_id ? 'Hide Summary' : 'View Summary'}
@@ -511,9 +511,9 @@ export default function TeacherDemoTab() {
               </button>
             </div>
             <div className="p-5 space-y-4">
-              <div className="rounded-lg bg-emerald-50 border border-emerald-200 p-3">
-                <p className="text-sm font-medium text-emerald-800">{scheduleModal.subject}</p>
-                <p className="text-xs text-emerald-600 mt-0.5">with {scheduleModal.studentName}</p>
+              <div className="rounded-lg bg-primary/5 border border-primary/20 p-3">
+                <p className="text-sm font-medium text-primary">{scheduleModal.subject}</p>
+                <p className="text-xs text-primary mt-0.5">with {scheduleModal.studentName}</p>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1.5">
@@ -524,7 +524,7 @@ export default function TeacherDemoTab() {
                   value={scheduledTime}
                   onChange={(e) => setScheduledTime(e.target.value)}
                   min={new Date(Date.now() + 5 * 60 * 1000 + 5.5 * 60 * 60 * 1000).toISOString().slice(0, 16)}
-                  className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none"
+                  className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none"
                 />
                 <p className="text-xs text-gray-500 mt-1.5">
                   Student and AO will be notified with this time. You can start 5 minutes before.
@@ -540,7 +540,7 @@ export default function TeacherDemoTab() {
                 <button
                   onClick={confirmAccept}
                   disabled={actionLoading === scheduleModal.requestId}
-                  className="flex-1 rounded-lg bg-emerald-600 px-4 py-2.5 text-sm font-bold text-white hover:bg-emerald-700 transition-colors disabled:opacity-50"
+                  className="flex-1 rounded-lg bg-primary px-4 py-2.5 text-sm font-bold text-white hover:bg-primary/90 transition-colors disabled:opacity-50"
                 >
                   {actionLoading === scheduleModal.requestId ? 'Scheduling…' : 'Confirm & Notify'}
                 </button>
@@ -583,7 +583,7 @@ function outcomeLabel(o: string): string {
 
 function outcomeColor(o: string): string {
   switch (o) {
-    case 'completed': case 'completed_with_exam': return 'text-emerald-700 bg-emerald-50 border-emerald-200';
+    case 'completed': case 'completed_with_exam': return 'text-primary bg-primary/5 border-primary/20';
     case 'student_no_show': return 'text-red-700 bg-red-50 border-red-200';
     case 'cancelled_by_teacher': case 'time_expired': return 'text-amber-700 bg-amber-50 border-amber-200';
     default: return 'text-gray-700 bg-gray-50 border-gray-200';
@@ -597,7 +597,7 @@ function DemoSummaryPanel({ summary, loading }: { summary: DemoSummary | null; l
     return (
       <div className="mt-4 flex items-center justify-center py-8 border-t border-gray-100">
         <div className="flex items-center gap-2 text-sm text-gray-400">
-          <span className="h-4 w-4 animate-spin rounded-full border-2 border-emerald-500 border-t-transparent" />
+          <span className="h-4 w-4 animate-spin rounded-full border-2 border-primary border-t-transparent" />
           Loading summary…
         </div>
       </div>
@@ -660,13 +660,13 @@ function DemoSummaryPanel({ summary, loading }: { summary: DemoSummary | null; l
               <div className="flex-1 h-3 rounded-full bg-gray-100 overflow-hidden">
                 <div
                   className={`h-full rounded-full transition-all ${
-                    s.attentionScore >= 70 ? 'bg-emerald-500' : s.attentionScore >= 40 ? 'bg-amber-500' : 'bg-red-500'
+                    s.attentionScore >= 70 ? 'bg-primary' : s.attentionScore >= 40 ? 'bg-amber-500' : 'bg-red-500'
                   }`}
                   style={{ width: `${s.attentionScore}%` }}
                 />
               </div>
               <span className={`text-sm font-bold tabular-nums ${
-                s.attentionScore >= 70 ? 'text-emerald-600' : s.attentionScore >= 40 ? 'text-amber-600' : 'text-red-600'
+                s.attentionScore >= 70 ? 'text-primary' : s.attentionScore >= 40 ? 'text-amber-600' : 'text-red-600'
               }`}>
                 {s.attentionScore}%
               </span>
@@ -714,7 +714,7 @@ function DemoSummaryPanel({ summary, loading }: { summary: DemoSummary | null; l
             <SummaryCard
               label="Score"
               value={`${s.exam.score}/${s.exam.totalMarks}`}
-              className={s.exam.percentage >= 60 ? 'text-emerald-700 bg-emerald-50 border-emerald-200' : 'text-amber-700 bg-amber-50 border-amber-200'}
+              className={s.exam.percentage >= 60 ? 'text-primary bg-primary/5 border-primary/20' : 'text-amber-700 bg-amber-50 border-amber-200'}
             />
             <SummaryCard label="Grade" value={s.exam.gradeLetter} className="text-blue-700 bg-blue-50 border-blue-200" />
             <SummaryCard label="Percentage" value={`${s.exam.percentage.toFixed(1)}%`} />
@@ -736,17 +736,17 @@ function DemoSummaryPanel({ summary, loading }: { summary: DemoSummary | null; l
               <div className="mt-2 space-y-1.5">
                 {s.exam.questions.map((q, i) => (
                   <div key={i} className={`rounded-lg border px-3 py-2 text-xs ${
-                    q.isCorrect ? 'border-emerald-200 bg-emerald-50/50' : 'border-red-200 bg-red-50/50'
+                    q.isCorrect ? 'border-primary/20 bg-primary/5/50' : 'border-red-200 bg-red-50/50'
                   }`}>
                     <div className="flex items-start justify-between gap-2">
                       <span className="font-medium text-gray-700">Q{i + 1}. {q.questionText}</span>
-                      <span className={`shrink-0 font-bold ${q.isCorrect ? 'text-emerald-600' : 'text-red-600'}`}>
+                      <span className={`shrink-0 font-bold ${q.isCorrect ? 'text-primary' : 'text-red-600'}`}>
                         {q.isCorrect ? <Check className="h-3.5 w-3.5 inline" /> : <X className="h-3.5 w-3.5 inline" />} {q.marks}
                       </span>
                     </div>
                     <div className="mt-1 flex flex-wrap gap-x-4 gap-y-0.5 text-gray-500">
-                      <span>Selected: <span className={q.isCorrect ? 'text-emerald-600' : 'text-red-600'}>{q.selectedOption || '—'}</span></span>
-                      {!q.isCorrect && <span>Correct: <span className="text-emerald-600">{q.correctAnswer}</span></span>}
+                      <span>Selected: <span className={q.isCorrect ? 'text-primary' : 'text-red-600'}>{q.selectedOption || '—'}</span></span>
+                      {!q.isCorrect && <span>Correct: <span className="text-primary">{q.correctAnswer}</span></span>}
                       {q.topic && <span className="text-gray-400">Topic: {q.topic}</span>}
                     </div>
                   </div>
@@ -788,7 +788,7 @@ function DemoSummaryPanel({ summary, loading }: { summary: DemoSummary | null; l
 function SectionHeader({ icon, title }: { icon: React.ReactNode; title: string }) {
   return (
     <div className="flex items-center gap-2 pt-1">
-      <span className="text-emerald-600">{icon}</span>
+      <span className="text-primary">{icon}</span>
       <h4 className="text-sm font-semibold text-gray-800">{title}</h4>
     </div>
   );
@@ -814,7 +814,7 @@ function InfoRow({ label, value, full }: { label: string; value: string; full?: 
 
 function MiniStat({ label, value, color }: { label: string; value: string; color: string }) {
   const colorMap: Record<string, string> = {
-    emerald: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+    emerald: 'bg-primary/5 text-primary border-primary/20',
     amber: 'bg-amber-50 text-amber-700 border-amber-200',
     red: 'bg-red-50 text-red-700 border-red-200',
     orange: 'bg-orange-50 text-orange-700 border-orange-200',

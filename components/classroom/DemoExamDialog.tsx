@@ -78,7 +78,7 @@ export default function DemoExamDialog({ roomId, role, onDismiss }: DemoExamDial
     <div className="fixed inset-0 z-200 flex items-center justify-center bg-black/60 backdrop-blur-sm animate-in fade-in duration-300">
       <div className="mx-4 w-full max-w-md rounded-2xl bg-[#2d2e30] shadow-2xl ring-1 ring-white/10 overflow-hidden">
         {/* Header */}
-        <div className="bg-linear-to-r from-teal-500 to-emerald-500 px-6 py-4 text-center">
+        <div className="bg-linear-to-r from-secondary to-primary px-6 py-4 text-center">
           <div className="text-4xl mb-2">📝</div>
           <h2 className="text-xl font-bold text-white">Sample Assessment</h2>
           <p className="text-sm text-white/80 mt-1">Quick test based on today&apos;s demo session</p>
@@ -107,8 +107,8 @@ export default function DemoExamDialog({ roomId, role, onDismiss }: DemoExamDial
                   </p>
                 </div>
               </div>
-              <div className="bg-teal-500/10 rounded-xl px-4 py-3 border border-teal-500/20">
-                <p className="text-xs text-teal-300 font-medium">
+              <div className="bg-secondary/10 rounded-xl px-4 py-3 border border-secondary/20">
+                <p className="text-xs text-secondary/80 font-medium">
                   ⏱ 10 questions · 30 seconds each · 5 minutes total
                 </p>
               </div>
@@ -136,8 +136,8 @@ export default function DemoExamDialog({ roomId, role, onDismiss }: DemoExamDial
                 </div>
               </div>
               {examOpened && (
-                <div className="bg-emerald-500/10 rounded-xl px-4 py-3 border border-emerald-500/20 text-center">
-                  <p className="text-xs text-emerald-300 font-medium">
+                <div className="bg-primary/10 rounded-xl px-4 py-3 border border-primary/20 text-center">
+                  <p className="text-xs text-primary/80 font-medium">
                     ✅ Exam opened in a new tab. Good luck!
                   </p>
                 </div>
@@ -152,7 +152,7 @@ export default function DemoExamDialog({ roomId, role, onDismiss }: DemoExamDial
             <button
               onClick={handleStartExam}
               disabled={loading || !demoRequestId}
-              className="w-full rounded-xl bg-linear-to-r from-teal-500 to-emerald-500 hover:from-teal-400 hover:to-emerald-400 disabled:opacity-40 disabled:cursor-not-allowed px-4 py-3 text-sm font-bold text-white transition-colors"
+              className="w-full rounded-xl bg-linear-to-r from-secondary to-primary hover:from-secondary/90 hover:to-primary/90 disabled:opacity-40 disabled:cursor-not-allowed px-4 py-3 text-sm font-bold text-white transition-colors"
             >
               {loading ? 'Loading…' : !demoRequestId ? 'Exam not available' : '🚀 Start Sample Exam'}
             </button>

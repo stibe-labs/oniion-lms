@@ -128,8 +128,8 @@ function scheduledStartMs(s: ScheduledSession): number {
 function teacherStatus(s: ScheduledSession, nowMs: number): { label: string; color: string; icon: 'pending' | 'denied' | 'classroom' | 'delayed' | 'waiting' | 'approved'; glow?: boolean } {
   if (s.go_live_status === 'pending') return { label: 'Requesting Go Live', color: 'text-amber-400', icon: 'pending', glow: true };
   if (s.go_live_status === 'denied')  return { label: 'Go Live Denied', color: 'text-red-400', icon: 'denied' };
-  if (s.go_live_status === 'approved') return { label: 'Approved — Going Live', color: 'text-emerald-400', icon: 'approved', glow: true };
-  if (s.room_exists) return { label: 'In Classroom', color: 'text-emerald-400', icon: 'classroom' };
+  if (s.go_live_status === 'approved') return { label: 'Approved — Going Live', color: 'text-primary', icon: 'approved', glow: true };
+  if (s.room_exists) return { label: 'In Classroom', color: 'text-primary', icon: 'classroom' };
   const startMs = scheduledStartMs(s);
   const delayMin = Math.floor((nowMs - startMs) / 60_000);
   if (delayMin > 0) return { label: `Delayed ${delayMin} min`, color: 'text-red-400', icon: 'delayed', glow: true };
@@ -598,7 +598,7 @@ export default function LiveMonitorClient({
     return (
       <div className="flex h-screen items-center justify-center bg-[#1a1a1d]">
         <div className="text-center">
-          <div className="h-8 w-8 animate-spin rounded-full border-2 border-emerald-500 border-t-transparent mx-auto mb-3" />
+          <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent mx-auto mb-3" />
           <p className="text-sm text-[#9aa0a6]">Loading sessions...</p>
         </div>
       </div>
@@ -666,7 +666,7 @@ export default function LiveMonitorClient({
                 <div className="text-center max-w-md">
                   <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#292a2d]">
                     {sessionEnded ? (
-                      <svg className="h-8 w-8 text-green-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+                      <svg className="h-8 w-8 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
                     ) : (
                       <svg className="h-8 w-8 text-[#5f6368]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}><rect x="2" y="7" width="20" height="15" rx="2" ry="2"/><polyline points="17 2 12 7 7 2"/></svg>
                     )}
@@ -982,17 +982,17 @@ export default function LiveMonitorClient({
                                       <div className="flex items-center gap-2">
                                         <div className="flex-1 h-2 rounded-full bg-[#3c4043] overflow-hidden">
                                           <div
-                                            className={cn('h-full rounded-full transition-all', avg >= 70 ? 'bg-green-500' : avg >= 40 ? 'bg-amber-500' : 'bg-red-500')}
+                                            className={cn('h-full rounded-full transition-all', avg >= 70 ? 'bg-primary' : avg >= 40 ? 'bg-amber-500' : 'bg-red-500')}
                                             style={{ width: `${avg}%` }}
                                           />
                                         </div>
-                                        <span className={cn('text-sm font-bold', avg >= 70 ? 'text-green-400' : avg >= 40 ? 'text-amber-400' : 'text-red-400')}>
+                                        <span className={cn('text-sm font-bold', avg >= 70 ? 'text-primary' : avg >= 40 ? 'text-amber-400' : 'text-red-400')}>
                                           {avg}%
                                         </span>
                                       </div>
                                       {allStudents.length > 0 && (
                                         <div className="grid grid-cols-4 gap-1 text-[10px] text-center">
-                                          <div className="rounded bg-green-900/30 px-1 py-0.5 text-green-400 flex items-center justify-center gap-0.5">{attentiveCount} <svg className="h-2.5 w-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+                                          <div className="rounded bg-green-900/30 px-1 py-0.5 text-primary flex items-center justify-center gap-0.5">{attentiveCount} <svg className="h-2.5 w-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
                                           <div className="rounded bg-red-900/30 px-1 py-0.5 text-red-400 flex items-center justify-center gap-0.5">{sleepingCount} <svg className="h-2.5 w-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round"><path d="M2 4h4l2-2"/><path d="M6 8h4l2-2"/><path d="M10 12h4l2-2"/></svg></div>
                                           <div className="rounded bg-purple-900/30 px-1 py-0.5 text-purple-400 flex items-center justify-center gap-0.5">{tabSwitched} <svg className="h-2.5 w-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div>
                                           <div className="rounded bg-amber-900/30 px-1 py-0.5 text-amber-400 flex items-center justify-center gap-0.5">{notInFrame} <svg className="h-2.5 w-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></div>
@@ -1019,7 +1019,7 @@ export default function LiveMonitorClient({
                                           inactive:       { label: 'Inactive', color: 'text-amber-400' },
                                           distracted:     { label: 'Distracted', color: 'text-amber-400' },
                                           low_engagement: { label: 'Low Engagement', color: 'text-amber-400' },
-                                          attentive:      { label: 'Attentive', color: 'text-green-400' },
+                                          attentive:      { label: 'Attentive', color: 'text-primary' },
                                         };
                                         const sc = stateConfig[att.monitorState] ?? stateConfig.attentive;
                                         const isCritical = ['eyes_closed', 'tab_switched', 'not_in_frame'].includes(att.monitorState);
@@ -1036,7 +1036,7 @@ export default function LiveMonitorClient({
                                             <div className="flex items-center justify-between">
                                               <span className="text-xs font-medium text-[#e8eaed] truncate">{att.name}</span>
                                               <span className={cn('text-xs font-bold',
-                                                att.attentionScore >= 70 ? 'text-green-400' :
+                                                att.attentionScore >= 70 ? 'text-primary' :
                                                 att.attentionScore >= 40 ? 'text-amber-400' : 'text-red-400',
                                               )}>{att.attentionScore}%</span>
                                             </div>
@@ -1199,20 +1199,20 @@ export default function LiveMonitorClient({
                 'flex items-center gap-3 rounded-xl px-5 py-3 shadow-2xl border backdrop-blur-sm',
                 sb.type === 'end-class'
                   ? 'bg-amber-950/90 border-amber-500/50'
-                  : 'bg-emerald-950/90 border-emerald-500/50',
+                  : 'bg-primary/30 border-primary/50',
               )}>
                 <span className={cn(
                   'flex h-9 w-9 shrink-0 items-center justify-center rounded-full',
-                  sb.type === 'end-class' ? 'bg-amber-500/20' : 'bg-emerald-500/20',
+                  sb.type === 'end-class' ? 'bg-amber-500/20' : 'bg-primary/20',
                 )}>
                   {sb.type === 'end-class' ? (
                     <svg className="h-5 w-5 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>
                   ) : (
-                    <svg className="h-5 w-5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                    <svg className="h-5 w-5 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><polygon points="5 3 19 12 5 21 5 3"/></svg>
                   )}
                 </span>
                 <div className="min-w-0">
-                  <p className={cn('text-sm font-semibold', sb.type === 'end-class' ? 'text-amber-200' : 'text-emerald-200')}>
+                  <p className={cn('text-sm font-semibold', sb.type === 'end-class' ? 'text-amber-200' : 'text-primary/60')}>
                     {sb.type === 'end-class'
                       ? `${sb.teacherName} wants to end class`
                       : `${sb.teacherName} requests Go Live`}
@@ -1236,7 +1236,7 @@ export default function LiveMonitorClient({
                   <div className="flex items-center gap-2 ml-3">
                     <button
                       onClick={() => { handleGoLiveAction(sb.roomName, 'approve'); setSnackbars(prev => prev.filter(s => s.id !== sb.id)); }}
-                      className="rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-bold text-white hover:bg-emerald-500 active:scale-95 transition-all"
+                      className="rounded-lg bg-primary px-3 py-1.5 text-xs font-bold text-white hover:bg-primary active:scale-95 transition-all"
                     >Approve</button>
                     <button
                       onClick={() => { handleGoLiveAction(sb.roomName, 'deny'); setSnackbars(prev => prev.filter(s => s.id !== sb.id)); }}
@@ -1323,12 +1323,12 @@ function LiveSessionCard({
         </div>
 
         <div className="flex items-center gap-2.5 mb-3">
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-600/30 text-xs font-bold text-[#e8eaed]">
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/30 text-xs font-bold text-[#e8eaed]">
             {(session.teacher_name || '?').charAt(0).toUpperCase()}
           </div>
           <div className="min-w-0">
             <p className="text-xs font-medium text-[#e8eaed] truncate">{session.teacher_name}</p>
-            <p className="text-[10px] text-emerald-400">Teaching</p>
+            <p className="text-[10px] text-primary">Teaching</p>
           </div>
         </div>
 
@@ -1411,7 +1411,7 @@ function ScheduledCard({
           </div>
           <button
             onClick={(e) => { e.stopPropagation(); onApprove(ss.session_id); }}
-            className="rounded-lg bg-emerald-600 px-3 py-1.5 text-[11px] font-bold text-white hover:bg-emerald-500 active:scale-95 transition-all"
+            className="rounded-lg bg-primary px-3 py-1.5 text-[11px] font-bold text-white hover:bg-primary active:scale-95 transition-all"
           >Approve</button>
           <button
             onClick={(e) => { e.stopPropagation(); onDeny(ss.session_id); }}
@@ -1450,7 +1450,7 @@ function ScheduledCard({
         <div className="flex items-center gap-2.5 mb-3">
           <div className={cn(
             'relative flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold text-[#e8eaed]',
-            ts.icon === 'classroom' || ts.icon === 'approved' ? 'bg-emerald-600/30' :
+            ts.icon === 'classroom' || ts.icon === 'approved' ? 'bg-primary/30' :
             ts.icon === 'pending' ? 'bg-amber-600/30' :
             ts.icon === 'delayed' ? 'bg-red-600/30' :
             'bg-[#3c4043]',
@@ -1458,7 +1458,7 @@ function ScheduledCard({
             {(ss.teacher_name || '?').charAt(0).toUpperCase()}
             <span className={cn(
               'absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full border-2 border-[#202124]',
-              ts.icon === 'classroom' || ts.icon === 'pending' || ts.icon === 'approved' ? 'bg-emerald-500' :
+              ts.icon === 'classroom' || ts.icon === 'pending' || ts.icon === 'approved' ? 'bg-primary' :
               ts.icon === 'delayed' ? 'bg-red-500 animate-pulse' :
               'bg-[#5f6368]',
             )} />
@@ -1475,7 +1475,7 @@ function ScheduledCard({
             {ss.student_count} enrolled
           </span>
           {ss.room_exists && ss.waiting_students > 0 && (
-            <span className="flex items-center gap-1 text-emerald-400">
+            <span className="flex items-center gap-1 text-primary">
               <svg className="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
               {ss.waiting_students} waiting
             </span>
@@ -1570,7 +1570,7 @@ function BCStudentGrid({
                 isTabAway ? 'bg-purple-600/80 text-white' :
                 isNotInFrame ? 'bg-red-600/70 text-white' :
                 isLowAtt ? 'bg-amber-500/80 text-white' :
-                'bg-green-600/70 text-white',
+                'bg-primary/70 text-white',
               )}>
                 {isSleeping ? (
                   <svg className="h-3 w-3" viewBox="0 0 24 24" fill="currentColor"><text x="2" y="18" fontSize="16" fontWeight="bold">Z</text><text x="10" y="12" fontSize="10" fontWeight="bold">z</text><text x="15" y="8" fontSize="7" fontWeight="bold">z</text></svg>
@@ -2659,7 +2659,7 @@ function TalkToTeacherButton() {
         'ml-auto mr-2 flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-colors select-none',
         disabled && 'opacity-40 cursor-not-allowed bg-[#292a2d] text-[#9aa0a6]',
         !disabled && (active
-          ? 'bg-emerald-600/30 text-emerald-300 ring-1 ring-emerald-500/60'
+          ? 'bg-primary/30 text-primary/80 ring-1 ring-primary/60'
           : 'bg-[#292a2d] text-[#9aa0a6] hover:text-[#e8eaed] hover:bg-[#3c4043]'),
       )}
       title={
@@ -2669,7 +2669,7 @@ function TalkToTeacherButton() {
       }
       aria-pressed={active}
     >
-      <span className={cn('h-2 w-2 rounded-full shrink-0', active ? 'bg-emerald-400 animate-pulse' : 'bg-[#5f6368]')} />
+      <span className={cn('h-2 w-2 rounded-full shrink-0', active ? 'bg-primary animate-pulse' : 'bg-[#5f6368]')} />
       <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
         <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
         <path d="M19 10v2a7 7 0 0 1-14 0v-2" />

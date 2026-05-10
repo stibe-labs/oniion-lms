@@ -111,13 +111,13 @@ function DiscontinuedStudentsPanelInner() {
               placeholder="Search student..."
               value={search}
               onChange={e => setSearch(e.target.value)}
-              className="pl-8 pr-3 py-1.5 text-xs border border-gray-200 rounded-lg focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 w-48"
+              className="pl-8 pr-3 py-1.5 text-xs border border-gray-200 rounded-lg focus:ring-1 focus:ring-primary focus:border-primary w-48"
             />
           </div>
           <select
             value={filter}
             onChange={e => setFilter(e.target.value as typeof filter)}
-            className="text-xs border border-gray-200 rounded-lg px-2 py-1.5 focus:ring-1 focus:ring-emerald-500"
+            className="text-xs border border-gray-200 rounded-lg px-2 py-1.5 focus:ring-1 focus:ring-primary"
           >
             <option value="all">All Statuses</option>
             <option value="discontinued">Discontinued</option>
@@ -179,7 +179,7 @@ function DiscontinuedStudentsPanelInner() {
                           <button
                             onClick={() => updateStatus(s.batch_id, s.student_email, 'rejoined', noteText)}
                             disabled={isLoading}
-                            className="text-xs font-medium text-white bg-emerald-600 hover:bg-emerald-700 px-2 py-1 rounded disabled:opacity-50 transition"
+                            className="text-xs font-medium text-white bg-primary hover:bg-primary/90 px-2 py-1 rounded disabled:opacity-50 transition"
                           >
                             {isLoading ? '...' : 'Confirm Rejoin'}
                           </button>
@@ -189,7 +189,7 @@ function DiscontinuedStudentsPanelInner() {
                       ) : (
                         <button
                           onClick={() => setShowNoteFor(key)}
-                          className="inline-flex items-center gap-1 text-xs font-medium text-emerald-700 bg-emerald-50 hover:bg-emerald-100 px-2.5 py-1 rounded-lg transition"
+                          className="inline-flex items-center gap-1 text-xs font-medium text-primary bg-primary/5 hover:bg-primary/10 px-2.5 py-1 rounded-lg transition"
                         >
                           <UserCheck className="h-3 w-3" /> Rejoin
                         </button>

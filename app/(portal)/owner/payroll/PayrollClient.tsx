@@ -263,7 +263,7 @@ export default function PayrollClient({ userName, userEmail, userRole }: Props) 
                   {configs.map(c => (
                     <TRow key={c.id}>
                       <td className="px-4 py-3 text-gray-800 text-sm">{c.teacher_name || c.teacher_email}</td>
-                      <td className="px-4 py-3 text-green-700 font-medium">{money(c.rate_per_class)}</td>
+                      <td className="px-4 py-3 text-primary font-medium">{money(c.rate_per_class)}</td>
                       <td className="px-4 py-3 text-teal-700 font-medium">{money(c.incentive_rules?.bonus_per_class ?? 0)}</td>
                       <td className="px-4 py-3 text-gray-600">{c.incentive_rules?.bonus_threshold ?? '—'} sessions</td>
                     </TRow>
@@ -288,7 +288,7 @@ export default function PayrollClient({ userName, userEmail, userRole }: Props) 
                     onClick={() => setSelectedPeriod(p.id)}
                     className={`rounded-xl border p-4 transition cursor-pointer shadow-sm ${
                       selectedPeriod === p.id
-                        ? 'border-emerald-400 bg-emerald-50/50 ring-1 ring-emerald-200'
+                        ? 'border-primary bg-primary/5/50 ring-1 ring-primary/20'
                         : 'border-gray-200 bg-white hover:bg-gray-50'
                     }`}>
                     <div className="flex items-center justify-between mb-2">
@@ -300,7 +300,7 @@ export default function PayrollClient({ userName, userEmail, userRole }: Props) 
                     </p>
                     <div className="flex justify-between mt-3 text-xs">
                       <span className="text-gray-500"><Users className="h-3 w-3 inline mr-1" />{p.payslip_count} payslips</span>
-                      <span className="text-green-700 font-semibold">{money(Number(p.total_paise) || 0)}</span>
+                      <span className="text-primary font-semibold">{money(Number(p.total_paise) || 0)}</span>
                     </div>
                   </div>
                 ))}
@@ -357,7 +357,7 @@ export default function PayrollClient({ userName, userEmail, userRole }: Props) 
                           <td className="px-3 py-2 text-center text-red-600">{s.classes_missed}</td>
                           <td className="px-3 py-2 text-right text-gray-600">{money(s.base_pay_paise)}</td>
                           <td className="px-3 py-2 text-right text-teal-700">{money(s.extension_paise || 0)}</td>
-                          <td className="px-3 py-2 text-right text-green-700">{money(s.incentive_paise)}</td>
+                          <td className="px-3 py-2 text-right text-primary">{money(s.incentive_paise)}</td>
                           <td className="px-3 py-2 text-right text-red-600">-{money(s.lop_paise)}</td>
                           <td className="px-3 py-2 text-right text-gray-900 font-semibold">{money(s.total_paise)}</td>
                           <td className="px-3 py-2 text-center"><StatusBadge status={s.status} /></td>

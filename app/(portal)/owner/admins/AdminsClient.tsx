@@ -239,9 +239,9 @@ export default function AdminsClient({ userName, userEmail, userRole }: Props) {
           </div>
         )}
         {success && (
-          <div className="rounded-xl border border-green-200 bg-green-50 px-4 py-3 flex items-center gap-3">
+          <div className="rounded-xl border border-primary/20 bg-primary/5 px-4 py-3 flex items-center gap-3">
             <CheckCircle className="h-5 w-5 text-green-500 shrink-0" />
-            <p className="text-sm text-green-700">{success}</p>
+            <p className="text-sm text-primary">{success}</p>
           </div>
         )}
 
@@ -249,7 +249,7 @@ export default function AdminsClient({ userName, userEmail, userRole }: Props) {
         {showForm && (
           <form onSubmit={handleCreate} className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm space-y-4">
             <h3 className="text-sm font-semibold text-gray-700 flex items-center gap-2">
-              <UserPlus className="h-4 w-4 text-emerald-600" />
+              <UserPlus className="h-4 w-4 text-primary" />
               Create New Admin Account
             </h3>
             <p className="text-xs text-gray-500">
@@ -266,7 +266,7 @@ export default function AdminsClient({ userName, userEmail, userRole }: Props) {
                   onChange={e => setFormName(e.target.value)}
                   required
                   placeholder="e.g. Rajesh Kumar"
-                  className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none"
+                  className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none"
                 />
               </div>
 
@@ -279,7 +279,7 @@ export default function AdminsClient({ userName, userEmail, userRole }: Props) {
                   onChange={e => setFormEmail(e.target.value)}
                   required
                   placeholder="e.g. admin2@stibe.in"
-                  className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none"
+                  className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none"
                 />
               </div>
 
@@ -291,7 +291,7 @@ export default function AdminsClient({ userName, userEmail, userRole }: Props) {
                   value={formPhone}
                   onChange={e => setFormPhone(e.target.value)}
                   placeholder="e.g. 9876543210"
-                  className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none"
+                  className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none"
                 />
               </div>
             </div>
@@ -308,7 +308,7 @@ export default function AdminsClient({ userName, userEmail, userRole }: Props) {
                     required
                     minLength={8}
                     placeholder="Min 8 characters"
-                    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm pr-10 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none"
+                    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm pr-10 focus:border-primary focus:ring-1 focus:ring-primary outline-none"
                   />
                   <button
                     type="button"
@@ -326,7 +326,7 @@ export default function AdminsClient({ userName, userEmail, userRole }: Props) {
                   className="inline-flex items-center gap-1.5 rounded-lg border border-gray-300 px-3 py-2 text-xs text-gray-600 hover:bg-gray-50 disabled:opacity-40"
                   title="Copy password"
                 >
-                  {copied ? <Check className="h-3.5 w-3.5 text-green-600" /> : <Copy className="h-3.5 w-3.5" />}
+                  {copied ? <Check className="h-3.5 w-3.5 text-primary" /> : <Copy className="h-3.5 w-3.5" />}
                   {copied ? 'Copied' : 'Copy'}
                 </button>
               </div>
@@ -372,13 +372,13 @@ export default function AdminsClient({ userName, userEmail, userRole }: Props) {
                               type="text"
                               value={editName}
                               onChange={e => setEditName(e.target.value)}
-                              className="w-full max-w-[200px] rounded-lg border border-emerald-300 px-2 py-1 text-sm font-medium text-gray-900 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none"
+                              className="w-full max-w-[200px] rounded-lg border border-emerald-300 px-2 py-1 text-sm font-medium text-gray-900 focus:border-primary focus:ring-1 focus:ring-primary outline-none"
                             />
                           ) : (
                             <p className="text-sm font-medium text-gray-900">
                               {admin.full_name}
                               {isSelf && (
-                                <span className="ml-2 text-[10px] font-medium text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded-full">
+                                <span className="ml-2 text-[10px] font-medium text-primary bg-primary/5 px-1.5 py-0.5 rounded-full">
                                   You
                                 </span>
                               )}
@@ -395,7 +395,7 @@ export default function AdminsClient({ userName, userEmail, userRole }: Props) {
                           value={editPhone}
                           onChange={e => setEditPhone(e.target.value)}
                           placeholder="9876543210"
-                          className="w-full max-w-[140px] rounded-lg border border-emerald-300 px-2 py-1 text-xs text-gray-700 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none"
+                          className="w-full max-w-[140px] rounded-lg border border-emerald-300 px-2 py-1 text-xs text-gray-700 focus:border-primary focus:ring-1 focus:ring-primary outline-none"
                         />
                       ) : (
                         <span className="text-xs text-gray-500">
@@ -428,7 +428,7 @@ export default function AdminsClient({ userName, userEmail, userRole }: Props) {
                           <button
                             onClick={handleEdit}
                             disabled={editSaving}
-                            className="inline-flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-medium text-white bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 transition"
+                            className="inline-flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-medium text-white bg-primary hover:bg-primary/90 disabled:opacity-50 transition"
                           >
                             <Check className="h-3.5 w-3.5" /> {editSaving ? 'Saving...' : 'Save'}
                           </button>
@@ -447,7 +447,7 @@ export default function AdminsClient({ userName, userEmail, userRole }: Props) {
                             className={`inline-flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-medium transition ${
                               admin.is_active
                                 ? 'text-amber-700 bg-amber-50 hover:bg-amber-100'
-                                : 'text-green-700 bg-green-50 hover:bg-green-100'
+                                : 'text-primary bg-primary/5 hover:bg-primary/10'
                             }`}
                             title={admin.is_active ? 'Deactivate' : 'Activate'}
                           >

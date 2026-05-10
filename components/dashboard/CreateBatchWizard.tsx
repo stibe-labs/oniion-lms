@@ -42,13 +42,13 @@ export const BATCH_TEMPLATES = [
   { id: 'one_to_one_PCM',         type: 'one_to_one' as const, subjectLabel: 'PCM',              subjects: ['Physics', 'Chemistry', 'Mathematics'],                   label: '1:1 — PCM',              maxStudents: 1,   color: 'bg-blue-50 border-blue-200 text-blue-700',       selectedColor: 'bg-blue-100 border-blue-500 ring-2 ring-blue-300 text-blue-800' },
   { id: 'one_to_one_PCBM',        type: 'one_to_one' as const, subjectLabel: 'PCBM (All 4)',     subjects: ['Physics', 'Chemistry', 'Biology', 'Mathematics'],         label: '1:1 — PCBM',             maxStudents: 1,   color: 'bg-blue-50 border-blue-200 text-blue-700',       selectedColor: 'bg-blue-100 border-blue-500 ring-2 ring-blue-300 text-blue-800' },
   // ── 1:3 Small Group ─────────────────────────────────────────────
-  { id: 'one_to_three_Physics',     type: 'one_to_three' as const, subjectLabel: 'Physics',        subjects: ['Physics'],                                               label: '1:3 — Physics',          maxStudents: 3,   color: 'bg-emerald-50 border-emerald-200 text-emerald-700', selectedColor: 'bg-emerald-100 border-emerald-500 ring-2 ring-emerald-300 text-emerald-800' },
-  { id: 'one_to_three_Chemistry',   type: 'one_to_three' as const, subjectLabel: 'Chemistry',      subjects: ['Chemistry'],                                             label: '1:3 — Chemistry',        maxStudents: 3,   color: 'bg-emerald-50 border-emerald-200 text-emerald-700', selectedColor: 'bg-emerald-100 border-emerald-500 ring-2 ring-emerald-300 text-emerald-800' },
-  { id: 'one_to_three_Biology',     type: 'one_to_three' as const, subjectLabel: 'Biology',        subjects: ['Biology'],                                               label: '1:3 — Biology',          maxStudents: 3,   color: 'bg-emerald-50 border-emerald-200 text-emerald-700', selectedColor: 'bg-emerald-100 border-emerald-500 ring-2 ring-emerald-300 text-emerald-800' },
-  { id: 'one_to_three_Mathematics', type: 'one_to_three' as const, subjectLabel: 'Mathematics',    subjects: ['Mathematics'],                                           label: '1:3 — Mathematics',      maxStudents: 3,   color: 'bg-emerald-50 border-emerald-200 text-emerald-700', selectedColor: 'bg-emerald-100 border-emerald-500 ring-2 ring-emerald-300 text-emerald-800' },
-  { id: 'one_to_three_PCB',         type: 'one_to_three' as const, subjectLabel: 'PCB',            subjects: ['Physics', 'Chemistry', 'Biology'],                        label: '1:3 — PCB',              maxStudents: 3,   color: 'bg-emerald-50 border-emerald-200 text-emerald-700', selectedColor: 'bg-emerald-100 border-emerald-500 ring-2 ring-emerald-300 text-emerald-800' },
-  { id: 'one_to_three_PCM',         type: 'one_to_three' as const, subjectLabel: 'PCM',            subjects: ['Physics', 'Chemistry', 'Mathematics'],                   label: '1:3 — PCM',              maxStudents: 3,   color: 'bg-emerald-50 border-emerald-200 text-emerald-700', selectedColor: 'bg-emerald-100 border-emerald-500 ring-2 ring-emerald-300 text-emerald-800' },
-  { id: 'one_to_three_PCBM',        type: 'one_to_three' as const, subjectLabel: 'PCBM (All 4)',   subjects: ['Physics', 'Chemistry', 'Biology', 'Mathematics'],         label: '1:3 — PCBM',             maxStudents: 3,   color: 'bg-emerald-50 border-emerald-200 text-emerald-700', selectedColor: 'bg-emerald-100 border-emerald-500 ring-2 ring-emerald-300 text-emerald-800' },
+  { id: 'one_to_three_Physics',     type: 'one_to_three' as const, subjectLabel: 'Physics',        subjects: ['Physics'],                                               label: '1:3 — Physics',          maxStudents: 3,   color: 'bg-primary/5 border-primary/20 text-primary', selectedColor: 'bg-primary/10 border-primary ring-2 ring-emerald-300 text-primary' },
+  { id: 'one_to_three_Chemistry',   type: 'one_to_three' as const, subjectLabel: 'Chemistry',      subjects: ['Chemistry'],                                             label: '1:3 — Chemistry',        maxStudents: 3,   color: 'bg-primary/5 border-primary/20 text-primary', selectedColor: 'bg-primary/10 border-primary ring-2 ring-emerald-300 text-primary' },
+  { id: 'one_to_three_Biology',     type: 'one_to_three' as const, subjectLabel: 'Biology',        subjects: ['Biology'],                                               label: '1:3 — Biology',          maxStudents: 3,   color: 'bg-primary/5 border-primary/20 text-primary', selectedColor: 'bg-primary/10 border-primary ring-2 ring-emerald-300 text-primary' },
+  { id: 'one_to_three_Mathematics', type: 'one_to_three' as const, subjectLabel: 'Mathematics',    subjects: ['Mathematics'],                                           label: '1:3 — Mathematics',      maxStudents: 3,   color: 'bg-primary/5 border-primary/20 text-primary', selectedColor: 'bg-primary/10 border-primary ring-2 ring-emerald-300 text-primary' },
+  { id: 'one_to_three_PCB',         type: 'one_to_three' as const, subjectLabel: 'PCB',            subjects: ['Physics', 'Chemistry', 'Biology'],                        label: '1:3 — PCB',              maxStudents: 3,   color: 'bg-primary/5 border-primary/20 text-primary', selectedColor: 'bg-primary/10 border-primary ring-2 ring-emerald-300 text-primary' },
+  { id: 'one_to_three_PCM',         type: 'one_to_three' as const, subjectLabel: 'PCM',            subjects: ['Physics', 'Chemistry', 'Mathematics'],                   label: '1:3 — PCM',              maxStudents: 3,   color: 'bg-primary/5 border-primary/20 text-primary', selectedColor: 'bg-primary/10 border-primary ring-2 ring-emerald-300 text-primary' },
+  { id: 'one_to_three_PCBM',        type: 'one_to_three' as const, subjectLabel: 'PCBM (All 4)',   subjects: ['Physics', 'Chemistry', 'Biology', 'Mathematics'],         label: '1:3 — PCBM',             maxStudents: 3,   color: 'bg-primary/5 border-primary/20 text-primary', selectedColor: 'bg-primary/10 border-primary ring-2 ring-emerald-300 text-primary' },
   // ── 1:15 Group ──────────────────────────────────────────────────
   { id: 'one_to_fifteen_PCB',  type: 'one_to_fifteen' as const, subjectLabel: 'PCB',  subjects: ['Physics', 'Chemistry', 'Biology'],              label: '1:15 — PCB',  maxStudents: 15,  color: 'bg-teal-50 border-teal-200 text-teal-700',     selectedColor: 'bg-teal-100 border-teal-500 ring-2 ring-teal-300 text-teal-800' },
   { id: 'one_to_fifteen_PCM',  type: 'one_to_fifteen' as const, subjectLabel: 'PCM',  subjects: ['Physics', 'Chemistry', 'Mathematics'],          label: '1:15 — PCM',  maxStudents: 15,  color: 'bg-teal-50 border-teal-200 text-teal-700',     selectedColor: 'bg-teal-100 border-teal-500 ring-2 ring-teal-300 text-teal-800' },
@@ -180,7 +180,7 @@ function TeacherPickerSelect({
         type="button"
         onClick={handleOpen}
         className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg border-2 bg-white text-left transition-all ${
-          open ? 'border-emerald-400 ring-2 ring-emerald-100' : 'border-gray-200 hover:border-emerald-300'
+          open ? 'border-primary ring-2 ring-primary/15' : 'border-gray-200 hover:border-emerald-300'
         }`}
       >
         {selected ? (
@@ -188,7 +188,7 @@ function TeacherPickerSelect({
             {selected.profile_image
               // eslint-disable-next-line @next/next/no-img-element
               ? <img src={selected.profile_image} alt="" className="h-8 w-8 rounded-full object-cover shrink-0" />
-              : <div className="h-8 w-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-bold shrink-0">{selected.full_name.charAt(0)}</div>
+              : <div className="h-8 w-8 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold shrink-0">{selected.full_name.charAt(0)}</div>
             }
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-gray-800 truncate">{selected.full_name}</p>
@@ -215,18 +215,18 @@ function TeacherPickerSelect({
               key={t.email}
               type="button"
               onClick={() => { onChange(t.email); setOpen(false); }}
-              className={`w-full flex items-center gap-3 px-4 py-3 transition hover:bg-emerald-50 ${t.email === value ? 'bg-emerald-50' : ''}`}
+              className={`w-full flex items-center gap-3 px-4 py-3 transition hover:bg-primary/5 ${t.email === value ? 'bg-primary/5' : ''}`}
             >
               {t.profile_image
                 // eslint-disable-next-line @next/next/no-img-element
                 ? <img src={t.profile_image} alt="" className="h-9 w-9 rounded-full object-cover shrink-0" />
-                : <div className="h-9 w-9 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-sm font-bold shrink-0">{t.full_name.charAt(0)}</div>
+                : <div className="h-9 w-9 rounded-full bg-primary/10 text-primary flex items-center justify-center text-sm font-bold shrink-0">{t.full_name.charAt(0)}</div>
               }
               <div className="flex-1 min-w-0 text-left">
                 <p className="text-sm font-medium text-gray-800 truncate">{t.full_name}</p>
                 {t.subjects && <p className="text-xs text-gray-400 truncate">{t.subjects.join(', ')}</p>}
               </div>
-              {t.email === value && <CheckCircle className="h-4 w-4 text-emerald-500 shrink-0" />}
+              {t.email === value && <CheckCircle className="h-4 w-4 text-primary shrink-0" />}
             </button>
           ))}
         </div>
@@ -685,15 +685,15 @@ export function CreateBatchWizard({
         <h3 className="text-xl font-bold text-gray-900 mb-1">Add Students</h3>
         <p className="text-gray-500 mb-6">
           {formGrade
-            ? <>Grade <span className="font-semibold text-emerald-700">{formGrade}</span>{formSection ? <> · {formSection}</> : ''} · <span className="font-semibold text-emerald-700">{BATCH_TYPE_LABELS[formType] || formType}</span> students</>
-            : <>Showing <span className="font-semibold text-emerald-700">{BATCH_TYPE_LABELS[formType] || formType}</span> students</>}
+            ? <>Grade <span className="font-semibold text-primary">{formGrade}</span>{formSection ? <> · {formSection}</> : ''} · <span className="font-semibold text-primary">{BATCH_TYPE_LABELS[formType] || formType}</span> students</>
+            : <>Showing <span className="font-semibold text-primary">{BATCH_TYPE_LABELS[formType] || formType}</span> students</>}
           {['one_to_one', 'one_to_three'].includes(formType) && <span className="text-amber-600 text-xs ml-2">· At least 1 required</span>}
         </p>
         <div className="flex items-center justify-between mb-5">
           <div className="flex items-center gap-3">
-            <div className="px-3 py-1.5 rounded-lg bg-emerald-50 border border-emerald-200">
-              <span className="text-sm font-semibold text-emerald-700">{selectedStudents.length}</span>
-              <span className="text-xs text-emerald-500 ml-1">/ {max === 999 ? '∞' : max}</span>
+            <div className="px-3 py-1.5 rounded-lg bg-primary/5 border border-primary/20">
+              <span className="text-sm font-semibold text-primary">{selectedStudents.length}</span>
+              <span className="text-xs text-primary ml-1">/ {max === 999 ? '∞' : max}</span>
             </div>
             <span className="text-sm text-gray-500">students selected</span>
           </div>
@@ -726,10 +726,10 @@ export function CreateBatchWizard({
           <div className="mb-5 space-y-3">
             <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Selected Students</h4>
             {selectedStudents.map(s => (
-              <div key={s.email} className="rounded-xl border-2 border-emerald-200 overflow-hidden">
-                <div className="flex items-center justify-between bg-emerald-50/80 px-5 py-3.5">
+              <div key={s.email} className="rounded-xl border-2 border-primary/20 overflow-hidden">
+                <div className="flex items-center justify-between bg-primary/5 px-5 py-3.5">
                   <div className="flex items-center gap-3 min-w-0">
-                    <div className="w-9 h-9 rounded-full bg-emerald-500 text-white flex items-center justify-center text-sm font-bold shrink-0">
+                    <div className="w-9 h-9 rounded-full bg-primary text-white flex items-center justify-center text-sm font-bold shrink-0">
                       {s.name.charAt(0).toUpperCase()}
                     </div>
                     <div className="min-w-0">
@@ -739,7 +739,7 @@ export function CreateBatchWizard({
                   </div>
                   <div className="flex items-center gap-3 shrink-0">
                     {s.parent_email ? (
-                      <span className="inline-flex items-center gap-1.5 text-xs font-medium text-emerald-700 bg-emerald-100 px-3 py-1.5 rounded-lg">
+                      <span className="inline-flex items-center gap-1.5 text-xs font-medium text-primary bg-primary/10 px-3 py-1.5 rounded-lg">
                         <CheckCircle className="h-3.5 w-3.5" /> Parent: {s.parent_name || s.parent_email}
                       </span>
                     ) : (
@@ -784,10 +784,10 @@ export function CreateBatchWizard({
                       key={s.email}
                       className={`border-t cursor-pointer transition-colors ${
                         selected
-                          ? 'bg-emerald-50/60'
+                          ? 'bg-primary/5/60'
                           : alreadyInBatch
                           ? 'bg-amber-50/40 hover:bg-amber-50/70'
-                          : 'hover:bg-emerald-50/30'
+                          : 'hover:bg-primary/5/30'
                       }`}
                       onClick={() => toggleStudent(s)}
                     >
@@ -801,7 +801,7 @@ export function CreateBatchWizard({
                           <span className={`inline-block text-[10px] font-semibold px-1.5 py-0.5 rounded border ${
                             enrolledAsMismatch
                               ? 'bg-orange-50 text-orange-700 border-orange-200'
-                              : 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                              : 'bg-primary/5 text-primary border-primary/20'
                           }`}>{enrolledAs}</span>
                         ) : <span className="text-xs text-gray-300">—</span>}
                       </td>
@@ -818,17 +818,17 @@ export function CreateBatchWizard({
                       </td>
                       <td className="px-4 py-3">
                         {s.parent_email
-                          ? <span className="text-xs text-emerald-600">{s.parent_name || s.parent_email}</span>
+                          ? <span className="text-xs text-primary">{s.parent_name || s.parent_email}</span>
                           : <span className="inline-flex items-center gap-1 text-xs font-medium text-amber-600 bg-amber-50 px-2 py-0.5 rounded"><AlertCircle className="h-3 w-3" /> No parent</span>}
                       </td>
                       <td className="px-4 py-3 text-right">
                         {selected
-                          ? <span className="inline-flex items-center gap-1 text-xs text-emerald-600 font-medium"><CheckCircle className="h-3.5 w-3.5" /> Selected</span>
+                          ? <span className="inline-flex items-center gap-1 text-xs text-primary font-medium"><CheckCircle className="h-3.5 w-3.5" /> Selected</span>
                           : maxReached
                           ? <span className="text-xs text-gray-300">Max reached</span>
                           : alreadyInBatch
                           ? <span className="text-xs text-amber-600 hover:text-amber-700">+ Add (in batch)</span>
-                          : <span className="text-xs text-gray-400 hover:text-emerald-600">+ Add</span>}
+                          : <span className="text-xs text-gray-400 hover:text-primary">+ Add</span>}
                       </td>
                     </tr>
                   );
@@ -858,9 +858,9 @@ export function CreateBatchWizard({
             />
           </FormField>
           <FormField label="Section (auto)">
-            <div className={`flex items-center gap-3 px-4 py-2.5 rounded-lg border-2 ${formSection ? 'border-emerald-300 bg-emerald-50' : 'border-gray-200 bg-gray-50'}`}>
+            <div className={`flex items-center gap-3 px-4 py-2.5 rounded-lg border-2 ${formSection ? 'border-emerald-300 bg-primary/5' : 'border-gray-200 bg-gray-50'}`}>
               {formSection ? (
-                <span className="text-lg font-bold text-emerald-700">{formSection}</span>
+                <span className="text-lg font-bold text-primary">{formSection}</span>
               ) : <p className="text-sm text-gray-400">Select grade &amp; category</p>}
             </div>
           </FormField>
@@ -929,8 +929,8 @@ export function CreateBatchWizard({
                 onClick={() => toggleSubject(subj)}
                 className={`px-4 py-2.5 rounded-xl text-sm font-medium border-2 transition-all ${
                   selected
-                    ? 'border-emerald-500 bg-emerald-50 text-emerald-700 shadow-sm'
-                    : 'border-gray-200 bg-white text-gray-500 hover:border-emerald-300 hover:text-emerald-600'
+                    ? 'border-primary bg-primary/5 text-primary shadow-sm'
+                    : 'border-gray-200 bg-white text-gray-500 hover:border-emerald-300 hover:text-primary'
                 }`}
               >
                 {selected && <span className="mr-1.5">✓</span>}{subj}
@@ -949,8 +949,8 @@ export function CreateBatchWizard({
             {formSubjects.map(subj => {
               const assigned = !!subjectTeachers[subj];
               return (
-                <div key={subj} className={`flex items-center gap-4 rounded-xl px-5 py-4 border-2 transition-all ${assigned ? 'border-emerald-200 bg-emerald-50/50' : 'border-gray-200 bg-gray-50/50'}`}>
-                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${assigned ? 'bg-emerald-500 text-white' : 'bg-gray-200 text-gray-500'}`}>
+                <div key={subj} className={`flex items-center gap-4 rounded-xl px-5 py-4 border-2 transition-all ${assigned ? 'border-primary/20 bg-primary/5/50' : 'border-gray-200 bg-gray-50/50'}`}>
+                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${assigned ? 'bg-primary text-white' : 'bg-gray-200 text-gray-500'}`}>
                     <BookOpen className="h-5 w-5" />
                   </div>
                   <div className="min-w-30"><span className="text-sm font-semibold text-gray-800">{subj}</span></div>
@@ -961,7 +961,7 @@ export function CreateBatchWizard({
                       teachers={teachers.filter(t => { const ts = t.subjects || []; return ts.length === 0 || ts.some(x => x.toLowerCase() === subj.toLowerCase()); })}
                     />
                   </div>
-                  {assigned && <CheckCircle className="h-5 w-5 text-emerald-500 shrink-0" />}
+                  {assigned && <CheckCircle className="h-5 w-5 text-primary shrink-0" />}
                 </div>
               );
             })}
@@ -977,8 +977,8 @@ export function CreateBatchWizard({
         <h3 className="text-xl font-bold text-gray-900 mb-1">Review &amp; Create</h3>
         <p className="text-gray-500 mb-6">Confirm the batch details before creating</p>
       </div>
-      <div className="bg-linear-to-r from-emerald-50 to-teal-50 rounded-xl p-5 border border-emerald-100">
-        <h4 className="text-sm font-bold text-emerald-800 mb-4">Batch Summary</h4>
+      <div className="bg-linear-to-r from-primary/5 to-secondary/5 rounded-xl p-5 border border-primary/15">
+        <h4 className="text-sm font-bold text-primary mb-4">Batch Summary</h4>
         <div className="grid grid-cols-2 gap-4 text-sm">
           <div><span className="text-gray-400">Name:</span> <span className="font-medium text-gray-800">{formName}</span></div>
           <div><span className="text-gray-400">Type:</span> <Badge label={batchTypeLabel(formType)} variant={batchTypeBadgeVariant(formType)} /></div>
@@ -998,12 +998,12 @@ export function CreateBatchWizard({
               const teacher = teachers.find(t => t.email === teacherEmail);
               return (
                 <div key={subj} className="flex items-center gap-3 bg-white border rounded-xl px-4 py-3 text-sm">
-                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${teacher ? 'bg-emerald-500 text-white' : 'bg-gray-200 text-gray-400'}`}>
+                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${teacher ? 'bg-primary text-white' : 'bg-gray-200 text-gray-400'}`}>
                     <BookOpen className="h-4 w-4" />
                   </div>
                   <span className="font-semibold text-gray-700 min-w-30">{subj}</span>
                   <span className="text-gray-300">→</span>
-                  {teacher ? <span className="text-emerald-600">{teacher.full_name}</span> : <span className="text-amber-500 italic">No teacher assigned</span>}
+                  {teacher ? <span className="text-primary">{teacher.full_name}</span> : <span className="text-amber-500 italic">No teacher assigned</span>}
                 </div>
               );
             })}
@@ -1016,10 +1016,10 @@ export function CreateBatchWizard({
           <div className="space-y-2">
             {selectedStudents.map(s => (
               <div key={s.email} className="flex items-center gap-3 bg-white border rounded-xl px-4 py-3 text-sm">
-                <div className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-bold shrink-0">{s.name.charAt(0).toUpperCase()}</div>
+                <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold shrink-0">{s.name.charAt(0).toUpperCase()}</div>
                 <span className="font-semibold text-gray-700">{s.name}</span>
                 <span className="text-gray-400 text-xs">{s.email}</span>
-                {s.parent_email ? <span className="ml-auto text-xs text-emerald-600">Parent: {s.parent_name || s.parent_email}</span> : <span className="ml-auto text-xs text-amber-500">No parent assigned</span>}
+                {s.parent_email ? <span className="ml-auto text-xs text-primary">Parent: {s.parent_name || s.parent_email}</span> : <span className="ml-auto text-xs text-amber-500">No parent assigned</span>}
               </div>
             ))}
           </div>
@@ -1040,13 +1040,13 @@ export function CreateBatchWizard({
       <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4" onClick={onClose}>
         <div className="bg-white rounded-2xl shadow-2xl w-full max-w-5xl max-h-[92vh] flex overflow-hidden" onClick={e => e.stopPropagation()}>
           {/* Left sidebar */}
-          <div className="w-60 bg-linear-to-b from-emerald-600 via-emerald-700 to-teal-800 p-6 flex flex-col shrink-0">
+          <div className="w-60 bg-linear-to-b from-primary via-primary/90 to-secondary p-6 flex flex-col shrink-0">
             <div className="mb-8">
               <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center mb-3">
                 <Database className="h-5 w-5 text-white" />
               </div>
               <h2 className="text-white font-bold text-lg">New Batch</h2>
-              <p className="text-emerald-200 text-xs mt-1">Step {stepIdx + 1} of {wizardSteps.length}</p>
+              <p className="text-primary/60 text-xs mt-1">Step {stepIdx + 1} of {wizardSteps.length}</p>
             </div>
             <div className="space-y-1 flex-1">
               {wizardSteps.map((step, idx) => {
@@ -1055,11 +1055,11 @@ export function CreateBatchWizard({
                 return (
                   <div key={step.key}
                     className={`flex items-center gap-3 px-3 py-3 rounded-xl transition-all ${
-                      isCurrent ? 'bg-white/20 text-white shadow-lg shadow-black/10' : isDone ? 'text-emerald-200' : 'text-emerald-400/50'
+                      isCurrent ? 'bg-white/20 text-white shadow-lg shadow-black/10' : isDone ? 'text-primary/60' : 'text-primary/50'
                     }`}
                   >
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold shrink-0 ${
-                      isDone ? 'bg-emerald-400 text-emerald-900' : isCurrent ? 'bg-white text-emerald-700' : 'bg-emerald-500/30 text-emerald-300/70'
+                      isDone ? 'bg-primary text-emerald-900' : isCurrent ? 'bg-white text-primary' : 'bg-primary/30 text-primary/80/70'
                     }`}>
                       {isDone ? '✓' : idx + 1}
                     </div>
@@ -1068,7 +1068,7 @@ export function CreateBatchWizard({
                 );
               })}
             </div>
-            <button onClick={onClose} className="mt-4 text-emerald-200 hover:text-white text-xs flex items-center gap-2 transition">
+            <button onClick={onClose} className="mt-4 text-primary/60 hover:text-white text-xs flex items-center gap-2 transition">
               <X className="h-3.5 w-3.5" /> Cancel &amp; Close
             </button>
           </div>

@@ -67,8 +67,8 @@ const BATCH_TEMPLATES = [
     description: 'Up to 3 Students — Small group (per-class fee).',
     maxStudents: 3,
     icon: Users,
-    color: 'bg-emerald-50 border-emerald-200 text-emerald-700',
-    selectedColor: 'bg-emerald-100 border-emerald-500 ring-2 ring-emerald-300',
+    color: 'bg-primary/5 border-primary/20 text-primary',
+    selectedColor: 'bg-primary/10 border-primary ring-2 ring-emerald-300',
   },
   {
     type: 'one_to_fifteen' as const,
@@ -826,24 +826,24 @@ export default function BatchesClient({ userName, userEmail, userRole }: Props) 
               onClick={() => setFormType(tpl.type)}
               className={`group relative p-6 rounded-2xl border-2 text-left transition-all duration-200 hover:shadow-lg ${
                 isSelected
-                  ? 'border-emerald-500 bg-emerald-50 shadow-emerald-100 shadow-md ring-2 ring-emerald-200'
-                  : 'border-gray-200 bg-white hover:border-emerald-300 hover:bg-emerald-50/30'
+                  ? 'border-primary bg-primary/5 shadow-primary/10 shadow-md ring-2 ring-primary/20'
+                  : 'border-gray-200 bg-white hover:border-emerald-300 hover:bg-primary/5/30'
               }`}
             >
               {isSelected && (
                 <div className="absolute top-3 right-3">
-                  <CheckCircle className="h-5 w-5 text-emerald-600" />
+                  <CheckCircle className="h-5 w-5 text-primary" />
                 </div>
               )}
               <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 transition-colors ${
-                isSelected ? 'bg-emerald-500 text-white' : 'bg-gray-100 text-gray-500 group-hover:bg-emerald-100 group-hover:text-emerald-600'
+                isSelected ? 'bg-primary text-white' : 'bg-gray-100 text-gray-500 group-hover:bg-primary/10 group-hover:text-primary'
               }`}>
                 <Icon className="h-6 w-6" />
               </div>
-              <h4 className={`text-base font-bold mb-1 ${isSelected ? 'text-emerald-800' : 'text-gray-800'}`}>{tpl.label}</h4>
+              <h4 className={`text-base font-bold mb-1 ${isSelected ? 'text-primary' : 'text-gray-800'}`}>{tpl.label}</h4>
               <p className="text-sm text-gray-500 mb-3 leading-relaxed">{tpl.description}</p>
               <div className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold ${
-                isSelected ? 'bg-emerald-200 text-emerald-800' : 'bg-gray-100 text-gray-600'
+                isSelected ? 'bg-primary/20 text-primary' : 'bg-gray-100 text-gray-600'
               }`}>
                 Max: {tpl.maxStudents === 999 ? 'Custom' : `${tpl.maxStudents} student${tpl.maxStudents > 1 ? 's' : ''}`}
               </div>
@@ -869,14 +869,14 @@ export default function BatchesClient({ userName, userEmail, userRole }: Props) 
           </FormField>
           <FormField label="Section (auto-assigned)">
             <div className={`flex items-center gap-3 px-4 py-2.5 rounded-lg border-2 ${
-              formSection ? 'border-emerald-300 bg-emerald-50' : 'border-gray-200 bg-gray-50'
+              formSection ? 'border-emerald-300 bg-primary/5' : 'border-gray-200 bg-gray-50'
             }`}>
               {formSection ? (
                 <>
-                  <span className="text-2xl font-bold text-emerald-700">{formSection}</span>
+                  <span className="text-2xl font-bold text-primary">{formSection}</span>
                   <div className="text-sm">
-                    <p className="font-semibold text-emerald-800">Section {formSection}</p>
-                    <p className="text-xs text-emerald-500">
+                    <p className="font-semibold text-primary">Section {formSection}</p>
+                    <p className="text-xs text-primary">
                       {getUsedSections(formGrade).length} section{getUsedSections(formGrade).length !== 1 ? 's' : ''} already used for Grade {formGrade}
                     </p>
                   </div>
@@ -895,7 +895,7 @@ export default function BatchesClient({ userName, userEmail, userRole }: Props) 
           <FormField label="Student Category" hint="Required. Determines section naming and filters student list.">
             <div className="flex gap-2">
               {[
-                { value: 'A', label: 'Category A', color: 'border-emerald-200 bg-emerald-50 text-emerald-700 hover:border-emerald-400' },
+                { value: 'A', label: 'Category A', color: 'border-primary/20 bg-primary/5 text-primary hover:border-primary' },
                 { value: 'B', label: 'Category B', color: 'border-blue-200 bg-blue-50 text-blue-700 hover:border-blue-400' },
                 { value: 'C', label: 'Category C', color: 'border-amber-200 bg-amber-50 text-amber-700 hover:border-amber-400' },
               ].map(opt => {
@@ -908,7 +908,7 @@ export default function BatchesClient({ userName, userEmail, userRole }: Props) 
                     className={`flex-1 px-4 py-2.5 rounded-xl text-sm font-medium border-2 transition-all ${
                       isActive
                         ? opt.value === 'A'
-                          ? 'border-emerald-500 bg-emerald-100 text-emerald-800 ring-2 ring-emerald-300'
+                          ? 'border-primary bg-primary/10 text-primary ring-2 ring-emerald-300'
                           : opt.value === 'B'
                           ? 'border-blue-500 bg-blue-100 text-blue-800 ring-2 ring-blue-300'
                           : 'border-amber-500 bg-amber-100 text-amber-800 ring-2 ring-amber-300'
@@ -996,10 +996,10 @@ export default function BatchesClient({ userName, userEmail, userRole }: Props) 
       <div className="mb-8">
         {GRADE_SUBJECTS[formGrade] ? (
           <>
-            <label className="block text-sm font-semibold text-gray-700 mb-3">Subjects <span className="text-xs font-normal text-emerald-600 ml-1">(auto-assigned for Grade {formGrade})</span></label>
+            <label className="block text-sm font-semibold text-gray-700 mb-3">Subjects <span className="text-xs font-normal text-primary ml-1">(auto-assigned for Grade {formGrade})</span></label>
             <div className="flex flex-wrap gap-2.5">
               {formSubjects.map(subj => (
-                <div key={subj} className="px-4 py-2.5 rounded-xl text-sm font-medium border-2 border-emerald-500 bg-emerald-50 text-emerald-700 shadow-sm">
+                <div key={subj} className="px-4 py-2.5 rounded-xl text-sm font-medium border-2 border-primary bg-primary/5 text-primary shadow-sm">
                   <Check className="h-3.5 w-3.5 inline mr-1.5" />{subj}
                 </div>
               ))}
@@ -1019,8 +1019,8 @@ export default function BatchesClient({ userName, userEmail, userRole }: Props) 
                     onClick={() => toggleSubject(subj)}
                     className={`px-4 py-2.5 rounded-xl text-sm font-medium border-2 transition-all duration-150 ${
                       isSelected
-                        ? 'border-emerald-500 bg-emerald-50 text-emerald-700 shadow-sm'
-                        : 'border-gray-200 bg-white text-gray-600 hover:border-emerald-300 hover:bg-emerald-50/50'
+                        ? 'border-primary bg-primary/5 text-primary shadow-sm'
+                        : 'border-gray-200 bg-white text-gray-600 hover:border-emerald-300 hover:bg-primary/5/50'
                     }`}
                   >
                     {isSelected && <span className="mr-1.5"><Check className="h-3.5 w-3.5 inline" /></span>}
@@ -1048,10 +1048,10 @@ export default function BatchesClient({ userName, userEmail, userRole }: Props) 
               const assigned = !!subjectTeachers[subj];
               return (
                 <div key={subj} className={`flex items-center gap-4 rounded-xl px-5 py-4 border-2 transition-all ${
-                  assigned ? 'border-emerald-200 bg-emerald-50/50' : 'border-gray-200 bg-gray-50/50'
+                  assigned ? 'border-primary/20 bg-primary/5/50' : 'border-gray-200 bg-gray-50/50'
                 }`}>
                   <div className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${
-                    assigned ? 'bg-emerald-500 text-white' : 'bg-gray-200 text-gray-500'
+                    assigned ? 'bg-primary text-white' : 'bg-gray-200 text-gray-500'
                   }`}>
                     <BookOpen className="h-5 w-5" />
                   </div>
@@ -1076,7 +1076,7 @@ export default function BatchesClient({ userName, userEmail, userRole }: Props) 
                       ]}
                     />
                   </div>
-                  {assigned && <CheckCircle className="h-5 w-5 text-emerald-500 shrink-0" />}
+                  {assigned && <CheckCircle className="h-5 w-5 text-primary shrink-0" />}
                 </div>
               );
             })}
@@ -1105,9 +1105,9 @@ export default function BatchesClient({ userName, userEmail, userRole }: Props) 
 
         <div className="flex items-center justify-between mb-5">
           <div className="flex items-center gap-3">
-            <div className="px-3 py-1.5 rounded-lg bg-emerald-50 border border-emerald-200">
-              <span className="text-sm font-semibold text-emerald-700">{selectedStudents.length}</span>
-              <span className="text-xs text-emerald-500 ml-1">/ {max === 999 ? '∞' : max}</span>
+            <div className="px-3 py-1.5 rounded-lg bg-primary/5 border border-primary/20">
+              <span className="text-sm font-semibold text-primary">{selectedStudents.length}</span>
+              <span className="text-xs text-primary ml-1">/ {max === 999 ? '∞' : max}</span>
             </div>
             <span className="text-sm text-gray-500">{isOneToOne ? 'student selected' : 'students selected'}</span>
             {formGrade && !isOneToOne && (
@@ -1117,7 +1117,7 @@ export default function BatchesClient({ userName, userEmail, userRole }: Props) 
             )}
             {formCategory && !isOneToOne && (
               <span className={`text-xs px-2 py-1 rounded-md font-medium ${
-                formCategory === 'A' ? 'bg-emerald-100 text-emerald-700' :
+                formCategory === 'A' ? 'bg-primary/10 text-primary' :
                 formCategory === 'B' ? 'bg-blue-100 text-blue-700' :
                 'bg-amber-100 text-amber-700'
               }`}>
@@ -1147,11 +1147,11 @@ export default function BatchesClient({ userName, userEmail, userRole }: Props) 
             {selectedStudents.map(s => {
               const hasParent = !!s.parent_email;
               return (
-                <div key={s.email} className="rounded-xl border-2 border-emerald-200 overflow-hidden">
+                <div key={s.email} className="rounded-xl border-2 border-primary/20 overflow-hidden">
                   {/* Student row */}
-                  <div className="flex items-center justify-between bg-emerald-50/80 px-5 py-3.5">
+                  <div className="flex items-center justify-between bg-primary/5 px-5 py-3.5">
                     <div className="flex items-center gap-3 min-w-0">
-                      <div className="w-9 h-9 rounded-full bg-emerald-500 text-white flex items-center justify-center text-sm font-bold shrink-0">
+                      <div className="w-9 h-9 rounded-full bg-primary text-white flex items-center justify-center text-sm font-bold shrink-0">
                         {s.name.charAt(0).toUpperCase()}
                       </div>
                       <div className="min-w-0">
@@ -1161,7 +1161,7 @@ export default function BatchesClient({ userName, userEmail, userRole }: Props) 
                     </div>
                     <div className="flex items-center gap-3 shrink-0">
                       {hasParent ? (
-                        <span className="inline-flex items-center gap-1.5 text-xs font-medium text-emerald-700 bg-emerald-100 px-3 py-1.5 rounded-lg">
+                        <span className="inline-flex items-center gap-1.5 text-xs font-medium text-primary bg-primary/10 px-3 py-1.5 rounded-lg">
                           <CheckCircle className="h-3.5 w-3.5" /> Parent: {s.parent_name || s.parent_email}
                         </span>
                       ) : (
@@ -1208,7 +1208,7 @@ export default function BatchesClient({ userName, userEmail, userRole }: Props) 
                   return (
                     <tr
                       key={s.email}
-                      className={`border-t hover:bg-emerald-50/30 cursor-pointer transition-colors ${selected ? 'bg-emerald-50/50' : ''}`}
+                      className={`border-t hover:bg-primary/5/30 cursor-pointer transition-colors ${selected ? 'bg-primary/5/50' : ''}`}
                       onClick={() => toggleStudent(s)}
                     >
                       <td className="px-4 py-3">
@@ -1232,7 +1232,7 @@ export default function BatchesClient({ userName, userEmail, userRole }: Props) 
                       </td>
                       <td className="px-4 py-3">
                         {s.parent_email ? (
-                          <span className="text-xs text-emerald-600">{s.parent_name || s.parent_email}</span>
+                          <span className="text-xs text-primary">{s.parent_name || s.parent_email}</span>
                         ) : (
                           <span className="inline-flex items-center gap-1 text-xs font-medium text-amber-600 bg-amber-50 px-2 py-0.5 rounded">
                             <AlertCircle className="h-3 w-3" /> No parent
@@ -1241,11 +1241,11 @@ export default function BatchesClient({ userName, userEmail, userRole }: Props) 
                       </td>
                       <td className="px-4 py-3 text-right">
                         {selected ? (
-                          <span className="inline-flex items-center gap-1 text-xs text-emerald-600 font-medium"><CheckCircle className="h-3.5 w-3.5" /> Selected</span>
+                          <span className="inline-flex items-center gap-1 text-xs text-primary font-medium"><CheckCircle className="h-3.5 w-3.5" /> Selected</span>
                         ) : maxReached ? (
                           <span className="text-xs text-gray-300">Max reached</span>
                         ) : (
-                          <span className="text-xs text-gray-400 hover:text-emerald-600">+ Add</span>
+                          <span className="text-xs text-gray-400 hover:text-primary">+ Add</span>
                         )}
                       </td>
                     </tr>
@@ -1270,8 +1270,8 @@ export default function BatchesClient({ userName, userEmail, userRole }: Props) 
         <p className="text-gray-500 mb-6">Confirm the batch details before creating</p>
       </div>
 
-      <div className="bg-linear-to-r from-emerald-50 to-teal-50 rounded-xl p-5 border border-emerald-100">
-        <h4 className="text-sm font-bold text-emerald-800 mb-4">Batch Summary</h4>
+      <div className="bg-linear-to-r from-primary/5 to-secondary/5 rounded-xl p-5 border border-primary/15">
+        <h4 className="text-sm font-bold text-primary mb-4">Batch Summary</h4>
         <div className="grid grid-cols-2 gap-4 text-sm">
           <div><span className="text-gray-400">Name:</span> <span className="font-medium text-gray-800">{formName}</span></div>
           <div><span className="text-gray-400">Type:</span> <Badge label={batchTypeLabel(formType)} variant={batchTypeBadgeVariant(formType)} /></div>
@@ -1295,14 +1295,14 @@ export default function BatchesClient({ userName, userEmail, userRole }: Props) 
               return (
                 <div key={subj} className="flex items-center gap-3 bg-white border rounded-xl px-4 py-3 text-sm">
                   <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
-                    teacher ? 'bg-emerald-500 text-white' : 'bg-gray-200 text-gray-400'
+                    teacher ? 'bg-primary text-white' : 'bg-gray-200 text-gray-400'
                   }`}>
                     <BookOpen className="h-4 w-4" />
                   </div>
                   <span className="font-semibold text-gray-700 min-w-30">{subj}</span>
                   <span className="text-gray-300">→</span>
                   {teacher ? (
-                    <span className="text-emerald-600">{teacher.full_name}</span>
+                    <span className="text-primary">{teacher.full_name}</span>
                   ) : (
                     <span className="text-amber-500 italic">No teacher assigned</span>
                   )}
@@ -1319,13 +1319,13 @@ export default function BatchesClient({ userName, userEmail, userRole }: Props) 
           <div className="space-y-2">
             {selectedStudents.map(s => (
               <div key={s.email} className="flex items-center gap-3 bg-white border rounded-xl px-4 py-3 text-sm">
-                <div className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-bold shrink-0">
+                <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold shrink-0">
                   {s.name.charAt(0).toUpperCase()}
                 </div>
                 <span className="font-semibold text-gray-700">{s.name}</span>
                 <span className="text-gray-400 text-xs">{s.email}</span>
                 {s.parent_email ? (
-                  <span className="ml-auto text-xs text-emerald-600">Parent: {s.parent_name || s.parent_email}</span>
+                  <span className="ml-auto text-xs text-primary">Parent: {s.parent_name || s.parent_email}</span>
                 ) : (
                   <span className="ml-auto text-xs text-amber-500">No parent assigned</span>
                 )}
@@ -1434,7 +1434,7 @@ export default function BatchesClient({ userName, userEmail, userRole }: Props) 
                 {/* ── Grades Card ── */}
                 <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
                   <div className="flex items-center gap-3 mb-5">
-                    <div className="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center"><GraduationCap className="h-5 w-5" /></div>
+                    <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center"><GraduationCap className="h-5 w-5" /></div>
                     <div>
                       <h3 className="text-base font-bold text-gray-800">Grades</h3>
                       <p className="text-xs text-gray-400">{GRADES.length} grades configured</p>
@@ -1442,10 +1442,10 @@ export default function BatchesClient({ userName, userEmail, userRole }: Props) 
                   </div>
                   <div className="flex flex-wrap gap-2 mb-4">
                     {GRADES.map(g => (
-                      <span key={g} className="group inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
+                      <span key={g} className="group inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium bg-primary/5 text-primary border border-primary/20">
                         Grade {g}
                         <button type="button" onClick={() => removeSettingItem('grades', g)}
-                          className="opacity-0 group-hover:opacity-100 transition-opacity text-emerald-400 hover:text-red-500">
+                          className="opacity-0 group-hover:opacity-100 transition-opacity text-primary hover:text-red-500">
                           <X className="h-3.5 w-3.5" />
                         </button>
                       </span>
@@ -1574,13 +1574,13 @@ export default function BatchesClient({ userName, userEmail, userRole }: Props) 
               onClick={e => e.stopPropagation()}
             >
               {/* ── Left sidebar — step indicator ── */}
-              <div className="w-60 bg-linear-to-b from-emerald-600 via-emerald-700 to-teal-800 p-6 flex flex-col shrink-0">
+              <div className="w-60 bg-linear-to-b from-primary via-primary/90 to-secondary p-6 flex flex-col shrink-0">
                 <div className="mb-8">
                   <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center mb-3">
                     <Database className="h-5 w-5 text-white" />
                   </div>
                   <h2 className="text-white font-bold text-lg">New Batch</h2>
-                  <p className="text-emerald-200 text-xs mt-1">Step {stepIdx + 1} of {wizardSteps.length}</p>
+                  <p className="text-primary/60 text-xs mt-1">Step {stepIdx + 1} of {wizardSteps.length}</p>
                 </div>
                 <div className="space-y-1 flex-1">
                   {wizardSteps.map((step, idx) => {
@@ -1590,11 +1590,11 @@ export default function BatchesClient({ userName, userEmail, userRole }: Props) 
                       <div
                         key={step.key}
                         className={`flex items-center gap-3 px-3 py-3 rounded-xl transition-all ${
-                          isCurrent ? 'bg-white/20 text-white shadow-lg shadow-black/10' : isDone ? 'text-emerald-200' : 'text-emerald-400/50'
+                          isCurrent ? 'bg-white/20 text-white shadow-lg shadow-black/10' : isDone ? 'text-primary/60' : 'text-primary/50'
                         }`}
                       >
                         <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold shrink-0 ${
-                          isDone ? 'bg-emerald-400 text-emerald-900' : isCurrent ? 'bg-white text-emerald-700' : 'bg-emerald-500/30 text-emerald-300/70'
+                          isDone ? 'bg-primary text-emerald-900' : isCurrent ? 'bg-white text-primary' : 'bg-primary/30 text-primary/80/70'
                         }`}>
                           {isDone ? <Check className="h-4 w-4" /> : idx + 1}
                         </div>
@@ -1603,7 +1603,7 @@ export default function BatchesClient({ userName, userEmail, userRole }: Props) 
                     );
                   })}
                 </div>
-                <button onClick={closeWizard} className="mt-4 text-emerald-200 hover:text-white text-xs flex items-center gap-2 transition">
+                <button onClick={closeWizard} className="mt-4 text-primary/60 hover:text-white text-xs flex items-center gap-2 transition">
                   <X className="h-3.5 w-3.5" /> Cancel & Close
                 </button>
               </div>
@@ -1735,7 +1735,7 @@ export default function BatchesClient({ userName, userEmail, userRole }: Props) 
                       <IconButton
                         icon={Power}
                         onClick={() => toggleBatchStatus(batch.batch_id, batch.status)}
-                        className={batch.status === 'active' ? 'text-emerald-600 hover:bg-emerald-50' : 'text-gray-400 hover:bg-gray-100'}
+                        className={batch.status === 'active' ? 'text-primary hover:bg-primary/5' : 'text-gray-400 hover:bg-gray-100'}
                         title={batch.status === 'active' ? 'Deactivate batch' : 'Activate batch'}
                       />
                       <IconButton
@@ -1750,7 +1750,7 @@ export default function BatchesClient({ userName, userEmail, userRole }: Props) 
                 {/* Inline expanded detail row */}
                 {isExpanded && (
                   <tr>
-                    <td colSpan={10} className="bg-emerald-50/40 border-b border-emerald-100 px-6 py-5">
+                    <td colSpan={10} className="bg-primary/5/40 border-b border-primary/15 px-6 py-5">
                       {detailLoading ? (
                         <div className="py-8 text-center text-sm text-gray-400">Loading batch details…</div>
                       ) : !detail ? (
@@ -1856,7 +1856,7 @@ export default function BatchesClient({ userName, userEmail, userRole }: Props) 
                                         {(s.total_classes ?? 0) > 0 ? (
                                           <div className="space-y-1">
                                             <span className={`text-xs font-semibold ${
-                                              (s.attendance_rate ?? 0) >= 75 ? 'text-green-600' :
+                                              (s.attendance_rate ?? 0) >= 75 ? 'text-primary' :
                                               (s.attendance_rate ?? 0) >= 50 ? 'text-amber-500' : 'text-red-500'
                                             }`}>{s.attendance_rate ?? 0}%</span>
                                             <p className="text-xs text-gray-400">{s.present}/{s.total_classes} attended</p>
@@ -1874,7 +1874,7 @@ export default function BatchesClient({ userName, userEmail, userRole }: Props) 
                                       </td>
                                       <td className="px-3 py-2">
                                         {s.parent_email ? (
-                                          <span className="text-xs text-emerald-600">{s.parent_email}</span>
+                                          <span className="text-xs text-primary">{s.parent_email}</span>
                                         ) : (
                                           <span className="text-xs text-gray-300">—</span>
                                         )}

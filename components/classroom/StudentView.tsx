@@ -2004,7 +2004,7 @@ export default function StudentView({
                 {/* Right pane — Flutter (tablet) screen share */}
                 <div className="relative overflow-hidden" style={{ width: `${(1 - splitRatio) * 100 - 10 / (splitContainerRef.current?.offsetWidth || 1000)}%`, flex: 1 }}>
                   <div className="absolute top-2 left-2 z-10 flex items-center gap-1.5 rounded-full bg-black/60 backdrop-blur-sm px-2.5 py-1 ring-1 ring-white/20">
-                    <svg className="h-3 w-3 text-emerald-400" viewBox="0 0 24 24" fill="currentColor"><rect x="5" y="2" width="14" height="20" rx="2"/><circle cx="12" cy="18" r="1"/></svg>
+                    <svg className="h-3 w-3 text-primary" viewBox="0 0 24 24" fill="currentColor"><rect x="5" y="2" width="14" height="20" rx="2"/><circle cx="12" cy="18" r="1"/></svg>
                     <span className="text-[10px] font-semibold text-white/80">Whiteboard</span>
                   </div>
                   <WhiteboardComposite
@@ -2425,14 +2425,14 @@ export default function StudentView({
             <div className="flex items-center gap-3">
               <div className={cn(
                 'flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium',
-                isMicOn ? 'bg-green-500/15 text-green-400 ring-1 ring-green-500/30' : 'bg-red-500/15 text-red-400 ring-1 ring-red-500/30',
+                isMicOn ? 'bg-primary/15 text-primary ring-1 ring-green-500/30' : 'bg-red-500/15 text-red-400 ring-1 ring-red-500/30',
               )}>
                 {isMicOn ? <MicOnIcon className="h-3.5 w-3.5" /> : <MicOffIcon className="h-3.5 w-3.5" />}
                 {isMicOn ? 'Mic on' : 'Mic off'}
               </div>
               <div className={cn(
                 'flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium',
-                isCamOn ? 'bg-green-500/15 text-green-400 ring-1 ring-green-500/30' : 'bg-red-500/15 text-red-400 ring-1 ring-red-500/30',
+                isCamOn ? 'bg-primary/15 text-primary ring-1 ring-green-500/30' : 'bg-red-500/15 text-red-400 ring-1 ring-red-500/30',
               )}>
                 {isCamOn ? <CameraOnIcon className="h-3.5 w-3.5" /> : <CameraOffIcon className="h-3.5 w-3.5" />}
                 {isCamOn ? 'Camera on' : 'Camera off'}
@@ -2488,7 +2488,7 @@ export default function StudentView({
         {notifications.map((n) => {
           const colors = {
             info: 'from-blue-500/20 to-blue-600/10 ring-blue-400/30 text-blue-300',
-            success: 'from-emerald-500/20 to-emerald-600/10 ring-emerald-400/30 text-emerald-300',
+            success: 'from-emerald-500/20 to-emerald-600/10 ring-emerald-400/30 text-primary/80',
             warning: 'from-amber-500/20 to-amber-600/10 ring-amber-400/30 text-amber-300',
             error: 'from-red-500/20 to-red-600/10 ring-red-400/30 text-red-300',
             chat: 'from-indigo-500/20 to-indigo-600/10 ring-indigo-400/30 text-indigo-300',
@@ -2708,7 +2708,7 @@ export default function StudentView({
                       <span className="block text-[10px] text-[#9aa0a6] mt-0.5">+{mins} min extension</span>
                     </div>
                     <div className="text-right">
-                      {feeDisplay && <span className="block text-xs font-bold text-emerald-400">{feeDisplay}</span>}
+                      {feeDisplay && <span className="block text-xs font-bold text-primary">{feeDisplay}</span>}
                       <span className="text-[10px] font-medium text-blue-400">Select →</span>
                     </div>
                   </button>
@@ -2808,7 +2808,7 @@ export default function StudentView({
               <span className={cn(
                 'rounded px-1.5 py-0.5 font-medium',
                 compact ? 'text-[9px]' : 'text-[10px]',
-                lateInfo.late ? 'bg-amber-500/20 text-amber-300' : 'bg-emerald-500/20 text-emerald-300',
+                lateInfo.late ? 'bg-amber-500/20 text-amber-300' : 'bg-primary/20 text-primary/80',
               )}>
                 {lateInfo.late ? `⏰ Late ${lateInfo.minutes}m` : 'On Time'}
               </span>

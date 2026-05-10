@@ -186,7 +186,7 @@ export default function TeacherControlsTab() {
               <div key={key} className="flex items-center justify-between px-6 py-5">
                 <div className="flex items-start gap-4 min-w-0">
                   <div className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${
-                    controls[key] ? 'bg-emerald-100 text-emerald-600' : 'bg-gray-100 text-gray-400'
+                    controls[key] ? 'bg-primary/10 text-primary' : 'bg-gray-100 text-gray-400'
                   }`}>
                     <Icon className="h-5 w-5" />
                   </div>
@@ -201,8 +201,8 @@ export default function TeacherControlsTab() {
                   aria-checked={!!controls[key]}
                   onClick={() => toggleControl(key, !controls[key])}
                   disabled={saving === key}
-                  className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 disabled:opacity-50 ${
-                    controls[key] ? 'bg-emerald-500' : 'bg-gray-200'
+                  className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-50 ${
+                    controls[key] ? 'bg-primary' : 'bg-gray-200'
                   }`}
                 >
                   <span
@@ -222,7 +222,7 @@ export default function TeacherControlsTab() {
               <div key={key} className="flex items-center justify-between px-6 py-5">
                 <div className="flex items-start gap-4 min-w-0">
                   <div className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${
-                    controls[key] ? 'bg-emerald-100 text-emerald-600' : 'bg-gray-100 text-gray-400'
+                    controls[key] ? 'bg-primary/10 text-primary' : 'bg-gray-100 text-gray-400'
                   }`}>
                     <Icon className="h-5 w-5" />
                   </div>
@@ -237,8 +237,8 @@ export default function TeacherControlsTab() {
                   aria-checked={!!controls[key]}
                   onClick={() => toggleControl(key, !controls[key])}
                   disabled={saving === key}
-                  className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 disabled:opacity-50 ${
-                    controls[key] ? 'bg-emerald-500' : 'bg-gray-200'
+                  className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-50 ${
+                    controls[key] ? 'bg-primary' : 'bg-gray-200'
                   }`}
                 >
                   <span

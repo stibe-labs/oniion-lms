@@ -170,7 +170,7 @@ export default function ScreenDeviceView({
       {/* Connection status badge */}
       <div className="mb-8 flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2">
         {localParticipant.connectionQuality !== undefined ? (
-          <Wifi className="h-4 w-4 text-emerald-400" />
+          <Wifi className="h-4 w-4 text-primary" />
         ) : (
           <WifiOff className="h-4 w-4 text-red-400" />
         )}
@@ -182,11 +182,11 @@ export default function ScreenDeviceView({
       {/* Icon */}
       <div className={`mb-6 flex h-24 w-24 items-center justify-center rounded-full ${
         sharing
-          ? 'bg-emerald-500/20 ring-2 ring-emerald-500/50'
+          ? 'bg-primary/20 ring-2 ring-primary/50'
           : 'bg-muted ring-2 ring-border'
       }`}>
         {sharing ? (
-          <Monitor className="h-12 w-12 text-emerald-400" />
+          <Monitor className="h-12 w-12 text-primary" />
         ) : (
           <MonitorOff className="h-12 w-12 text-muted-foreground" />
         )}
@@ -212,7 +212,7 @@ export default function ScreenDeviceView({
           sharing
             ? 'bg-red-600 text-white hover:bg-red-700'
             : isLive
-              ? 'bg-emerald-600 text-white hover:bg-emerald-700'
+              ? 'bg-primary text-white hover:bg-primary/90'
               : 'bg-gray-600 text-gray-300 cursor-not-allowed'
         } disabled:opacity-50`}
       >
@@ -252,10 +252,10 @@ export default function ScreenDeviceView({
       {sharing && (
         <div className="mt-8 flex items-center gap-2">
           <span className="relative flex h-3 w-3">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-            <span className="relative inline-flex h-3 w-3 rounded-full bg-emerald-500" />
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75" />
+            <span className="relative inline-flex h-3 w-3 rounded-full bg-primary" />
           </span>
-          <span className="text-sm text-emerald-400">Live — sharing to classroom</span>
+          <span className="text-sm text-primary">Live — sharing to classroom</span>
         </div>
       )}
 

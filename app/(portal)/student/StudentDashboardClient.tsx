@@ -378,14 +378,14 @@ interface HomeworkSubmission {
 }
 
 const GRADE_COLORS: Record<string, string> = {
-  'A+': 'text-green-600', A: 'text-green-600',
+  'A+': 'text-primary', A: 'text-primary',
   'B+': 'text-blue-600', B: 'text-blue-600',
   'C+': 'text-yellow-600', C: 'text-yellow-600',
   D: 'text-orange-600', F: 'text-red-600',
 };
 
 const HW_STATUS_STYLE: Record<string, { bg: string; text: string; label: string }> = {
-  completed: { bg: 'bg-emerald-100', text: 'text-emerald-700', label: 'Completed' },
+  completed: { bg: 'bg-primary/10', text: 'text-primary', label: 'Completed' },
   partial: { bg: 'bg-amber-100', text: 'text-amber-700', label: 'Partial' },
   not_started: { bg: 'bg-red-100', text: 'text-red-700', label: 'Not Started' },
 };
@@ -590,9 +590,9 @@ function OverviewTab({
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-3 shrink-0">
         {[
           { label: 'Today', value: `${sessionTodayStats?.total ?? todaySessions.length} session${(sessionTodayStats?.total ?? todaySessions.length) !== 1 ? 's' : ''}`, sub: liveSessions.length > 0 ? `${liveSessions.length} live` : `${sessionTodayStats?.upcoming ?? scheduledSessions.filter(s => s.scheduled_date.slice(0,10) === todayISO).length} upcoming`, color: 'bg-blue-500', icon: CalendarDays },
-          { label: 'Attendance', value: attendanceSummary ? `${attendanceSummary.attendance_rate}%` : '—', sub: attendanceSummary ? `${attendanceSummary.present}/${attendanceSummary.total_sessions} present` : 'No data', color: attendanceSummary && attendanceSummary.attendance_rate >= 75 ? 'bg-emerald-500' : attendanceSummary && attendanceSummary.attendance_rate >= 50 ? 'bg-amber-500' : 'bg-rose-500', icon: TrendingUp },
-          { label: 'Avg Score', value: avgScore !== null ? `${avgScore}%` : '—', sub: gradedExams.length > 0 ? `${gradedExams.length} exam${gradedExams.length !== 1 ? 's' : ''}` : 'No exams', color: avgScore !== null && avgScore >= 75 ? 'bg-emerald-500' : avgScore !== null && avgScore >= 50 ? 'bg-amber-500' : 'bg-purple-500', icon: Trophy },
-          { label: 'Fees', value: feesSummary ? money(feesSummary.total_pending_paise) : '—', sub: feesSummary ? `${money(feesSummary.total_paid_paise)} paid` : 'No data', color: feesSummary && feesSummary.total_pending_paise > 0 ? 'bg-amber-500' : 'bg-emerald-500', icon: CreditCard },
+          { label: 'Attendance', value: attendanceSummary ? `${attendanceSummary.attendance_rate}%` : '—', sub: attendanceSummary ? `${attendanceSummary.present}/${attendanceSummary.total_sessions} present` : 'No data', color: attendanceSummary && attendanceSummary.attendance_rate >= 75 ? 'bg-primary' : attendanceSummary && attendanceSummary.attendance_rate >= 50 ? 'bg-amber-500' : 'bg-rose-500', icon: TrendingUp },
+          { label: 'Avg Score', value: avgScore !== null ? `${avgScore}%` : '—', sub: gradedExams.length > 0 ? `${gradedExams.length} exam${gradedExams.length !== 1 ? 's' : ''}` : 'No exams', color: avgScore !== null && avgScore >= 75 ? 'bg-primary' : avgScore !== null && avgScore >= 50 ? 'bg-amber-500' : 'bg-purple-500', icon: Trophy },
+          { label: 'Fees', value: feesSummary ? money(feesSummary.total_pending_paise) : '—', sub: feesSummary ? `${money(feesSummary.total_paid_paise)} paid` : 'No data', color: feesSummary && feesSummary.total_pending_paise > 0 ? 'bg-amber-500' : 'bg-primary', icon: CreditCard },
           (() => {
             const isGroup = feesSummary?.is_group_batch;
             const ni = feesSummary?.next_invoice;
@@ -614,7 +614,7 @@ function OverviewTab({
                 return { label: 'Next Invoice', value: money(ni.amount_paise), sub: installLabel, color: 'bg-indigo-500', icon: Receipt };
               }
               // Fully paid / no upcoming
-              return { label: 'Enrollment', value: 'Paid Up', sub: feesSummary?.payment_plan === 'quarterly' ? 'SPO plan · all paid' : 'One-time paid', color: 'bg-emerald-500', icon: Receipt };
+              return { label: 'Enrollment', value: 'Paid Up', sub: feesSummary?.payment_plan === 'quarterly' ? 'SPO plan · all paid' : 'One-time paid', color: 'bg-primary', icon: Receipt };
             }
             // Per-class batch: show credits
             return { label: 'Credits', value: creditsData ? `${creditsData.total_remaining}` : '—', sub: creditsData ? `of ${creditsData.total_allotted} sessions` : 'No credits', color: creditsData?.exhausted ? 'bg-red-500' : creditsData?.warning ? 'bg-amber-500' : 'bg-indigo-500', icon: Layers };
@@ -636,13 +636,13 @@ function OverviewTab({
 
       {/* ═══ Row 2: Alerts (conditional, compact) ═══ */}
       {liveSessions.length > 0 && (
-        <div className="rounded-xl border border-green-300 bg-green-50/60 px-3 sm:px-4 py-2.5 flex items-center gap-2 sm:gap-3 shrink-0">
-          <Radio className="h-5 w-5 text-green-600 animate-pulse shrink-0" />
+        <div className="rounded-xl border border-green-300 bg-primary/5/60 px-3 sm:px-4 py-2.5 flex items-center gap-2 sm:gap-3 shrink-0">
+          <Radio className="h-5 w-5 text-primary animate-pulse shrink-0" />
           <div className="flex-1 min-w-0">
             <span className="text-sm font-semibold text-green-800">
               {liveSessions.length} Live Now
             </span>
-            <span className="text-xs text-green-600 ml-2 hidden sm:inline">
+            <span className="text-xs text-primary ml-2 hidden sm:inline">
               {liveSessions.map(s => `${s.subject} — ${s.batch_name}`).join(', ')}
             </span>
           </div>
@@ -656,7 +656,7 @@ function OverviewTab({
           ) : (
             <a
               href={`/join/${liveSessions[0].session_id}`}
-              className="rounded-lg bg-green-600 px-3 py-1.5 text-xs font-bold text-white hover:bg-green-700 shrink-0"
+              className="rounded-lg bg-primary px-3 py-1.5 text-xs font-bold text-white hover:bg-green-700 shrink-0"
             >
               Join
             </a>
@@ -790,9 +790,9 @@ function OverviewTab({
         const nsStart = sessionToDate(nextSession.scheduled_date, nextSession.start_time);
         const nsLobbyOpen = Date.now() >= nsStart.getTime() - 15 * 60 * 1000;
         return (
-          <div className="rounded-xl border border-emerald-200 bg-emerald-50/60 px-3 sm:px-4 py-2.5 flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3 shrink-0">
+          <div className="rounded-xl border border-primary/20 bg-primary/5/60 px-3 sm:px-4 py-2.5 flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3 shrink-0">
             <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto flex-1 min-w-0">
-              <Calendar className="h-5 w-5 text-emerald-600 shrink-0" />
+              <Calendar className="h-5 w-5 text-primary shrink-0" />
               <div className="flex-1 min-w-0 flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
                 <span className="text-sm font-semibold text-gray-900 truncate">{nextSession.subject} — {nextSession.batch_name}</span>
                 <span className="text-xs text-gray-500 truncate">
@@ -815,7 +815,7 @@ function OverviewTab({
               ) : (
                 <a
                   href={`/join/${nextSession.session_id}`}
-                  className="flex items-center gap-1.5 rounded-lg bg-teal-600 px-3 py-1.5 text-xs font-bold text-white hover:bg-teal-700 shrink-0"
+                  className="flex items-center gap-1.5 rounded-lg bg-secondary px-3 py-1.5 text-xs font-bold text-white hover:bg-teal-700 shrink-0"
                 >
                   <Timer className="h-3.5 w-3.5" /> Enter Lobby
                 </a>
@@ -835,7 +835,7 @@ function OverviewTab({
                 {pendingExams.length} exam{pendingExams.length !== 1 ? 's' : ''} pending
               </button>
             )}
-            <button onClick={() => { window.location.hash = 'batches'; }} className="text-[10px] text-emerald-600 hover:underline">All sessions</button>
+            <button onClick={() => { window.location.hash = 'batches'; }} className="text-[10px] text-primary hover:underline">All sessions</button>
           </div>
         </div>
         {todaySessions.length === 0 ? (
@@ -854,14 +854,14 @@ function OverviewTab({
                     <span className="text-gray-500 truncate max-w-[120px]">{s.subject}</span>
                     {s.teacher_name && <span className="text-gray-400 hidden sm:inline">· {s.teacher_name}</span>}
                     {es === 'live' && <Radio className="h-3 w-3 text-red-500 animate-pulse" />}
-                    {es === 'ended' && <CheckCircle2 className="h-3 w-3 text-emerald-500" />}
+                    {es === 'ended' && <CheckCircle2 className="h-3 w-3 text-primary" />}
                     {es === 'live' && (
                       joinBlocked ? (
                         <button onClick={() => { window.location.hash = 'fees'; }} className="flex items-center gap-0.5 rounded-md bg-red-600 px-2 py-0.5 text-[10px] font-bold text-white hover:bg-red-700">
                           <AlertCircle className="h-2.5 w-2.5" /> Pay
                         </button>
                       ) : (
-                        <a href={`/join/${s.session_id}`} className="rounded-md bg-green-600 px-2 py-0.5 text-[10px] font-bold text-white hover:bg-green-700">
+                        <a href={`/join/${s.session_id}`} className="rounded-md bg-primary px-2 py-0.5 text-[10px] font-bold text-white hover:bg-green-700">
                           Join
                         </a>
                       )
@@ -872,7 +872,7 @@ function OverviewTab({
                           <AlertCircle className="h-2.5 w-2.5" /> Pay
                         </button>
                       ) : (
-                        <a href={`/join/${s.session_id}`} className="flex items-center gap-1 rounded-md bg-teal-600 px-2 py-0.5 text-[10px] font-bold text-white hover:bg-teal-700 shrink-0">
+                        <a href={`/join/${s.session_id}`} className="flex items-center gap-1 rounded-md bg-secondary px-2 py-0.5 text-[10px] font-bold text-white hover:bg-teal-700 shrink-0">
                           <Timer className="h-2.5 w-2.5" /> Enter Lobby
                         </a>
                       )
@@ -893,7 +893,7 @@ function OverviewTab({
               <h3 className="text-xs font-semibold text-gray-700">Weekly Sessions</h3>
               <p className="text-[10px] text-gray-400">This week by day</p>
             </div>
-            <button onClick={() => { window.location.hash = 'batches'; }} className="text-[10px] text-emerald-600 hover:underline">View all →</button>
+            <button onClick={() => { window.location.hash = 'batches'; }} className="text-[10px] text-primary hover:underline">View all →</button>
           </div>
           <div className="flex-1 min-h-0">
             {weeklySessionData.some(d => d.Completed + d.Upcoming > 0) ? (
@@ -930,7 +930,7 @@ function OverviewTab({
               <h3 className="text-xs font-semibold text-gray-700">Subject Attendance</h3>
               <p className="text-[10px] text-gray-400">Present vs Absent by subject</p>
             </div>
-            <button onClick={() => { window.location.hash = 'attendance'; }} className="text-[10px] text-emerald-600 hover:underline">Details →</button>
+            <button onClick={() => { window.location.hash = 'attendance'; }} className="text-[10px] text-primary hover:underline">Details →</button>
           </div>
           <div className="flex-1 min-h-0">
             {subjectAttendanceData.length > 0 ? (
@@ -957,7 +957,7 @@ function OverviewTab({
               <h3 className="text-xs font-semibold text-gray-700">Fee Status</h3>
               <p className="text-[10px] text-gray-400">Payment breakdown</p>
             </div>
-            <button onClick={() => { window.location.hash = 'fees'; }} className="text-[10px] text-emerald-600 hover:underline">Details →</button>
+            <button onClick={() => { window.location.hash = 'fees'; }} className="text-[10px] text-primary hover:underline">Details →</button>
           </div>
           {feesPieData.length > 0 ? (
             <div className="flex-1 flex flex-col items-center">
@@ -1000,7 +1000,7 @@ function OverviewTab({
         <div className="rounded-xl bg-white border border-gray-100 shadow-sm p-3 sm:p-4">
           <div className="flex items-center justify-between mb-2">
             <h3 className="text-xs font-semibold text-gray-700">Upcoming Sessions</h3>
-            <button onClick={() => { window.location.hash = 'batches'; }} className="text-[10px] text-emerald-600 hover:underline">View all</button>
+            <button onClick={() => { window.location.hash = 'batches'; }} className="text-[10px] text-primary hover:underline">View all</button>
           </div>
           {(() => {
             const upcoming = sessions
@@ -1018,7 +1018,7 @@ function OverviewTab({
                       <span className="font-mono font-semibold text-gray-500 w-16 shrink-0">{s.scheduled_date.slice(5)} {fmtSessionTime24Local(s.scheduled_date, s.start_time)}</span>
                       <span className="text-gray-800 font-medium truncate flex-1">{s.subject}</span>
                       {lobbyIsOpen ? (
-                        <a href={`/join/${s.session_id}`} className="flex items-center gap-1 rounded-md bg-teal-600 px-2 py-0.5 text-[10px] font-bold text-white hover:bg-teal-700 shrink-0">
+                        <a href={`/join/${s.session_id}`} className="flex items-center gap-1 rounded-md bg-secondary px-2 py-0.5 text-[10px] font-bold text-white hover:bg-teal-700 shrink-0">
                           <Timer className="h-2.5 w-2.5" /> Enter Lobby
                         </a>
                       ) : (
@@ -1036,7 +1036,7 @@ function OverviewTab({
         <div className="rounded-xl bg-white border border-gray-100 shadow-sm p-3 sm:p-4">
           <div className="flex items-center justify-between mb-2">
             <h3 className="text-xs font-semibold text-gray-700">Recent Results</h3>
-            <button onClick={() => { window.location.hash = 'exams'; }} className="text-[10px] text-emerald-600 hover:underline">All exams</button>
+            <button onClick={() => { window.location.hash = 'exams'; }} className="text-[10px] text-primary hover:underline">All exams</button>
           </div>
           {gradedExams.length === 0 ? (
             <p className="text-xs text-gray-400 py-1">No exam results yet</p>
@@ -1046,7 +1046,7 @@ function OverviewTab({
                 const passed = Number(e.attempt_percentage) >= (e.passing_marks / e.total_marks * 100);
                 return (
                   <div key={e.id} className="flex items-center gap-2 rounded-lg bg-gray-50 px-3 py-1.5 text-xs">
-                    <div className={`h-1.5 w-1.5 rounded-full shrink-0 ${passed ? 'bg-emerald-500' : 'bg-red-400'}`} />
+                    <div className={`h-1.5 w-1.5 rounded-full shrink-0 ${passed ? 'bg-primary' : 'bg-red-400'}`} />
                     <span className="text-gray-800 font-medium truncate flex-1">{e.title}</span>
                     <span className="text-gray-500">{e.attempt_score}/{e.total_marks}</span>
                     <span className={`font-bold ${GRADE_COLORS[e.attempt_grade ?? ''] ?? 'text-gray-400'}`}>{e.attempt_grade}</span>
@@ -1099,7 +1099,7 @@ function MyClassesTab({ assignments }: { assignments: Assignment[] }) {
               onClick={() => setFilter(f)}
               className={`flex items-center gap-1.5 rounded-lg px-3 py-2.5 sm:py-1.5 text-xs font-medium capitalize transition-colors ${
                 filter === f
-                  ? 'bg-emerald-600 text-white shadow-sm'
+                  ? 'bg-primary text-white shadow-sm'
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
               }`}
             >
@@ -1134,11 +1134,11 @@ function MyClassesTab({ assignments }: { assignments: Assignment[] }) {
                   onClick={() => setExpandedId(isExpanded ? null : a.room_id)}
                 >
                   <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg ${
-                    es === 'live' ? 'bg-green-100' :
+                    es === 'live' ? 'bg-primary/10' :
                     es === 'scheduled' ? 'bg-teal-50' :
                     es === 'cancelled' ? 'bg-red-50' : 'bg-gray-100'
                   }`}>
-                    {es === 'live'      && <Radio        className="h-5 w-5 text-green-600" />}
+                    {es === 'live'      && <Radio        className="h-5 w-5 text-primary" />}
                     {es === 'ended'     && <CheckCircle2 className="h-5 w-5 text-gray-400" />}
                     {es === 'cancelled' && <XCircle      className="h-5 w-5 text-red-500" />}
                     {es === 'scheduled' && <Calendar     className="h-5 w-5 text-teal-600" />}
@@ -1170,7 +1170,7 @@ function MyClassesTab({ assignments }: { assignments: Assignment[] }) {
                       <a
                         href={`/join/${a.room_id}`}
                         onClick={(e) => e.stopPropagation()}
-                        className="rounded-lg bg-green-600 px-3 py-1.5 text-xs font-bold text-white hover:bg-green-700"
+                        className="rounded-lg bg-primary px-3 py-1.5 text-xs font-bold text-white hover:bg-green-700"
                       >
                         Join
                       </a>
@@ -1360,7 +1360,7 @@ function HomeworkTab({
                         <p className="text-xs font-semibold text-gray-700">Questions:</p>
                         {hw.questions.map(q => (
                           <div key={q.id} className="flex gap-2 text-xs">
-                            <span className="text-emerald-600 font-medium shrink-0">{q.question_number}.</span>
+                            <span className="text-primary font-medium shrink-0">{q.question_number}.</span>
                             <span className="text-gray-800">{q.question_text}</span>
                           </div>
                         ))}
@@ -1383,7 +1383,7 @@ function HomeworkTab({
                           <div className="flex flex-wrap gap-1.5">
                             {sub.file_names.map((name, i) => (
                               <a key={i} href={sub.file_urls[i]} target="_blank" rel="noreferrer"
-                                className="inline-flex items-center gap-1 text-xs text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-1 rounded hover:bg-emerald-100 transition">
+                                className="inline-flex items-center gap-1 text-xs text-primary bg-primary/5 border border-primary/20 px-2 py-1 rounded hover:bg-primary/10 transition">
                                 <Paperclip className="h-3 w-3" /> {name}
                               </a>
                             ))}
@@ -1423,7 +1423,7 @@ function HomeworkTab({
                           {uploadedFiles.length > 0 && (
                             <div className="flex flex-wrap gap-1.5 mt-2">
                               {uploadedFiles.map((f, i) => (
-                                <span key={i} className="inline-flex items-center gap-1 text-xs bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded">
+                                <span key={i} className="inline-flex items-center gap-1 text-xs bg-primary/5 text-primary border border-primary/20 px-2 py-0.5 rounded">
                                   <Paperclip className="h-3 w-3" /> {f.name}
                                   <button onClick={() => setUploadedFiles(prev => prev.filter((_, j) => j !== i))} className="text-red-400 hover:text-red-600 ml-0.5">✕</button>
                                 </span>
@@ -1434,7 +1434,7 @@ function HomeworkTab({
 
                         <div className="flex gap-2">
                           <button onClick={() => handleSubmit(hw.id)} disabled={submitting}
-                            className="rounded-lg bg-emerald-600 px-4 py-2 text-xs font-medium text-white hover:bg-emerald-700 disabled:opacity-50 transition">
+                            className="rounded-lg bg-primary px-4 py-2 text-xs font-medium text-white hover:bg-primary/90 disabled:opacity-50 transition">
                             {submitting ? 'Submitting…' : 'Submit'}
                           </button>
                           <button onClick={() => { setSubmitTarget(null); setSubmitText(''); setUploadedFiles([]); setSubmitStatus('completed'); }}
@@ -1445,7 +1445,7 @@ function HomeworkTab({
                       </div>
                     ) : (
                       <button onClick={() => setSubmitTarget(hw.id)}
-                        className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-2 text-xs font-medium text-white hover:bg-emerald-700 transition">
+                        className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-xs font-medium text-white hover:bg-primary/90 transition">
                         <Send className="h-3.5 w-3.5" /> Submit Homework
                       </button>
                     )}
@@ -1504,7 +1504,7 @@ function HomeworkTab({
                       <div className="flex flex-wrap gap-1">
                         {sub.file_names.map((name, i) => (
                           <a key={i} href={sub.file_urls[i]} target="_blank" rel="noreferrer"
-                            className="text-xs text-emerald-600 hover:underline">📎 {name}</a>
+                            className="text-xs text-primary hover:underline">📎 {name}</a>
                         ))}
                       </div>
                     ) : null}
@@ -1551,12 +1551,12 @@ function ProfileTab({ profile, loading }: { profile: StudentProfile | null; load
   return (
     <div className="max-w-2xl space-y-4 sm:space-y-5">
       {/* Header card */}
-      <div className="rounded-2xl border border-emerald-200 bg-linear-to-br from-emerald-50 to-white p-4 sm:p-6 shadow-sm">
+      <div className="rounded-2xl border border-primary/20 bg-linear-to-br from-emerald-50 to-white p-4 sm:p-6 shadow-sm">
         <div className="flex items-center gap-3 sm:gap-5">
           <Avatar name={profile.name} size="lg" />
           <div className="min-w-0">
             <h2 className="text-xl sm:text-2xl font-bold text-gray-900 truncate">{profile.name}</h2>
-            <p className="mt-0.5 text-xs sm:text-sm font-medium text-emerald-600">Student</p>
+            <p className="mt-0.5 text-xs sm:text-sm font-medium text-primary">Student</p>
             <p className="mt-0.5 sm:mt-1 text-xs text-gray-500 truncate">{profile.email}</p>
           </div>
         </div>
@@ -1641,9 +1641,9 @@ function MobileBottomNav({
                 <div
                   className={`flex h-14 w-14 items-center justify-center rounded-full shadow-lg transition-all active:scale-95 ${
                     liveCount > 0
-                      ? 'bg-green-500 text-white ring-4 ring-green-100 animate-pulse'
+                      ? 'bg-primary text-white ring-4 ring-green-100 animate-pulse'
                       : isActive
-                        ? 'bg-emerald-600 text-white ring-4 ring-emerald-100'
+                        ? 'bg-primary text-white ring-4 ring-primary/15'
                         : 'bg-gray-100 text-gray-500 ring-2 ring-gray-200'
                   }`}
                 >
@@ -1655,7 +1655,7 @@ function MobileBottomNav({
                   )}
                 </div>
                 <span className={`mt-0.5 text-[10px] font-semibold ${
-                  liveCount > 0 ? 'text-green-600' : isActive ? 'text-emerald-600' : 'text-gray-400'
+                  liveCount > 0 ? 'text-primary' : isActive ? 'text-primary' : 'text-gray-400'
                 }`}>
                   {liveCount > 0 ? `${liveCount} Live` : 'Classes'}
                 </span>
@@ -1671,18 +1671,18 @@ function MobileBottomNav({
             >
               <Icon
                 className={`h-5 w-5 transition-colors ${
-                  isActive ? 'text-emerald-600' : 'text-gray-400'
+                  isActive ? 'text-primary' : 'text-gray-400'
                 }`}
               />
               <span
                 className={`text-[10px] font-medium ${
-                  isActive ? 'text-emerald-600' : 'text-gray-400'
+                  isActive ? 'text-primary' : 'text-gray-400'
                 }`}
               >
                 {t.label}
               </span>
               {isActive && (
-                <div className="h-0.5 w-4 rounded-full bg-emerald-600" />
+                <div className="h-0.5 w-4 rounded-full bg-primary" />
               )}
             </button>
           );
@@ -2394,7 +2394,7 @@ const BATCH_TYPE_VARIANT: Record<string, 'primary' | 'info' | 'default' | 'warni
 };
 
 const SUBJECT_COLORS = [
-  { bg: 'bg-emerald-500', light: 'bg-emerald-50', border: 'border-emerald-200', text: 'text-emerald-700', pill: 'bg-emerald-100 text-emerald-700 border-emerald-200', dot: 'bg-emerald-500' },
+  { bg: 'bg-primary', light: 'bg-primary/5', border: 'border-primary/20', text: 'text-primary', pill: 'bg-primary/10 text-primary border-primary/20', dot: 'bg-primary' },
   { bg: 'bg-blue-500', light: 'bg-blue-50', border: 'border-blue-200', text: 'text-blue-700', pill: 'bg-blue-100 text-blue-700 border-blue-200', dot: 'bg-blue-500' },
   { bg: 'bg-purple-500', light: 'bg-purple-50', border: 'border-purple-200', text: 'text-purple-700', pill: 'bg-purple-100 text-purple-700 border-purple-200', dot: 'bg-purple-500' },
   { bg: 'bg-amber-500', light: 'bg-amber-50', border: 'border-amber-200', text: 'text-amber-700', pill: 'bg-amber-100 text-amber-700 border-amber-200', dot: 'bg-amber-500' },
@@ -2509,8 +2509,8 @@ function BatchesTab({
   const safeIdx = Math.min(activeBatchIdx, batches.length - 1);
   const b = batches[safeIdx];
   const rate = b.attendance.rate;
-  const attColor = (r: number) => r >= 75 ? 'text-emerald-600' : r >= 50 ? 'text-amber-600' : 'text-red-600';
-  const attBarCls = (r: number) => r >= 75 ? 'bg-emerald-500' : r >= 50 ? 'bg-amber-500' : 'bg-red-500';
+  const attColor = (r: number) => r >= 75 ? 'text-primary' : r >= 50 ? 'text-amber-600' : 'text-red-600';
+  const attBarCls = (r: number) => r >= 75 ? 'bg-primary' : r >= 50 ? 'bg-amber-500' : 'bg-red-500';
 
   const allSessions = sessions.filter(s => s.batch_id === b.id);
   const subjects = [...new Set(allSessions.map(s => s.subject))].sort();
@@ -2598,7 +2598,7 @@ function BatchesTab({
                   onClick={() => setPaymentMethod(m.key)}
                   className={`flex-1 rounded-lg px-3 py-2 text-xs font-semibold border transition-colors ${
                     paymentMethod === m.key
-                      ? 'bg-emerald-50 border-emerald-300 text-emerald-700'
+                      ? 'bg-primary/5 border-emerald-300 text-primary'
                       : 'bg-white border-gray-200 text-gray-500 hover:border-gray-300'
                   }`}
                 >
@@ -2616,7 +2616,7 @@ function BatchesTab({
                   value={upiId}
                   onChange={e => setUpiId(e.target.value)}
                   placeholder="yourname@upi"
-                  className="w-full rounded-xl border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  className="w-full rounded-xl border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                 />
               </div>
             )}
@@ -2631,7 +2631,7 @@ function BatchesTab({
                     value={bankName}
                     onChange={e => setBankName(e.target.value)}
                     placeholder="Full name as per bank"
-                    className="w-full rounded-xl border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    className="w-full rounded-xl border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                 </div>
                 <div>
@@ -2641,7 +2641,7 @@ function BatchesTab({
                     value={bankAccount}
                     onChange={e => setBankAccount(e.target.value)}
                     placeholder="Account number"
-                    className="w-full rounded-xl border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    className="w-full rounded-xl border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                 </div>
                 <div>
@@ -2651,7 +2651,7 @@ function BatchesTab({
                     value={bankIfsc}
                     onChange={e => setBankIfsc(e.target.value.toUpperCase())}
                     placeholder="e.g. SBIN0001234"
-                    className="w-full rounded-xl border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    className="w-full rounded-xl border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                 </div>
               </div>
@@ -2662,10 +2662,10 @@ function BatchesTab({
               <div>
                 <label className="block text-xs font-medium text-gray-700 mb-1">Upload QR Code</label>
                 {qrCodeUrl ? (
-                  <div className="flex items-center gap-3 rounded-xl border border-emerald-200 bg-emerald-50 p-3">
+                  <div className="flex items-center gap-3 rounded-xl border border-primary/20 bg-primary/5 p-3">
                     <img src={qrCodeUrl} alt="QR Code" className="h-16 w-16 rounded-lg object-cover border border-gray-200" />
                     <div className="flex-1">
-                      <p className="text-xs font-semibold text-emerald-700">QR code uploaded</p>
+                      <p className="text-xs font-semibold text-primary">QR code uploaded</p>
                       <button
                         type="button"
                         onClick={() => setQrCodeUrl('')}
@@ -2677,7 +2677,7 @@ function BatchesTab({
                   </div>
                 ) : (
                   <label className={`flex flex-col items-center justify-center rounded-xl border-2 border-dashed px-4 py-5 cursor-pointer transition-colors ${
-                    qrUploading ? 'border-gray-200 bg-gray-50' : 'border-gray-300 hover:border-emerald-400 hover:bg-emerald-50'
+                    qrUploading ? 'border-gray-200 bg-gray-50' : 'border-gray-300 hover:border-primary hover:bg-primary/5'
                   }`}>
                     <Upload className="h-6 w-6 text-gray-400 mb-1" />
                     <span className="text-xs text-gray-500">{qrUploading ? 'Uploading…' : 'Click to upload QR code image'}</span>
@@ -2741,14 +2741,14 @@ function BatchesTab({
                 onClick={() => { setActiveBatchIdx(idx); setSubjectFilter('all'); setStatusFilter('all'); setExpandedSession(null); }}
                 className={`flex shrink-0 items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition-all border-2 ${
                   safeIdx === idx
-                    ? 'bg-emerald-600 text-white border-emerald-600 shadow-md'
+                    ? 'bg-primary text-white border-emerald-600 shadow-md'
                     : 'bg-white text-gray-600 border-gray-200 hover:border-emerald-300 hover:shadow-sm'
                 }`}
               >
                 <BookOpen className="h-4 w-4 shrink-0" />
                 <span className="max-w-[160px] truncate">{batch.name}</span>
                 {liveSess > 0 && (
-                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-green-500 text-[10px] font-bold text-white animate-pulse shrink-0">
+                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white animate-pulse shrink-0">
                     {liveSess}
                   </span>
                 )}
@@ -2759,7 +2759,7 @@ function BatchesTab({
       )}
 
       {/* ── Class Info Card — Compact, modern ── */}
-      <div className="rounded-2xl bg-gradient-to-br from-emerald-600 via-emerald-700 to-teal-700 text-white overflow-hidden shadow-lg">
+      <div className="rounded-2xl bg-gradient-to-br from-primary via-primary/90 to-secondary text-white overflow-hidden shadow-lg">
         <div className="p-4 sm:p-5">
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0">
@@ -2769,7 +2769,7 @@ function BatchesTab({
                   {BATCH_TYPE_LABEL[b.type] ?? b.type}
                 </span>
               </div>
-              <div className="mt-1 flex items-center gap-3 text-emerald-100 text-xs">
+              <div className="mt-1 flex items-center gap-3 text-primary/40 text-xs">
                 {b.grade && <span>{b.grade}{b.section ? ` · ${b.section}` : ''}</span>}
                 <span>{subjects.length} subject{subjects.length !== 1 ? 's' : ''}</span>
                 <span>{allSessions.length} session{allSessions.length !== 1 ? 's' : ''}</span>
@@ -2793,7 +2793,7 @@ function BatchesTab({
             ].map(x => (
               <div key={x.label} className="rounded-xl bg-white/10 backdrop-blur-sm px-2.5 py-2 text-center">
                 <p className="text-sm font-bold">{x.val}</p>
-                <p className="text-[10px] text-emerald-200">{x.label}</p>
+                <p className="text-[10px] text-primary/60">{x.label}</p>
               </div>
             ))}
           </div>
@@ -2804,7 +2804,7 @@ function BatchesTab({
               <div className="flex-1 h-2 rounded-full bg-white/20 overflow-hidden">
                 <div className="h-full rounded-full bg-white transition-all" style={{ width: `${rate}%` }} />
               </div>
-              <span className="text-xs font-semibold text-emerald-100">{b.attendance.present}/{b.attendance.total}</span>
+              <span className="text-xs font-semibold text-primary/40">{b.attendance.present}/{b.attendance.total}</span>
             </div>
           )}
         </div>
@@ -2814,7 +2814,7 @@ function BatchesTab({
           <div className="border-t border-white/10 bg-white/5 backdrop-blur-sm px-4 sm:px-5 py-4 space-y-3">
             {b.teachers.length > 0 && (
               <div>
-                <p className="text-[11px] font-semibold uppercase tracking-wider text-emerald-200 mb-2">Your Teachers</p>
+                <p className="text-[11px] font-semibold uppercase tracking-wider text-primary/60 mb-2">Your Teachers</p>
                 <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
                   {b.teachers.map((t, i) => {
                     const sc = subjectColorMap.get(t.subject);
@@ -2825,7 +2825,7 @@ function BatchesTab({
                           <p className="text-xs font-semibold truncate">{t.teacher_name}</p>
                           <div className="flex items-center gap-1.5 mt-0.5">
                             {sc && <span className={`h-1.5 w-1.5 rounded-full ${sc.dot}`} />}
-                            <p className="text-[10px] text-emerald-200">{t.subject}{t.is_primary ? ' · Primary' : ''}</p>
+                            <p className="text-[10px] text-primary/60">{t.subject}{t.is_primary ? ' · Primary' : ''}</p>
                           </div>
                         </div>
                       </div>
@@ -2838,19 +2838,19 @@ function BatchesTab({
               <div className="grid gap-2 sm:grid-cols-2">
                 {b.coordinator.name && (
                   <div className="rounded-xl bg-white/10 px-3 py-2.5">
-                    <p className="text-[10px] text-emerald-300 uppercase tracking-wide">Coordinator</p>
+                    <p className="text-[10px] text-primary/80 uppercase tracking-wide">Coordinator</p>
                     <p className="text-xs font-semibold mt-0.5">{b.coordinator.name}</p>
                   </div>
                 )}
                 {b.ao_name && (
                   <div className="rounded-xl bg-white/10 px-3 py-2.5">
-                    <p className="text-[10px] text-emerald-300 uppercase tracking-wide">Academic Operator</p>
+                    <p className="text-[10px] text-primary/80 uppercase tracking-wide">Academic Operator</p>
                     <p className="text-xs font-semibold mt-0.5">{b.ao_name}</p>
                   </div>
                 )}
               </div>
             )}
-            {b.notes && <div className="rounded-xl bg-white/10 px-3 py-2.5 text-xs text-emerald-100">{b.notes}</div>}
+            {b.notes && <div className="rounded-xl bg-white/10 px-3 py-2.5 text-xs text-primary/40">{b.notes}</div>}
           </div>
         )}
       </div>
@@ -2861,7 +2861,7 @@ function BatchesTab({
           <div className="flex items-center gap-2.5 mb-3">
             <span className="relative flex h-3 w-3">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
-              <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500" />
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-primary" />
             </span>
             <p className="text-sm font-bold text-green-800">
               {liveSessions.length === 1 ? 'Your class is live!' : `${liveSessions.length} classes are live!`}
@@ -2869,7 +2869,7 @@ function BatchesTab({
           </div>
           <div className="space-y-2">
             {liveSessions.map(s => (
-              <div key={s.session_id} className="flex items-center justify-between gap-3 rounded-xl bg-white border border-green-200 px-4 py-3 shadow-sm">
+              <div key={s.session_id} className="flex items-center justify-between gap-3 rounded-xl bg-white border border-primary/20 px-4 py-3 shadow-sm">
                 <div className="min-w-0">
                   <div className="flex items-center gap-2">
                     <span className={`h-2.5 w-2.5 rounded-full ${subjectColorMap.get(s.subject)?.dot ?? 'bg-gray-400'}`} />
@@ -2881,7 +2881,7 @@ function BatchesTab({
                   </p>
                 </div>
                 <a href={`/join/${s.session_id}`}
-                  className="shrink-0 rounded-xl bg-green-600 px-5 py-2.5 text-sm font-bold text-white hover:bg-green-700 shadow-md hover:shadow-lg transition-all animate-pulse">
+                  className="shrink-0 rounded-xl bg-primary px-5 py-2.5 text-sm font-bold text-white hover:bg-green-700 shadow-md hover:shadow-lg transition-all animate-pulse">
                   Join Now
                 </a>
               </div>
@@ -2896,11 +2896,11 @@ function BatchesTab({
           <button onClick={() => setSubjectFilter('all')}
             className={`rounded-xl p-3 text-left border-2 transition-all ${
               subjectFilter === 'all'
-                ? 'border-emerald-300 bg-emerald-50 shadow-md ring-1 ring-emerald-200 ring-opacity-50'
+                ? 'border-emerald-300 bg-primary/5 shadow-md ring-1 ring-primary/20 ring-opacity-50'
                 : 'border-gray-200 bg-white text-gray-700 hover:border-gray-300 hover:shadow-sm'
             }`}>
-            <p className={`text-sm font-bold ${subjectFilter === 'all' ? 'text-emerald-700' : ''}`}>{allSessions.length}</p>
-            <p className={`text-[11px] mt-0.5 ${subjectFilter === 'all' ? 'text-emerald-700' : 'opacity-75'}`}>All Subjects</p>
+            <p className={`text-sm font-bold ${subjectFilter === 'all' ? 'text-primary' : ''}`}>{allSessions.length}</p>
+            <p className={`text-[11px] mt-0.5 ${subjectFilter === 'all' ? 'text-primary' : 'opacity-75'}`}>All Subjects</p>
           </button>
           {subjects.map(sub => {
             const sc = subjectColorMap.get(sub)!;
@@ -2933,7 +2933,7 @@ function BatchesTab({
               <button key={f} onClick={() => setStatusFilter(f)}
                 className={`whitespace-nowrap rounded-full px-3.5 py-1.5 text-xs font-semibold transition-all ${
                   statusFilter === f
-                    ? f === 'live' ? 'bg-green-600 text-white shadow-sm' : 'bg-emerald-600 text-white shadow-sm'
+                    ? f === 'live' ? 'bg-primary text-white shadow-sm' : 'bg-primary text-white shadow-sm'
                     : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
                 }`}>
                 {f === 'live' && <span className="inline-block h-1.5 w-1.5 rounded-full bg-white animate-pulse mr-1.5" />}
@@ -2970,7 +2970,7 @@ function BatchesTab({
             const d = fmtDate(s.scheduled_date);
             return (
               <div key={s.session_id} className={`rounded-2xl border overflow-hidden transition-all ${
-                es === 'live' ? 'border-green-300 bg-green-50/40 shadow-md ring-1 ring-green-200' :
+                es === 'live' ? 'border-green-300 bg-primary/5/40 shadow-md ring-1 ring-green-200' :
                 isExp ? 'border-gray-200 shadow-md' : 'border-gray-100 bg-white hover:shadow-sm'
               }`}>
                 <button className="flex w-full items-center gap-3 px-4 py-3.5 text-left" onClick={() => setExpandedSession(isExp ? null : s.session_id)}>
@@ -2980,7 +2980,7 @@ function BatchesTab({
                     <p className="text-lg font-bold text-gray-800 leading-tight">{d.day}</p>
                     <p className="text-[10px] text-gray-400">{d.month}</p>
                   </div>
-                  <div className={`w-1 self-stretch rounded-full ${es === 'live' ? 'bg-green-500 animate-pulse' : sc.dot}`} />
+                  <div className={`w-1 self-stretch rounded-full ${es === 'live' ? 'bg-primary animate-pulse' : sc.dot}`} />
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2 flex-wrap">
                       <span className="text-sm font-bold text-gray-900">{s.subject}</span>
@@ -3008,19 +3008,19 @@ function BatchesTab({
                     {s.attendance_status && (
                       <span className={`h-6 w-6 flex items-center justify-center rounded-full text-[10px] font-bold ${
                         s.attendance_status === 'present'
-                          ? s.is_late ? 'bg-amber-100 text-amber-700' : 'bg-emerald-100 text-emerald-700'
+                          ? s.is_late ? 'bg-amber-100 text-amber-700' : 'bg-primary/10 text-primary'
                           : 'bg-red-100 text-red-600'
                       }`}>
                         {s.is_late ? 'L' : s.attendance_status === 'present' ? '✓' : '✗'}
                       </span>
                     )}
                     {es === 'live' && (
-                      <a href={`/join/${s.session_id}`} onClick={e => e.stopPropagation()} className="rounded-xl bg-green-600 px-4 py-2 text-xs font-bold text-white hover:bg-green-700 shadow-sm animate-pulse">Join</a>
+                      <a href={`/join/${s.session_id}`} onClick={e => e.stopPropagation()} className="rounded-xl bg-primary px-4 py-2 text-xs font-bold text-white hover:bg-green-700 shadow-sm animate-pulse">Join</a>
                     )}
                     {es === 'scheduled' && (() => {
                       const sStart = sessionToDate(s.scheduled_date, s.start_time);
                       if (Date.now() >= sStart.getTime() - 15 * 60 * 1000) return (
-                        <a href={`/join/${s.session_id}`} onClick={e => e.stopPropagation()} className="rounded-xl bg-teal-600 px-4 py-2 text-xs font-bold text-white hover:bg-teal-700 shadow-sm">Lobby</a>
+                        <a href={`/join/${s.session_id}`} onClick={e => e.stopPropagation()} className="rounded-xl bg-secondary px-4 py-2 text-xs font-bold text-white hover:bg-teal-700 shadow-sm">Lobby</a>
                       );
                       return null;
                     })()}
@@ -3058,15 +3058,15 @@ function BatchesTab({
                   const d = fmtDate(s.scheduled_date);
                   return (
                     <div key={s.session_id} className={`rounded-2xl border overflow-hidden transition-all ${
-                      es === 'live' ? 'border-green-300 bg-green-50/40 shadow-md ring-1 ring-green-200' :
+                      es === 'live' ? 'border-green-300 bg-primary/5/40 shadow-md ring-1 ring-green-200' :
                       isExp ? 'border-gray-200 shadow-md bg-white' : 'border-gray-100 bg-white hover:shadow-sm hover:border-gray-200'
                     }`}>
                       {/* Session row */}
                       <button className="flex w-full items-center gap-3 px-3 sm:px-4 py-3 text-left" onClick={() => setExpandedSession(isExp ? null : s.session_id)}>
                         {/* Date chip */}
-                        <div className={`shrink-0 rounded-xl px-2.5 py-1.5 text-center ${es === 'live' ? 'bg-green-100' : 'bg-gray-50'}`}>
+                        <div className={`shrink-0 rounded-xl px-2.5 py-1.5 text-center ${es === 'live' ? 'bg-primary/10' : 'bg-gray-50'}`}>
                           <p className="text-[9px] font-bold text-gray-400 leading-tight">{d.weekday}</p>
-                          <p className={`text-base font-bold leading-tight ${es === 'live' ? 'text-green-700' : 'text-gray-800'}`}>{d.day}</p>
+                          <p className={`text-base font-bold leading-tight ${es === 'live' ? 'text-primary' : 'text-gray-800'}`}>{d.day}</p>
                           <p className="text-[9px] text-gray-400 leading-tight">{d.month}</p>
                         </div>
 
@@ -3102,19 +3102,19 @@ function BatchesTab({
                           {s.attendance_status && (
                             <span className={`h-6 w-6 flex items-center justify-center rounded-full text-[10px] font-bold ${
                               s.attendance_status === 'present'
-                                ? s.is_late ? 'bg-amber-100 text-amber-700' : 'bg-emerald-100 text-emerald-700'
+                                ? s.is_late ? 'bg-amber-100 text-amber-700' : 'bg-primary/10 text-primary'
                                 : 'bg-red-100 text-red-600'
                             }`}>
                               {s.is_late ? 'L' : s.attendance_status === 'present' ? '✓' : '✗'}
                             </span>
                           )}
                           {es === 'live' && (
-                            <a href={`/join/${s.session_id}`} onClick={e => e.stopPropagation()} className="rounded-xl bg-green-600 px-4 py-2 text-xs font-bold text-white hover:bg-green-700 shadow-sm animate-pulse">Join</a>
+                            <a href={`/join/${s.session_id}`} onClick={e => e.stopPropagation()} className="rounded-xl bg-primary px-4 py-2 text-xs font-bold text-white hover:bg-green-700 shadow-sm animate-pulse">Join</a>
                           )}
                           {es === 'scheduled' && (() => {
                             const sStart = sessionToDate(s.scheduled_date, s.start_time);
                             if (Date.now() >= sStart.getTime() - 15 * 60 * 1000) return (
-                              <a href={`/join/${s.session_id}`} onClick={e => e.stopPropagation()} className="rounded-xl bg-teal-600 px-4 py-2 text-xs font-bold text-white hover:bg-teal-700 shadow-sm">Lobby</a>
+                              <a href={`/join/${s.session_id}`} onClick={e => e.stopPropagation()} className="rounded-xl bg-secondary px-4 py-2 text-xs font-bold text-white hover:bg-teal-700 shadow-sm">Lobby</a>
                             );
                             return null;
                           })()}
@@ -3190,7 +3190,7 @@ function BatchesTab({
             {s.engagement_score != null && (
               <div>
                 <p className="text-[10px] text-gray-400">Engagement</p>
-                <p className="text-sm font-bold text-emerald-600">{s.engagement_score}%</p>
+                <p className="text-sm font-bold text-primary">{s.engagement_score}%</p>
               </div>
             )}
           </div>
@@ -3200,9 +3200,9 @@ function BatchesTab({
         {(s.class_portion || s.class_remarks) && (
           <div className="grid gap-2 sm:grid-cols-2">
             {s.class_portion && (
-              <div className="rounded-xl bg-emerald-50 border border-emerald-100 px-3 py-2.5">
-                <p className="text-[10px] text-emerald-600 font-semibold uppercase">Portion Covered</p>
-                <p className="text-xs text-emerald-800 mt-1">{s.class_portion}</p>
+              <div className="rounded-xl bg-primary/5 border border-primary/15 px-3 py-2.5">
+                <p className="text-[10px] text-primary font-semibold uppercase">Portion Covered</p>
+                <p className="text-xs text-primary mt-1">{s.class_portion}</p>
               </div>
             )}
             {s.class_remarks && (
@@ -3229,7 +3229,7 @@ function BatchesTab({
           {es === 'ended' && <SessionMaterialsButton sessionId={s.session_id} />}
           {es === 'live' && (
             <a href={`/join/${s.session_id}`}
-              className="inline-flex items-center gap-2 rounded-xl bg-green-600 px-4 py-2 text-xs font-bold text-white hover:bg-green-700 shadow-sm">
+              className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-xs font-bold text-white hover:bg-green-700 shadow-sm">
               <span className="h-2 w-2 rounded-full bg-white animate-pulse" /> Join Live Session
             </a>
           )}
@@ -3243,7 +3243,7 @@ function BatchesTab({
                   <Clock className="h-3.5 w-3.5 shrink-0" /> Lobby is open — class starts at <strong>{localTime}</strong>
                 </div>
                 <a href={`/join/${s.session_id}`}
-                  className="inline-flex items-center gap-2 rounded-xl bg-teal-600 px-4 py-2 text-xs font-bold text-white hover:bg-teal-700 shadow-sm">
+                  className="inline-flex items-center gap-2 rounded-xl bg-secondary px-4 py-2 text-xs font-bold text-white hover:bg-teal-700 shadow-sm">
                   <Timer className="h-3.5 w-3.5" /> Enter Lobby
                 </a>
               </div>
@@ -3262,7 +3262,7 @@ function BatchesTab({
               <div className="flex items-center gap-2">
                 <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold ${
                   s.refund_request_status === 'pending' ? 'bg-amber-100 text-amber-700 border border-amber-200'
-                    : s.refund_request_status === 'approved' ? 'bg-emerald-100 text-emerald-700 border border-emerald-200'
+                    : s.refund_request_status === 'approved' ? 'bg-primary/10 text-primary border border-primary/20'
                     : 'bg-red-100 text-red-700 border border-red-200'
                 }`}>
                   {s.refund_request_status === 'pending' ? <Clock className="h-3 w-3" /> : s.refund_request_status === 'approved' ? <CheckCircle2 className="h-3 w-3" /> : <XCircle className="h-3 w-3" />}
@@ -3337,8 +3337,8 @@ function AttendanceTab({
     late:     records.filter(subjectFiltered).filter(r => statusMatch(r, 'late')).length,
   };
 
-  const attColor  = (rate: number) => rate >= 75 ? 'text-green-700' : rate >= 50 ? 'text-amber-700' : 'text-red-600';
-  const attBar    = (rate: number) => rate >= 75 ? 'bg-green-500' : rate >= 50 ? 'bg-amber-500' : 'bg-red-500';
+  const attColor  = (rate: number) => rate >= 75 ? 'text-primary' : rate >= 50 ? 'text-amber-700' : 'text-red-600';
+  const attBar    = (rate: number) => rate >= 75 ? 'bg-primary' : rate >= 50 ? 'bg-amber-500' : 'bg-red-500';
 
   return (
     <div className="space-y-5">
@@ -3349,7 +3349,7 @@ function AttendanceTab({
           <div className="col-span-2 sm:col-span-1 rounded-xl border border-gray-200 bg-white p-3 sm:p-4 shadow-sm">
             <div className="flex items-center justify-between mb-1">
               <p className="text-[11px] sm:text-xs text-gray-500 font-medium">Attendance Rate</p>
-              <TrendingUp className="h-4 w-4 text-emerald-500" />
+              <TrendingUp className="h-4 w-4 text-primary" />
             </div>
             <p className={`text-xl sm:text-2xl font-bold ${attColor(summary.attendance_rate)}`}>{summary.attendance_rate}%</p>
             <div className="mt-2 h-1.5 rounded-full bg-gray-100">
@@ -3423,9 +3423,9 @@ function AttendanceTab({
               )}
               {avgAttention !== null && (
                 <div className={`rounded-lg border p-2.5 sm:p-3 text-center ${
-                  avgAttention >= 70 ? 'border-green-200 bg-green-50' : avgAttention >= 40 ? 'border-amber-200 bg-amber-50' : 'border-red-200 bg-red-50'
+                  avgAttention >= 70 ? 'border-primary/20 bg-primary/5' : avgAttention >= 40 ? 'border-amber-200 bg-amber-50' : 'border-red-200 bg-red-50'
                 }`}>
-                  <p className={`text-base sm:text-lg font-bold ${avgAttention >= 70 ? 'text-green-700' : avgAttention >= 40 ? 'text-amber-700' : 'text-red-600'}`}>{avgAttention}%</p>
+                  <p className={`text-base sm:text-lg font-bold ${avgAttention >= 70 ? 'text-primary' : avgAttention >= 40 ? 'text-amber-700' : 'text-red-600'}`}>{avgAttention}%</p>
                   <p className="text-[10px] text-gray-400">Avg Attention</p>
                 </div>
               )}
@@ -3440,7 +3440,7 @@ function AttendanceTab({
           <select
             value={filterSubject}
             onChange={e => setFilterSubject(e.target.value)}
-            className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-600 focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-100"
+            className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-600 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/15"
           >
             <option value="">All Subjects</option>
             {subjects.map(s => <option key={s} value={s}>{s}</option>)}
@@ -3453,7 +3453,7 @@ function AttendanceTab({
               onClick={() => setFilterStatus(f)}
               className={`rounded-lg px-3 py-2.5 sm:py-1.5 text-xs font-medium capitalize transition-colors ${
                 filterStatus === f
-                  ? 'bg-emerald-600 text-white shadow-sm'
+                  ? 'bg-primary text-white shadow-sm'
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
               }`}
             >
@@ -3483,16 +3483,16 @@ function AttendanceTab({
                 key={r.room_id + r.scheduled_start}
                 className={`flex items-center gap-3 rounded-xl border p-4 transition-colors ${
                   isPresent
-                    ? isLate ? 'border-amber-200 bg-amber-50/30' : 'border-green-200 bg-green-50/30'
+                    ? isLate ? 'border-amber-200 bg-amber-50/30' : 'border-primary/20 bg-primary/5/30'
                     : isAbsent ? 'border-red-200 bg-red-50/20' : 'border-gray-100 bg-white'
                 }`}
               >
                 {/* Status icon */}
                 <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${
-                  isPresent ? (isLate ? 'bg-amber-100' : 'bg-green-100') : isAbsent ? 'bg-red-100' : 'bg-gray-100'
+                  isPresent ? (isLate ? 'bg-amber-100' : 'bg-primary/10') : isAbsent ? 'bg-red-100' : 'bg-gray-100'
                 }`}>
                   {isPresent
-                    ? isLate ? <Timer className="h-4 w-4 text-amber-600" /> : <CheckCircle2 className="h-4 w-4 text-green-600" />
+                    ? isLate ? <Timer className="h-4 w-4 text-amber-600" /> : <CheckCircle2 className="h-4 w-4 text-primary" />
                     : isAbsent ? <XCircle className="h-4 w-4 text-red-500" /> : <Clock className="h-4 w-4 text-gray-400" />}
                 </div>
 
@@ -3522,7 +3522,7 @@ function AttendanceTab({
                         <span title="Leave requests">🚪×{r.leave_request_count}</span>
                       )}
                       {r.attention_avg !== null && (
-                        <span title="Attention score" className={`font-medium ${r.attention_avg >= 70 ? 'text-green-600' : r.attention_avg >= 40 ? 'text-amber-600' : 'text-red-500'}`}>
+                        <span title="Attention score" className={`font-medium ${r.attention_avg >= 70 ? 'text-primary' : r.attention_avg >= 40 ? 'text-amber-600' : 'text-red-500'}`}>
                           Att: {r.attention_avg}%
                         </span>
                       )}
@@ -3557,7 +3557,7 @@ function AttendanceTab({
 const STUDENT_MATERIAL_TYPE_STYLE: Record<string, string> = {
   notes:      'bg-blue-50   text-blue-700   border-blue-200',
   assignment: 'bg-amber-50  text-amber-700  border-amber-200',
-  resource:   'bg-emerald-50 text-emerald-700 border-emerald-200',
+  resource:   'bg-primary/5 text-primary border-primary/20',
   video:      'bg-purple-50 text-purple-700  border-purple-200',
   other:      'bg-gray-50   text-gray-600   border-gray-200',
 };
@@ -3601,7 +3601,7 @@ function StudentMaterialsTab({
           <select
             value={filterBatch}
             onChange={e => setFilterBatch(e.target.value)}
-            className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-600 focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-100"
+            className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-600 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/15"
           >
             <option value="">All batches</option>
             {batches.map(b => <option key={b.value} value={b.value}>{b.label}</option>)}
@@ -3609,7 +3609,7 @@ function StudentMaterialsTab({
           <select
             value={filterType}
             onChange={e => setFilterType(e.target.value)}
-            className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-600 focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-100"
+            className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-600 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/15"
           >
             <option value="">All types</option>
             {types.map(t => <option key={t} value={t}>{t.charAt(0).toUpperCase() + t.slice(1)}</option>)}
@@ -3638,7 +3638,7 @@ function StudentMaterialsTab({
                   {m.batches && m.batches.length > 0 && (
                     <div className="flex items-center gap-1 flex-wrap mt-1">
                       {m.batches.map(b => (
-                        <span key={b.batch_id} className="text-[11px] bg-emerald-50 text-emerald-700 border border-emerald-100 px-1.5 py-0.5 rounded-full">
+                        <span key={b.batch_id} className="text-[11px] bg-primary/5 text-primary border border-primary/15 px-1.5 py-0.5 rounded-full">
                           {b.batch_name}
                         </span>
                       ))}
@@ -3661,7 +3661,7 @@ function StudentMaterialsTab({
                   href={m.file_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700 hover:text-emerald-900 transition-colors"
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:text-emerald-900 transition-colors"
                 >
                   <ExternalLink className="h-3.5 w-3.5" />
                   {m.file_name || 'Open / Download'}
@@ -3713,7 +3713,7 @@ function SessionsTab({
 
   const attColor = (status: string | null) => {
     if (!status) return 'bg-gray-100 text-gray-500';
-    if (status === 'present') return 'bg-green-100 text-green-700';
+    if (status === 'present') return 'bg-primary/10 text-primary';
     if (status === 'absent') return 'bg-red-100 text-red-600';
     return 'bg-gray-100 text-gray-500';
   };
@@ -3749,7 +3749,7 @@ function SessionsTab({
           <select
             value={filterBatch}
             onChange={e => setFilterBatch(e.target.value)}
-            className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-600 focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-100"
+            className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-600 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/15"
           >
             <option value="">All Batches</option>
             {batchList.map(b => <option key={b.id} value={b.id}>{b.name}</option>)}
@@ -3762,7 +3762,7 @@ function SessionsTab({
               onClick={() => setFilterStatus(f)}
               className={`flex items-center gap-1.5 rounded-lg px-3 py-2.5 sm:py-1.5 text-xs font-medium capitalize transition-colors ${
                 filterStatus === f
-                  ? 'bg-emerald-600 text-white shadow-sm'
+                  ? 'bg-primary text-white shadow-sm'
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
               }`}
             >
@@ -3788,13 +3788,13 @@ function SessionsTab({
             const isExpanded = expandedId === s.session_id;
             const es = effectiveSessionStatus(s);
             const statusIcon = {
-              live: <Radio className="h-5 w-5 text-green-600" />,
+              live: <Radio className="h-5 w-5 text-primary" />,
               scheduled: <Clock className="h-5 w-5 text-teal-600" />,
               ended: <CheckCircle2 className="h-5 w-5 text-gray-400" />,
               cancelled: <XCircle className="h-5 w-5 text-red-500" />,
             }[es] ?? <Clock className="h-5 w-5 text-gray-400" />;
             const statusBg = {
-              live: 'bg-green-100', scheduled: 'bg-teal-50', ended: 'bg-gray-100', cancelled: 'bg-red-50',
+              live: 'bg-primary/10', scheduled: 'bg-teal-50', ended: 'bg-gray-100', cancelled: 'bg-red-50',
             }[es] ?? 'bg-gray-100';
 
             return (
@@ -3835,7 +3835,7 @@ function SessionsTab({
                       <a
                         href={`/join/${s.session_id}`}
                         onClick={(e) => e.stopPropagation()}
-                        className="rounded-lg bg-green-600 px-4 py-2.5 sm:px-3 sm:py-1.5 text-xs font-bold text-white hover:bg-green-700 shrink-0 animate-pulse"
+                        className="rounded-lg bg-primary px-4 py-2.5 sm:px-3 sm:py-1.5 text-xs font-bold text-white hover:bg-green-700 shrink-0 animate-pulse"
                       >
                         Join Now
                       </a>
@@ -3847,7 +3847,7 @@ function SessionsTab({
                         <a
                           href={`/join/${s.session_id}`}
                           onClick={(e) => e.stopPropagation()}
-                          className="rounded-lg bg-teal-600 px-4 py-2.5 sm:px-3 sm:py-1.5 text-xs font-bold text-white hover:bg-teal-700 shrink-0"
+                          className="rounded-lg bg-secondary px-4 py-2.5 sm:px-3 sm:py-1.5 text-xs font-bold text-white hover:bg-teal-700 shrink-0"
                         >
                           Enter Lobby
                         </a>
@@ -3912,9 +3912,9 @@ function SessionsTab({
                     {(s.class_portion || s.class_remarks) && (
                       <div className="space-y-2">
                         {s.class_portion && (
-                          <div className="rounded-lg bg-emerald-50 border border-emerald-100 px-3 py-2">
-                            <p className="text-[10px] text-emerald-600 font-semibold uppercase">Session Portion Covered</p>
-                            <p className="text-sm text-emerald-800 mt-0.5">{s.class_portion}</p>
+                          <div className="rounded-lg bg-primary/5 border border-primary/15 px-3 py-2">
+                            <p className="text-[10px] text-primary font-semibold uppercase">Session Portion Covered</p>
+                            <p className="text-sm text-primary mt-0.5">{s.class_portion}</p>
                           </div>
                         )}
                         {s.class_remarks && (
@@ -3949,7 +3949,7 @@ function SessionsTab({
                     {es === 'live' && (
                       <a
                         href={`/join/${s.session_id}`}
-                        className="inline-flex items-center gap-2 rounded-xl bg-green-600 px-5 py-2.5 text-sm font-bold text-white hover:bg-green-700"
+                        className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-bold text-white hover:bg-green-700"
                       >
                         <span className="h-2 w-2 rounded-full bg-white animate-pulse" />
                         Join Live Session
@@ -3983,7 +3983,7 @@ function SessionsTab({
                           </div>
                           <a
                             href={`/join/${s.session_id}`}
-                            className="inline-flex items-center gap-2 rounded-xl bg-teal-600 px-5 py-2.5 text-sm font-bold text-white hover:bg-teal-700"
+                            className="inline-flex items-center gap-2 rounded-xl bg-secondary px-5 py-2.5 text-sm font-bold text-white hover:bg-teal-700"
                           >
                             <Timer className="h-4 w-4" />
                             Enter Lobby
@@ -4104,8 +4104,8 @@ function ExamsTab() {
     : null;
   const passCount = filtered.filter(e => e.percentage >= 40).length;
 
-  const pctColor = (p: number) => p >= 75 ? 'text-emerald-600' : p >= 50 ? 'text-amber-600' : 'text-red-600';
-  const pctBg = (p: number) => p >= 75 ? 'bg-emerald-500' : p >= 50 ? 'bg-amber-500' : 'bg-red-500';
+  const pctColor = (p: number) => p >= 75 ? 'text-primary' : p >= 50 ? 'text-amber-600' : 'text-red-600';
+  const pctBg = (p: number) => p >= 75 ? 'bg-primary' : p >= 50 ? 'bg-amber-500' : 'bg-red-500';
 
   return (
     <div className="space-y-4 sm:space-y-5">
@@ -4132,7 +4132,7 @@ function ExamsTab() {
                 <button
                   onClick={() => setSelectedSubject('all')}
                   className={`rounded-lg px-2.5 py-1 text-xs font-medium transition ${
-                    selectedSubject === 'all' ? 'bg-emerald-600 text-white shadow-sm' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    selectedSubject === 'all' ? 'bg-primary text-white shadow-sm' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                   }`}
                 >All</button>
                 {subjects.map(s => (
@@ -4140,7 +4140,7 @@ function ExamsTab() {
                     key={s}
                     onClick={() => setSelectedSubject(s)}
                     className={`rounded-lg px-2.5 py-1 text-xs font-medium transition ${
-                      selectedSubject === s ? 'bg-emerald-600 text-white shadow-sm' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      selectedSubject === s ? 'bg-primary text-white shadow-sm' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                     }`}
                   >{s}</button>
                 ))}
@@ -4197,8 +4197,8 @@ function ExamsTab() {
                   onClick={() => setExpandedSessionId(isExpanded ? null : se.id)}
                   className="w-full flex items-center gap-3 sm:gap-4 p-4 sm:p-5 text-left hover:bg-gray-50 transition"
                 >
-                  <div className={`shrink-0 h-12 w-12 rounded-xl flex items-center justify-center ${passed ? 'bg-emerald-100' : 'bg-red-100'}`}>
-                    <span className={`text-lg font-bold ${passed ? 'text-emerald-700' : 'text-red-700'}`}>
+                  <div className={`shrink-0 h-12 w-12 rounded-xl flex items-center justify-center ${passed ? 'bg-primary/10' : 'bg-red-100'}`}>
+                    <span className={`text-lg font-bold ${passed ? 'text-primary' : 'text-red-700'}`}>
                       {se.grade_letter || '—'}
                     </span>
                   </div>
@@ -4294,19 +4294,19 @@ function SessionQuestionCard({ q, index }: { q: SessionExamResult['answers'][0];
 
   return (
     <div className={`rounded-xl border overflow-hidden ${
-      q.is_correct ? 'border-emerald-200 bg-emerald-50/30'
+      q.is_correct ? 'border-primary/20 bg-primary/5/30'
       : q.selected_option == null ? 'border-gray-200 bg-white'
       : 'border-red-200 bg-red-50/30'
     }`}>
       <button onClick={() => setExpanded(!expanded)} className="w-full flex items-center gap-3 px-3.5 py-3 text-left">
         <span className={`shrink-0 h-7 w-7 rounded-lg flex items-center justify-center text-xs font-bold ${
-          q.is_correct ? 'bg-emerald-100 text-emerald-700'
+          q.is_correct ? 'bg-primary/10 text-primary'
           : q.selected_option == null ? 'bg-gray-100 text-gray-500'
           : 'bg-red-100 text-red-700'
         }`}>{index + 1}</span>
         <p className="flex-1 text-xs sm:text-sm text-gray-800 line-clamp-2">{q.question_text}</p>
         <div className="shrink-0 flex items-center gap-2">
-          {q.is_correct && <CheckCircle2 className="h-4 w-4 text-emerald-500" />}
+          {q.is_correct && <CheckCircle2 className="h-4 w-4 text-primary" />}
           {!q.is_correct && q.selected_option != null && <XCircle className="h-4 w-4 text-red-500" />}
           {q.selected_option == null && <span className="text-[10px] text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded">Skipped</span>}
           <ChevronDown className={`h-3.5 w-3.5 text-gray-400 transition-transform ${expanded ? 'rotate-180' : ''}`} />
@@ -4319,20 +4319,20 @@ function SessionQuestionCard({ q, index }: { q: SessionExamResult['answers'][0];
             const isSelected = oi === q.selected_option;
             return (
               <div key={oi} className={`flex items-center gap-2.5 rounded-lg border px-3 py-2 text-xs sm:text-sm ${
-                isCorrect && isSelected ? 'border-emerald-300 bg-emerald-50'
-                : isCorrect ? 'border-emerald-200 bg-emerald-50/50'
+                isCorrect && isSelected ? 'border-emerald-300 bg-primary/5'
+                : isCorrect ? 'border-primary/20 bg-primary/5/50'
                 : isSelected ? 'border-red-300 bg-red-50'
                 : 'border-gray-100 bg-white'
               }`}>
                 <span className={`shrink-0 h-6 w-6 rounded-md flex items-center justify-center text-[10px] font-bold ${
-                  isCorrect ? 'bg-emerald-100 text-emerald-700'
+                  isCorrect ? 'bg-primary/10 text-primary'
                   : isSelected ? 'bg-red-100 text-red-700'
                   : 'bg-gray-100 text-gray-500'
                 }`}>{optionLabels[oi] || oi + 1}</span>
-                <span className={`flex-1 ${isCorrect ? 'text-emerald-800 font-medium' : isSelected ? 'text-red-800' : 'text-gray-700'}`}>
+                <span className={`flex-1 ${isCorrect ? 'text-primary font-medium' : isSelected ? 'text-red-800' : 'text-gray-700'}`}>
                   {opt}
                 </span>
-                {isCorrect && <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />}
+                {isCorrect && <CheckCircle2 className="h-4 w-4 text-primary shrink-0" />}
                 {isSelected && !isCorrect && <XCircle className="h-4 w-4 text-red-500 shrink-0" />}
               </div>
             );
@@ -4618,7 +4618,7 @@ function FeesTab({
   const paidInvoices = invoices.filter(i => i.status === 'paid');
 
   const statusConfig = (status: string) => {
-    if (status === 'paid')      return { bg: 'bg-emerald-50', border: 'border-emerald-200', dot: 'bg-emerald-500', text: 'text-emerald-700', badge: 'bg-emerald-100 text-emerald-700', label: 'Paid' };
+    if (status === 'paid')      return { bg: 'bg-primary/5', border: 'border-primary/20', dot: 'bg-primary', text: 'text-primary', badge: 'bg-primary/10 text-primary', label: 'Paid' };
     if (status === 'overdue')   return { bg: 'bg-red-50', border: 'border-red-200', dot: 'bg-red-500', text: 'text-red-700', badge: 'bg-red-100 text-red-700', label: 'Overdue' };
     if (status === 'scheduled') return { bg: 'bg-indigo-50', border: 'border-indigo-200', dot: 'bg-indigo-400', text: 'text-indigo-600', badge: 'bg-indigo-100 text-indigo-700', label: 'Scheduled' };
     return { bg: 'bg-amber-50', border: 'border-amber-200', dot: 'bg-amber-500', text: 'text-amber-700', badge: 'bg-amber-100 text-amber-700', label: 'Pending' };
@@ -4645,9 +4645,9 @@ function FeesTab({
           {/* Paid */}
           <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-500 to-green-600 p-4 text-white shadow-md shadow-emerald-500/20">
             <div className="absolute -right-4 -top-4 h-16 w-16 rounded-full bg-white/10" />
-            <p className="text-[11px] font-semibold uppercase tracking-wider text-emerald-100">Paid</p>
+            <p className="text-[11px] font-semibold uppercase tracking-wider text-primary/40">Paid</p>
             <p className="mt-1.5 text-xl font-black tracking-tight">{money(summary.total_paid_paise)}</p>
-            <p className="mt-0.5 text-[11px] text-emerald-200">{summary.paid_count} settled</p>
+            <p className="mt-0.5 text-[11px] text-primary/60">{summary.paid_count} settled</p>
           </div>
           {/* Pending */}
           <div className={`relative overflow-hidden rounded-2xl p-4 text-white shadow-md ${
@@ -4765,7 +4765,7 @@ function FeesTab({
                         <button
                           onClick={() => onPay(inv.id)}
                           disabled={payingId === inv.id}
-                          className="flex items-center gap-1.5 rounded-xl bg-teal-600 px-4 py-2 text-xs font-bold text-white hover:bg-teal-700 disabled:opacity-50 transition shadow-sm shadow-teal-500/30"
+                          className="flex items-center gap-1.5 rounded-xl bg-secondary px-4 py-2 text-xs font-bold text-white hover:bg-teal-700 disabled:opacity-50 transition shadow-sm shadow-teal-500/30"
                         >
                           {payingId === inv.id ? (
                             <><Loader2 className="h-3 w-3 animate-spin" />Processing…</>
@@ -4806,8 +4806,8 @@ function FeesTab({
                     <div key={inv.id} className="rounded-2xl border border-gray-100 bg-white p-4 shadow-sm">
                       <div className="flex items-center justify-between gap-3">
                         <div className="flex items-center gap-3 min-w-0">
-                          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-50">
-                            <CheckCircle2 className="h-5 w-5 text-emerald-500" />
+                          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/5">
+                            <CheckCircle2 className="h-5 w-5 text-primary" />
                           </div>
                           <div className="min-w-0">
                             <div className="flex flex-wrap items-center gap-2">
@@ -4818,7 +4818,7 @@ function FeesTab({
                             <div className="flex flex-wrap gap-x-3 gap-y-0.5 mt-0.5">
                               {inv.billing_period && <p className="text-xs text-gray-400">{inv.billing_period}</p>}
                               {inv.paid_at && (
-                                <p className="text-xs text-emerald-600 font-medium">
+                                <p className="text-xs text-primary font-medium">
                                   Paid {new Date(inv.paid_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
                                 </p>
                               )}
@@ -4826,7 +4826,7 @@ function FeesTab({
                           </div>
                         </div>
                         <div className="text-right shrink-0">
-                          <p className="text-base font-black text-emerald-700">{money(inv.amount_paise)}</p>
+                          <p className="text-base font-black text-primary">{money(inv.amount_paise)}</p>
                           <div className="mt-1.5 flex items-center justify-end gap-1.5">
                             <a
                               href={inv.pay_token ? `/pay/${inv.id}?t=${inv.pay_token}` : `/api/v1/payment/invoice-pdf/${inv.id}`}
@@ -4884,8 +4884,8 @@ function FeesTab({
                         {r.billing_period && <p className="text-xs text-gray-400 mt-0.5">{r.billing_period}</p>}
                       </div>
                       <div className="shrink-0 text-right">
-                        <p className="text-xl font-black text-emerald-700 leading-none">{money(r.amount_paise)}</p>
-                        <span className="mt-1 inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-600">
+                        <p className="text-xl font-black text-primary leading-none">{money(r.amount_paise)}</p>
+                        <span className="mt-1 inline-flex items-center gap-1 rounded-full bg-primary/5 px-2 py-0.5 text-[10px] font-bold text-primary">
                           <CheckCircle2 className="h-2.5 w-2.5" />Paid
                         </span>
                       </div>
@@ -4910,7 +4910,7 @@ function FeesTab({
                       </div>
                       <button
                         onClick={() => printReceiptWindow(r, studentName, platformName)}
-                        className="flex items-center gap-1.5 rounded-lg border border-gray-200 bg-gray-50 px-2.5 py-1.5 text-[11px] font-semibold text-gray-600 hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-700 transition-colors"
+                        className="flex items-center gap-1.5 rounded-lg border border-gray-200 bg-gray-50 px-2.5 py-1.5 text-[11px] font-semibold text-gray-600 hover:border-primary/20 hover:bg-primary/5 hover:text-primary transition-colors"
                       >
                         <Download className="h-3 w-3" />Print
                       </button>
@@ -5008,10 +5008,10 @@ function RequestsTab({ requests, availability, sessions, batches, loading, loadi
       {/* Toggle bar */}
       <div className="flex items-center justify-between">
         <div className="flex gap-2">
-          <button onClick={() => setView('requests')} className={`px-4 py-2 rounded-lg text-sm font-medium transition ${view === 'requests' ? 'bg-emerald-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>
+          <button onClick={() => setView('requests')} className={`px-4 py-2 rounded-lg text-sm font-medium transition ${view === 'requests' ? 'bg-primary text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>
             <ClipboardList className="inline h-4 w-4 mr-1.5" />Session Requests
           </button>
-          <button onClick={() => setView('availability')} className={`px-4 py-2 rounded-lg text-sm font-medium transition ${view === 'availability' ? 'bg-emerald-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>
+          <button onClick={() => setView('availability')} className={`px-4 py-2 rounded-lg text-sm font-medium transition ${view === 'availability' ? 'bg-primary text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>
             <CalendarClock className="inline h-4 w-4 mr-1.5" />My Availability
           </button>
         </div>
@@ -5022,14 +5022,14 @@ function RequestsTab({ requests, availability, sessions, batches, loading, loadi
         <div className="space-y-4">
           {/* New request button */}
           {upcomingSessions.length > 0 && (
-            <button onClick={() => setShowForm(!showForm)} className="flex items-center gap-2 px-4 py-2.5 bg-emerald-50 border border-emerald-200 rounded-lg text-emerald-700 hover:bg-emerald-100 transition text-sm font-medium">
+            <button onClick={() => setShowForm(!showForm)} className="flex items-center gap-2 px-4 py-2.5 bg-primary/5 border border-primary/20 rounded-lg text-primary hover:bg-primary/10 transition text-sm font-medium">
               <Send className="h-4 w-4" />{showForm ? 'Cancel' : 'New Request'}
             </button>
           )}
 
           {/* Request form */}
           {showForm && (
-            <Card className="p-5 space-y-4 border-emerald-200">
+            <Card className="p-5 space-y-4 border-primary/20">
               <h3 className="text-sm font-semibold text-gray-900">Submit Session Request</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
@@ -5073,7 +5073,7 @@ function RequestsTab({ requests, availability, sessions, batches, loading, loadi
                 </div>
               </div>
               <button disabled={submitting || !form.sessionId || !form.reason} onClick={submitRequest}
-                className="px-4 py-2 rounded-lg bg-emerald-600 text-white text-sm font-medium hover:bg-emerald-700 disabled:opacity-50 transition">
+                className="px-4 py-2 rounded-lg bg-primary text-white text-sm font-medium hover:bg-primary/90 disabled:opacity-50 transition">
                 {submitting ? 'Submitting…' : 'Submit Request'}
               </button>
             </Card>
@@ -5153,7 +5153,7 @@ function RequestsTab({ requests, availability, sessions, batches, loading, loadi
               </div>
             </div>
             <button disabled={submitting || !availForm.batchId} onClick={submitAvailability}
-              className="px-4 py-2 rounded-lg bg-emerald-600 text-white text-sm font-medium hover:bg-emerald-700 disabled:opacity-50 transition">
+              className="px-4 py-2 rounded-lg bg-primary text-white text-sm font-medium hover:bg-primary/90 disabled:opacity-50 transition">
               {submitting ? 'Saving…' : 'Add Slot'}
             </button>
           </Card>
@@ -5173,7 +5173,7 @@ function RequestsTab({ requests, availability, sessions, batches, loading, loadi
                       {daySlots.map(slot => (
                         <div key={slot.id} className="flex items-center justify-between text-sm">
                           <div className="flex items-center gap-2">
-                            <span className={`inline-block w-2 h-2 rounded-full ${slot.preference === 'preferred' ? 'bg-emerald-500' : slot.preference === 'unavailable' ? 'bg-red-500' : 'bg-blue-500'}`} />
+                            <span className={`inline-block w-2 h-2 rounded-full ${slot.preference === 'preferred' ? 'bg-primary' : slot.preference === 'unavailable' ? 'bg-red-500' : 'bg-blue-500'}`} />
                             <span className="text-gray-700">{slot.start_time?.slice(0, 5)} – {slot.end_time?.slice(0, 5)}</span>
                             <Badge label={slot.preference} variant={slot.preference === 'preferred' ? 'success' : slot.preference === 'unavailable' ? 'danger' : 'info'} />
                             {slot.notes && <span className="text-xs text-gray-400">({slot.notes})</span>}

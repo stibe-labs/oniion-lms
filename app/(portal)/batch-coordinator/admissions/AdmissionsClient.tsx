@@ -43,7 +43,7 @@ const STATUS_COLORS: Record<string, string> = {
   registered: 'bg-blue-500/20 text-blue-400',
   fee_confirmed: 'bg-cyan-500/20 text-cyan-400',
   allocated: 'bg-purple-500/20 text-purple-400',
-  active: 'bg-green-500/20 text-green-400',
+  active: 'bg-primary/20 text-primary',
   rejected: 'bg-red-500/20 text-red-400',
 };
 
@@ -219,7 +219,7 @@ export default function AdmissionsClient({ userName, userEmail, userRole }: Prop
                       </button>
                     )}
                     {a.status === 'active' && (
-                      <span className="flex items-center gap-1 text-xs text-green-400">
+                      <span className="flex items-center gap-1 text-xs text-primary">
                         <CheckCircle2 className="h-3.5 w-3.5" /> Enrolled
                       </span>
                     )}

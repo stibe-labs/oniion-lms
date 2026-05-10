@@ -497,13 +497,13 @@ export default function SplashConfigSection({ initial, logoFullUrl, characterUrl
                   className="flex-1 text-xs"
                   maxLength={200}
                 />
-                <button type="button" onClick={() => addQuote(newQuote)} disabled={!newQuote.trim()} className="inline-flex items-center gap-1 rounded-md bg-emerald-500 px-3 py-1.5 text-xs font-medium text-white hover:bg-emerald-600 disabled:opacity-40 transition-colors">
+                <button type="button" onClick={() => addQuote(newQuote)} disabled={!newQuote.trim()} className="inline-flex items-center gap-1 rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-white hover:bg-primary disabled:opacity-40 transition-colors">
                   <Plus className="h-3.5 w-3.5" />
                 </button>
               </div>
 
               <details className="group">
-                <summary className="text-[11px] text-emerald-600 cursor-pointer hover:text-emerald-700 select-none font-medium list-none flex items-center gap-1">
+                <summary className="text-[11px] text-primary cursor-pointer hover:text-primary select-none font-medium list-none flex items-center gap-1">
                   <span className="group-open:hidden">+ Add from presets</span>
                   <span className="hidden group-open:inline">− Hide presets</span>
                 </summary>

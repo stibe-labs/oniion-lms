@@ -103,7 +103,7 @@ const TEMPLATES: Template[] = [
     id: 'student', label: 'Student Meeting', icon: GraduationCap, audience: 'students',
     defaultSubject: 'Student Assembly', defaultDuration: 45, defaultMaxParticipants: 300,
     desc: 'All-students assembly or motivational session',
-    accent: { bar: 'bg-emerald-500', barBefore: 'before:bg-emerald-500', bg: 'bg-emerald-50', text: 'text-emerald-700', ring: 'ring-emerald-200' },
+    accent: { bar: 'bg-primary', barBefore: 'before:bg-primary', bg: 'bg-primary/5', text: 'text-primary', ring: 'ring-primary/20' },
   },
   {
     id: 'custom', label: 'Custom Meeting', icon: Pencil, audience: 'staff',
@@ -124,19 +124,19 @@ function fmt(ts: string | null) {
 }
 
 const STATUS_STYLE: Record<string, { bar: string; badge: string; label: string }> = {
-  live:      { bar: 'bg-emerald-500', badge: 'bg-emerald-50 text-emerald-700 ring-emerald-200', label: 'LIVE' },
+  live:      { bar: 'bg-primary', badge: 'bg-primary/5 text-primary ring-primary/20', label: 'LIVE' },
   created:   { bar: 'bg-blue-400',    badge: 'bg-blue-50 text-blue-700 ring-blue-200',          label: 'READY' },
   ended:     { bar: 'bg-gray-300',    badge: 'bg-gray-100 text-gray-600 ring-gray-200',         label: 'ENDED' },
   cancelled: { bar: 'bg-rose-500',    badge: 'bg-rose-50 text-rose-700 ring-rose-200',          label: 'CANCELLED' },
 };
 
 const ROLE_BADGE: Record<string, string> = {
-  owner: 'bg-emerald-50 text-emerald-700 ring-emerald-200',
+  owner: 'bg-primary/5 text-primary ring-primary/20',
   academic_operator: 'bg-blue-50 text-blue-700 ring-blue-200',
   academic: 'bg-blue-50 text-blue-700 ring-blue-200',
   batch_coordinator: 'bg-cyan-50 text-cyan-700 ring-cyan-200',
   hr: 'bg-amber-50 text-amber-700 ring-amber-200',
-  teacher: 'bg-emerald-50 text-emerald-700 ring-emerald-200',
+  teacher: 'bg-primary/5 text-primary ring-primary/20',
   student: 'bg-indigo-50 text-indigo-700 ring-indigo-200',
   parent: 'bg-rose-50 text-rose-700 ring-rose-200',
 };
@@ -318,7 +318,7 @@ export default function OwnerMeetingsTab({
       <div className="space-y-4 max-w-6xl mx-auto">
         <button
           onClick={() => setDetail(null)}
-          className="inline-flex items-center gap-1.5 text-sm font-semibold text-emerald-700 hover:text-emerald-900 transition">
+          className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:text-emerald-900 transition">
           <ChevronLeft className="w-4 h-4" /> Back to Meetings
         </button>
         <OpenClassroomDetail
@@ -333,7 +333,7 @@ export default function OwnerMeetingsTab({
   return (
     <div className="space-y-6 max-w-6xl mx-auto">
       {/* ── Hero Header ── */}
-      <div className="relative overflow-hidden rounded-2xl border border-emerald-200 bg-gradient-to-br from-emerald-600 via-emerald-700 to-teal-700 p-6 shadow-lg">
+      <div className="relative overflow-hidden rounded-2xl border border-primary/20 bg-gradient-to-br from-primary via-primary/90 to-secondary p-6 shadow-lg">
         <div className="absolute -right-16 -top-16 h-56 w-56 rounded-full bg-white/10 blur-3xl" />
         <div className="absolute -left-10 -bottom-10 h-48 w-48 rounded-full bg-teal-400/20 blur-3xl" />
         <div className="relative flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -342,7 +342,7 @@ export default function OwnerMeetingsTab({
               <MessageSquare className="h-6 w-6 text-white" />
             </div>
             <div>
-              <div className="text-[10px] font-bold uppercase tracking-[0.12em] text-emerald-100">Owner Console</div>
+              <div className="text-[10px] font-bold uppercase tracking-[0.12em] text-primary/40">Owner Console</div>
               <h2 className="text-2xl font-bold tracking-tight text-white">Meetings &amp; Sessions</h2>
               <p className="text-xs text-white/70 mt-0.5">Host staff, parents, batch &amp; student meetings — you&apos;re always the host</p>
             </div>
@@ -423,14 +423,14 @@ export default function OwnerMeetingsTab({
             <div>
               <label className="block text-xs font-semibold text-gray-600 mb-1.5">Host (you)</label>
               <div className="flex items-center gap-2 rounded-lg bg-gray-50 ring-1 ring-inset ring-gray-200 px-3 py-2">
-                <div className="flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 text-white text-xs font-bold">
+                <div className="flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-primary to-secondary text-white text-xs font-bold">
                   {(ownerName || 'O').slice(0, 1).toUpperCase()}
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-gray-800 truncate">{ownerName || 'Owner'}</p>
                   <p className="text-[10px] text-gray-400 truncate">{ownerEmail}</p>
                 </div>
-                <span className="text-[10px] font-bold uppercase tracking-wide text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">Host</span>
+                <span className="text-[10px] font-bold uppercase tracking-wide text-primary bg-primary/5 px-2 py-0.5 rounded-full">Host</span>
               </div>
             </div>
 
@@ -439,7 +439,7 @@ export default function OwnerMeetingsTab({
               <label className="block text-xs font-semibold text-gray-600 mb-1.5">Subject / Title *</label>
               <input value={subject} onChange={e => setSubject(e.target.value)}
                 placeholder={activeTemplate.id === 'custom' ? 'e.g. Quarterly Review' : activeTemplate.defaultSubject}
-                className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-800 outline-none focus:ring-2 focus:ring-emerald-200 focus:border-emerald-400" />
+                className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-800 outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" />
             </div>
 
             {/* Batch picker (only for batch template) */}
@@ -447,7 +447,7 @@ export default function OwnerMeetingsTab({
               <div>
                 <label className="block text-xs font-semibold text-gray-600 mb-1.5">Batch *</label>
                 <select value={batchId} onChange={e => setBatchId(e.target.value)}
-                  className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-800 outline-none focus:ring-2 focus:ring-emerald-200 bg-white">
+                  className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-800 outline-none focus:ring-2 focus:ring-primary/20 bg-white">
                   <option value="">Select batch…</option>
                   {batches.map(b => (
                     <option key={b.batch_id} value={b.batch_id}>
@@ -463,7 +463,7 @@ export default function OwnerMeetingsTab({
               <label className="block text-xs font-medium text-gray-500 mb-1">Agenda / Description (optional)</label>
               <textarea value={description} onChange={e => setDescription(e.target.value)}
                 placeholder="Brief agenda for the meeting…" rows={2}
-                className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-800 outline-none focus:ring-2 focus:ring-emerald-200 focus:border-emerald-400 resize-none" />
+                className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-800 outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary resize-none" />
             </div>
 
             {/* Mode toggle */}
@@ -471,11 +471,11 @@ export default function OwnerMeetingsTab({
               <span className="text-xs font-semibold text-gray-600">When:</span>
               <div className="inline-flex rounded-lg ring-1 ring-inset ring-gray-200 overflow-hidden text-xs bg-gray-50 p-0.5">
                 <button onClick={() => setMode('instant')}
-                  className={`px-3.5 py-1 rounded-md font-semibold transition ${mode === 'instant' ? 'bg-emerald-600 text-white shadow-sm' : 'text-gray-600 hover:text-gray-900'}`}>
+                  className={`px-3.5 py-1 rounded-md font-semibold transition ${mode === 'instant' ? 'bg-primary text-white shadow-sm' : 'text-gray-600 hover:text-gray-900'}`}>
                   Start Now
                 </button>
                 <button onClick={() => setMode('scheduled')}
-                  className={`px-3.5 py-1 rounded-md font-semibold transition ${mode === 'scheduled' ? 'bg-emerald-600 text-white shadow-sm' : 'text-gray-600 hover:text-gray-900'}`}>
+                  className={`px-3.5 py-1 rounded-md font-semibold transition ${mode === 'scheduled' ? 'bg-primary text-white shadow-sm' : 'text-gray-600 hover:text-gray-900'}`}>
                   Schedule
                 </button>
               </div>
@@ -486,17 +486,17 @@ export default function OwnerMeetingsTab({
                 <div>
                   <label className="block text-xs font-medium text-gray-500 mb-1">Date</label>
                   <input type="date" value={scheduledDate} onChange={e => setScheduledDate(e.target.value)}
-                    className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-800 outline-none focus:ring-2 focus:ring-emerald-200" />
+                    className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-800 outline-none focus:ring-2 focus:ring-primary/20" />
                 </div>
                 <div>
                   <label className="block text-xs font-medium text-gray-500 mb-1">Time</label>
                   <input type="time" value={scheduledTime} onChange={e => setScheduledTime(e.target.value)}
-                    className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-800 outline-none focus:ring-2 focus:ring-emerald-200" />
+                    className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-800 outline-none focus:ring-2 focus:ring-primary/20" />
                 </div>
                 <div>
                   <label className="block text-xs font-medium text-gray-500 mb-1">Duration (min)</label>
                   <input type="number" value={duration} onChange={e => setDuration(Number(e.target.value))} min={15} max={480}
-                    className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-800 outline-none focus:ring-2 focus:ring-emerald-200" />
+                    className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-800 outline-none focus:ring-2 focus:ring-primary/20" />
                 </div>
               </div>
             )}
@@ -505,25 +505,25 @@ export default function OwnerMeetingsTab({
               <div className="w-40">
                 <label className="block text-xs font-medium text-gray-500 mb-1">Duration (min)</label>
                 <input type="number" value={duration} onChange={e => setDuration(Number(e.target.value))} min={15} max={480}
-                  className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-800 outline-none focus:ring-2 focus:ring-emerald-200" />
+                  className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-800 outline-none focus:ring-2 focus:ring-primary/20" />
               </div>
             )}
 
             <div className="w-48">
               <label className="block text-xs font-medium text-gray-500 mb-1">Max Participants</label>
               <input type="number" value={maxParticipants} onChange={e => setMaxParticipants(Number(e.target.value))} min={1} max={500}
-                className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-800 outline-none focus:ring-2 focus:ring-emerald-200" />
+                className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-800 outline-none focus:ring-2 focus:ring-primary/20" />
             </div>
 
             <div className="flex items-center gap-3">
               <button onClick={handleCreate} disabled={creating}
-                className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-br from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 disabled:from-gray-300 disabled:to-gray-400 disabled:cursor-not-allowed text-white px-5 py-2.5 text-sm font-semibold transition shadow-md hover:shadow-lg">
+                className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-br from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 disabled:from-gray-300 disabled:to-gray-400 disabled:cursor-not-allowed text-white px-5 py-2.5 text-sm font-semibold transition shadow-md hover:shadow-lg">
                 {creating ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
                 Create &amp; Open Share Panel
               </button>
               {createMsg && (
                 <div className={`flex items-center gap-2 rounded-lg px-3 py-2 ring-1 ring-inset ${
-                  createMsg.ok ? 'bg-emerald-50 text-emerald-700 ring-emerald-200' : 'bg-rose-50 text-rose-700 ring-rose-200'
+                  createMsg.ok ? 'bg-primary/5 text-primary ring-primary/20' : 'bg-rose-50 text-rose-700 ring-rose-200'
                 }`}>
                   {createMsg.ok ? <CheckCircle2 className="h-3.5 w-3.5" /> : <AlertCircle className="h-3.5 w-3.5" />}
                   <p className="text-xs font-medium">{createMsg.text}</p>
@@ -540,12 +540,12 @@ export default function OwnerMeetingsTab({
           <h3 className="text-sm font-bold text-gray-800">All Meetings ({filtered.length})</h3>
           <div className="flex flex-wrap items-center gap-2">
             <select value={filterTemplate} onChange={e => setFilterTemplate(e.target.value)}
-              className="text-xs rounded-lg border border-gray-200 px-2.5 py-1.5 bg-white text-gray-700 outline-none focus:ring-2 focus:ring-emerald-200">
+              className="text-xs rounded-lg border border-gray-200 px-2.5 py-1.5 bg-white text-gray-700 outline-none focus:ring-2 focus:ring-primary/20">
               <option value="all">All types</option>
               {TEMPLATES.map(t => <option key={t.id} value={t.id}>{t.label}</option>)}
             </select>
             <select value={filterStatus} onChange={e => setFilterStatus(e.target.value)}
-              className="text-xs rounded-lg border border-gray-200 px-2.5 py-1.5 bg-white text-gray-700 outline-none focus:ring-2 focus:ring-emerald-200">
+              className="text-xs rounded-lg border border-gray-200 px-2.5 py-1.5 bg-white text-gray-700 outline-none focus:ring-2 focus:ring-primary/20">
               <option value="all">All statuses</option>
               <option value="created">Ready</option>
               <option value="live">Live</option>
@@ -557,7 +557,7 @@ export default function OwnerMeetingsTab({
 
         {loading ? (
           <div className="px-5 py-12 text-center">
-            <Loader2 className="w-6 h-6 text-emerald-500 animate-spin mx-auto" />
+            <Loader2 className="w-6 h-6 text-primary animate-spin mx-auto" />
           </div>
         ) : filtered.length === 0 ? (
           <div className="px-5 py-16 text-center">
@@ -599,13 +599,13 @@ export default function OwnerMeetingsTab({
                             : 'staff';
                           setShareTarget({ meeting: m, audience });
                         }}
-                          className="inline-flex items-center gap-1 rounded-lg bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-200 px-2.5 py-1 text-[11px] font-semibold hover:bg-emerald-100 transition">
+                          className="inline-flex items-center gap-1 rounded-lg bg-primary/5 text-primary ring-1 ring-inset ring-primary/20 px-2.5 py-1 text-[11px] font-semibold hover:bg-primary/10 transition">
                           <Send className="w-3 h-3" /> Share
                         </button>
                       )}
                       {(m.status === 'created' || m.status === 'live') && (
                         <a href={m.host_link || `${baseUrl}/open-classroom/${m.host_token}`} target="_blank" rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 rounded-lg bg-emerald-600 text-white px-2.5 py-1 text-[11px] font-semibold hover:bg-emerald-700 transition">
+                          className="inline-flex items-center gap-1 rounded-lg bg-primary text-white px-2.5 py-1 text-[11px] font-semibold hover:bg-primary/90 transition">
                           <ExternalLink className="w-3 h-3" /> {m.status === 'live' ? 'Join' : 'Start'}
                         </a>
                       )}
@@ -763,11 +763,11 @@ function MeetingSharePanel({
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/40 backdrop-blur-sm p-4 pt-16"
       onClick={e => { if (e.target === e.currentTarget) onClose(); }}>
-      <div className="relative w-full max-w-2xl overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-xl before:absolute before:left-0 before:top-0 before:h-full before:w-1 before:bg-emerald-500">
+      <div className="relative w-full max-w-2xl overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-xl before:absolute before:left-0 before:top-0 before:h-full before:w-1 before:bg-primary">
         <div className="flex items-center justify-between border-b border-gray-100 px-5 py-4">
           <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-50">
-              <Send className="h-4 w-4 text-emerald-600" />
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/5">
+              <Send className="h-4 w-4 text-primary" />
             </div>
             <div>
               <h3 className="text-sm font-bold text-gray-800">Share Meeting</h3>
@@ -784,7 +784,7 @@ function MeetingSharePanel({
           <div className="flex items-center gap-2">
             <input readOnly value={joinLink} className="flex-1 min-w-0 text-xs text-gray-600 bg-gray-50 ring-1 ring-inset ring-gray-200 rounded-lg px-3 py-2 outline-none" />
             <button onClick={copyLink}
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700 bg-emerald-50 ring-1 ring-inset ring-emerald-200 rounded-lg px-3 py-2 hover:bg-emerald-100 transition">
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary bg-primary/5 ring-1 ring-inset ring-primary/20 rounded-lg px-3 py-2 hover:bg-primary/10 transition">
               {linkCopied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
               {linkCopied ? 'Copied' : 'Copy'}
             </button>
@@ -798,7 +798,7 @@ function MeetingSharePanel({
           <div className="flex gap-1 text-xs flex-wrap">
             {(['staff', 'parents', 'students', 'batch'] as Audience[]).map(t => (
               <button key={t} onClick={() => setAudience(t)}
-                className={`px-3 py-1.5 rounded-lg font-semibold transition capitalize ${audience === t ? 'bg-emerald-600 text-white shadow-sm' : 'bg-gray-50 text-gray-600 hover:bg-gray-100 ring-1 ring-inset ring-gray-200'}`}>
+                className={`px-3 py-1.5 rounded-lg font-semibold transition capitalize ${audience === t ? 'bg-primary text-white shadow-sm' : 'bg-gray-50 text-gray-600 hover:bg-gray-100 ring-1 ring-inset ring-gray-200'}`}>
                 {t}
               </button>
             ))}
@@ -806,7 +806,7 @@ function MeetingSharePanel({
 
           {audience === 'batch' && (
             <select value={batchId} onChange={e => setBatchId(e.target.value)}
-              className="w-full text-xs border border-gray-200 rounded-lg px-3 py-2 bg-white text-gray-700 outline-none focus:ring-2 focus:ring-emerald-200">
+              className="w-full text-xs border border-gray-200 rounded-lg px-3 py-2 bg-white text-gray-700 outline-none focus:ring-2 focus:ring-primary/20">
               <option value="">Select batch…</option>
               {batches.map(b => <option key={b.batch_id} value={b.batch_id}>{b.batch_name} ({b.student_count})</option>)}
             </select>
@@ -816,20 +816,20 @@ function MeetingSharePanel({
           <div className="relative">
             <Search className="absolute left-3 top-2.5 w-3.5 h-3.5 text-gray-400" />
             <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search by name or email…"
-              className="w-full pl-8 pr-3 py-2 text-xs border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-emerald-200" />
+              className="w-full pl-8 pr-3 py-2 text-xs border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-primary/20" />
           </div>
 
           {/* User list */}
           <div className="max-h-56 overflow-y-auto border border-gray-100 rounded-lg divide-y divide-gray-50">
             {filtered.length > 0 && (
-              <button onClick={selectAll} className="w-full text-left px-3 py-2 text-xs text-emerald-600 font-semibold hover:bg-emerald-50 sticky top-0 bg-white border-b border-gray-100">
+              <button onClick={selectAll} className="w-full text-left px-3 py-2 text-xs text-primary font-semibold hover:bg-primary/5 sticky top-0 bg-white border-b border-gray-100">
                 {filtered.every(u => selected.has(u.email)) ? 'Deselect All' : `Select All (${filtered.length})`}
               </button>
             )}
             {filtered.map(u => (
               <label key={u.email} className="flex items-center gap-3 px-3 py-2 hover:bg-gray-50 cursor-pointer">
                 <input type="checkbox" checked={selected.has(u.email)} onChange={() => toggleSelect(u.email)}
-                  className="rounded border-gray-300 text-emerald-600 focus:ring-emerald-400" />
+                  className="rounded border-gray-300 text-primary focus:ring-emerald-400" />
                 <div className="flex-1 min-w-0">
                   <p className="text-xs font-medium text-gray-700 truncate">{u.name}</p>
                   <p className="text-[10px] text-gray-400 truncate">{u.email}</p>
@@ -852,10 +852,10 @@ function MeetingSharePanel({
             <p className="text-xs font-semibold text-gray-600 mb-1.5">Add external recipients:</p>
             <div className="flex gap-2">
               <input value={manualName} onChange={e => setManualName(e.target.value)} placeholder="Name"
-                className="flex-1 text-xs border border-gray-200 rounded-lg px-3 py-1.5 outline-none focus:ring-2 focus:ring-emerald-200" />
+                className="flex-1 text-xs border border-gray-200 rounded-lg px-3 py-1.5 outline-none focus:ring-2 focus:ring-primary/20" />
               <input value={manualPhone} onChange={e => setManualPhone(e.target.value)} placeholder="+91…"
-                className="flex-1 text-xs border border-gray-200 rounded-lg px-3 py-1.5 outline-none focus:ring-2 focus:ring-emerald-200" />
-              <button onClick={addManual} className="inline-flex items-center gap-1 text-xs text-emerald-600 font-semibold bg-emerald-50 ring-1 ring-inset ring-emerald-200 rounded-lg px-3 py-1.5 hover:bg-emerald-100 transition">
+                className="flex-1 text-xs border border-gray-200 rounded-lg px-3 py-1.5 outline-none focus:ring-2 focus:ring-primary/20" />
+              <button onClick={addManual} className="inline-flex items-center gap-1 text-xs text-primary font-semibold bg-primary/5 ring-1 ring-inset ring-primary/20 rounded-lg px-3 py-1.5 hover:bg-primary/10 transition">
                 <UserPlus className="w-3.5 h-3.5" />
               </button>
             </div>
@@ -879,7 +879,7 @@ function MeetingSharePanel({
               <strong className="text-gray-800">{recipientCount}</strong> recipient{recipientCount !== 1 ? 's' : ''} selected
             </span>
             <button onClick={handleSend} disabled={sending || recipientCount === 0}
-              className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-br from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white px-4 py-2 text-xs font-semibold disabled:from-gray-300 disabled:to-gray-400 disabled:cursor-not-allowed transition shadow-sm hover:shadow-md">
+              className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-br from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white px-4 py-2 text-xs font-semibold disabled:from-gray-300 disabled:to-gray-400 disabled:cursor-not-allowed transition shadow-sm hover:shadow-md">
               {sending ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Send className="w-3.5 h-3.5" />}
               Send via WhatsApp
             </button>
@@ -887,7 +887,7 @@ function MeetingSharePanel({
 
           {results && (
             <div className={`flex items-center gap-2 text-xs rounded-lg px-3 py-2 ring-1 ring-inset ${
-              results.failed === 0 ? 'bg-emerald-50 text-emerald-700 ring-emerald-200' : 'bg-amber-50 text-amber-700 ring-amber-200'
+              results.failed === 0 ? 'bg-primary/5 text-primary ring-primary/20' : 'bg-amber-50 text-amber-700 ring-amber-200'
             }`}>
               <CheckCircle2 className="w-3.5 h-3.5" />
               <span><strong>{results.sent}</strong> sent · <strong>{results.failed}</strong> failed</span>

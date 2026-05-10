@@ -45,7 +45,7 @@ export function examGradeToCategory(grade: string): StudentCategory {
 }
 
 export const CATEGORY_STYLES: Record<string, { bg: string; text: string; border: string; label: string }> = {
-  A: { bg: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-200', label: 'Category A' },
+  A: { bg: 'bg-primary/5', text: 'text-primary', border: 'border-primary/20', label: 'Category A' },
   B: { bg: 'bg-blue-50',    text: 'text-blue-700',    border: 'border-blue-200',    label: 'Category B' },
   C: { bg: 'bg-amber-50',   text: 'text-amber-700',   border: 'border-amber-200',   label: 'Category C' },
 };
@@ -168,7 +168,7 @@ export function SubjectSelector({ selected, onChange }: { selected: string[]; on
             <label key={s}
               className="flex items-center gap-2.5 px-3 py-2 cursor-pointer hover:bg-gray-50 transition-colors">
               <input type="checkbox" checked={selected.includes(s)} onChange={() => toggle(s)}
-                className="h-4 w-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500" />
+                className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary" />
               <span className="text-sm text-gray-700">{s}</span>
             </label>
           ))}
@@ -177,7 +177,7 @@ export function SubjectSelector({ selected, onChange }: { selected: string[]; on
       {selected.length > 0 && (
         <div className="flex flex-wrap gap-1 mt-1.5">
           {selected.map((s) => (
-            <span key={s} className="inline-flex items-center gap-1 rounded-md bg-emerald-50 text-emerald-700 px-2 py-0.5 text-xs font-medium">
+            <span key={s} className="inline-flex items-center gap-1 rounded-md bg-primary/5 text-primary px-2 py-0.5 text-xs font-medium">
               {s}
               <button type="button" onClick={() => toggle(s)} className="hover:text-emerald-900">
                 <X className="h-3 w-3" />
@@ -263,7 +263,7 @@ export function CredentialsPanel({
         <div className="px-4 py-3 flex items-center justify-between gap-3">
           <div className="min-w-0">
             <p className="text-[10px] uppercase tracking-wide text-gray-400">Login Email</p>
-            <p className="mt-0.5 font-mono text-sm text-emerald-700 truncate">{email}</p>
+            <p className="mt-0.5 font-mono text-sm text-primary truncate">{email}</p>
           </div>
           <Button variant={copiedEmail ? 'success' : 'secondary'} size="xs" onClick={() => copy(email, 'email')}>
             {copiedEmail ? 'Copied!' : 'Copy'}
@@ -617,7 +617,7 @@ export function CreateUserModal({
           <div className="relative h-20 w-20 shrink-0">
             {avatarPreview ? (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={avatarPreview} alt="Preview" className="h-20 w-20 rounded-full object-cover ring-2 ring-emerald-200" />
+              <img src={avatarPreview} alt="Preview" className="h-20 w-20 rounded-full object-cover ring-2 ring-primary/20" />
             ) : (
               <div className="h-20 w-20 rounded-full bg-red-50 flex items-center justify-center ring-2 ring-red-200">
                 <Camera className="h-8 w-8 text-red-300" />
@@ -626,7 +626,7 @@ export function CreateUserModal({
             <button
               type="button"
               onClick={() => avatarInputRef.current?.click()}
-              className="absolute bottom-0 right-0 h-7 w-7 rounded-full bg-emerald-600 text-white flex items-center justify-center shadow hover:bg-emerald-700 transition"
+              className="absolute bottom-0 right-0 h-7 w-7 rounded-full bg-primary text-white flex items-center justify-center shadow hover:bg-primary/90 transition"
               title="Upload photo"
             >
               <Camera className="h-3.5 w-3.5" />
@@ -684,14 +684,14 @@ export function CreateUserModal({
           hint={emailStatus === 'checking' ? 'Checking...' : emailStatus === 'taken' ? 'Email already exists' : emailStatus === 'available' ? 'Available' : undefined}>
           <div className="relative">
             <Input type="email" required value={form.email} onChange={(e) => f('email', e.target.value)} placeholder="e.g. priya@gmail.com"
-              className={emailStatus === 'taken' ? 'border-red-400 focus:border-red-500 focus:ring-red-200' : emailStatus === 'available' ? 'border-emerald-400 focus:border-emerald-500 focus:ring-emerald-200' : ''} />
+              className={emailStatus === 'taken' ? 'border-red-400 focus:border-red-500 focus:ring-red-200' : emailStatus === 'available' ? 'border-primary focus:border-primary focus:ring-primary/20' : ''} />
             {emailStatus === 'checking' && (
               <div className="absolute right-3 top-1/2 -translate-y-1/2">
                 <div className="h-4 w-4 border-2 border-gray-300 border-t-emerald-500 rounded-full animate-spin" />
               </div>
             )}
             {emailStatus === 'taken' && <AlertCircle className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-red-500" />}
-            {emailStatus === 'available' && <CheckCircle2 className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-emerald-500" />}
+            {emailStatus === 'available' && <CheckCircle2 className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-primary" />}
           </div>
         </FormField>
       </FormGrid>
@@ -704,7 +704,7 @@ export function CreateUserModal({
             <select
               value={form.phoneCode}
               onChange={(e) => f('phoneCode', e.target.value)}
-              className="w-24 shrink-0 rounded-lg border border-gray-200 bg-white py-2 px-2 text-sm text-gray-900 outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100"
+              className="w-24 shrink-0 rounded-lg border border-gray-200 bg-white py-2 px-2 text-sm text-gray-900 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/15"
             >
               <option value="+91">🇮🇳 +91</option>
               <option value="+971">🇦🇪 +971</option>
@@ -836,12 +836,12 @@ export function CreateUserModal({
               <div className="h-4 w-4 border-2 border-gray-300 border-t-emerald-500 rounded-full animate-spin" />
             </div>
           )}
-          {parentEmailStatus === 'exists' && <CheckCircle2 className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-emerald-500" />}
+          {parentEmailStatus === 'exists' && <CheckCircle2 className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-primary" />}
           {parentEmailStatus === 'wrong_role' && <AlertCircle className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-red-500" />}
           {parentEmailStatus === 'new' && <AlertCircle className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-blue-500" />}
         </div>
         {parentEmailStatus === 'exists' && (
-          <p className="text-xs text-emerald-600 mt-1 flex items-center gap-1"><CheckCircle2 className="h-3 w-3" /> Existing parent account — student will be linked automatically</p>
+          <p className="text-xs text-primary mt-1 flex items-center gap-1"><CheckCircle2 className="h-3 w-3" /> Existing parent account — student will be linked automatically</p>
         )}
         {parentEmailStatus === 'wrong_role' && (
           <p className="text-xs text-red-600 mt-1 flex items-center gap-1"><AlertCircle className="h-3 w-3" /> This email belongs to a {parentEmailRole} account — please use a different email for the parent</p>
@@ -936,8 +936,8 @@ export function CreateUserModal({
             </div>
           ))}
         </div>
-        <div className="rounded-xl bg-emerald-50 border border-emerald-200 p-4">
-          <p className="text-sm text-emerald-800">
+        <div className="rounded-xl bg-primary/5 border border-primary/20 p-4">
+          <p className="text-sm text-primary">
             <strong>Ready to create!</strong> Credentials will be emailed to <strong>{form.email}</strong> automatically.
           </p>
         </div>
@@ -950,16 +950,16 @@ export function CreateUserModal({
     return (
       <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4" onClick={onClose}>
         <div className="bg-white rounded-2xl shadow-2xl w-full max-w-5xl max-h-[92vh] flex overflow-hidden" onClick={e => e.stopPropagation()}>
-          <div className="w-60 bg-linear-to-b from-emerald-600 via-emerald-700 to-teal-800 p-6 flex flex-col shrink-0">
+          <div className="w-60 bg-linear-to-b from-primary via-primary/90 to-secondary p-6 flex flex-col shrink-0">
             <div className="mb-8">
               <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center mb-3">
                 <CheckCircle className="h-5 w-5 text-white" />
               </div>
               <h2 className="text-white font-bold text-lg">Account Created</h2>
-              <p className="text-emerald-200 text-xs mt-1">Credentials issued successfully</p>
+              <p className="text-primary/60 text-xs mt-1">Credentials issued successfully</p>
             </div>
             <div className="flex-1" />
-            <button onClick={onClose} className="mt-4 text-emerald-200 hover:text-white text-xs flex items-center gap-2 transition">
+            <button onClick={onClose} className="mt-4 text-primary/60 hover:text-white text-xs flex items-center gap-2 transition">
               <X className="h-3.5 w-3.5" /> Close
             </button>
           </div>
@@ -1001,13 +1001,13 @@ export function CreateUserModal({
         onClick={e => e.stopPropagation()}
       >
         {/* ── Left sidebar — step indicator ── */}
-        <div className="w-60 bg-linear-to-b from-emerald-600 via-emerald-700 to-teal-800 p-6 flex flex-col shrink-0">
+        <div className="w-60 bg-linear-to-b from-primary via-primary/90 to-secondary p-6 flex flex-col shrink-0">
           <div className="mb-8">
             <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center mb-3">
               <RoleIcon className="h-5 w-5 text-white" />
             </div>
             <h2 className="text-white font-bold text-lg">{roleLabel}</h2>
-            <p className="text-emerald-200 text-xs mt-1">Step {stepIdx + 1} of {STEPS.length}</p>
+            <p className="text-primary/60 text-xs mt-1">Step {stepIdx + 1} of {STEPS.length}</p>
           </div>
 
           <div className="space-y-1 flex-1">
@@ -1021,11 +1021,11 @@ export function CreateUserModal({
                   type="button"
                   onClick={() => { if (idx < stepIdx) setStepIdx(idx); }}
                   className={`w-full flex items-center gap-3 px-3 py-3.5 rounded-xl transition-all text-left ${
-                    isCurrent ? 'bg-white/20 text-white shadow-lg shadow-black/10' : isDone ? 'text-emerald-200 hover:bg-white/10 cursor-pointer' : 'text-emerald-400/50 cursor-default'
+                    isCurrent ? 'bg-white/20 text-white shadow-lg shadow-black/10' : isDone ? 'text-primary/60 hover:bg-white/10 cursor-pointer' : 'text-primary/50 cursor-default'
                   }`}
                 >
                   <div className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 ${
-                    isDone ? 'bg-emerald-400 text-emerald-900' : isCurrent ? 'bg-white text-emerald-700' : 'bg-emerald-500/30 text-emerald-300/70'
+                    isDone ? 'bg-primary text-emerald-900' : isCurrent ? 'bg-white text-primary' : 'bg-primary/30 text-primary/80/70'
                   }`}>
                     {isDone ? <Check className="h-4 w-4" /> : <StepIcon className="h-4 w-4" />}
                   </div>
@@ -1038,7 +1038,7 @@ export function CreateUserModal({
             })}
           </div>
 
-          <button onClick={onClose} className="mt-4 text-emerald-200 hover:text-white text-xs flex items-center gap-2 transition">
+          <button onClick={onClose} className="mt-4 text-primary/60 hover:text-white text-xs flex items-center gap-2 transition">
             <X className="h-3.5 w-3.5" /> Cancel &amp; Close
           </button>
         </div>

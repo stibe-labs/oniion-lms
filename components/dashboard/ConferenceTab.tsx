@@ -61,7 +61,7 @@ const ROLE_COLORS: Record<string, string> = {
   batch_coordinator: 'bg-indigo-100 text-indigo-700 border-indigo-200',
   hr: 'bg-teal-100 text-teal-700 border-teal-200',
   teacher: 'bg-amber-100 text-amber-700 border-amber-200',
-  student: 'bg-emerald-100 text-emerald-700 border-emerald-200',
+  student: 'bg-primary/10 text-primary border-primary/20',
   parent: 'bg-rose-100 text-rose-700 border-rose-200',
 };
 
@@ -221,8 +221,8 @@ export default function ConferenceTab() {
 
   const statusBadge = (c: Conference) => {
     if (c.status === 'live') return (
-      <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-medium text-emerald-700 border border-emerald-200">
-        <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" /> Live
+      <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary border border-primary/20">
+        <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" /> Live
       </span>
     );
     if (c.status === 'ended') return (
@@ -252,7 +252,7 @@ export default function ConferenceTab() {
       {/* ── Create Conference ── */}
       <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
         <h3 className="text-base font-semibold text-gray-900 mb-5 flex items-center gap-2">
-          <Video className="h-5 w-5 text-emerald-600" />
+          <Video className="h-5 w-5 text-primary" />
           Create Conference
         </h3>
 
@@ -279,7 +279,7 @@ export default function ConferenceTab() {
             onChange={(e) => setTitle(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && mode === 'instant' && handleCreate()}
             placeholder="Conference title (e.g. Team Standup, Parent Meeting)"
-            className="w-full rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-100"
+            className="w-full rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/15"
             maxLength={100}
           />
         </div>
@@ -289,17 +289,17 @@ export default function ConferenceTab() {
             <div>
               <label className="block text-xs font-medium text-gray-600 mb-1.5">Date</label>
               <input type="date" value={scheduledDate} onChange={(e) => setScheduledDate(e.target.value)} min={today}
-                className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-100" />
+                className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/15" />
             </div>
             <div>
               <label className="block text-xs font-medium text-gray-600 mb-1.5">Time</label>
               <input type="time" value={scheduledTime} onChange={(e) => setScheduledTime(e.target.value)}
-                className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-100" />
+                className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/15" />
             </div>
             <div>
               <label className="block text-xs font-medium text-gray-600 mb-1.5">Duration</label>
               <select value={duration} onChange={(e) => setDuration(Number(e.target.value))}
-                className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-100">
+                className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/15">
                 <option value={15}>15 min</option>
                 <option value={30}>30 min</option>
                 <option value={45}>45 min</option>
@@ -314,7 +314,7 @@ export default function ConferenceTab() {
 
         <button onClick={handleCreate}
           disabled={!title.trim() || creating || (mode === 'scheduled' && (!scheduledDate || !scheduledTime))}
-          className="flex items-center gap-2 rounded-lg bg-emerald-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-sm">
+          className="flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-white hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-sm">
           {creating ? <RefreshCw className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
           {mode === 'scheduled' ? 'Schedule Conference' : 'Start Instant Conference'}
         </button>
@@ -357,9 +357,9 @@ export default function ConferenceTab() {
               </div>
             )}
             {editSuccess && (
-              <div className="rounded-lg border border-green-200 bg-green-50 px-3 py-2 flex items-center gap-2">
+              <div className="rounded-lg border border-primary/20 bg-primary/5 px-3 py-2 flex items-center gap-2">
                 <CheckCircle2 className="h-4 w-4 text-green-500 shrink-0" />
-                <p className="text-xs text-green-700">{editSuccess}</p>
+                <p className="text-xs text-primary">{editSuccess}</p>
               </div>
             )}
 
@@ -466,7 +466,7 @@ export default function ConferenceTab() {
                     <Users className="h-3 w-3" /> {c.participant_count || 0}
                   </span>
                   <button onClick={() => copyToClipboard(adminLink(c), `admin-${c.id}`)}
-                    className="flex items-center gap-1 text-emerald-600 hover:text-emerald-700">
+                    className="flex items-center gap-1 text-primary hover:text-primary">
                     {copiedField === `admin-${c.id}` ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />} Admin Link
                   </button>
                   <button onClick={() => copyToClipboard(userLink(c), `user-${c.id}`)}
@@ -476,7 +476,7 @@ export default function ConferenceTab() {
                   {isActive && (
                     <>
                       <a href={adminLink(c)} target="_blank" rel="noopener noreferrer"
-                        className="flex items-center gap-1 text-emerald-600 hover:text-emerald-700 font-medium">
+                        className="flex items-center gap-1 text-primary hover:text-primary font-medium">
                         <ExternalLink className="h-3 w-3" /> Join
                       </a>
                       <button
@@ -753,7 +753,7 @@ function SharePanel({
       <div className="px-6 py-4 border-b border-gray-100 space-y-3">
         <div className="flex gap-1 bg-gray-100 rounded-lg p-1 w-fit">
           <button onClick={() => setLinkType('admin')}
-            className={`px-4 py-1.5 rounded-md text-sm font-medium transition-colors ${linkType === 'admin' ? 'bg-emerald-600 text-white shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}>
+            className={`px-4 py-1.5 rounded-md text-sm font-medium transition-colors ${linkType === 'admin' ? 'bg-primary text-white shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}>
             Admin / Host Link
           </button>
           <button onClick={() => setLinkType('user')}
@@ -766,7 +766,7 @@ function SharePanel({
           <input type="text" readOnly value={link}
             className="flex-1 rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-700 font-mono" />
           <button onClick={() => copyToClipboard(link, `share-${linkType}`)}
-            className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-white transition-colors ${linkType === 'admin' ? 'bg-emerald-600 hover:bg-emerald-700' : 'bg-blue-600 hover:bg-blue-700'}`}>
+            className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-white transition-colors ${linkType === 'admin' ? 'bg-primary hover:bg-primary/90' : 'bg-blue-600 hover:bg-blue-700'}`}>
             {copiedField === `share-${linkType}` ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
           </button>
         </div>
@@ -779,7 +779,7 @@ function SharePanel({
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
             <input type="text" value={search} onChange={(e) => setSearch(e.target.value)}
               placeholder="Search users by name or email..."
-              className="w-full rounded-lg border border-gray-200 bg-white pl-9 pr-4 py-2 text-sm text-gray-900 placeholder-gray-400 focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-100" />
+              className="w-full rounded-lg border border-gray-200 bg-white pl-9 pr-4 py-2 text-sm text-gray-900 placeholder-gray-400 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/15" />
           </div>
           <span className="text-xs text-gray-500 whitespace-nowrap">
             {selectedCount} selected · {readyCount} ready
@@ -813,7 +813,7 @@ function SharePanel({
                     </div>
                     <span
                       onClick={(e) => { e.stopPropagation(); selectAll(filtered); }}
-                      className={`text-xs font-medium px-2 py-0.5 rounded cursor-pointer ${allSelected ? 'text-emerald-700 bg-emerald-50' : 'text-gray-500 hover:text-gray-700'}`}>
+                      className={`text-xs font-medium px-2 py-0.5 rounded cursor-pointer ${allSelected ? 'text-primary bg-primary/5' : 'text-gray-500 hover:text-gray-700'}`}>
                       {allSelected ? 'Deselect All' : 'Select All'}
                     </span>
                   </button>
@@ -864,7 +864,7 @@ function SharePanel({
                     <span className="text-sm font-medium text-gray-700">Select by Batch</span>
                   </div>
                   <select value={selectedBatch} onChange={(e) => setSelectedBatch(e.target.value)}
-                    className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-100">
+                    className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/15">
                     <option value="">Choose a batch...</option>
                     {batches.map(b => (
                       <option key={b.batch_id} value={b.batch_id}>
@@ -910,9 +910,9 @@ function SharePanel({
               </div>
               <div className="flex gap-2">
                 <input type="text" value={manualName} onChange={(e) => setManualName(e.target.value)}
-                  placeholder="Name" className="flex-1 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm placeholder-gray-400 focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-100" />
+                  placeholder="Name" className="flex-1 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm placeholder-gray-400 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/15" />
                 <input type="text" value={manualPhone} onChange={(e) => setManualPhone(e.target.value)}
-                  placeholder="WhatsApp (e.g. 919876543210)" className="flex-1 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm placeholder-gray-400 focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-100"
+                  placeholder="WhatsApp (e.g. 919876543210)" className="flex-1 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm placeholder-gray-400 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/15"
                   onKeyDown={(e) => e.key === 'Enter' && addManualEntry()} />
                 <button onClick={addManualEntry} disabled={!manualName.trim() || !manualPhone.trim()}
                   className="flex items-center gap-1 rounded-lg bg-violet-600 px-3 py-2 text-sm font-medium text-white hover:bg-violet-700 disabled:opacity-50 transition-colors">
@@ -944,8 +944,8 @@ function SharePanel({
       <div className="border-t border-gray-100 px-6 py-4 flex items-center justify-between">
         {sendResult ? (
           <div className="flex items-center gap-3 text-sm">
-            <CheckCircle2 className="h-4 w-4 text-emerald-600" />
-            <span className="text-emerald-700 font-medium">{sendResult.sent} sent</span>
+            <CheckCircle2 className="h-4 w-4 text-primary" />
+            <span className="text-primary font-medium">{sendResult.sent} sent</span>
             {sendResult.failed > 0 && (
               <span className="text-red-600">{sendResult.failed} failed</span>
             )}
@@ -959,7 +959,7 @@ function SharePanel({
           </p>
         )}
         <button onClick={handleSend} disabled={sending || readyCount === 0}
-          className="flex items-center gap-2 rounded-lg bg-green-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-sm">
+          className="flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-white hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-sm">
           {sending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
           Send via WhatsApp ({readyCount})
         </button>
@@ -1001,7 +1001,7 @@ function UserGroup({
           <span className="text-xs text-gray-400">{users.length}</span>
         </div>
         <span onClick={(e) => { e.stopPropagation(); onSelectAll(); }}
-          className={`text-xs font-medium px-2 py-0.5 rounded cursor-pointer ${allSelected ? 'text-emerald-700 bg-emerald-50' : 'text-gray-500 hover:text-gray-700'}`}>
+          className={`text-xs font-medium px-2 py-0.5 rounded cursor-pointer ${allSelected ? 'text-primary bg-primary/5' : 'text-gray-500 hover:text-gray-700'}`}>
           {allSelected ? 'Deselect All' : 'Select All'}
         </span>
       </button>
@@ -1037,9 +1037,9 @@ function UserRow({
   const [tempPhone, setTempPhone] = useState('');
 
   return (
-    <div className={`flex items-center gap-3 px-3 py-2 ${isSelected ? 'bg-emerald-50/50' : 'hover:bg-gray-50'} transition-colors`}>
+    <div className={`flex items-center gap-3 px-3 py-2 ${isSelected ? 'bg-primary/5/50' : 'hover:bg-gray-50'} transition-colors`}>
       <button onClick={onToggle} className="shrink-0">
-        <div className={`h-4 w-4 rounded border-2 flex items-center justify-center transition-colors ${isSelected ? 'bg-emerald-600 border-emerald-600' : 'border-gray-300'}`}>
+        <div className={`h-4 w-4 rounded border-2 flex items-center justify-center transition-colors ${isSelected ? 'bg-primary border-emerald-600' : 'border-gray-300'}`}>
           {isSelected && <Check className="h-3 w-3 text-white" />}
         </div>
       </button>
@@ -1049,17 +1049,17 @@ function UserRow({
       </div>
       <div className="flex items-center gap-2 shrink-0">
         {phone ? (
-          <span className="inline-flex items-center gap-1 text-xs text-green-600">
+          <span className="inline-flex items-center gap-1 text-xs text-primary">
             <Phone className="h-3 w-3" /> {phone.slice(-4)}
           </span>
         ) : editing ? (
           <div className="flex items-center gap-1">
             <input type="text" value={tempPhone} onChange={(e) => setTempPhone(e.target.value)}
               placeholder="91xxxxxxxxxx" autoFocus
-              className="w-28 rounded border border-gray-200 px-2 py-1 text-xs focus:border-emerald-400 focus:outline-none"
+              className="w-28 rounded border border-gray-200 px-2 py-1 text-xs focus:border-primary focus:outline-none"
               onKeyDown={(e) => { if (e.key === 'Enter' && tempPhone) { onPhoneChange(tempPhone); setEditing(false); } }} />
             <button onClick={() => { if (tempPhone) { onPhoneChange(tempPhone); setEditing(false); } }}
-              className="text-emerald-600 hover:text-emerald-700"><Check className="h-3 w-3" /></button>
+              className="text-primary hover:text-primary"><Check className="h-3 w-3" /></button>
             <button onClick={() => setEditing(false)} className="text-gray-400 hover:text-gray-600"><X className="h-3 w-3" /></button>
           </div>
         ) : (

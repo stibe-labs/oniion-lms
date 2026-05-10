@@ -261,12 +261,12 @@ export default function ParticipantList({
 
 function RoleBadge({ role }: { role: string }) {
   const colors: Record<string, string> = {
-    teacher: 'bg-emerald-600',
+    teacher: 'bg-primary',
     student: 'bg-blue-600',
     observer: 'bg-purple-600',
     batch_coordinator: 'bg-indigo-600',
-    academic_operator: 'bg-teal-600',
-    academic: 'bg-teal-600',
+    academic_operator: 'bg-secondary',
+    academic: 'bg-secondary',
     parent: 'bg-orange-600',
     owner: 'bg-purple-600',
   };

@@ -63,7 +63,7 @@ interface Batch {
 }
 
 const STATUS_STYLE: Record<string, { label: string; bg: string; dot?: string }> = {
-  live:      { label: 'Live',      bg: 'bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-200', dot: 'bg-emerald-500 animate-pulse' },
+  live:      { label: 'Live',      bg: 'bg-primary/5 text-primary ring-1 ring-inset ring-primary/20', dot: 'bg-primary animate-pulse' },
   created:   { label: 'Ready',     bg: 'bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-200' },
   scheduled: { label: 'Scheduled', bg: 'bg-amber-50 text-amber-700 ring-1 ring-inset ring-amber-200' },
   ended:     { label: 'Ended',     bg: 'bg-slate-100 text-slate-500 ring-1 ring-inset ring-slate-200' },
@@ -83,7 +83,7 @@ const ROLE_COLORS: Record<string, string> = {
   batch_coordinator: 'bg-indigo-100 text-indigo-700 border-indigo-200',
   hr: 'bg-teal-100 text-teal-700 border-teal-200',
   teacher: 'bg-amber-100 text-amber-700 border-amber-200',
-  student: 'bg-emerald-100 text-emerald-700 border-emerald-200',
+  student: 'bg-primary/10 text-primary border-primary/20',
   parent: 'bg-rose-100 text-rose-700 border-rose-200',
 };
 
@@ -106,7 +106,7 @@ const CLASS_TEMPLATES: ClassTemplate[] = [
     id: 'class', label: 'Subject Class', icon: GraduationCap,
     desc: 'Standard teaching session with public join link',
     defaultDescription: '', defaultDuration: 60, defaultMaxParticipants: 100,
-    accent: { barBefore: 'before:bg-emerald-500', bg: 'bg-emerald-50', text: 'text-emerald-700', ring: 'ring-emerald-200' },
+    accent: { barBefore: 'before:bg-primary', bg: 'bg-primary/5', text: 'text-primary', ring: 'ring-primary/20' },
   },
   {
     id: 'doubt', label: 'Doubt Class', icon: HelpCircle,
@@ -392,7 +392,7 @@ export default function OpenClassroomTab() {
       <div className="space-y-4 max-w-6xl mx-auto">
         <button
           onClick={() => setDetailClassroom(null)}
-          className="inline-flex items-center gap-1.5 text-sm font-semibold text-emerald-700 hover:text-emerald-900 transition">
+          className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:text-emerald-900 transition">
           <ChevronLeft className="w-4 h-4" /> Back to Classrooms
         </button>
         <OpenClassroomDetail
@@ -407,7 +407,7 @@ export default function OpenClassroomTab() {
   return (
     <div className="space-y-6 max-w-6xl mx-auto">
       {/* Hero Header */}
-      <div className="relative overflow-hidden rounded-2xl border border-emerald-200 bg-gradient-to-br from-emerald-600 via-emerald-700 to-teal-700 p-6 shadow-lg">
+      <div className="relative overflow-hidden rounded-2xl border border-primary/20 bg-gradient-to-br from-primary via-primary/90 to-secondary p-6 shadow-lg">
         <div className="absolute -right-16 -top-16 h-56 w-56 rounded-full bg-white/10 blur-3xl" />
         <div className="absolute -left-10 -bottom-10 h-48 w-48 rounded-full bg-teal-400/20 blur-3xl" />
         <div className="relative flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -416,7 +416,7 @@ export default function OpenClassroomTab() {
               <Radio className="h-6 w-6 text-white" />
             </div>
             <div>
-              <div className="text-[10px] font-bold uppercase tracking-[0.12em] text-emerald-100">Public Sessions</div>
+              <div className="text-[10px] font-bold uppercase tracking-[0.12em] text-primary/40">Public Sessions</div>
               <h2 className="text-2xl font-bold tracking-tight text-white">Open Classroom</h2>
               <p className="text-xs text-white/60 mt-0.5">Host real teaching sessions with public join links</p>
             </div>
@@ -437,7 +437,7 @@ export default function OpenClassroomTab() {
           ].map(stat => {
             const accents: Record<string, { iconBg: string; iconText: string }> = {
               white:   { iconBg: 'bg-white/15',        iconText: 'text-white' },
-              lime:    { iconBg: 'bg-white/15',        iconText: 'text-emerald-100' },
+              lime:    { iconBg: 'bg-white/15',        iconText: 'text-primary/40' },
               amber:   { iconBg: 'bg-amber-400/20',   iconText: 'text-amber-100' },
             };
             const a = accents[stat.accent];
@@ -497,10 +497,10 @@ export default function OpenClassroomTab() {
       </div>
 
       {/* ── Create Form ── */}
-      <div className="relative overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm before:absolute before:left-0 before:top-0 before:h-full before:w-1 before:bg-emerald-500">
+      <div className="relative overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm before:absolute before:left-0 before:top-0 before:h-full before:w-1 before:bg-primary">
         <div className="flex items-center gap-3 border-b border-gray-100 px-5 py-4">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-50">
-            <Plus className="h-4 w-4 text-emerald-600" />
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/5">
+            <Plus className="h-4 w-4 text-primary" />
           </div>
           <div className="flex-1 min-w-0">
             <h3 className="text-sm font-bold text-gray-800">Create Open Classroom</h3>
@@ -516,18 +516,18 @@ export default function OpenClassroomTab() {
             <label className="block text-xs font-semibold text-gray-600 mb-2">Teacher *</label>
             <div className="flex gap-1 mb-3 text-xs">
               <button onClick={() => setTeacherSource('platform')}
-                className={`px-3 py-1.5 rounded-lg font-semibold transition ${teacherSource === 'platform' ? 'bg-emerald-600 text-white shadow-sm' : 'bg-gray-50 text-gray-600 hover:bg-gray-100 ring-1 ring-inset ring-gray-200'}`}>
+                className={`px-3 py-1.5 rounded-lg font-semibold transition ${teacherSource === 'platform' ? 'bg-primary text-white shadow-sm' : 'bg-gray-50 text-gray-600 hover:bg-gray-100 ring-1 ring-inset ring-gray-200'}`}>
                 Select from platform
               </button>
               <button onClick={() => setTeacherSource('manual')}
-                className={`px-3 py-1.5 rounded-lg font-semibold transition ${teacherSource === 'manual' ? 'bg-emerald-600 text-white shadow-sm' : 'bg-gray-50 text-gray-600 hover:bg-gray-100 ring-1 ring-inset ring-gray-200'}`}>
+                className={`px-3 py-1.5 rounded-lg font-semibold transition ${teacherSource === 'manual' ? 'bg-primary text-white shadow-sm' : 'bg-gray-50 text-gray-600 hover:bg-gray-100 ring-1 ring-inset ring-gray-200'}`}>
                 Add manually
               </button>
             </div>
 
             {teacherSource === 'platform' ? (
               <select value={teacherEmail} onChange={e => setTeacherEmail(e.target.value)}
-                className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-800 outline-none focus:ring-2 focus:ring-emerald-200 focus:border-emerald-400 bg-white">
+                className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-800 outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-white">
                 <option value="">Select teacher…</option>
                 {teachers.map(t => (
                   <option key={t.email} value={t.email}>
@@ -542,19 +542,19 @@ export default function OpenClassroomTab() {
                   <label className="block text-[10px] font-medium text-gray-400 mb-0.5">Name *</label>
                   <input value={manualTeacherName} onChange={e => setManualTeacherName(e.target.value)}
                     placeholder="Teacher name"
-                    className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-800 outline-none focus:ring-2 focus:ring-emerald-200" />
+                    className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-800 outline-none focus:ring-2 focus:ring-primary/20" />
                 </div>
                 <div>
                   <label className="block text-[10px] font-medium text-gray-400 mb-0.5">WhatsApp</label>
                   <input value={manualTeacherWhatsapp} onChange={e => setManualTeacherWhatsapp(e.target.value)}
                     placeholder="+91…"
-                    className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-800 outline-none focus:ring-2 focus:ring-emerald-200" />
+                    className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-800 outline-none focus:ring-2 focus:ring-primary/20" />
                 </div>
                 <div>
                   <label className="block text-[10px] font-medium text-gray-400 mb-0.5">Email *</label>
                   <input value={manualTeacherEmail} onChange={e => setManualTeacherEmail(e.target.value)}
                     placeholder="teacher@example.com"
-                    className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-800 outline-none focus:ring-2 focus:ring-emerald-200" />
+                    className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-800 outline-none focus:ring-2 focus:ring-primary/20" />
                 </div>
                 <div>
                   <label className="block text-[10px] font-medium text-gray-400 mb-0.5 flex items-center gap-1">
@@ -580,7 +580,7 @@ export default function OpenClassroomTab() {
             <label className="block text-xs font-medium text-gray-500 mb-1">Subject *</label>
             <div className="flex gap-2">
               <select value={subject} onChange={e => setSubject(e.target.value)}
-                className="flex-1 rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-800 outline-none focus:ring-2 focus:ring-emerald-200 bg-white">
+                className="flex-1 rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-800 outline-none focus:ring-2 focus:ring-primary/20 bg-white">
                 <option value="">Select subject…</option>
                 {['Mathematics', 'Physics', 'Chemistry', 'Biology', 'English', 'Hindi', 'Social Science', 'Computer Science', 'Accountancy', 'Economics', 'Business Studies'].map(s => (
                   <option key={s} value={s}>{s}</option>
@@ -590,7 +590,7 @@ export default function OpenClassroomTab() {
               {subject === '__custom__' && (
                 <input value={customSubject} onChange={e => setCustomSubject(e.target.value)}
                   placeholder="Enter subject…"
-                  className="flex-1 rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-800 outline-none focus:ring-2 focus:ring-emerald-200" />
+                  className="flex-1 rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-800 outline-none focus:ring-2 focus:ring-primary/20" />
               )}
             </div>
           </div>
@@ -599,7 +599,7 @@ export default function OpenClassroomTab() {
           <div>
             <label className="block text-xs font-medium text-gray-500 mb-1">Grade / Class <span className="text-gray-400 font-normal">(optional)</span></label>
             <select value={grade} onChange={e => setGrade(e.target.value)}
-              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-800 outline-none focus:ring-2 focus:ring-emerald-200 bg-white">
+              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-800 outline-none focus:ring-2 focus:ring-primary/20 bg-white">
               <option value="">No grade (general / workshop)</option>
               {['1','2','3','4','5','6','7','8','9','10','11','12'].map(g => (
                 <option key={g} value={g}>Grade {g}</option>
@@ -609,9 +609,9 @@ export default function OpenClassroomTab() {
 
           {/* Auto-generated title preview */}
           {autoTitle && (
-            <div className="flex items-center gap-2 px-3 py-2 bg-emerald-50 ring-1 ring-inset ring-emerald-200 rounded-lg">
-              <Video className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-              <span className="text-xs text-emerald-700">Classroom: <strong>{autoTitle}</strong></span>
+            <div className="flex items-center gap-2 px-3 py-2 bg-primary/5 ring-1 ring-inset ring-primary/20 rounded-lg">
+              <Video className="w-3.5 h-3.5 text-primary shrink-0" />
+              <span className="text-xs text-primary">Classroom: <strong>{autoTitle}</strong></span>
             </div>
           )}
 
@@ -620,7 +620,7 @@ export default function OpenClassroomTab() {
             <label className="block text-xs font-medium text-gray-500 mb-1">Description (optional)</label>
             <textarea value={description} onChange={e => setDescription(e.target.value)}
               placeholder="Brief description of the session…" rows={2}
-              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-800 outline-none focus:ring-2 focus:ring-emerald-200 focus:border-emerald-400 resize-none" />
+              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-800 outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary resize-none" />
           </div>
 
           {/* Training Materials (optional) */}
@@ -660,11 +660,11 @@ export default function OpenClassroomTab() {
             <span className="text-xs font-semibold text-gray-600">Type:</span>
             <div className="inline-flex rounded-lg ring-1 ring-inset ring-gray-200 overflow-hidden text-xs bg-gray-50 p-0.5">
               <button onClick={() => setMode('instant')}
-                className={`px-3.5 py-1 rounded-md font-semibold transition ${mode === 'instant' ? 'bg-emerald-600 text-white shadow-sm' : 'text-gray-600 hover:text-gray-900'}`}>
+                className={`px-3.5 py-1 rounded-md font-semibold transition ${mode === 'instant' ? 'bg-primary text-white shadow-sm' : 'text-gray-600 hover:text-gray-900'}`}>
                 Instant
               </button>
               <button onClick={() => setMode('scheduled')}
-                className={`px-3.5 py-1 rounded-md font-semibold transition ${mode === 'scheduled' ? 'bg-emerald-600 text-white shadow-sm' : 'text-gray-600 hover:text-gray-900'}`}>
+                className={`px-3.5 py-1 rounded-md font-semibold transition ${mode === 'scheduled' ? 'bg-primary text-white shadow-sm' : 'text-gray-600 hover:text-gray-900'}`}>
                 Scheduled
               </button>
             </div>
@@ -675,20 +675,20 @@ export default function OpenClassroomTab() {
               <div>
                 <label className="block text-xs font-medium text-gray-500 mb-1">Date</label>
                 <input type="date" value={scheduledDate} onChange={e => setScheduledDate(e.target.value)}
-                  className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-800 outline-none focus:ring-2 focus:ring-emerald-200" />
+                  className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-800 outline-none focus:ring-2 focus:ring-primary/20" />
               </div>
               <div>
                 <label className="block text-xs font-medium text-gray-500 mb-1">Time</label>
                 <input type="time" value={scheduledTime} onChange={e => setScheduledTime(e.target.value)}
-                  className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-800 outline-none focus:ring-2 focus:ring-emerald-200" />
+                  className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-800 outline-none focus:ring-2 focus:ring-primary/20" />
               </div>
               <div>
                 <label className="block text-xs font-medium text-gray-500 mb-1">Duration</label>
                 {unlimitedDuration ? (
-                  <div className="flex items-center h-[38px] px-3 text-sm text-emerald-600 font-medium">∞ Unlimited</div>
+                  <div className="flex items-center h-[38px] px-3 text-sm text-primary font-medium">∞ Unlimited</div>
                 ) : (
                   <input type="number" value={duration} onChange={e => setDuration(Number(e.target.value))} min={15} max={480}
-                    className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-800 outline-none focus:ring-2 focus:ring-emerald-200" />
+                    className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-800 outline-none focus:ring-2 focus:ring-primary/20" />
                 )}
               </div>
             </div>
@@ -697,13 +697,13 @@ export default function OpenClassroomTab() {
             <div className="w-40">
               <label className="block text-xs font-medium text-gray-500 mb-1">Duration (min)</label>
               <input type="number" value={duration} onChange={e => setDuration(Number(e.target.value))} min={15} max={480}
-                className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-800 outline-none focus:ring-2 focus:ring-emerald-200" />
+                className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-800 outline-none focus:ring-2 focus:ring-primary/20" />
             </div>
           )}
           <label className="inline-flex items-center gap-2 cursor-pointer select-none">
             <div className="relative">
               <input type="checkbox" checked={unlimitedDuration} onChange={e => setUnlimitedDuration(e.target.checked)} className="sr-only peer" />
-              <div className="w-9 h-5 bg-gray-200 peer-checked:bg-emerald-500 rounded-full transition-colors" />
+              <div className="w-9 h-5 bg-gray-200 peer-checked:bg-primary rounded-full transition-colors" />
               <div className="absolute left-0.5 top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform peer-checked:translate-x-4" />
             </div>
             <span className="text-xs font-medium text-gray-600">Unlimited Duration</span>
@@ -715,7 +715,7 @@ export default function OpenClassroomTab() {
               <div className="relative">
                 <input type="checkbox" checked={paymentEnabled} onChange={e => setPaymentEnabled(e.target.checked)}
                   className="sr-only peer" />
-                <div className="w-9 h-5 bg-gray-200 peer-checked:bg-emerald-500 rounded-full transition-colors" />
+                <div className="w-9 h-5 bg-gray-200 peer-checked:bg-primary rounded-full transition-colors" />
                 <div className="absolute left-0.5 top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform peer-checked:translate-x-4" />
               </div>
               <span className="text-xs font-medium text-gray-600">Paid Entry</span>
@@ -725,7 +725,7 @@ export default function OpenClassroomTab() {
                 <span className="text-xs text-gray-500">₹</span>
                 <input type="number" value={priceRupees} onChange={e => setPriceRupees(e.target.value)}
                   placeholder="0" min={1}
-                  className="w-24 rounded-lg border border-gray-200 px-3 py-1.5 text-sm text-gray-800 outline-none focus:ring-2 focus:ring-emerald-200" />
+                  className="w-24 rounded-lg border border-gray-200 px-3 py-1.5 text-sm text-gray-800 outline-none focus:ring-2 focus:ring-primary/20" />
                 <span className="text-xs text-gray-400">per participant</span>
               </div>
             )}
@@ -735,7 +735,7 @@ export default function OpenClassroomTab() {
           <div className="w-48">
             <label className="block text-xs font-medium text-gray-500 mb-1">Max Participants</label>
             <input type="number" value={maxParticipants} onChange={e => setMaxParticipants(Number(e.target.value))} min={1} max={500}
-              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-800 outline-none focus:ring-2 focus:ring-emerald-200" />
+              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-800 outline-none focus:ring-2 focus:ring-primary/20" />
           </div>
 
           {/* Auto-approve toggle */}
@@ -749,14 +749,14 @@ export default function OpenClassroomTab() {
           </label>
 
           <button onClick={handleCreate} disabled={creating || !canCreate}
-            className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-br from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 disabled:from-gray-300 disabled:to-gray-400 disabled:cursor-not-allowed text-white px-5 py-2.5 text-sm font-semibold transition shadow-md hover:shadow-lg">
+            className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-br from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 disabled:from-gray-300 disabled:to-gray-400 disabled:cursor-not-allowed text-white px-5 py-2.5 text-sm font-semibold transition shadow-md hover:shadow-lg">
             {creating ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
             Create & Send Host Link
           </button>
           {createSuccess && (
-            <div className="flex items-center gap-2 rounded-lg bg-emerald-50 ring-1 ring-inset ring-emerald-200 px-3 py-2">
-              <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />
-              <p className="text-xs font-medium text-emerald-700">{createSuccess}</p>
+            <div className="flex items-center gap-2 rounded-lg bg-primary/5 ring-1 ring-inset ring-primary/20 px-3 py-2">
+              <CheckCircle2 className="h-3.5 w-3.5 text-primary" />
+              <p className="text-xs font-medium text-primary">{createSuccess}</p>
             </div>
           )}
           {tempCredentials && (
@@ -829,24 +829,24 @@ export default function OpenClassroomTab() {
               <div>
                 <label className="block text-xs font-semibold text-gray-600 mb-1.5">Title</label>
                 <input value={editTitle} onChange={e => setEditTitle(e.target.value)}
-                  className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-800 outline-none focus:ring-2 focus:ring-emerald-200 focus:border-emerald-400" />
+                  className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-800 outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" />
               </div>
             )}
             <div className="grid grid-cols-3 gap-3">
               <div>
                 <label className="block text-xs font-semibold text-gray-600 mb-1.5">Date</label>
                 <input type="date" value={editDate} onChange={e => setEditDate(e.target.value)}
-                  className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-emerald-200 focus:border-emerald-400" />
+                  className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" />
               </div>
               <div>
                 <label className="block text-xs font-semibold text-gray-600 mb-1.5">Time</label>
                 <input type="time" value={editTime} onChange={e => setEditTime(e.target.value)}
-                  className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-emerald-200 focus:border-emerald-400" />
+                  className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" />
               </div>
               <div>
                 <label className="block text-xs font-semibold text-gray-600 mb-1.5">Duration (min)</label>
                 <input type="number" value={editDuration} onChange={e => setEditDuration(Number(e.target.value))} min={15}
-                  className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-emerald-200 focus:border-emerald-400" />
+                  className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" />
               </div>
             </div>
             {editError && (
@@ -856,9 +856,9 @@ export default function OpenClassroomTab() {
               </div>
             )}
             {editSuccess && (
-              <div className="flex items-center gap-2 rounded-lg bg-emerald-50 ring-1 ring-inset ring-emerald-200 px-3 py-2">
-                <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />
-                <p className="text-xs font-medium text-emerald-700">{editSuccess}</p>
+              <div className="flex items-center gap-2 rounded-lg bg-primary/5 ring-1 ring-inset ring-primary/20 px-3 py-2">
+                <CheckCircle2 className="h-3.5 w-3.5 text-primary" />
+                <p className="text-xs font-medium text-primary">{editSuccess}</p>
               </div>
             )}
             <div className="flex items-center gap-2 pt-1">
@@ -876,7 +876,7 @@ export default function OpenClassroomTab() {
       {/* ── Classroom List ── */}
       {loading ? (
         <div className="flex items-center justify-center py-16">
-          <Loader2 className="w-6 h-6 text-emerald-500 animate-spin" />
+          <Loader2 className="w-6 h-6 text-primary animate-spin" />
         </div>
       ) : classrooms.length === 0 ? (
         <div className="rounded-2xl border-2 border-dashed border-gray-200 bg-gray-50/50 p-12 text-center">
@@ -893,7 +893,7 @@ export default function OpenClassroomTab() {
             const isActive = c.status === 'created' || c.status === 'live';
             const hostLink = c.host_link || `${baseUrl}/open-classroom/${c.host_token}`;
             const joinLink = c.join_link || `${baseUrl}/open-classroom/${c.join_token}`;
-            const accentBar = c.status === 'live' ? 'before:bg-emerald-500'
+            const accentBar = c.status === 'live' ? 'before:bg-primary'
               : c.status === 'scheduled' ? 'before:bg-amber-500'
               : c.status === 'cancelled' ? 'before:bg-rose-500'
               : c.status === 'ended' ? 'before:bg-slate-300'
@@ -916,7 +916,7 @@ export default function OpenClassroomTab() {
                             <Wallet className="h-3 w-3" /> ₹{(c.price_paise / 100).toFixed(0)}/person
                           </span>
                         ) : (
-                          <span className="inline-flex items-center text-[10px] font-semibold bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-200 rounded-md px-2 py-0.5">
+                          <span className="inline-flex items-center text-[10px] font-semibold bg-primary/5 text-primary ring-1 ring-inset ring-primary/20 rounded-md px-2 py-0.5">
                             Free
                           </span>
                         )}
@@ -945,7 +945,7 @@ export default function OpenClassroomTab() {
                           {c.participant_count}
                         </span>
                         {c.payment_enabled && c.revenue_paise > 0 && (
-                          <span className="inline-flex items-center gap-1.5 font-semibold text-emerald-600">
+                          <span className="inline-flex items-center gap-1.5 font-semibold text-primary">
                             <Wallet className="h-3.5 w-3.5" />
                             ₹{(c.revenue_paise / 100).toLocaleString('en-IN')}
                           </span>
@@ -972,14 +972,14 @@ export default function OpenClassroomTab() {
 
                     {/* Share */}
                     <button onClick={() => setShareClassroom(c)}
-                      className="inline-flex items-center gap-1.5 text-xs font-medium text-emerald-700 bg-emerald-50 ring-1 ring-inset ring-emerald-200 rounded-lg px-2.5 py-1.5 hover:bg-emerald-100 transition">
+                      className="inline-flex items-center gap-1.5 text-xs font-medium text-primary bg-primary/5 ring-1 ring-inset ring-primary/20 rounded-lg px-2.5 py-1.5 hover:bg-primary/10 transition">
                       <Send className="w-3 h-3" /> Share
                     </button>
 
                     {/* Join as host */}
                     {isActive && (
                       <a href={hostLink} target="_blank" rel="noreferrer"
-                        className="inline-flex items-center gap-1.5 text-xs font-bold text-white bg-gradient-to-br from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 rounded-lg px-2.5 py-1.5 transition shadow-sm">
+                        className="inline-flex items-center gap-1.5 text-xs font-bold text-white bg-gradient-to-br from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 rounded-lg px-2.5 py-1.5 transition shadow-sm">
                         <ExternalLink className="w-3 h-3" /> Open
                       </a>
                     )}
@@ -1134,11 +1134,11 @@ function SharePanel({
   );
 
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-lg before:absolute before:left-0 before:top-0 before:h-full before:w-1 before:bg-emerald-500">
+    <div className="relative overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-lg before:absolute before:left-0 before:top-0 before:h-full before:w-1 before:bg-primary">
       <div className="flex items-center justify-between border-b border-gray-100 px-5 py-4">
         <div className="flex items-center gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-50">
-            <Send className="h-4 w-4 text-emerald-600" />
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/5">
+            <Send className="h-4 w-4 text-primary" />
           </div>
           <div>
             <h3 className="text-sm font-bold text-gray-800">Share Classroom</h3>
@@ -1155,7 +1155,7 @@ function SharePanel({
         <div className="flex items-center gap-2">
           <input readOnly value={joinLink} className="flex-1 min-w-0 text-xs text-slate-600 bg-slate-50 ring-1 ring-inset ring-slate-200 rounded-lg px-3 py-2 outline-none" />
           <button onClick={() => copyToClipboard(joinLink, 'share-link')}
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700 bg-emerald-50 ring-1 ring-inset ring-emerald-200 rounded-lg px-3 py-2 hover:bg-emerald-100 transition">
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary bg-primary/5 ring-1 ring-inset ring-primary/20 rounded-lg px-3 py-2 hover:bg-primary/10 transition">
             {copiedField === 'share-link' ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
             Copy
           </button>
@@ -1165,7 +1165,7 @@ function SharePanel({
         <div className="flex gap-1 text-xs">
           {(['students', 'parents', 'staff', 'batch'] as const).map(t => (
             <button key={t} onClick={() => { setUserType(t); setSelected(new Set()); }}
-              className={`px-3 py-1.5 rounded-lg font-semibold transition capitalize ${userType === t ? 'bg-emerald-600 text-white shadow-sm' : 'bg-gray-50 text-gray-600 hover:bg-gray-100 ring-1 ring-inset ring-gray-200'}`}>
+              className={`px-3 py-1.5 rounded-lg font-semibold transition capitalize ${userType === t ? 'bg-primary text-white shadow-sm' : 'bg-gray-50 text-gray-600 hover:bg-gray-100 ring-1 ring-inset ring-gray-200'}`}>
               {t}
             </button>
           ))}
@@ -1173,7 +1173,7 @@ function SharePanel({
 
         {userType === 'batch' && (
           <select value={batchId} onChange={e => setBatchId(e.target.value)}
-            className="w-full text-xs border border-gray-200 rounded-lg px-3 py-2 bg-white text-gray-700 outline-none focus:ring-2 focus:ring-emerald-200">
+            className="w-full text-xs border border-gray-200 rounded-lg px-3 py-2 bg-white text-gray-700 outline-none focus:ring-2 focus:ring-primary/20">
             <option value="">Select batch…</option>
             {batches.map(b => <option key={b.batch_id} value={b.batch_id}>{b.batch_name} ({b.student_count})</option>)}
           </select>
@@ -1183,20 +1183,20 @@ function SharePanel({
         <div className="relative">
           <Search className="absolute left-3 top-2.5 w-3.5 h-3.5 text-gray-400" />
           <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search…"
-            className="w-full pl-8 pr-3 py-2 text-xs border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-emerald-200" />
+            className="w-full pl-8 pr-3 py-2 text-xs border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-primary/20" />
         </div>
 
         {/* User list */}
         <div className="max-h-48 overflow-y-auto border border-gray-100 rounded-lg divide-y divide-gray-50">
           {filtered.length > 0 && (
-            <button onClick={selectAll} className="w-full text-left px-3 py-2 text-xs text-emerald-600 font-medium hover:bg-emerald-50">
+            <button onClick={selectAll} className="w-full text-left px-3 py-2 text-xs text-primary font-medium hover:bg-primary/5">
               {filtered.every(u => selected.has(u.email)) ? 'Deselect All' : 'Select All'}
             </button>
           )}
           {filtered.map(u => (
             <label key={u.email} className="flex items-center gap-3 px-3 py-2 hover:bg-gray-50 cursor-pointer">
               <input type="checkbox" checked={selected.has(u.email)} onChange={() => toggleSelect(u.email)}
-                className="rounded border-gray-300 text-emerald-600 focus:ring-emerald-400" />
+                className="rounded border-gray-300 text-primary focus:ring-emerald-400" />
               <div className="flex-1 min-w-0">
                 <p className="text-xs font-medium text-gray-700 truncate">{u.name}</p>
                 <p className="text-[10px] text-gray-400 truncate">{u.email}</p>
@@ -1224,7 +1224,7 @@ function SharePanel({
               className="flex-1 text-xs border border-gray-200 rounded-lg px-3 py-1.5 outline-none" />
             <input value={manualPhone} onChange={e => setManualPhone(e.target.value)} placeholder="+91…"
               className="flex-1 text-xs border border-gray-200 rounded-lg px-3 py-1.5 outline-none" />
-            <button onClick={addManual} className="text-xs text-emerald-600 font-medium hover:underline px-2">
+            <button onClick={addManual} className="text-xs text-primary font-medium hover:underline px-2">
               <UserPlus className="w-4 h-4" />
             </button>
           </div>
@@ -1248,7 +1248,7 @@ function SharePanel({
             {selected.size + manualList.length} recipient{(selected.size + manualList.length) !== 1 ? 's' : ''}
           </span>
           <button onClick={handleSend} disabled={sending || (selected.size + manualList.length === 0)}
-            className="inline-flex items-center gap-1.5 rounded-lg bg-green-600 hover:bg-green-700 text-white px-4 py-2 text-xs font-medium disabled:opacity-50 transition">
+            className="inline-flex items-center gap-1.5 rounded-lg bg-primary hover:bg-green-700 text-white px-4 py-2 text-xs font-medium disabled:opacity-50 transition">
             {sending ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Send className="w-3.5 h-3.5" />}
             Send WhatsApp
           </button>
@@ -1256,7 +1256,7 @@ function SharePanel({
 
         {results && (
           <div className="flex items-center gap-2 text-xs">
-            <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+            <CheckCircle2 className="w-4 h-4 text-primary" />
             <span className="text-gray-600">Sent: {results.sent}</span>
             {results.failed > 0 && (
               <span className="text-red-500">Failed: {results.failed}</span>

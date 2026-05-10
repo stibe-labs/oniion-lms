@@ -483,7 +483,7 @@ function SessionCountdown({ session }: { session: BatchSession }) {
     const id = setInterval(tick, live ? 1_000 : 60_000);
     return () => clearInterval(id);
   }, [session, live]);
-  return <span className={`text-xs ${live ? 'font-mono text-emerald-600' : 'text-gray-500'}`}>{label}</span>;
+  return <span className={`text-xs ${live ? 'font-mono text-primary' : 'text-gray-500'}`}>{label}</span>;
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -876,8 +876,8 @@ function OverviewTab({
       {/* ═══ Header ═══ */}
       <div className="flex items-center justify-between shrink-0">
         <div className="flex items-center gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-100">
-            <LayoutDashboard className="h-5 w-5 text-emerald-600" />
+          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10">
+            <LayoutDashboard className="h-5 w-5 text-primary" />
           </div>
           <div>
             <h1 className="text-lg font-bold text-gray-900">Overview</h1>
@@ -891,7 +891,7 @@ function OverviewTab({
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-3 shrink-0">
         {[
           { label: 'Today', value: `${todayStats.today_total} session${todayStats.today_total !== 1 ? 's' : ''}`, sub: todayStats.today_live > 0 ? `${todayStats.today_live} live` : `${todayStats.today_upcoming} upcoming`, color: 'bg-blue-500', icon: CalendarDays },
-          { label: 'Earnings', value: monthEarnings > 0 ? money(monthEarnings) : '—', sub: monthSessions > 0 ? `${monthSessions} sessions` : 'This month', color: 'bg-emerald-500', icon: CreditCard },
+          { label: 'Earnings', value: monthEarnings > 0 ? money(monthEarnings) : '—', sub: monthSessions > 0 ? `${monthSessions} sessions` : 'This month', color: 'bg-primary', icon: CreditCard },
           { label: 'Rating', value: rSummary?.overall_avg ? `${rSummary.overall_avg.toFixed(1)} ★` : '—', sub: rSummary ? `${rSummary.total_feedback} reviews` : 'No reviews', color: 'bg-amber-500', icon: Star },
           { label: 'Completion', value: `${completionPct}%`, sub: `${totalCompleted}/${totalSessions}`, color: 'bg-purple-500', icon: TrendingUp },
           { label: 'Students', value: String(totalStudents), sub: `${batches.length} batches`, color: 'bg-teal-500', icon: Users },
@@ -911,9 +911,9 @@ function OverviewTab({
 
       {/* ═══ Row 2: Next Session Bar ═══ */}
       {nextSession && (
-        <div className="rounded-xl border border-emerald-200 bg-emerald-50/60 px-3 sm:px-4 py-2.5 flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3 shrink-0">
+        <div className="rounded-xl border border-primary/20 bg-primary/5/60 px-3 sm:px-4 py-2.5 flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3 shrink-0">
           <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto flex-1 min-w-0">
-            <Calendar className="h-5 w-5 text-emerald-600 shrink-0" />
+            <Calendar className="h-5 w-5 text-primary shrink-0" />
             <div className="flex-1 min-w-0 flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
               <span className="text-sm font-semibold text-gray-900 truncate">
                 {nextSession.subject}
@@ -938,7 +938,7 @@ function OverviewTab({
         <div className="lg:col-span-4 rounded-xl bg-white border border-gray-100 shadow-sm p-3 sm:p-4 flex flex-col min-h-[200px] md:min-h-0">
           <div className="flex items-center justify-between mb-2 shrink-0">
             <h3 className="text-xs font-semibold text-gray-700">Weekly Sessions</h3>
-            <button onClick={() => changeTab('schedule')} className="text-[10px] text-emerald-600 hover:underline">View all</button>
+            <button onClick={() => changeTab('schedule')} className="text-[10px] text-primary hover:underline">View all</button>
           </div>
           <div className="flex-1 min-h-0">
             {weeklySessionData.some(d => d.total > 0) ? (
@@ -962,7 +962,7 @@ function OverviewTab({
         <div className="hidden md:flex lg:col-span-4 rounded-xl bg-white border border-gray-100 shadow-sm p-3 sm:p-4 flex-col min-h-[200px] md:min-h-0">
           <div className="flex items-center justify-between mb-2 shrink-0">
             <h3 className="text-xs font-semibold text-gray-700">Earnings Trend</h3>
-            <button onClick={() => changeTab('salary')} className="text-[10px] text-emerald-600 hover:underline">Details</button>
+            <button onClick={() => changeTab('salary')} className="text-[10px] text-primary hover:underline">Details</button>
           </div>
           <div className="flex-1 min-h-0">
             {earningsChartData.length > 0 ? (
@@ -1038,7 +1038,7 @@ function OverviewTab({
                   <span className="text-sm font-bold text-gray-900">{rSummary?.overall_avg?.toFixed(1) ?? '—'}</span>
                   {ratingTrendData.length >= 2 && (() => {
                     const diff = ratingTrendData[ratingTrendData.length - 1].rating - ratingTrendData[ratingTrendData.length - 2].rating;
-                    return <span className={`text-[10px] font-medium ${diff >= 0 ? 'text-emerald-600' : 'text-red-500'}`}>{diff >= 0 ? '↑' : '↓'} {Math.abs(diff).toFixed(1)}</span>;
+                    return <span className={`text-[10px] font-medium ${diff >= 0 ? 'text-primary' : 'text-red-500'}`}>{diff >= 0 ? '↑' : '↓'} {Math.abs(diff).toFixed(1)}</span>;
                   })()}
                 </div>
               ) : (
@@ -1060,7 +1060,7 @@ function OverviewTab({
                 {pendingGrading} homework to grade
               </button>
             )}
-            <button onClick={() => changeTab('schedule')} className="text-[10px] text-emerald-600 hover:underline">Full schedule</button>
+            <button onClick={() => changeTab('schedule')} className="text-[10px] text-primary hover:underline">Full schedule</button>
           </div>
         </div>
         {todaySessions.length === 0 ? (
@@ -1073,7 +1073,7 @@ function OverviewTab({
                 <span className="text-gray-500">{s.subject}</span>
                 <span className="text-gray-400">· {s.student_count} <Users className="inline h-3 w-3" /></span>
                 {s.status === 'live' && <Radio className="h-3 w-3 text-red-500 animate-pulse" />}
-                {s.status === 'ended' && <CheckCircle2 className="h-3 w-3 text-emerald-500" />}
+                {s.status === 'ended' && <CheckCircle2 className="h-3 w-3 text-primary" />}
                 {s.status === 'live' && (
                   <Button size="xs" variant="danger" icon={Video} onClick={() => onStartSession(s.session_id, s)} disabled={starting === s.session_id} loading={starting === s.session_id}>
                     Rejoin
@@ -1122,9 +1122,9 @@ const SETUP_SECTIONS = [
     id: 'pre_class',
     icon: ListChecks,
     label: 'Before & During Session',
-    color: 'text-emerald-600',
-    bg: 'bg-emerald-50',
-    border: 'border-emerald-200',
+    color: 'text-primary',
+    bg: 'bg-primary/5',
+    border: 'border-primary/20',
     items: [
       'Enter the session 15 minutes before the scheduled start time',
       'Students join after you (the teacher) have entered',
@@ -1227,8 +1227,8 @@ function QuickSetupGuide() {
         onClick={() => setOpen(p => !p)}
         className="w-full flex items-center gap-3 px-5 py-3.5 hover:bg-gray-50 transition-colors text-left"
       >
-        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-100 shrink-0">
-          <HelpCircle className="h-4 w-4 text-emerald-600" />
+        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 shrink-0">
+          <HelpCircle className="h-4 w-4 text-primary" />
         </div>
         <div className="flex-1 min-w-0">
           <p className="text-sm font-semibold text-gray-800">Quick Setup Guide</p>
@@ -1363,7 +1363,7 @@ function SessionReportPanel({
   const fmtTime = (iso: string | null) => iso ? new Date(iso).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true }) : '—';
 
   const statusColor: Record<string, string> = {
-    present: 'bg-emerald-100 text-emerald-700',
+    present: 'bg-primary/10 text-primary',
     late: 'bg-amber-100 text-amber-700',
     absent: 'bg-red-100 text-red-700',
     not_joined: 'bg-gray-100 text-gray-500',
@@ -1375,7 +1375,7 @@ function SessionReportPanel({
       {/* ── Session Timing ── */}
       <div>
         <h5 className="text-[11px] font-semibold uppercase tracking-wide text-gray-500 mb-2 flex items-center gap-1.5">
-          <Clock className="h-3.5 w-3.5 text-emerald-600" /> Session Timing
+          <Clock className="h-3.5 w-3.5 text-primary" /> Session Timing
         </h5>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           <div className="bg-white rounded-lg border border-gray-100 p-3">
@@ -1409,12 +1409,12 @@ function SessionReportPanel({
           </h5>
           <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
             {[
-              { label: 'Present', value: attSummary?.present ?? summary?.students_joined ?? 0, color: 'text-emerald-600' },
+              { label: 'Present', value: attSummary?.present ?? summary?.students_joined ?? 0, color: 'text-primary' },
               { label: 'Late', value: attSummary?.late ?? 0, color: 'text-amber-600' },
               { label: 'Absent', value: attSummary?.absent ?? 0, color: 'text-red-600' },
               { label: 'Not Joined', value: attSummary?.not_joined ?? (studentCount - (summary?.students_joined ?? 0)), color: 'text-gray-500' },
               { label: 'Left Early', value: attSummary?.left_early ?? 0, color: 'text-orange-600' },
-              { label: 'Avg Attention', value: summary && summary.avg_attention > 0 ? `${summary.avg_attention}%` : '—', color: summary && summary.avg_attention >= 70 ? 'text-emerald-600' : summary && summary.avg_attention >= 40 ? 'text-amber-600' : 'text-gray-500' },
+              { label: 'Avg Attention', value: summary && summary.avg_attention > 0 ? `${summary.avg_attention}%` : '—', color: summary && summary.avg_attention >= 70 ? 'text-primary' : summary && summary.avg_attention >= 40 ? 'text-amber-600' : 'text-gray-500' },
             ].map(s => (
               <div key={s.label} className="bg-white rounded-lg border border-gray-100 p-3 text-center">
                 <p className={`text-lg font-bold ${s.color}`}>{s.value}</p>
@@ -1428,7 +1428,7 @@ function SessionReportPanel({
       {/* ── Per-Student Attendance ── */}
       {attLoading ? (
         <div className="flex items-center justify-center py-4 gap-2">
-          <Loader2 className="h-4 w-4 animate-spin text-emerald-500" />
+          <Loader2 className="h-4 w-4 animate-spin text-primary" />
           <span className="text-xs text-gray-400">Loading student attendance...</span>
         </div>
       ) : attRecords.length > 0 ? (
@@ -1476,10 +1476,10 @@ function SessionReportPanel({
                       {a.attention_avg > 0 ? (
                         <div className="flex items-center gap-1.5">
                           <div className="w-10 h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                            <div className={`h-full rounded-full ${a.attention_avg >= 70 ? 'bg-emerald-500' : a.attention_avg >= 40 ? 'bg-amber-500' : 'bg-red-500'}`}
+                            <div className={`h-full rounded-full ${a.attention_avg >= 70 ? 'bg-primary' : a.attention_avg >= 40 ? 'bg-amber-500' : 'bg-red-500'}`}
                               style={{ width: `${Math.min(a.attention_avg, 100)}%` }} />
                           </div>
-                          <span className={`text-[10px] font-bold ${a.attention_avg >= 70 ? 'text-emerald-600' : a.attention_avg >= 40 ? 'text-amber-600' : 'text-red-600'}`}>{Math.round(a.attention_avg)}%</span>
+                          <span className={`text-[10px] font-bold ${a.attention_avg >= 70 ? 'text-primary' : a.attention_avg >= 40 ? 'text-amber-600' : 'text-red-600'}`}>{Math.round(a.attention_avg)}%</span>
                         </div>
                       ) : <span className="text-xs text-gray-300">—</span>}
                     </td>
@@ -1489,11 +1489,11 @@ function SessionReportPanel({
                         <td className="px-3 py-2">
                           {exam ? (
                             <div className="flex items-center gap-1">
-                              <span className={`text-xs font-bold ${exam.percentage >= 75 ? 'text-emerald-600' : exam.percentage >= 50 ? 'text-amber-600' : 'text-red-600'}`}>
+                              <span className={`text-xs font-bold ${exam.percentage >= 75 ? 'text-primary' : exam.percentage >= 50 ? 'text-amber-600' : 'text-red-600'}`}>
                                 {exam.score}/{exam.total_marks}
                               </span>
                               <span className={`inline-flex items-center justify-center h-4 w-4 rounded-full text-[8px] font-bold ${
-                                exam.grade_letter === 'A' || exam.grade_letter === 'A+' ? 'bg-emerald-100 text-emerald-700'
+                                exam.grade_letter === 'A' || exam.grade_letter === 'A+' ? 'bg-primary/10 text-primary'
                                 : exam.grade_letter === 'B' || exam.grade_letter === 'B+' ? 'bg-blue-100 text-blue-700'
                                 : exam.grade_letter === 'C' || exam.grade_letter === 'C+' ? 'bg-amber-100 text-amber-700'
                                 : 'bg-red-100 text-red-700'
@@ -1540,13 +1540,13 @@ function SessionReportPanel({
                     </td>
                     <td className="px-3 py-2 text-xs text-gray-600 max-w-28 truncate">{e.topic_title}</td>
                     <td className="px-3 py-2">
-                      <span className={`text-xs font-bold ${e.percentage >= 75 ? 'text-emerald-600' : e.percentage >= 50 ? 'text-amber-600' : 'text-red-600'}`}>
+                      <span className={`text-xs font-bold ${e.percentage >= 75 ? 'text-primary' : e.percentage >= 50 ? 'text-amber-600' : 'text-red-600'}`}>
                         {e.score}/{e.total_marks} ({Math.round(e.percentage)}%)
                       </span>
                     </td>
                     <td className="px-3 py-2">
                       <span className={`inline-flex items-center justify-center h-5 w-5 rounded-full text-[10px] font-bold ${
-                        e.grade_letter === 'A' || e.grade_letter === 'A+' ? 'bg-emerald-100 text-emerald-700'
+                        e.grade_letter === 'A' || e.grade_letter === 'A+' ? 'bg-primary/10 text-primary'
                         : e.grade_letter === 'B' || e.grade_letter === 'B+' ? 'bg-blue-100 text-blue-700'
                         : e.grade_letter === 'C' || e.grade_letter === 'C+' ? 'bg-amber-100 text-amber-700'
                         : 'bg-red-100 text-red-700'
@@ -1626,7 +1626,7 @@ function BatchDetailInline({
       <div className="px-4 py-3 bg-gradient-to-r from-emerald-50/80 to-blue-50/40 grid grid-cols-3 sm:grid-cols-6 gap-2">
         {[
           { label: 'Total', value: batch.total_sessions, color: 'text-gray-800' },
-          { label: 'Completed', value: batch.completed_sessions, color: 'text-emerald-600' },
+          { label: 'Completed', value: batch.completed_sessions, color: 'text-primary' },
           { label: 'Upcoming', value: batch.upcoming_sessions, color: 'text-blue-600' },
           { label: 'Live', value: batch.live_sessions, color: 'text-red-600' },
           { label: 'Students', value: batch.student_count, color: 'text-purple-600' },
@@ -1647,7 +1647,7 @@ function BatchDetailInline({
             onClick={() => setSubTab(t.key)}
             className={`inline-flex items-center gap-1.5 px-3 py-2.5 text-[11px] font-semibold border-b-2 transition-all -mb-px whitespace-nowrap ${
               subTab === t.key
-                ? 'border-emerald-500 text-emerald-700 bg-white/60'
+                ? 'border-primary text-primary bg-white/60'
                 : 'border-transparent text-gray-400 hover:text-gray-600'
             }`}
           >
@@ -1655,7 +1655,7 @@ function BatchDetailInline({
             {t.label}
             {t.count !== undefined && t.count > 0 && (
               <span className={`ml-0.5 text-[10px] rounded-full px-1.5 py-0.5 font-bold ${
-                subTab === t.key ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-gray-500'
+                subTab === t.key ? 'bg-primary/10 text-primary' : 'bg-gray-100 text-gray-500'
               }`}>{t.count}</span>
             )}
           </button>
@@ -1670,12 +1670,12 @@ function BatchDetailInline({
             <div className="flex items-center justify-between mb-3">
               <div>
                 <h4 className="text-sm font-bold text-gray-900 flex items-center gap-2">
-                  <Video className="h-4 w-4 text-emerald-600" /> Sessions
+                  <Video className="h-4 w-4 text-primary" /> Sessions
                 </h4>
                 <p className="text-xs text-gray-400 mt-0.5">
                   {batchSessions.filter(s => s.status === 'scheduled').length > 0 && <span className="text-teal-600 font-medium">{batchSessions.filter(s => s.status === 'scheduled').length} upcoming</span>}
                   {batchSessions.filter(s => s.status === 'scheduled').length > 0 && batchSessions.filter(s => s.status === 'live').length > 0 && <span> · </span>}
-                  {batchSessions.filter(s => s.status === 'live').length > 0 && <span className="text-green-600 font-medium">{batchSessions.filter(s => s.status === 'live').length} live</span>}
+                  {batchSessions.filter(s => s.status === 'live').length > 0 && <span className="text-primary font-medium">{batchSessions.filter(s => s.status === 'live').length} live</span>}
                   {batchSessions.filter(s => s.status === 'ended').length > 0 && <span className="text-gray-400"> · {batchSessions.filter(s => s.status === 'ended').length} completed</span>}
                 </p>
               </div>
@@ -1709,10 +1709,10 @@ function BatchDetailInline({
                     const sessionExams = detail?.exam_results.filter(e => e.session_id === s.session_id) || [];
                     return (
                       <React.Fragment key={s.session_id}>
-                      <TRow className={`cursor-pointer ${isExpanded ? 'bg-emerald-50/50' : 'hover:bg-gray-50/80'}`} onClick={() => setExpandedSession(isExpanded ? null : s.session_id)}>
+                      <TRow className={`cursor-pointer ${isExpanded ? 'bg-primary/5/50' : 'hover:bg-gray-50/80'}`} onClick={() => setExpandedSession(isExpanded ? null : s.session_id)}>
                         <td className="px-2 py-2.5 w-6">
                           {isExpanded
-                            ? <ChevronDown className="h-3.5 w-3.5 text-emerald-600" />
+                            ? <ChevronDown className="h-3.5 w-3.5 text-primary" />
                             : <ChevronRight className="h-3.5 w-3.5 text-gray-400" />}
                         </td>
                         <td className="px-4 py-2.5">
@@ -1787,7 +1787,7 @@ function BatchDetailInline({
                       {isExpanded && (
                         <tr>
                           <td colSpan={8} className="px-0 py-0">
-                            <div className="bg-gradient-to-b from-emerald-50/60 to-white border-y border-emerald-100 px-6 py-4">
+                            <div className="bg-gradient-to-b from-emerald-50/60 to-white border-y border-primary/15 px-6 py-4">
                               <SessionReportPanel
                                 session={s}
                                 summary={summary}
@@ -1821,7 +1821,7 @@ function BatchDetailInline({
               const todayDow = new Date().getDay();
               const subjects = [...new Set(detail.timetable.map(t => t.subject))].sort();
               const colorSets = [
-                { bg: 'bg-emerald-500', light: 'bg-emerald-50', border: 'border-emerald-200', text: 'text-emerald-700' },
+                { bg: 'bg-primary', light: 'bg-primary/5', border: 'border-primary/20', text: 'text-primary' },
                 { bg: 'bg-blue-500', light: 'bg-blue-50', border: 'border-blue-200', text: 'text-blue-700' },
                 { bg: 'bg-purple-500', light: 'bg-purple-50', border: 'border-purple-200', text: 'text-purple-700' },
                 { bg: 'bg-amber-500', light: 'bg-amber-50', border: 'border-amber-200', text: 'text-amber-700' },
@@ -1835,7 +1835,7 @@ function BatchDetailInline({
                   {/* Summary strip */}
                   <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 flex-wrap">
                     <div className="flex items-center gap-2">
-                      <Calendar className="h-4 w-4 text-emerald-600" />
+                      <Calendar className="h-4 w-4 text-primary" />
                       <span className="text-sm font-bold text-gray-900">Weekly Schedule</span>
                     </div>
                     <div className="flex items-center gap-3 text-[11px] text-gray-500">
@@ -1866,16 +1866,16 @@ function BatchDetailInline({
                         .sort((a, b) => a.start_time.localeCompare(b.start_time));
 
                       return (
-                        <div key={dow} className={`rounded-xl border overflow-hidden ${isToday ? 'border-emerald-300 ring-1 ring-emerald-200' : 'border-gray-200'}`}>
+                        <div key={dow} className={`rounded-xl border overflow-hidden ${isToday ? 'border-emerald-300 ring-1 ring-primary/20' : 'border-gray-200'}`}>
                           {/* Day header */}
-                          <div className={`px-3 py-2 text-center ${isToday ? 'bg-emerald-500' : 'bg-gray-100'}`}>
+                          <div className={`px-3 py-2 text-center ${isToday ? 'bg-primary' : 'bg-gray-100'}`}>
                             <span className={`text-xs font-bold ${isToday ? 'text-white' : 'text-gray-600'}`}>
                               {DAY_NAMES[dow].slice(0, 3).toUpperCase()}
                             </span>
-                            {isToday && <span className="ml-1 text-[9px] text-emerald-100 font-medium">TODAY</span>}
+                            {isToday && <span className="ml-1 text-[9px] text-primary/40 font-medium">TODAY</span>}
                           </div>
                           {/* Slots */}
-                          <div className={`p-1.5 space-y-1.5 ${isToday ? 'bg-emerald-50/30' : 'bg-white'}`}>
+                          <div className={`p-1.5 space-y-1.5 ${isToday ? 'bg-primary/5/30' : 'bg-white'}`}>
                             {daySlots.map((sl, i) => {
                               const c = getColor(sl.subject);
                               return (
@@ -1936,28 +1936,28 @@ function BatchDetailInline({
                           </div>
                         </td>
                         <td className="px-4 py-2.5 text-sm text-gray-700 font-medium">{total}</td>
-                        <td className="px-4 py-2.5 text-sm text-emerald-600 font-semibold">{present}</td>
+                        <td className="px-4 py-2.5 text-sm text-primary font-semibold">{present}</td>
                         <td className="px-4 py-2.5 text-sm text-amber-600 font-semibold">{late}</td>
                         <td className="px-4 py-2.5 text-sm text-red-600 font-semibold">{absent + notJoined}</td>
                         <td className="px-4 py-2.5 text-sm text-orange-600 font-semibold">{leftEarly}</td>
                         <td className="px-4 py-2.5">
                           <div className="flex items-center gap-2">
                             <div className="w-14 h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                              <div className={`h-full rounded-full ${rate >= 75 ? 'bg-emerald-500' : rate >= 50 ? 'bg-amber-500' : 'bg-red-500'}`} style={{ width: `${Math.min(rate, 100)}%` }} />
+                              <div className={`h-full rounded-full ${rate >= 75 ? 'bg-primary' : rate >= 50 ? 'bg-amber-500' : 'bg-red-500'}`} style={{ width: `${Math.min(rate, 100)}%` }} />
                             </div>
-                            <span className={`text-xs font-bold ${rate >= 75 ? 'text-emerald-600' : rate >= 50 ? 'text-amber-600' : 'text-red-600'}`}>{rate}%</span>
+                            <span className={`text-xs font-bold ${rate >= 75 ? 'text-primary' : rate >= 50 ? 'text-amber-600' : 'text-red-600'}`}>{rate}%</span>
                           </div>
                         </td>
                         <td className="px-4 py-2.5">
                           {avgAtt > 0
-                            ? <span className={`text-xs font-bold ${avgAtt >= 70 ? 'text-emerald-600' : avgAtt >= 40 ? 'text-amber-600' : 'text-red-600'}`}>{avgAtt}%</span>
+                            ? <span className={`text-xs font-bold ${avgAtt >= 70 ? 'text-primary' : avgAtt >= 40 ? 'text-amber-600' : 'text-red-600'}`}>{avgAtt}%</span>
                             : <span className="text-xs text-gray-400">—</span>
                           }
                         </td>
                         <td className="px-4 py-2.5">
                           <button
                             onClick={() => setPerfStudent({ email: a.student_email, name: a.student_name })}
-                            className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium text-emerald-700 bg-emerald-50 hover:bg-emerald-100 rounded-md transition-colors"
+                            className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium text-primary bg-primary/5 hover:bg-primary/10 rounded-md transition-colors"
                           >
                             <BarChart3 className="w-3.5 h-3.5" />
                             Performance
@@ -2086,13 +2086,13 @@ function MyBatchesTab({
           {filteredBatches.map((b, idx) => {
             const isExpanded = expandedBatch === b.batch_id;
             return (
-              <Card key={`${b.batch_id}-${idx}`} className={`overflow-hidden transition-shadow ${isExpanded ? 'ring-1 ring-emerald-200 shadow-md' : ''}`}>
+              <Card key={`${b.batch_id}-${idx}`} className={`overflow-hidden transition-shadow ${isExpanded ? 'ring-1 ring-primary/20 shadow-md' : ''}`}>
                 <button
                   onClick={() => setExpandedBatch(isExpanded ? null : b.batch_id)}
                   className="w-full flex items-center gap-4 text-left p-4 hover:bg-gray-50/50 transition-colors"
                 >
-                  <div className={`flex h-10 w-10 items-center justify-center rounded-lg shrink-0 ${isExpanded ? 'bg-emerald-500' : 'bg-emerald-100'}`}>
-                    <BookOpen className={`h-5 w-5 ${isExpanded ? 'text-white' : 'text-emerald-600'}`} />
+                  <div className={`flex h-10 w-10 items-center justify-center rounded-lg shrink-0 ${isExpanded ? 'bg-primary' : 'bg-primary/10'}`}>
+                    <BookOpen className={`h-5 w-5 ${isExpanded ? 'text-white' : 'text-primary'}`} />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
@@ -2108,7 +2108,7 @@ function MyBatchesTab({
                   <div className="flex items-center gap-4 text-xs text-gray-500 shrink-0">
                     <span className="hidden sm:flex items-center gap-1"><Users className="h-3.5 w-3.5" />{b.student_count}</span>
                     <span className="hidden sm:flex items-center gap-1"><CalendarDays className="h-3.5 w-3.5" />{b.completed_sessions}/{b.total_sessions}</span>
-                    {isExpanded ? <ChevronDown className="h-4 w-4 text-emerald-500" /> : <ChevronRight className="h-4 w-4" />}
+                    {isExpanded ? <ChevronDown className="h-4 w-4 text-primary" /> : <ChevronRight className="h-4 w-4" />}
                   </div>
                 </button>
                 {isExpanded && (
@@ -2206,7 +2206,7 @@ function WeeklyScheduleTab({
       {todaySessions.length > 0 && (
         <Card className="p-4">
           <h3 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
-            <CalendarDays className="h-4 w-4 text-emerald-500" />
+            <CalendarDays className="h-4 w-4 text-primary" />
             Today&apos;s Agenda
           </h3>
           <div className="flex gap-3 overflow-x-auto pb-1">
@@ -2382,7 +2382,7 @@ function ProfileTab({ profile, onRefresh }: { profile: TeacherProfile | null; on
               type="button"
               onClick={() => avatarInputRef.current?.click()}
               disabled={avatarUploading}
-              className="absolute bottom-0 right-0 h-6 w-6 rounded-full bg-emerald-600 text-white flex items-center justify-center shadow hover:bg-emerald-700 transition disabled:opacity-50"
+              className="absolute bottom-0 right-0 h-6 w-6 rounded-full bg-primary text-white flex items-center justify-center shadow hover:bg-primary/90 transition disabled:opacity-50"
               title="Change photo"
             >
               {avatarUploading
@@ -2526,7 +2526,7 @@ const REGION_OPTIONS = [
 // Shared styling for edit inputs
 const editInputCls =
   'w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 ' +
-  'placeholder:text-gray-400 focus:border-emerald-400 focus:outline-none focus:ring-1 focus:ring-emerald-300';
+  'placeholder:text-gray-400 focus:border-primary focus:outline-none focus:ring-1 focus:ring-emerald-300';
 
 function EditField({ label, children, className = '' }: { label: string; children: React.ReactNode; className?: string }) {
   return (
@@ -2546,7 +2546,7 @@ function ProfileField({ icon: Icon, label, value }: { icon: typeof User; label: 
   return (
     <div className="rounded-lg bg-gray-50 p-3">
       <p className="text-xs text-gray-400 mb-1 flex items-center gap-1">
-        <Icon className="h-3 w-3 text-emerald-500" /> {label}
+        <Icon className="h-3 w-3 text-primary" /> {label}
       </p>
       <p className="text-sm text-gray-700">{value || <span className="text-gray-300">—</span>}</p>
     </div>
@@ -2559,7 +2559,7 @@ function ProfileField({ icon: Icon, label, value }: { icon: typeof User; label: 
 // ═════════════════════════════════════════════════════════════
 
 const PAYSLIP_STATUS_STYLE: Record<string, string> = {
-  paid:      'text-emerald-700 bg-emerald-50 border border-emerald-200',
+  paid:      'text-primary bg-primary/5 border border-primary/20',
   finalized: 'text-blue-700   bg-blue-50   border border-blue-200',
   draft:     'text-gray-600   bg-gray-50   border border-gray-200',
 };
@@ -2587,7 +2587,7 @@ function SalaryTab({
       {/* Header */}
       <div className="flex items-center justify-between">
         <h2 className="text-base font-semibold text-gray-800 flex items-center gap-2">
-          <CreditCard className="h-4 w-4 text-emerald-600" /> Salary &amp; Payroll
+          <CreditCard className="h-4 w-4 text-primary" /> Salary &amp; Payroll
         </h2>
         <RefreshButton onClick={onRefresh} loading={loading} />
       </div>
@@ -2599,7 +2599,7 @@ function SalaryTab({
             key={t}
             onClick={() => setSubTab(t)}
             className={`px-4 py-1.5 text-xs font-semibold rounded-md transition-colors capitalize ${
-              subTab === t ? 'bg-white text-emerald-700 shadow-sm' : 'text-gray-500 hover:text-gray-700'
+              subTab === t ? 'bg-white text-primary shadow-sm' : 'text-gray-500 hover:text-gray-700'
             }`}
           >
             {t}
@@ -2613,14 +2613,14 @@ function SalaryTab({
 
           {/* Current Month Live Estimate */}
           {cm && (
-            <div className="rounded-xl border border-emerald-200 bg-gradient-to-br from-emerald-50 to-teal-50 p-5 shadow-sm">
+            <div className="rounded-xl border border-primary/20 bg-gradient-to-br from-primary/5 to-secondary/5 p-5 shadow-sm">
               <div className="flex items-center justify-between mb-4">
-                <p className="text-sm font-semibold text-emerald-800">{cm.label} — Live Estimate</p>
-                <span className="text-xs bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full font-medium">Real-time</span>
+                <p className="text-sm font-semibold text-primary">{cm.label} — Live Estimate</p>
+                <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full font-medium">Real-time</span>
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
                 {[
-                  { label: 'Sessions Done',     value: String(cm.classes_conducted), color: 'text-emerald-700' },
+                  { label: 'Sessions Done',     value: String(cm.classes_conducted), color: 'text-primary' },
                   { label: 'Upcoming',           value: String(cm.classes_upcoming),  color: 'text-blue-600' },
                   { label: 'Extensions',         value: cm.extension_sessions > 0 ? `${cm.extension_sessions} (+${cm.extension_minutes}m)` : '0', color: 'text-teal-600' },
                   { label: 'Missed',             value: String(cm.classes_missed),    color: cm.classes_missed > 0 ? 'text-red-600' : 'text-gray-400' },
@@ -2631,7 +2631,7 @@ function SalaryTab({
                   </div>
                 ))}
               </div>
-              <div className="border-t border-emerald-200 pt-4">
+              <div className="border-t border-primary/20 pt-4">
                 <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 text-center">
                   <div>
                     <p className="text-sm font-semibold text-gray-700">{money(cm.base_pay_paise)}</p>
@@ -2656,7 +2656,7 @@ function SalaryTab({
                     </div>
                   )}
                   <div>
-                    <p className="text-xl font-bold text-emerald-700">{money(cm.total_paise)}</p>
+                    <p className="text-xl font-bold text-primary">{money(cm.total_paise)}</p>
                     <p className="text-xs text-gray-500 font-medium">Estimated Total</p>
                   </div>
                 </div>
@@ -2673,7 +2673,7 @@ function SalaryTab({
           {/* Historical totals */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {[
-              { label: 'Total Earned',    value: money(totalPaid),    color: 'text-emerald-700' },
+              { label: 'Total Earned',    value: money(totalPaid),    color: 'text-primary' },
               { label: 'Pending / Draft', value: money(totalPending), color: 'text-amber-600'   },
               { label: 'Sessions Done',    value: String(totalDone),   color: 'text-blue-700'    },
               { label: 'Sessions Missed',  value: String(totalMissed), color: 'text-red-600'     },
@@ -2691,7 +2691,7 @@ function SalaryTab({
               <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Current Pay Schedule</p>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div className="text-center">
-                  <p className="text-xl sm:text-2xl font-bold text-emerald-700">{money(config.per_hour_rate)}</p>
+                  <p className="text-xl sm:text-2xl font-bold text-primary">{money(config.per_hour_rate)}</p>
                   <p className="text-xs text-gray-400 mt-1">Rate per hour</p>
                 </div>
                 <div className="text-center">
@@ -2758,7 +2758,7 @@ function SalaryTab({
                         )}
                       </td>
                       <td className="px-4 py-3 text-sm text-gray-600">{money(e.per_hour_rate_paise)}/hr</td>
-                      <td className="px-4 py-3 text-sm text-emerald-700">{money(e.base_paise)}</td>
+                      <td className="px-4 py-3 text-sm text-primary">{money(e.base_paise)}</td>
                       <td className="px-4 py-3 text-sm text-teal-600">
                         {e.extension_minutes > 0
                           ? <>{money(e.extension_paise)} <span className="text-xs text-gray-400">(+{e.extension_minutes}m)</span></>
@@ -2803,7 +2803,7 @@ function SalaryTab({
                   <TRow key={p.id}>
                     <td className="px-4 py-3 text-sm text-gray-700 font-medium">{p.period_label}</td>
                     <td className="px-4 py-3 text-sm text-gray-600">
-                      <span className="text-emerald-700 font-semibold">{p.classes_conducted}</span>
+                      <span className="text-primary font-semibold">{p.classes_conducted}</span>
                       {(p.extension_sessions || 0) > 0 && (
                         <span className="text-teal-500 text-xs ml-1">(+{p.extension_sessions} ext)</span>
                       )}
@@ -2813,7 +2813,7 @@ function SalaryTab({
                     </td>
                     <td className="px-4 py-3 text-sm text-gray-700">{money(p.base_pay_paise)}</td>
                     <td className="px-4 py-3 text-sm text-teal-600">{money(p.extension_paise || 0)}</td>
-                    <td className="px-4 py-3 text-sm text-emerald-600">{money(p.incentive_paise)}</td>
+                    <td className="px-4 py-3 text-sm text-primary">{money(p.incentive_paise)}</td>
                     <td className="px-4 py-3 text-sm text-red-500">
                       {p.lop_paise > 0 ? `−${money(p.lop_paise)}` : <span className="text-gray-300">—</span>}
                     </td>
@@ -2952,7 +2952,7 @@ function ScoreRing({ value, label, color, sub }: { value: number; label: string;
 }
 
 function PunctualityBadge({ lateMin }: { lateMin: number }) {
-  if (lateMin <= 1) return <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700">On Time</span>;
+  if (lateMin <= 1) return <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-primary/5 text-primary">On Time</span>;
   if (lateMin <= 3) return <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-blue-50 text-blue-600">+{Math.round(lateMin)}m</span>;
   if (lateMin <= 5) return <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-amber-50 text-amber-600">+{Math.round(lateMin)}m</span>;
   if (lateMin <= 15) return <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-orange-50 text-orange-600">+{Math.round(lateMin)}m late</span>;
@@ -2991,7 +2991,7 @@ function RatingsTab({
             key={t}
             onClick={() => setSubTab(t)}
             className={`px-4 py-1.5 text-xs font-semibold rounded-md transition-colors capitalize ${
-              subTab === t ? 'bg-white text-emerald-700 shadow-sm' : 'text-gray-500 hover:text-gray-700'
+              subTab === t ? 'bg-white text-primary shadow-sm' : 'text-gray-500 hover:text-gray-700'
             }`}
           >
             {t === 'feedback' ? 'Student Feedback' : t}
@@ -3024,7 +3024,7 @@ function RatingsTab({
                   <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm space-y-3">
                     <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Class Start Timing</p>
                     {[
-                      { label: 'On Time (≤1 min)', count: pDist.on_time, color: 'bg-emerald-400', total: sm.total_sessions },
+                      { label: 'On Time (≤1 min)', count: pDist.on_time, color: 'bg-primary', total: sm.total_sessions },
                       { label: 'Slightly Late (1-5m)', count: pDist.slightly_late, color: 'bg-blue-400', total: sm.total_sessions },
                       { label: 'Late (5-15m)', count: pDist.late, color: 'bg-amber-400', total: sm.total_sessions },
                       { label: 'Very Late (>15m)', count: pDist.very_late, color: 'bg-red-400', total: sm.total_sessions },
@@ -3050,7 +3050,7 @@ function RatingsTab({
                   <div className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm space-y-3">
                     <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Student Ratings Breakdown</p>
                     {[
-                      { label: '★★★★★ Excellent', count: rDist.five, color: 'bg-emerald-400' },
+                      { label: '★★★★★ Excellent', count: rDist.five, color: 'bg-primary' },
                       { label: '★★★★ Good', count: rDist.four, color: 'bg-blue-400' },
                       { label: '★★★ Average', count: rDist.three, color: 'bg-amber-400' },
                       { label: '★★ Below Avg', count: rDist.two, color: 'bg-orange-400' },
@@ -3115,7 +3115,7 @@ function RatingsTab({
                     const isExpanded = expandedSession === s.room_id;
                     return (
                       <React.Fragment key={s.room_id}>
-                        <TRow className={`cursor-pointer ${isExpanded ? 'bg-emerald-50/50' : ''}`} onClick={() => setExpandedSession(isExpanded ? null : s.room_id)}>
+                        <TRow className={`cursor-pointer ${isExpanded ? 'bg-primary/5/50' : ''}`} onClick={() => setExpandedSession(isExpanded ? null : s.room_id)}>
                           <td className="px-4 py-3 text-sm text-gray-700">
                             {s.scheduled_date ? new Date(s.scheduled_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }) : '—'}
                           </td>
@@ -3236,7 +3236,7 @@ function RatingsTab({
                                 <span className="text-sm font-semibold text-gray-700">{f.display_name}</span>
                                 <StarDisplay value={f.rating} />
                                 <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${
-                                  f.rating >= 4 ? 'bg-emerald-50 text-emerald-700' :
+                                  f.rating >= 4 ? 'bg-primary/5 text-primary' :
                                   f.rating >= 3 ? 'bg-amber-50 text-amber-700' :
                                   'bg-red-50 text-red-600'
                                 }`}>{f.rating}/5</span>
@@ -3275,13 +3275,13 @@ function RatingsTab({
 // ═════════════════════════════════════════════════════════════
 
 const HW_COMPLETION_STYLE: Record<string, { bg: string; text: string; label: string }> = {
-  completed:   { bg: 'bg-emerald-100', text: 'text-emerald-700', label: 'Completed' },
+  completed:   { bg: 'bg-primary/10', text: 'text-primary', label: 'Completed' },
   partial:     { bg: 'bg-amber-100',   text: 'text-amber-700',   label: 'Partial' },
   not_started: { bg: 'bg-red-100',     text: 'text-red-700',     label: 'Not Started' },
 };
 
 const GRADE_COLORS_T: Record<string, string> = {
-  A: 'text-emerald-600', B: 'text-blue-600', C: 'text-amber-600',
+  A: 'text-primary', B: 'text-blue-600', C: 'text-amber-600',
   D: 'text-orange-600', F: 'text-red-600',
 };
 
@@ -3332,7 +3332,7 @@ function TeacherHomeworkTab({
     <div className="space-y-5">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div className="flex items-center gap-2">
-          <ListChecks className="h-5 w-5 text-emerald-600" />
+          <ListChecks className="h-5 w-5 text-primary" />
           <h2 className="text-lg font-bold text-gray-900">Homework</h2>
         </div>
         <div className="flex items-center gap-2">
@@ -3414,7 +3414,7 @@ function TeacherHomeworkTab({
                         <p className="text-xs font-semibold text-gray-700">Questions:</p>
                         {hw.questions.map(q => (
                           <div key={q.id} className="flex gap-2 text-xs">
-                            <span className="text-emerald-600 font-medium shrink-0">{q.question_number}.</span>
+                            <span className="text-primary font-medium shrink-0">{q.question_number}.</span>
                             <span className="text-gray-800">{q.question_text}</span>
                           </div>
                         ))}
@@ -3451,7 +3451,7 @@ function TeacherHomeworkTab({
                                 <div className="flex flex-wrap gap-1.5">
                                   {sub.file_names.map((name, i) => (
                                     <a key={i} href={sub.file_urls[i]} target="_blank" rel="noreferrer"
-                                      className="inline-flex items-center gap-1 text-xs text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded hover:bg-emerald-100 transition">
+                                      className="inline-flex items-center gap-1 text-xs text-primary bg-primary/5 border border-primary/20 px-2 py-0.5 rounded hover:bg-primary/10 transition">
                                       <FileText className="h-3 w-3" /> {name}
                                     </a>
                                   ))}
@@ -3465,7 +3465,7 @@ function TeacherHomeworkTab({
                                   <span className={`font-bold ${GRADE_COLORS_T[sub.grade] || 'text-gray-800'}`}>{sub.grade}</span>
                                   {sub.teacher_comment && <span className="text-gray-400">— {sub.teacher_comment}</span>}
                                   <button onClick={() => setGrading({ subId: sub.id, grade: sub.grade || '', comment: sub.teacher_comment || '' })}
-                                    className="text-emerald-600 hover:underline text-[10px]">Edit</button>
+                                    className="text-primary hover:underline text-[10px]">Edit</button>
                                 </div>
                               ) : isGrading ? (
                                 <div className="flex flex-wrap items-center gap-2">
@@ -3477,14 +3477,14 @@ function TeacherHomeworkTab({
                                   <input value={grading.comment} onChange={e => setGrading({ ...grading, comment: e.target.value })}
                                     placeholder="Comment…" className="flex-1 min-w-0 rounded border border-gray-300 bg-white px-2 py-1 text-xs text-gray-800 outline-none focus:ring-1 focus:ring-emerald-400" />
                                   <button onClick={() => handleGrade(hw.id)} disabled={!grading.grade || saving}
-                                    className="rounded bg-emerald-600 px-2 py-1 text-xs text-white hover:bg-emerald-700 disabled:opacity-50 transition">
+                                    className="rounded bg-primary px-2 py-1 text-xs text-white hover:bg-primary/90 disabled:opacity-50 transition">
                                     {saving ? '…' : 'Save'}
                                   </button>
                                   <button onClick={() => setGrading(null)} className="text-xs text-gray-400 hover:text-gray-600">Cancel</button>
                                 </div>
                               ) : (
                                 <button onClick={() => setGrading({ subId: sub.id, grade: '', comment: '' })}
-                                  className="text-xs text-emerald-600 hover:underline">
+                                  className="text-xs text-primary hover:underline">
                                   Grade
                                 </button>
                               )}
@@ -3512,7 +3512,7 @@ function TeacherHomeworkTab({
 const MATERIAL_TYPE_STYLE_T: Record<string, string> = {
   notes:      'bg-blue-50   text-blue-700   border-blue-200',
   assignment: 'bg-amber-50  text-amber-700  border-amber-200',
-  resource:   'bg-emerald-50 text-emerald-700 border-emerald-200',
+  resource:   'bg-primary/5 text-primary border-primary/20',
   video:      'bg-purple-50 text-purple-700  border-purple-200',
   other:      'bg-gray-50   text-gray-600   border-gray-200',
 };
@@ -3541,7 +3541,7 @@ function TeacherMaterialsTab({
       {/* Header */}
       <div className="flex items-center justify-between">
         <h2 className="text-base font-semibold text-gray-800 flex items-center gap-2">
-          <FolderOpen className="h-4 w-4 text-emerald-600" /> Teaching Materials
+          <FolderOpen className="h-4 w-4 text-primary" /> Teaching Materials
         </h2>
         <RefreshButton onClick={onRefresh} loading={loading} />
       </div>
@@ -3593,7 +3593,7 @@ function TeacherMaterialsTab({
                   {m.batches && m.batches.length > 0 && (
                     <div className="flex items-center gap-1 flex-wrap mt-1">
                       {m.batches.map(b => (
-                        <span key={b.batch_id} className="text-[11px] bg-emerald-50 text-emerald-700 border border-emerald-100 px-1.5 py-0.5 rounded-full">
+                        <span key={b.batch_id} className="text-[11px] bg-primary/5 text-primary border border-primary/15 px-1.5 py-0.5 rounded-full">
                           {b.batch_name}
                         </span>
                       ))}
@@ -3613,7 +3613,7 @@ function TeacherMaterialsTab({
                   href={m.file_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700 hover:text-emerald-900 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-lg px-3 py-1.5 transition-colors"
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:text-emerald-900 bg-primary/5 hover:bg-primary/10 border border-primary/20 rounded-lg px-3 py-1.5 transition-colors"
                 >
                   <ExternalLink className="h-3.5 w-3.5" />
                   {m.file_name || 'Open file'}
@@ -3751,13 +3751,13 @@ function LeaveTab() {
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-semibold text-gray-900">Leave Requests</h2>
             <button onClick={() => setShowForm(!showForm)}
-              className="flex items-center gap-2 px-4 py-2 bg-emerald-50 border border-emerald-200 rounded-lg text-emerald-700 hover:bg-emerald-100 transition text-sm font-medium">
+              className="flex items-center gap-2 px-4 py-2 bg-primary/5 border border-primary/20 rounded-lg text-primary hover:bg-primary/10 transition text-sm font-medium">
               <Send className="h-4 w-4" />{showForm ? 'Cancel' : 'Request Leave'}
             </button>
           </div>
 
           {showForm && (
-            <Card className="p-5 space-y-4 border-emerald-200">
+            <Card className="p-5 space-y-4 border-primary/20">
               <h3 className="text-sm font-semibold text-gray-900">New Leave Request</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
@@ -3806,7 +3806,7 @@ function LeaveTab() {
                 )}
               </div>
               <button disabled={submitting || certUploading || !form.startDate || !form.endDate || !form.reason} onClick={submitLeave}
-                className="px-4 py-2 rounded-lg bg-emerald-600 text-white text-sm font-medium hover:bg-emerald-700 disabled:opacity-50 transition">
+                className="px-4 py-2 rounded-lg bg-primary text-white text-sm font-medium hover:bg-primary/90 disabled:opacity-50 transition">
                 {certUploading ? 'Uploading certificate…' : submitting ? 'Submitting…' : 'Submit Leave Request'}
               </button>
             </Card>
@@ -3837,7 +3837,7 @@ function LeaveTab() {
                           <Paperclip className="h-3 w-3" /> Medical Certificate
                         </a>
                       ) : !['withdrawn', 'rejected'].includes(lr.status) ? (
-                        <label className="inline-flex items-center gap-1 mt-1 text-xs text-emerald-600 hover:text-emerald-800 cursor-pointer">
+                        <label className="inline-flex items-center gap-1 mt-1 text-xs text-primary hover:text-primary cursor-pointer">
                           <Paperclip className="h-3 w-3" />
                           {uploadingCertFor === lr.id ? 'Uploading…' : 'Upload Medical Certificate'}
                           <input type="file" className="hidden" accept=".pdf,.jpg,.jpeg,.png,.webp"
@@ -3847,7 +3847,7 @@ function LeaveTab() {
                       ) : null}
                       {lr.salary_adjustment && (
                         <span className={`inline-block mt-1 text-[11px] px-2 py-0.5 rounded-full font-medium ${
-                          lr.salary_adjustment === 'full_pay' ? 'bg-green-100 text-green-700' :
+                          lr.salary_adjustment === 'full_pay' ? 'bg-primary/10 text-primary' :
                           lr.salary_adjustment === 'half_pay' ? 'bg-amber-100 text-amber-700' :
                           'bg-red-100 text-red-700'
                         }`}>
@@ -4291,7 +4291,7 @@ function QuestionsTab() {
                   onClick={() => setForm(f => ({ ...f, category: 'topic', paper_type: '', chapter_name: '', topic_name: '', title: '' }))}
                   className={`rounded-xl border-2 p-4 text-left transition-all ${
                     form.category === 'topic'
-                      ? 'border-emerald-500 bg-emerald-50 ring-2 ring-emerald-200'
+                      ? 'border-primary bg-primary/5 ring-2 ring-primary/20'
                       : 'border-gray-200 bg-white hover:border-gray-300'
                   }`}
                 >
@@ -4523,7 +4523,7 @@ function QuestionsTab() {
                     {t.category === 'question_paper' ? (
                       <span className="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">📝 QP</span>
                     ) : t.category === 'topic' ? (
-                      <span className="text-xs bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full font-medium">📖 Topic</span>
+                      <span className="text-xs bg-primary/5 text-primary px-2 py-0.5 rounded-full font-medium">📖 Topic</span>
                     ) : null}
                     <span className="text-xs bg-purple-50 text-purple-700 px-2 py-0.5 rounded-full">{t.subject}</span>
                     <span className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">Gr.{t.grade}</span>
@@ -4531,7 +4531,7 @@ function QuestionsTab() {
                       <span className="text-xs bg-amber-50 text-amber-700 px-2 py-0.5 rounded-full">{t.board}</span>
                     )}
                     {t.files?.length > 0 && (
-                      <span className="text-xs bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full">{t.files.length} file{t.files.length > 1 ? 's' : ''}</span>
+                      <span className="text-xs bg-primary/5 text-primary px-2 py-0.5 rounded-full">{t.files.length} file{t.files.length > 1 ? 's' : ''}</span>
                     )}
                   </div>
                   <p className="text-sm font-semibold text-gray-800 truncate mt-1">{t.title}</p>
@@ -4539,7 +4539,7 @@ function QuestionsTab() {
                     <p className="text-xs text-blue-600 mt-0.5">{t.paper_type}</p>
                   )}
                   {t.category === 'topic' && (t.chapter_name || t.topic_name) && (
-                    <p className="text-xs text-emerald-600 mt-0.5">
+                    <p className="text-xs text-primary mt-0.5">
                       {t.chapter_name}{t.topic_name ? ` → ${t.topic_name}` : ''}
                     </p>
                   )}
@@ -4612,7 +4612,7 @@ function QuestionsTab() {
                     {(t.generated_questions ?? 0) > 0 ? (
                       <button
                         onClick={() => handleViewQuestions(t.id)}
-                        className="flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 hover:bg-emerald-100 transition-colors"
+                        className="flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-lg bg-primary/5 text-primary hover:bg-primary/10 transition-colors"
                       >
                         <Eye className="h-3.5 w-3.5" /> {t.generated_questions} Qs
                       </button>
@@ -4638,8 +4638,8 @@ function QuestionsTab() {
                   </button>
                 </div>
                 {genCountPromptId === t.id && (
-                  <div className="flex items-center gap-2 mt-2 p-2.5 rounded-lg bg-emerald-50 border border-emerald-200">
-                    <label className="text-xs text-emerald-700 font-medium whitespace-nowrap">How many questions?</label>
+                  <div className="flex items-center gap-2 mt-2 p-2.5 rounded-lg bg-primary/5 border border-primary/20">
+                    <label className="text-xs text-primary font-medium whitespace-nowrap">How many questions?</label>
                     <input
                       type="number"
                       min={5}
@@ -4655,14 +4655,14 @@ function QuestionsTab() {
                           setGenCountPromptId(null);
                         }
                       }}
-                      className="w-16 px-2 py-1 text-xs rounded-md border border-emerald-300 focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 outline-none text-center"
+                      className="w-16 px-2 py-1 text-xs rounded-md border border-emerald-300 focus:ring-2 focus:ring-emerald-400 focus:border-primary outline-none text-center"
                     />
                     <button
                       onClick={() => {
                         const n = Math.min(50, Math.max(5, parseInt(genCountValue) || 10));
                         handleGenerate(t.id, n);
                       }}
-                      className="text-xs font-medium px-2.5 py-1 rounded-md bg-emerald-600 text-white hover:bg-emerald-700 transition-colors"
+                      className="text-xs font-medium px-2.5 py-1 rounded-md bg-primary text-white hover:bg-primary/90 transition-colors"
                     >
                       Go
                     </button>

@@ -36,7 +36,7 @@ interface Props {
 }
 
 const GRADE_COLORS: Record<string, string> = {
-  'A+': 'text-green-400', A: 'text-green-400',
+  'A+': 'text-primary', A: 'text-primary',
   'B+': 'text-blue-400', B: 'text-blue-400',
   'C+': 'text-yellow-400', C: 'text-yellow-400',
   D: 'text-orange-400', F: 'text-red-400',
@@ -92,7 +92,7 @@ export default function StudentExamsClient({ userName, userEmail, userRole }: Pr
           ].map(t => (
             <button key={t.key} onClick={() => setTab(t.key)}
               className={`rounded-md px-4 py-1.5 text-sm font-medium transition
-                ${tab === t.key ? 'bg-emerald-600 text-white shadow-sm' : 'text-gray-500 hover:text-gray-800'}`}>
+                ${tab === t.key ? 'bg-primary text-white shadow-sm' : 'text-gray-500 hover:text-gray-800'}`}>
               {t.label} ({t.count})
             </button>
           ))}
@@ -101,7 +101,7 @@ export default function StudentExamsClient({ userName, userEmail, userRole }: Pr
         {/* Exam Cards */}
         {loading ? (
           <div className="flex items-center justify-center py-16">
-            <div className="h-8 w-8 animate-spin rounded-full border-2 border-emerald-500 border-t-transparent" />
+            <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
           </div>
         ) : currentList.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 text-gray-400">
@@ -158,7 +158,7 @@ export default function StudentExamsClient({ userName, userEmail, userRole }: Pr
                   <div className="mt-auto">
                     <button
                       onClick={() => router.push(`/student/exams/${exam.id}`)}
-                      className="w-full flex items-center justify-center gap-2 rounded-lg bg-emerald-600 py-2 text-sm font-medium text-white hover:bg-emerald-700 transition">
+                      className="w-full flex items-center justify-center gap-2 rounded-lg bg-primary py-2 text-sm font-medium text-white hover:bg-primary/90 transition">
                       {exam.attempt_status === 'in_progress' ? 'Continue Exam' : 'Start Exam'}
                       <ArrowRight className="h-4 w-4" />
                     </button>

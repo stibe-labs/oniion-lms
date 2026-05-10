@@ -114,18 +114,18 @@ interface Props {
 // ── Helpers ────────────────────────────────────────────────────
 
 const gradeColor = (pct: number) =>
-  pct >= 90 ? 'text-emerald-600' :
-  pct >= 75 ? 'text-green-600' :
+  pct >= 90 ? 'text-primary' :
+  pct >= 75 ? 'text-primary' :
   pct >= 50 ? 'text-amber-600' :
   'text-red-600';
 
 const gradeBg = (pct: number) =>
-  pct >= 90 ? 'bg-emerald-50 border-emerald-200' :
-  pct >= 75 ? 'bg-green-50 border-green-200' :
+  pct >= 90 ? 'bg-primary/5 border-primary/20' :
+  pct >= 75 ? 'bg-primary/5 border-primary/20' :
   pct >= 50 ? 'bg-amber-50 border-amber-200' :
   'bg-red-50 border-red-200';
 
-const attColor = (r: number) => r >= 75 ? 'text-green-600' : r >= 50 ? 'text-amber-600' : 'text-red-600';
+const attColor = (r: number) => r >= 75 ? 'text-primary' : r >= 50 ? 'text-amber-600' : 'text-red-600';
 
 const ringColor = (pct: number) =>
   pct >= 75 ? '#10b981' : pct >= 50 ? '#f59e0b' : '#ef4444';
@@ -173,8 +173,8 @@ const computeHealthScore = (examPct: number, attRate: number, attentionPct: numb
 };
 
 const healthGrade = (score: number) =>
-  score >= 85 ? { label: 'Excellent', color: 'text-emerald-600 bg-emerald-50', icon: '🟢' } :
-  score >= 70 ? { label: 'Good', color: 'text-green-600 bg-green-50', icon: '🟡' } :
+  score >= 85 ? { label: 'Excellent', color: 'text-primary bg-primary/5', icon: '🟢' } :
+  score >= 70 ? { label: 'Good', color: 'text-primary bg-primary/5', icon: '🟡' } :
   score >= 50 ? { label: 'Needs Improvement', color: 'text-amber-600 bg-amber-50', icon: '🟠' } :
   { label: 'At Risk', color: 'text-red-600 bg-red-50', icon: '🔴' };
 
@@ -215,7 +215,7 @@ export default function StudentReportsTab({ studentEmail, batchId, showStudentHe
     <div className="text-center py-12">
       <AlertCircle className="w-10 h-10 text-red-400 mx-auto mb-2" />
       <p className="text-sm text-red-600">{error}</p>
-      <button onClick={fetchReport} className="mt-3 text-sm text-emerald-600 hover:underline">Retry</button>
+      <button onClick={fetchReport} className="mt-3 text-sm text-primary hover:underline">Retry</button>
     </div>
   );
   if (!data) return <EmptyState icon={BarChart2} message="No report data available." />;
@@ -240,8 +240,8 @@ export default function StudentReportsTab({ studentEmail, batchId, showStudentHe
       {/* Header with student info */}
       {showStudentHeader && student.name && (
         <div className="flex items-center gap-3 pb-3 border-b border-gray-200">
-          <div className="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center">
-            <span className="text-emerald-700 font-bold text-sm">{student.name.charAt(0)}</span>
+          <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+            <span className="text-primary font-bold text-sm">{student.name.charAt(0)}</span>
           </div>
           <div className="flex-1">
             <p className="font-semibold text-gray-900">{student.name}</p>
@@ -258,7 +258,7 @@ export default function StudentReportsTab({ studentEmail, batchId, showStudentHe
               key={p}
               onClick={() => setPeriod(p)}
               className={`px-3 py-1.5 text-xs font-medium rounded-md transition ${
-                period === p ? 'bg-white shadow text-emerald-700' : 'text-gray-500 hover:text-gray-700'
+                period === p ? 'bg-white shadow text-primary' : 'text-gray-500 hover:text-gray-700'
               }`}
             >
               {p === 'daily' ? 'Today' : p === 'weekly' ? 'This Week' : 'Overall'}
@@ -333,7 +333,7 @@ export default function StudentReportsTab({ studentEmail, batchId, showStudentHe
             <Card>
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
-                  <Trophy className="w-4 h-4 text-emerald-600" />
+                  <Trophy className="w-4 h-4 text-primary" />
                   <p className="text-sm font-semibold text-gray-700">Exam Results</p>
                 </div>
                 <p className="text-xs text-gray-400">{ex.total_exams} exam{ex.total_exams !== 1 ? 's' : ''} · Avg {ex.avg_percentage}%</p>
@@ -477,7 +477,7 @@ export default function StudentReportsTab({ studentEmail, batchId, showStudentHe
                           </div>
                           <div className="flex-1 bg-gray-100 h-2 rounded-full overflow-hidden">
                             <div
-                              className={`h-full rounded-full transition-all ${rate >= 75 ? 'bg-green-500' : rate >= 50 ? 'bg-amber-500' : 'bg-red-500'}`}
+                              className={`h-full rounded-full transition-all ${rate >= 75 ? 'bg-primary' : rate >= 50 ? 'bg-amber-500' : 'bg-red-500'}`}
                               style={{ width: `${rate}%` }}
                             />
                           </div>

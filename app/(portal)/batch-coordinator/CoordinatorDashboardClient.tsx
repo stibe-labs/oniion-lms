@@ -157,8 +157,8 @@ function effectiveRoomStatus(room: { status: string; scheduled_start: string; du
   return room.status;
 }
 
-const attColor = (s: number) => s >= 75 ? 'text-green-600' : s >= 50 ? 'text-amber-600' : 'text-red-600';
-const attBg    = (s: number) => s >= 75 ? 'bg-green-500'   : s >= 50 ? 'bg-amber-500'   : 'bg-red-500';
+const attColor = (s: number) => s >= 75 ? 'text-primary' : s >= 50 ? 'text-amber-600' : 'text-red-600';
+const attBg    = (s: number) => s >= 75 ? 'bg-primary'   : s >= 50 ? 'bg-amber-500'   : 'bg-red-500';
 
 /* ═══ MAIN COMPONENT ═══ */
 
@@ -339,17 +339,17 @@ export default function CoordinatorDashboardClient({
       {goLiveRequests.length > 0 && (
         <div className="mb-4 space-y-2">
           {goLiveRequests.map((req) => (
-            <div key={req.session_id} className="rounded-xl border border-emerald-200 bg-emerald-50 p-3 flex items-center gap-3">
-              <Play className="h-5 w-5 text-emerald-600 shrink-0" />
+            <div key={req.session_id} className="rounded-xl border border-primary/20 bg-primary/5 p-3 flex items-center gap-3">
+              <Play className="h-5 w-5 text-primary shrink-0" />
               <div className="flex-1">
-                <p className="text-sm font-semibold text-emerald-700">Go Live Request — {req.batch_name}</p>
-                <p className="text-xs text-emerald-500">{req.teacher_name} wants to start <strong>{req.subject}</strong> · Grade {req.grade}{req.section ? `-${req.section}` : ''} · {req.start_time?.slice(0, 5)}</p>
+                <p className="text-sm font-semibold text-primary">Go Live Request — {req.batch_name}</p>
+                <p className="text-xs text-primary">{req.teacher_name} wants to start <strong>{req.subject}</strong> · Grade {req.grade}{req.section ? `-${req.section}` : ''} · {req.start_time?.slice(0, 5)}</p>
               </div>
               <div className="flex gap-2">
                 <button onClick={() => handleGoLiveDecision(req.session_id, 'deny')}
                   className="rounded-lg border border-gray-200 px-3 py-1.5 text-xs font-medium text-gray-500 hover:bg-gray-50">Deny</button>
                 <button onClick={() => handleGoLiveDecision(req.session_id, 'approve')}
-                  className="rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-emerald-700">Approve Go Live</button>
+                  className="rounded-lg bg-primary px-3 py-1.5 text-xs font-medium text-white hover:bg-primary/90">Approve Go Live</button>
               </div>
             </div>
           ))}
@@ -458,7 +458,7 @@ function OverviewTab({ stats, sessions, batches, loading, router }: {
       {/* Today's Agenda */}
       <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
         <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2 mb-4">
-          <Calendar className="h-4 w-4 text-emerald-600" /> Today&apos;s Agenda
+          <Calendar className="h-4 w-4 text-primary" /> Today&apos;s Agenda
         </h3>
         {todaySessions.length === 0 ? (
           <p className="text-sm text-gray-400 text-center py-8">No sessions scheduled for today</p>
@@ -469,7 +469,7 @@ function OverviewTab({ stats, sessions, batches, loading, router }: {
               return (
                 <div key={s.session_id} className="flex items-center gap-3 rounded-lg border border-gray-100 bg-gray-50/50 p-3">
                   <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg ${
-                    es === 'live' ? 'bg-green-100 text-green-600' : es === 'ended' ? 'bg-gray-100 text-gray-400' : 'bg-teal-50 text-teal-600'
+                    es === 'live' ? 'bg-primary/10 text-primary' : es === 'ended' ? 'bg-gray-100 text-gray-400' : 'bg-teal-50 text-teal-600'
                   }`}>
                     {es === 'live' ? <Radio className="h-5 w-5" /> : es === 'ended' ? <CheckCircle2 className="h-5 w-5" /> : <Clock className="h-5 w-5" />}
                   </div>
@@ -488,7 +488,7 @@ function OverviewTab({ stats, sessions, batches, loading, router }: {
                   </div>
                   {es === 'live' && (
                     <button onClick={() => router.push('/batch-coordinator/live')}
-                      className="flex items-center gap-1 rounded-lg bg-green-600 px-2.5 py-1 text-[10px] font-medium text-white hover:bg-green-700 shrink-0">
+                      className="flex items-center gap-1 rounded-lg bg-primary px-2.5 py-1 text-[10px] font-medium text-white hover:bg-green-700 shrink-0">
                       <Eye className="h-3 w-3" /> Live Monitor
                     </button>
                   )}
@@ -503,7 +503,7 @@ function OverviewTab({ stats, sessions, batches, loading, router }: {
       {batches.length > 0 && (
         <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
           <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2 mb-4">
-            <BookOpen className="h-4 w-4 text-emerald-600" /> Batch Summary
+            <BookOpen className="h-4 w-4 text-primary" /> Batch Summary
           </h3>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {batches.filter(b => b.status === 'active').slice(0, 6).map(b => (
@@ -562,8 +562,8 @@ function BatchesTab({ batches, sessions, loading, router }: {
                     ? <ChevronDown className="h-4 w-4 text-gray-400 shrink-0" />
                     : <ChevronRight className="h-4 w-4 text-gray-400 shrink-0" />}
 
-                  <div className={cn('flex h-10 w-10 shrink-0 items-center justify-center rounded-lg', b.status === 'active' ? 'bg-green-50 border border-green-200' : 'bg-gray-50 border border-gray-200')}>
-                    <BookOpen className={cn('h-5 w-5', b.status === 'active' ? 'text-green-600' : 'text-gray-400')} />
+                  <div className={cn('flex h-10 w-10 shrink-0 items-center justify-center rounded-lg', b.status === 'active' ? 'bg-primary/5 border border-primary/20' : 'bg-gray-50 border border-gray-200')}>
+                    <BookOpen className={cn('h-5 w-5', b.status === 'active' ? 'text-primary' : 'text-gray-400')} />
                   </div>
 
                   <div className="flex-1 min-w-0">
@@ -572,7 +572,7 @@ function BatchesTab({ batches, sessions, loading, router }: {
                       <Badge label={BATCH_TYPE_LABELS[b.batch_type] || b.batch_type} variant={BATCH_TYPE_VARIANTS[b.batch_type] || 'default'} />
                       <StatusBadge status={b.status} />
                       {liveCount > 0 && (
-                        <span className="flex items-center gap-1 rounded-full bg-green-100 border border-green-200 px-2 py-0.5 text-[10px] font-bold text-green-700">
+                        <span className="flex items-center gap-1 rounded-full bg-primary/10 border border-primary/20 px-2 py-0.5 text-[10px] font-bold text-primary">
                           <Radio className="h-3 w-3 animate-pulse" /> {liveCount} Live
                         </span>
                       )}
@@ -634,10 +634,10 @@ function BatchDetailInline({ batch, sessions, router }: {
   const liveCount = sessions.filter(s => effectiveSessionStatus(s) === 'live').length;
 
   // Accent colors for the inline panel
-  const accent = 'from-emerald-600 to-teal-600';
-  const light = 'bg-emerald-50';
-  const border = 'border-emerald-200';
-  const text = 'text-emerald-700';
+  const accent = 'from-primary to-secondary';
+  const light = 'bg-primary/5';
+  const border = 'border-primary/20';
+  const text = 'text-primary';
 
   return (
     <div className="border-t border-gray-200">
@@ -674,7 +674,7 @@ function BatchDetailInline({ batch, sessions, router }: {
               <p className="text-[10px] text-white/70 uppercase tracking-wider">Sessions</p>
             </div>
             {liveCount > 0 && (
-              <div className="bg-green-500/30 backdrop-blur-sm rounded-xl px-3.5 py-2 text-center ring-1 ring-green-300/40">
+              <div className="bg-primary/30 backdrop-blur-sm rounded-xl px-3.5 py-2 text-center ring-1 ring-green-300/40">
                 <p className="text-lg font-bold text-white flex items-center gap-1"><Radio className="h-3.5 w-3.5 animate-pulse" />{liveCount}</p>
                 <p className="text-[10px] text-green-100 uppercase tracking-wider">Live</p>
               </div>
@@ -759,7 +759,7 @@ function SessionsSubTab({ sessions, router }: { sessions: Session[]; router: Ret
   if (liveSession) {
     highlight = liveSession;
     label = 'LIVE NOW';
-    theme = { ring: 'border-green-300 ring-2 ring-green-200', bg: 'bg-gradient-to-r from-green-50 to-emerald-50', chipBg: 'bg-green-600', pill: 'bg-white/80 text-green-700 border-green-200', iconColor: 'text-green-600' };
+    theme = { ring: 'border-green-300 ring-2 ring-green-200', bg: 'bg-gradient-to-r from-primary/5 to-primary/5', chipBg: 'bg-primary', pill: 'bg-white/80 text-primary border-primary/20', iconColor: 'text-primary' };
   } else if (todaysScheduled) {
     highlight = todaysScheduled;
     label = "TODAY'S NEXT SESSION";
@@ -771,7 +771,7 @@ function SessionsSubTab({ sessions, router }: { sessions: Session[]; router: Ret
   } else if (nextUpcoming) {
     highlight = nextUpcoming;
     label = 'NEXT UPCOMING SESSION';
-    theme = { ring: 'border-teal-300', bg: 'bg-gradient-to-r from-teal-50 to-cyan-50', chipBg: 'bg-teal-600', pill: 'bg-white/80 text-teal-700 border-teal-200', iconColor: 'text-teal-600' };
+    theme = { ring: 'border-teal-300', bg: 'bg-gradient-to-r from-teal-50 to-cyan-50', chipBg: 'bg-secondary', pill: 'bg-white/80 text-teal-700 border-teal-200', iconColor: 'text-teal-600' };
   } else if (lastEnded) {
     highlight = lastEnded;
     label = 'LATEST SESSION';
@@ -812,7 +812,7 @@ function SessionsSubTab({ sessions, router }: { sessions: Session[]; router: Ret
                 </span>
                 {es === 'live' && (
                   <button onClick={() => router.push('/batch-coordinator/live')}
-                    className="flex items-center gap-1 rounded-lg bg-green-600 px-2.5 py-1.5 text-[11px] font-medium text-white hover:bg-green-700">
+                    className="flex items-center gap-1 rounded-lg bg-primary px-2.5 py-1.5 text-[11px] font-medium text-white hover:bg-green-700">
                     <Eye className="h-3 w-3" /> Live Monitor
                   </button>
                 )}
@@ -828,10 +828,10 @@ function SessionsSubTab({ sessions, router }: { sessions: Session[]; router: Ret
         return (
           <div key={s.session_id} className={cn(
             'flex items-center gap-3 rounded-lg border p-3 transition-colors',
-            es === 'live' ? 'border-green-200 bg-green-50/50' : 'border-gray-100 bg-gray-50/50',
+            es === 'live' ? 'border-primary/20 bg-primary/5/50' : 'border-gray-100 bg-gray-50/50',
           )}>
             <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${
-              es === 'live' ? 'bg-green-100 text-green-600' : es === 'ended' ? 'bg-gray-100 text-gray-400' : es === 'cancelled' ? 'bg-red-50 text-red-400' : 'bg-blue-50 text-blue-600'
+              es === 'live' ? 'bg-primary/10 text-primary' : es === 'ended' ? 'bg-gray-100 text-gray-400' : es === 'cancelled' ? 'bg-red-50 text-red-400' : 'bg-blue-50 text-blue-600'
             }`}>
               {es === 'live' ? <Radio className="h-4 w-4 animate-pulse" /> : es === 'ended' ? <CheckCircle2 className="h-4 w-4" /> : es === 'cancelled' ? <XCircle className="h-4 w-4" /> : <Clock className="h-4 w-4" />}
             </div>
@@ -850,7 +850,7 @@ function SessionsSubTab({ sessions, router }: { sessions: Session[]; router: Ret
             </div>
             {es === 'live' && (
               <button onClick={() => router.push('/batch-coordinator/live')}
-                className="flex items-center gap-1 rounded-lg bg-green-600 px-2.5 py-1 text-[10px] font-medium text-white hover:bg-green-700 shrink-0">
+                className="flex items-center gap-1 rounded-lg bg-primary px-2.5 py-1 text-[10px] font-medium text-white hover:bg-green-700 shrink-0">
                 <Eye className="h-3 w-3" /> Live Monitor
               </button>
             )}

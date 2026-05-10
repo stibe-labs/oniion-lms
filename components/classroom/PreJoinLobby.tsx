@@ -108,13 +108,13 @@ export default function PreJoinLobby({
   };
 
   const roleColors: Record<string, string> = {
-    teacher: 'bg-emerald-600',
+    teacher: 'bg-primary',
     student: 'bg-blue-600',
     ghost: 'bg-purple-600',
     owner: 'bg-purple-600',
     batch_coordinator: 'bg-indigo-600',
-    academic_operator: 'bg-teal-600',
-    academic: 'bg-teal-600',
+    academic_operator: 'bg-secondary',
+    academic: 'bg-secondary',
     parent: 'bg-orange-600',
   };
 
@@ -200,7 +200,7 @@ export default function PreJoinLobby({
       <button
         onClick={onJoin}
         disabled={isJoining}
-        className="rounded-lg bg-emerald-600 px-8 py-3 text-base font-semibold text-white transition-colors hover:bg-emerald-700 disabled:opacity-50"
+        className="rounded-lg bg-primary px-8 py-3 text-base font-semibold text-white transition-colors hover:bg-primary/90 disabled:opacity-50"
       >
         {isJoining ? (
           <span className="flex items-center gap-2">

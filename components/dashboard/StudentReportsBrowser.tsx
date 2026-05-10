@@ -87,7 +87,7 @@ export default function StudentReportsBrowser({ batchesApi = '/api/v1/batches' }
   if (selectedStudent && selectedBatch) {
     return (
       <div className="space-y-3">
-        <button onClick={goBack} className="flex items-center gap-1 text-sm text-emerald-600 hover:underline">
+        <button onClick={goBack} className="flex items-center gap-1 text-sm text-primary hover:underline">
           <ArrowLeft className="w-4 h-4" /> Back to students
         </button>
         <StudentReportsTab
@@ -108,7 +108,7 @@ export default function StudentReportsBrowser({ batchesApi = '/api/v1/batches' }
 
     return (
       <div className="space-y-3">
-        <button onClick={goBack} className="flex items-center gap-1 text-sm text-emerald-600 hover:underline">
+        <button onClick={goBack} className="flex items-center gap-1 text-sm text-primary hover:underline">
           <ArrowLeft className="w-4 h-4" /> Back to batches
         </button>
         <div className="flex items-center justify-between">
@@ -127,11 +127,11 @@ export default function StudentReportsBrowser({ batchesApi = '/api/v1/batches' }
               <button
                 key={s.student_email}
                 onClick={() => setSelectedStudent(s)}
-                className="flex items-center justify-between p-3 bg-white border border-gray-200 rounded-lg hover:border-emerald-300 hover:bg-emerald-50/50 transition text-left"
+                className="flex items-center justify-between p-3 bg-white border border-gray-200 rounded-lg hover:border-emerald-300 hover:bg-primary/5/50 transition text-left"
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 bg-emerald-100 rounded-full flex items-center justify-center">
-                    <span className="text-emerald-700 font-bold text-sm">{s.student_name.charAt(0)}</span>
+                  <div className="w-9 h-9 bg-primary/10 rounded-full flex items-center justify-center">
+                    <span className="text-primary font-bold text-sm">{s.student_name.charAt(0)}</span>
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-900">{s.student_name}</p>
@@ -159,7 +159,7 @@ export default function StudentReportsBrowser({ batchesApi = '/api/v1/batches' }
           <button
             key={b.batch_id}
             onClick={() => selectBatch(b)}
-            className="flex items-center justify-between p-4 bg-white border border-gray-200 rounded-lg hover:border-emerald-300 hover:bg-emerald-50/50 transition text-left"
+            className="flex items-center justify-between p-4 bg-white border border-gray-200 rounded-lg hover:border-emerald-300 hover:bg-primary/5/50 transition text-left"
           >
             <div>
               <p className="text-sm font-semibold text-gray-900">{b.batch_name}</p>
@@ -168,7 +168,7 @@ export default function StudentReportsBrowser({ batchesApi = '/api/v1/batches' }
                 {b.student_count !== undefined && ` · ${b.student_count} students`}
               </p>
             </div>
-            <BarChart2 className="w-5 h-5 text-emerald-500" />
+            <BarChart2 className="w-5 h-5 text-primary" />
           </button>
         ))}
       </div>

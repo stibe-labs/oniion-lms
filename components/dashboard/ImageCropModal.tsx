@@ -143,8 +143,8 @@ export default function ImageCropModal({
         {/* Header */}
         <div className="px-5 py-4 border-b flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center">
-              <CropIcon className="h-4 w-4 text-emerald-600" />
+            <div className="w-8 h-8 rounded-lg bg-primary/5 flex items-center justify-center">
+              <CropIcon className="h-4 w-4 text-primary" />
             </div>
             <div>
               <h3 className="text-sm font-semibold text-gray-900">Crop Photo</h3>
@@ -220,7 +220,7 @@ export default function ImageCropModal({
             type="button"
             onClick={handleConfirm}
             disabled={saving || !completedCrop}
-            className="px-5 py-2 text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 rounded-lg transition flex items-center gap-2"
+            className="px-5 py-2 text-sm font-medium text-white bg-primary hover:bg-primary/90 disabled:opacity-50 rounded-lg transition flex items-center gap-2"
           >
             <Check className="h-4 w-4" />
             {saving ? 'Processing…' : 'Apply Crop'}

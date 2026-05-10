@@ -60,7 +60,7 @@ const BTN_VARIANT: Record<ButtonVariant, string> = {
   outline:   'bg-white text-gray-700 border border-gray-200 hover:bg-gray-50',
   ghost:     'text-gray-600 hover:bg-gray-100',
   danger:    'bg-red-600 text-white hover:bg-red-700 shadow-sm',
-  success:   'bg-green-600 text-white hover:bg-green-700 shadow-sm',
+  success:   'bg-primary text-white hover:bg-green-700 shadow-sm',
 };
 
 const BTN_SIZE: Record<ButtonSize, string> = {
@@ -584,7 +584,7 @@ export function ConfirmProvider({ children }: { children: React.ReactNode }) {
   const VARIANT_STYLES = {
     danger:  { bg: 'bg-red-50',   border: 'border-red-200',   iconBg: 'bg-red-100',   iconColor: 'text-red-600',   btnBg: 'bg-red-600 hover:bg-red-700',   text: 'text-red-800' },
     warning: { bg: 'bg-amber-50', border: 'border-amber-200', iconBg: 'bg-amber-100', iconColor: 'text-amber-600', btnBg: 'bg-amber-600 hover:bg-amber-700', text: 'text-amber-800' },
-    info:    { bg: 'bg-teal-50',  border: 'border-teal-200',  iconBg: 'bg-teal-100',  iconColor: 'text-teal-600',  btnBg: 'bg-teal-600 hover:bg-teal-700',  text: 'text-teal-800' },
+    info:    { bg: 'bg-teal-50',  border: 'border-teal-200',  iconBg: 'bg-teal-100',  iconColor: 'text-teal-600',  btnBg: 'bg-secondary hover:bg-teal-700',  text: 'text-teal-800' },
   };
   const DEFAULT_ICONS: Record<string, LucideIcon> = { danger: AlertTriangle, warning: AlertCircle, info: Info };
   const vs = VARIANT_STYLES[variant];
@@ -664,7 +664,7 @@ export interface StatCardProps {
 
 const STAT_ICON: Record<string, string> = {
   default: 'text-gray-500',
-  success: 'text-green-600',
+  success: 'text-primary',
   warning: 'text-amber-600',
   danger:  'text-red-500',
   info:    'text-teal-600',
@@ -672,7 +672,7 @@ const STAT_ICON: Record<string, string> = {
 
 const STAT_VALUE: Record<string, string> = {
   default: 'text-gray-900',
-  success: 'text-green-700',
+  success: 'text-primary',
   warning: 'text-amber-700',
   danger:  'text-red-600',
   info:    'text-teal-700',
@@ -844,7 +844,7 @@ export type BadgeVariant = 'default' | 'success' | 'warning' | 'danger' | 'info'
 
 const BADGE_COLORS: Record<BadgeVariant, string> = {
   default:   'bg-gray-50 border-gray-200 text-gray-600',
-  success:   'bg-green-50 border-green-200 text-green-700',
+  success:   'bg-primary/5 border-primary/20 text-primary',
   warning:   'bg-amber-50 border-amber-200 text-amber-700',
   danger:    'bg-red-50 border-red-200 text-red-600',
   info:      'bg-teal-50 border-teal-200 text-teal-700',
@@ -917,12 +917,12 @@ export interface RoleConfig {
 export const ROLE_CONFIG: Record<string, RoleConfig> = {
   owner:             { label: 'Owner',             variant: 'primary',   icon: Shield,        color: 'text-primary',     bg: 'bg-primary/10' },
   batch_coordinator: { label: 'Batch Coordinator', variant: 'info',      icon: MapPin,        color: 'text-teal-600',    bg: 'bg-teal-50' },
-  academic_operator: { label: 'Academic Op',       variant: 'success',   icon: Building,      color: 'text-green-600',   bg: 'bg-green-50' },
+  academic_operator: { label: 'Academic Op',       variant: 'success',   icon: Building,      color: 'text-primary',   bg: 'bg-primary/5' },
   hr:                { label: 'HR',                variant: 'warning',   icon: Briefcase,     color: 'text-amber-600',   bg: 'bg-amber-50' },
   teacher:           { label: 'Teacher',           variant: 'info',      icon: BookOpen,      color: 'text-teal-600',    bg: 'bg-teal-50' },
   teacher_screen:    { label: 'Teacher Screen',    variant: 'default',   icon: BookOpen,      color: 'text-gray-600',    bg: 'bg-gray-50' },
   student:           { label: 'Student',           variant: 'primary',   icon: GraduationCap, color: 'text-primary',     bg: 'bg-primary/10' },
-  parent:            { label: 'Parent',            variant: 'success',   icon: Users,         color: 'text-green-600',   bg: 'bg-green-50' },
+  parent:            { label: 'Parent',            variant: 'success',   icon: Users,         color: 'text-primary',   bg: 'bg-primary/5' },
   ghost:             { label: 'Ghost',             variant: 'default',   icon: Eye,           color: 'text-gray-500',    bg: 'bg-gray-50' },
   academic:          { label: 'Academic (Legacy)',  variant: 'default',   icon: GraduationCap, color: 'text-gray-600',    bg: 'bg-gray-50' },
 };
@@ -997,7 +997,7 @@ export function EmptyState({ icon: Icon, message = 'No data found' }: EmptyState
 type AlertVariant = 'success' | 'error' | 'warning' | 'info';
 
 const ALERT_STYLES: Record<AlertVariant, { bg: string; border: string; text: string; icon: LucideIcon }> = {
-  success: { bg: 'bg-green-50',  border: 'border-green-200', text: 'text-green-700',  icon: CheckCircle },
+  success: { bg: 'bg-primary/5',  border: 'border-primary/20', text: 'text-primary',  icon: CheckCircle },
   error:   { bg: 'bg-red-50',    border: 'border-red-200',   text: 'text-red-700',    icon: AlertCircle },
   warning: { bg: 'bg-amber-50',  border: 'border-amber-200', text: 'text-amber-700',  icon: AlertTriangle },
   info:    { bg: 'bg-teal-50',   border: 'border-teal-200',  text: 'text-teal-700',   icon: Info },

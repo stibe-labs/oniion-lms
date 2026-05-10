@@ -141,7 +141,7 @@ const BATCH_TYPE_META: Record<string, {
   color: string; selColor: string; feeType: 'per_class' | 'annual' | 'batch_flat';
 }> = {
   one_to_one:        { label: '1:1 Individual',    shortLabel: '1:1',         desc: 'Personal tuition · per-class fee',           color: 'border-blue-200 bg-blue-50 text-blue-700',       selColor: 'border-blue-500 bg-blue-100 ring-2 ring-blue-300 text-blue-900',       feeType: 'per_class'  },
-  one_to_three:      { label: '1:3 Small Group',   shortLabel: '1:3',         desc: 'Up to 3 students · per-class fee',           color: 'border-emerald-200 bg-emerald-50 text-emerald-700', selColor: 'border-emerald-500 bg-emerald-100 ring-2 ring-emerald-300 text-emerald-900', feeType: 'per_class'  },
+  one_to_three:      { label: '1:3 Small Group',   shortLabel: '1:3',         desc: 'Up to 3 students · per-class fee',           color: 'border-primary/20 bg-primary/5 text-primary', selColor: 'border-primary bg-primary/10 ring-2 ring-emerald-300 text-emerald-900', feeType: 'per_class'  },
   one_to_fifteen:    { label: '1:15 Group Class',  shortLabel: '1:15',        desc: 'Up to 15 students · annual fee',             color: 'border-teal-200 bg-teal-50 text-teal-700',       selColor: 'border-teal-500 bg-teal-100 ring-2 ring-teal-300 text-teal-900',       feeType: 'annual'     },
   one_to_thirty:     { label: '1:30 Large Group',  shortLabel: '1:30',        desc: 'Up to 30 students · annual fee',             color: 'border-purple-200 bg-purple-50 text-purple-700', selColor: 'border-purple-500 bg-purple-100 ring-2 ring-purple-300 text-purple-900', feeType: 'annual'     },
   one_to_many:       { label: '1:M Classroom',     shortLabel: '1:M',         desc: 'Large batch · annual fee',                   color: 'border-indigo-200 bg-indigo-50 text-indigo-700', selColor: 'border-indigo-500 bg-indigo-100 ring-2 ring-indigo-300 text-indigo-900', feeType: 'annual'     },
@@ -570,13 +570,13 @@ export default function ManualEnrollModal({ open, onClose, onSuccess }: ManualEn
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-5xl max-h-[92vh] flex overflow-hidden" onClick={e => e.stopPropagation()}>
 
         {/* Left sidebar */}
-        <div className="w-60 bg-linear-to-b from-emerald-600 via-emerald-700 to-teal-800 p-6 flex flex-col shrink-0">
+        <div className="w-60 bg-linear-to-b from-primary via-primary/90 to-secondary p-6 flex flex-col shrink-0">
           <div className="mb-8">
             <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center mb-3">
               <UserPlus className="h-5 w-5 text-white" />
             </div>
             <h2 className="text-white font-bold text-lg">Enroll Student</h2>
-            {!success && <p className="text-emerald-200 text-xs mt-1">Step {step + 1} of {STEP_LABELS.length}</p>}
+            {!success && <p className="text-primary/60 text-xs mt-1">Step {step + 1} of {STEP_LABELS.length}</p>}
           </div>
           {!success ? (
             <div className="space-y-1 flex-1">
@@ -586,11 +586,11 @@ export default function ManualEnrollModal({ open, onClose, onSuccess }: ManualEn
                 return (
                   <div key={label}
                     className={`flex items-center gap-3 px-3 py-3 rounded-xl transition-all ${
-                      isCurrent ? 'bg-white/20 text-white shadow-lg shadow-black/10' : isDone ? 'text-emerald-200' : 'text-emerald-400/50'
+                      isCurrent ? 'bg-white/20 text-white shadow-lg shadow-black/10' : isDone ? 'text-primary/60' : 'text-primary/50'
                     }`}
                   >
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold shrink-0 ${
-                      isDone ? 'bg-emerald-400 text-emerald-900' : isCurrent ? 'bg-white text-emerald-700' : 'bg-emerald-500/30 text-emerald-300/70'
+                      isDone ? 'bg-primary text-emerald-900' : isCurrent ? 'bg-white text-primary' : 'bg-primary/30 text-primary/80/70'
                     }`}>
                       {isDone ? '✓' : idx + 1}
                     </div>
@@ -606,7 +606,7 @@ export default function ManualEnrollModal({ open, onClose, onSuccess }: ManualEn
               </div>
             </div>
           )}
-          <button onClick={handleClose} className="mt-4 text-emerald-200 hover:text-white text-xs flex items-center gap-2 transition">
+          <button onClick={handleClose} className="mt-4 text-primary/60 hover:text-white text-xs flex items-center gap-2 transition">
             <X className="h-3.5 w-3.5" /> Cancel &amp; Close
           </button>
         </div>
@@ -617,8 +617,8 @@ export default function ManualEnrollModal({ open, onClose, onSuccess }: ManualEn
 
         {success ? (
           <div className="text-center py-6 space-y-4">
-          <div className="w-16 h-16 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center mx-auto">
-            <CheckCircle2 className="w-9 h-9 text-green-600 dark:text-green-400" />
+          <div className="w-16 h-16 rounded-full bg-primary/10 dark:bg-green-900/30 flex items-center justify-center mx-auto">
+            <CheckCircle2 className="w-9 h-9 text-primary dark:text-primary" />
           </div>
           <div>
             <p className="text-lg font-semibold text-foreground">Student Enrolled!</p>
@@ -642,7 +642,7 @@ export default function ManualEnrollModal({ open, onClose, onSuccess }: ManualEn
               )}
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Amount Paid</span>
-                <span className="font-medium text-green-600">₹{(success.amount_paid_paise / 100).toFixed(2)}</span>
+                <span className="font-medium text-primary">₹{(success.amount_paid_paise / 100).toFixed(2)}</span>
               </div>
               {success.sessions_credited > 0 && (
                 <div className="flex justify-between">
@@ -819,25 +819,25 @@ export default function ManualEnrollModal({ open, onClose, onSuccess }: ManualEn
                         <button key={bt} type="button" onClick={() => setPreferredBatchType(bt)}
                           className={`w-full text-left rounded-xl border-2 transition-all overflow-hidden ${
                             isSelected
-                              ? 'border-emerald-500 ring-2 ring-emerald-200'
+                              ? 'border-primary ring-2 ring-primary/20'
                               : 'border-gray-200 hover:border-emerald-300 bg-white'
                           }`}>
                           {/* Card header */}
-                          <div className={`flex items-center gap-3 px-4 py-3 ${isSelected ? 'bg-emerald-50' : 'bg-white'}`}>
+                          <div className={`flex items-center gap-3 px-4 py-3 ${isSelected ? 'bg-primary/5' : 'bg-white'}`}>
                             <div className={`w-4 h-4 rounded-full border-2 shrink-0 flex items-center justify-center ${
-                              isSelected ? 'border-emerald-600 bg-emerald-600' : 'border-gray-300'
+                              isSelected ? 'border-emerald-600 bg-primary' : 'border-gray-300'
                             }`}>
                               {isSelected && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
                             </div>
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center gap-2 flex-wrap">
-                                <span className={`text-sm font-bold ${isSelected ? 'text-emerald-800' : 'text-gray-800'}`}>
+                                <span className={`text-sm font-bold ${isSelected ? 'text-primary' : 'text-gray-800'}`}>
                                   {meta.label}
                                 </span>
                                 <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border ${
                                   isFlatFee ? 'bg-amber-50 text-amber-700 border-amber-200' :
                                   isAnnual  ? 'bg-blue-50 text-blue-700 border-blue-200' :
-                                             'bg-emerald-50 text-emerald-700 border-emerald-200'
+                                             'bg-primary/5 text-primary border-primary/20'
                                 }`}>{isFlatFee ? 'Flat Fee at Entry' : isAnnual ? 'Annual' : 'Per Class'}</span>
                                 {offerActive && feeRowBt?.offer_label && (
                                   <span className="text-[10px] font-bold bg-amber-500 text-white px-2 py-0.5 rounded-full">
@@ -852,7 +852,7 @@ export default function ManualEnrollModal({ open, onClose, onSuccess }: ManualEn
                           {/* Fee strip */}
                           {(feeRowBt && activeFeeVal !== null) ? (
                             <div className={`border-t px-4 py-2.5 flex items-center gap-4 ${
-                              isSelected ? 'bg-emerald-100/60 border-emerald-200' : 'bg-gray-50 border-gray-100'
+                              isSelected ? 'bg-primary/10/60 border-primary/20' : 'bg-gray-50 border-gray-100'
                             }`}>
                               {isFlatFee ? (
                                 /* Flat-fee: show amount with batch name */
@@ -870,7 +870,7 @@ export default function ManualEnrollModal({ open, onClose, onSuccess }: ManualEn
                                 /* Per-class fee */
                                 <>
                                   <div className="flex items-baseline gap-1.5">
-                                    <span className={`text-base font-bold ${offerActive ? 'text-emerald-600' : 'text-gray-800'}`}>
+                                    <span className={`text-base font-bold ${offerActive ? 'text-primary' : 'text-gray-800'}`}>
                                       {fmtRs(activeFeeVal)}<span className="text-xs font-normal text-gray-500">/class</span>
                                     </span>
                                   </div>
@@ -888,7 +888,7 @@ export default function ManualEnrollModal({ open, onClose, onSuccess }: ManualEn
                                   <div>
                                     <p className="text-[10px] text-gray-400 uppercase font-medium mb-0.5">Annual</p>
                                     <div className="flex items-baseline gap-1.5">
-                                      <span className={`text-base font-bold ${offerActive ? 'text-emerald-600' : 'text-gray-800'}`}>
+                                      <span className={`text-base font-bold ${offerActive ? 'text-primary' : 'text-gray-800'}`}>
                                         {fmtRs(activeFeeVal)}
                                       </span>
                                       <span className="text-xs text-gray-400">/yr</span>
@@ -900,12 +900,12 @@ export default function ManualEnrollModal({ open, onClose, onSuccess }: ManualEn
                                       <div className="w-px h-8 bg-gray-200" />
                                       <div>
                                         <p className="text-[10px] text-gray-400 uppercase font-medium mb-0.5">OTP</p>
-                                        <span className="text-base font-bold text-emerald-600">{fmtRs(otpAmount)}</span>
+                                        <span className="text-base font-bold text-primary">{fmtRs(otpAmount)}</span>
                                       </div>
                                     </>
                                   )}
                                   {savings > 0 && (
-                                    <span className="ml-auto text-xs font-bold text-emerald-700 bg-emerald-100 border border-emerald-200 px-2 py-1 rounded-lg">
+                                    <span className="ml-auto text-xs font-bold text-primary bg-primary/10 border border-primary/20 px-2 py-1 rounded-lg">
                                       Save {fmtRs(savings)}
                                     </span>
                                   )}
@@ -945,7 +945,7 @@ export default function ManualEnrollModal({ open, onClose, onSuccess }: ManualEn
                     <div className="flex items-center gap-2 mt-0.5 flex-wrap">
                       <p className="text-xs text-muted-foreground">Fee is charged per class, per subject</p>
                       {perSessionRate !== null && (
-                        <span className="text-xs font-medium text-emerald-600">· {fmtRs(perSessionRate)}/class</span>
+                        <span className="text-xs font-medium text-primary">· {fmtRs(perSessionRate)}/class</span>
                       )}
                     </div>
                   </div>
@@ -967,7 +967,7 @@ export default function ManualEnrollModal({ open, onClose, onSuccess }: ManualEn
                         <p className="text-xs text-muted-foreground mt-0.5">{perClassSubjects.join(' · ')}</p>
                       </div>
                       {!showPerSubject && perSessionRate !== null && (
-                        <span className="text-xs font-semibold text-emerald-600 shrink-0 ml-2">{fmtRs(perSessionRate)}/class</span>
+                        <span className="text-xs font-semibold text-primary shrink-0 ml-2">{fmtRs(perSessionRate)}/class</span>
                       )}
                     </div>
                   </button>
@@ -1125,10 +1125,10 @@ export default function ManualEnrollModal({ open, onClose, onSuccess }: ManualEn
                       const bd = computeFeeBreakdown(feeRow);
                       const fmt = (p: number) => fmtPaise(p, feeRow.currency || 'INR');
                       return (
-                        <div className="rounded-lg border bg-emerald-50 border-emerald-200 dark:bg-emerald-950/20 dark:border-emerald-800 p-3 text-sm">
-                          <p className="text-xs font-semibold text-emerald-700 dark:text-emerald-400 uppercase tracking-wide mb-2">Fee Reference</p>
+                        <div className="rounded-lg border bg-primary/5 border-primary/20 dark:bg-primary/30/20 dark:border-emerald-800 p-3 text-sm">
+                          <p className="text-xs font-semibold text-primary dark:text-primary uppercase tracking-wide mb-2">Fee Reference</p>
                           <div className="flex gap-4 flex-wrap">
-                            <div><p className="text-[10px] text-muted-foreground uppercase">OTP</p><p className="font-bold text-emerald-700 dark:text-emerald-400">{fmt(bd.otpTotal)}</p></div>
+                            <div><p className="text-[10px] text-muted-foreground uppercase">OTP</p><p className="font-bold text-primary dark:text-primary">{fmt(bd.otpTotal)}</p></div>
                             <div><p className="text-[10px] text-muted-foreground uppercase">SPO Q1</p><p className="font-bold text-foreground">{fmt(bd.q123)}</p></div>
                             <div><p className="text-[10px] text-muted-foreground uppercase">SPO Q4</p><p className="font-bold text-foreground">{fmt(bd.q4)}</p></div>
                           </div>
@@ -1149,8 +1149,8 @@ export default function ManualEnrollModal({ open, onClose, onSuccess }: ManualEn
                       </FormField>
                     </FormGrid>
                     {effectiveIsPerClass && effectiveFeeRate !== null && derivedSessions > 0 && (
-                      <div className="rounded-lg bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-700 px-3 py-2 text-sm flex items-center gap-1.5">
-                        <span className="font-bold text-emerald-700 dark:text-emerald-400">{derivedSessions} sessions</span>
+                      <div className="rounded-lg bg-primary/5 dark:bg-primary/30/20 border border-primary/20 dark:border-emerald-700 px-3 py-2 text-sm flex items-center gap-1.5">
+                        <span className="font-bold text-primary dark:text-primary">{derivedSessions} sessions</span>
                         <span className="text-muted-foreground">will be credited at {fmtPaise(effectiveFeeRate, 'INR')}/class</span>
                       </div>
                     )}
@@ -1178,22 +1178,22 @@ export default function ManualEnrollModal({ open, onClose, onSuccess }: ManualEn
                       <button type="button" onClick={() => setPaymentType('otp')}
                         className={`text-left rounded-xl border-2 p-3.5 transition-all ${
                           paymentType === 'otp'
-                            ? 'border-emerald-500 bg-emerald-50 ring-2 ring-emerald-200'
+                            ? 'border-primary bg-primary/5 ring-2 ring-primary/20'
                             : 'border-border hover:border-emerald-300 bg-white'
                         }`}>
                         <div className="flex items-center gap-2 mb-1.5">
                           <div className={`w-3.5 h-3.5 rounded-full border-2 shrink-0 flex items-center justify-center ${
-                            paymentType === 'otp' ? 'border-emerald-600 bg-emerald-600' : 'border-gray-300'
+                            paymentType === 'otp' ? 'border-emerald-600 bg-primary' : 'border-gray-300'
                           }`}>
                             {paymentType === 'otp' && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
                           </div>
                           <span className="text-sm font-bold text-foreground">OTP</span>
-                          <span className="text-[10px] bg-emerald-100 text-emerald-700 border border-emerald-200 px-1.5 py-0.5 rounded-full font-semibold ml-auto">One-Time</span>
+                          <span className="text-[10px] bg-primary/10 text-primary border border-primary/20 px-1.5 py-0.5 rounded-full font-semibold ml-auto">One-Time</span>
                         </div>
                         <p className="text-xs text-muted-foreground mb-2">Pay once, save more</p>
-                        <p className="text-base font-bold text-emerald-700">{fmtRs(groupBreakdown.otpTotal)}</p>
+                        <p className="text-base font-bold text-primary">{fmtRs(groupBreakdown.otpTotal)}</p>
                         {groupBreakdown.otpTotal < groupBreakdown.regularFee && (
-                          <p className="text-[11px] text-emerald-600 mt-0.5">Save {fmtRs(groupBreakdown.regularFee - groupBreakdown.otpTotal)}</p>
+                          <p className="text-[11px] text-primary mt-0.5">Save {fmtRs(groupBreakdown.regularFee - groupBreakdown.otpTotal)}</p>
                         )}
                       </button>
                       {/* SPO card */}
@@ -1269,8 +1269,8 @@ export default function ManualEnrollModal({ open, onClose, onSuccess }: ManualEn
 
                 {/* Payment summary */}
                 {paymentMode !== 'none' && amountRs && parseFloat(amountRs) > 0 && (
-                  <div className="rounded-lg border bg-emerald-50 dark:bg-emerald-950/20 border-emerald-200 dark:border-emerald-800 p-4">
-                    <p className="text-sm font-semibold text-emerald-800 dark:text-emerald-300 mb-2">Payment Summary</p>
+                  <div className="rounded-lg border bg-primary/5 dark:bg-primary/30/20 border-primary/20 dark:border-emerald-800 p-4">
+                    <p className="text-sm font-semibold text-primary dark:text-primary/80 mb-2">Payment Summary</p>
                     <div className="space-y-1.5 text-sm">
                       <div className="flex justify-between">
                         <span className="text-muted-foreground">Mode</span>
@@ -1278,7 +1278,7 @@ export default function ManualEnrollModal({ open, onClose, onSuccess }: ManualEn
                       </div>
                       <div className="flex justify-between">
                         <span className="text-muted-foreground">Amount</span>
-                        <span className="font-bold text-emerald-700 dark:text-emerald-400">₹{parseFloat(amountRs || '0').toLocaleString('en-IN')}</span>
+                        <span className="font-bold text-primary dark:text-primary">₹{parseFloat(amountRs || '0').toLocaleString('en-IN')}</span>
                       </div>
                       {effectiveIsPerClass && derivedSessions > 0 && (
                         <div className="flex justify-between">

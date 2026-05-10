@@ -284,7 +284,7 @@ export default function TakeExamClient({ examId, userName, userEmail }: Props) {
         <div className="bg-card rounded-2xl border border-border p-8 max-w-md w-full">
           {/* Pass / Fail hero */}
           <div className={`h-20 w-20 mx-auto rounded-full flex items-center justify-center mb-4 ${passed ? 'bg-green-900/40' : 'bg-red-900/40'}`}>
-            {passed ? <Trophy className="h-10 w-10 text-green-400" /> : <AlertTriangle className="h-10 w-10 text-red-400" />}
+            {passed ? <Trophy className="h-10 w-10 text-primary" /> : <AlertTriangle className="h-10 w-10 text-red-400" />}
           </div>
           <h2 className="text-2xl font-bold text-foreground text-center mb-1">
             {passed ? 'Congratulations!' : 'Keep Trying!'}
@@ -298,7 +298,7 @@ export default function TakeExamClient({ examId, userName, userEmail }: Props) {
             <ResultCard label="Score" value={`${result.score}/${result.total_marks}`} />
             <ResultCard label="Percentage" value={`${result.percentage}%`} />
             <ResultCard label="Grade" value={result.grade_letter} accent />
-            <ResultCard label="Status" value={passed ? 'PASS' : 'FAIL'} cn={passed ? 'text-green-400' : 'text-red-400'} />
+            <ResultCard label="Status" value={passed ? 'PASS' : 'FAIL'} cn={passed ? 'text-primary' : 'text-red-400'} />
           </div>
 
           {/* Quick stats */}
@@ -359,13 +359,13 @@ export default function TakeExamClient({ examId, userName, userEmail }: Props) {
   // Color-coded option backgrounds
   const optBg = [
     'border-blue-500/30 bg-blue-900/20 hover:border-blue-400 hover:bg-blue-900/30',
-    'border-emerald-500/30 bg-emerald-900/20 hover:border-emerald-400 hover:bg-emerald-900/30',
+    'border-primary/30 bg-primary/15/20 hover:border-primary hover:bg-primary/10',
     'border-amber-500/30 bg-amber-900/20 hover:border-amber-400 hover:bg-amber-900/30',
     'border-purple-500/30 bg-purple-900/20 hover:border-purple-400 hover:bg-purple-900/30',
   ];
   const optBgSel = [
     'border-blue-400 bg-blue-800/40 ring-2 ring-blue-500/30',
-    'border-emerald-400 bg-emerald-800/40 ring-2 ring-emerald-500/30',
+    'border-primary bg-primary/80/40 ring-2 ring-primary/30',
     'border-amber-400 bg-amber-800/40 ring-2 ring-amber-500/30',
     'border-purple-400 bg-purple-800/40 ring-2 ring-purple-500/30',
   ];

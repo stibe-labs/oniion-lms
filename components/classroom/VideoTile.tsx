@@ -163,7 +163,7 @@ export default function VideoTile({
           className={cn(
             'absolute left-1 z-10 flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[9px] font-bold backdrop-blur-sm shadow-sm',
             isGuest ? 'top-6' : 'top-1',
-            connectionQuality === ConnectionQuality.Excellent && 'bg-green-600/70 text-white',
+            connectionQuality === ConnectionQuality.Excellent && 'bg-primary/70 text-white',
             connectionQuality === ConnectionQuality.Good && 'bg-amber-500/70 text-white',
             connectionQuality === ConnectionQuality.Poor && 'bg-red-600/80 text-white',
             connectionQuality === ConnectionQuality.Lost && 'bg-red-800/90 text-white animate-pulse',

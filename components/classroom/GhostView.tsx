@@ -336,7 +336,7 @@ export default function GhostView({
 
   const attBadge = (isSleeping: boolean, isNotLooking: boolean, isLowAtt: boolean, attScore: number) => (
     <div className={cn('absolute top-1.5 right-1.5 z-10 flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[9px] font-bold backdrop-blur-sm shadow-sm pointer-events-none',
-      isSleeping ? 'bg-red-600/80 text-white' : isLowAtt ? 'bg-amber-500/80 text-white' : 'bg-green-600/70 text-white')}>
+      isSleeping ? 'bg-red-600/80 text-white' : isLowAtt ? 'bg-amber-500/80 text-white' : 'bg-primary/70 text-white')}>
       {isSleeping ? (<svg className="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}><path d="M2 4h4l2-2"/><path d="M6 8h4l2-2"/><path d="M10 12h4l2-2"/></svg>)
       : isNotLooking ? (<svg className="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>)
       : attScore >= 75 ? 'OK' : '!'}
@@ -364,8 +364,8 @@ export default function GhostView({
       {/* HEADER */}
       <div className="flex h-13 items-center justify-between border-b border-[#3c4043] bg-[#202124] px-4 shrink-0">
         <div className="flex items-center gap-3">
-          <div className="flex h-7 w-7 items-center justify-center rounded-full bg-emerald-500/20">
-            <svg className="h-3.5 w-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          <div className="flex h-7 w-7 items-center justify-center rounded-full bg-primary/20">
+            <svg className="h-3.5 w-3.5 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
           </div>
           <div>
             <span className="text-sm font-semibold text-[#e8eaed]">{roomName}</span>
@@ -412,13 +412,13 @@ export default function GhostView({
                 </span>
               )}
               {studentAttention.size > 0 && (
-                <span className={cn('flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-bold', avgEngagement >= 70 ? 'bg-green-600/20 text-green-400' : avgEngagement >= 40 ? 'bg-amber-600/20 text-amber-400' : 'bg-red-600/20 text-red-400')}>
+                <span className={cn('flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-bold', avgEngagement >= 70 ? 'bg-primary/20 text-primary' : avgEngagement >= 40 ? 'bg-amber-600/20 text-amber-400' : 'bg-red-600/20 text-red-400')}>
                   <svg className="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                   {avgEngagement}%
                 </span>
               )}
               <div className="h-5 w-px bg-[#3c4043]" />
-              <span className="flex items-center gap-1.5 rounded-full bg-emerald-600/20 px-2.5 py-1 text-xs text-emerald-400">
+              <span className="flex items-center gap-1.5 rounded-full bg-primary/20 px-2.5 py-1 text-xs text-primary">
                 <svg className="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                 Invisible
               </span>
@@ -476,7 +476,7 @@ export default function GhostView({
                 {hasScreenShare && teacher && (
                   <div className="relative rounded-xl overflow-hidden bg-[#292a2d] flex-1" style={{ maxHeight: 200 }}>
                     <WhiteboardComposite teacher={teacher} teacherScreenDevice={screenDevice} preferLaptopScreen={screenSourcePref === 'laptop'} className="h-full w-full rounded-xl" />
-                    <div className="absolute top-1.5 left-1.5 z-10 rounded-full bg-emerald-600/80 px-2 py-0.5 text-[9px] text-white font-semibold flex items-center gap-1">
+                    <div className="absolute top-1.5 left-1.5 z-10 rounded-full bg-primary/80 px-2 py-0.5 text-[9px] text-white font-semibold flex items-center gap-1">
                       <svg className="h-2.5 w-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>Screen Share
                     </div>
                   </div>
@@ -657,9 +657,9 @@ export default function GhostView({
                     <div className="text-[10px] text-[#9aa0a6] uppercase tracking-wide">Session Engagement</div>
                     <div className="flex items-center gap-2 mt-1">
                       <div className="flex-1 h-2 rounded-full bg-[#3c4043] overflow-hidden">
-                        <div className={cn('h-full rounded-full transition-all', avgEngagement >= 70 ? 'bg-green-500' : avgEngagement >= 40 ? 'bg-amber-500' : 'bg-red-500')} style={{ width: `${avgEngagement}%` }} />
+                        <div className={cn('h-full rounded-full transition-all', avgEngagement >= 70 ? 'bg-primary' : avgEngagement >= 40 ? 'bg-amber-500' : 'bg-red-500')} style={{ width: `${avgEngagement}%` }} />
                       </div>
-                      <span className={cn('text-sm font-bold', avgEngagement >= 70 ? 'text-green-400' : avgEngagement >= 40 ? 'text-amber-400' : 'text-red-400')}>{avgEngagement}%</span>
+                      <span className={cn('text-sm font-bold', avgEngagement >= 70 ? 'text-primary' : avgEngagement >= 40 ? 'text-amber-400' : 'text-red-400')}>{avgEngagement}%</span>
                     </div>
                   </div>
                   {teacherAttention && (() => {
@@ -670,7 +670,7 @@ export default function GhostView({
                       <div className={cn('rounded-lg border-2 p-2.5', isCritical ? 'border-red-500 bg-red-950/50' : att.attentionScore < 50 ? 'border-amber-500 bg-amber-950/40' : 'border-indigo-500/70 bg-indigo-950/30')}>
                         <div className="flex items-center justify-between">
                           <span className="text-xs font-semibold text-indigo-200">{`\u{1F393} ${att.name.replace(' (Teacher)', '')}`}</span>
-                          <span className={cn('text-xs font-bold', att.attentionScore >= 70 ? 'text-green-400' : att.attentionScore >= 40 ? 'text-amber-400' : 'text-red-400')}>{att.attentionScore}%</span>
+                          <span className={cn('text-xs font-bold', att.attentionScore >= 70 ? 'text-primary' : att.attentionScore >= 40 ? 'text-amber-400' : 'text-red-400')}>{att.attentionScore}%</span>
                         </div>
                         <div className="text-[10px] text-indigo-100/80 mt-1">{stateLabel[att.monitorState] ?? 'Engaged'}</div>
                         <div className="flex flex-wrap gap-1 mt-1.5">
@@ -689,7 +689,7 @@ export default function GhostView({
                       head_turned: { label: 'Head Turned', color: 'text-amber-400' }, looking_away: { label: 'Looking Away', color: 'text-amber-400' },
                       yawning: { label: 'Yawning', color: 'text-amber-400' }, inactive: { label: 'Inactive', color: 'text-amber-400' },
                       distracted: { label: 'Distracted', color: 'text-amber-400' }, low_engagement: { label: 'Low Engagement', color: 'text-amber-400' },
-                      attentive: { label: 'Attentive', color: 'text-green-400' }, writing_notes: { label: '\u{1F4DD} Writing', color: 'text-blue-400' },
+                      attentive: { label: 'Attentive', color: 'text-primary' }, writing_notes: { label: '\u{1F4DD} Writing', color: 'text-blue-400' },
                       brief_absence: { label: 'Briefly Away', color: 'text-sky-400' }, low_visibility: { label: 'Low Visibility', color: 'text-slate-400' },
                       thinking: { label: '\u{1F4A1} Thinking', color: 'text-cyan-400' }, reading_material: { label: '\u{1F4D6} Reading', color: 'text-blue-400' },
                     };
@@ -699,7 +699,7 @@ export default function GhostView({
                       <div key={att.email} className={cn('rounded-lg border p-2.5', isCritical ? 'border-red-600/50 bg-red-950/30' : att.attentionScore < 50 ? 'border-amber-600/50 bg-amber-950/30' : 'border-[#3c4043] bg-[#292a2d]')}>
                         <div className="flex items-center justify-between">
                           <span className="text-xs font-medium text-[#e8eaed] truncate">{att.name}</span>
-                          <span className={cn('text-xs font-bold', att.attentionScore >= 70 ? 'text-green-400' : att.attentionScore >= 40 ? 'text-amber-400' : 'text-red-400')}>{att.attentionScore}%</span>
+                          <span className={cn('text-xs font-bold', att.attentionScore >= 70 ? 'text-primary' : att.attentionScore >= 40 ? 'text-amber-400' : 'text-red-400')}>{att.attentionScore}%</span>
                         </div>
                         <div className="flex items-center gap-1.5 mt-1 text-[10px]"><span className={sc.color}>{sc.label}</span></div>
                         <div className="flex flex-wrap gap-1 mt-1.5">

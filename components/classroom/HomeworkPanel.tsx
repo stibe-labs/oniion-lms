@@ -108,7 +108,7 @@ function fmtTime(iso: string): string {
 }
 
 const STATUS_BADGE: Record<string, { bg: string; text: string; border: string; label: string }> = {
-  completed:   { bg: 'bg-emerald-500/10', text: 'text-emerald-400', border: 'border-emerald-500/30', label: 'Completed' },
+  completed:   { bg: 'bg-primary/10', text: 'text-primary', border: 'border-primary/30', label: 'Completed' },
   partial:     { bg: 'bg-amber-500/10',   text: 'text-amber-400',   border: 'border-amber-500/30',   label: 'Partial' },
   not_started: { bg: 'bg-red-500/10',     text: 'text-red-400',     border: 'border-red-500/30',     label: 'Not Started' },
 };
@@ -408,7 +408,7 @@ export default function HomeworkPanel({ roomId, role, participantEmail, particip
                     </div>
                     <span className={cn('text-[10px] px-2 py-0.5 rounded border shrink-0 font-medium',
                       hw.status === 'active'
-                        ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
+                        ? 'bg-primary/10 text-primary border-primary/30'
                         : 'bg-white/[0.04] text-[#8b8fa3] border-white/[0.06]')}>
                       {hw.status}
                     </span>
@@ -428,7 +428,7 @@ export default function HomeworkPanel({ roomId, role, participantEmail, particip
                     <div className="flex flex-wrap gap-1">
                       {hw.attachment_names.map((name, i) => (
                         <a key={i} href={hw.attachment_urls[i]} target="_blank" rel="noreferrer" download
-                          className="flex items-center gap-1 text-[10px] text-emerald-400 hover:text-emerald-300 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 transition-colors">
+                          className="flex items-center gap-1 text-[10px] text-primary hover:text-primary/80 bg-primary/10 px-2 py-0.5 rounded border border-primary/20 transition-colors">
                           <IcDownload className="w-3 h-3" /> {name}
                         </a>
                       ))}
@@ -478,7 +478,7 @@ export default function HomeworkPanel({ roomId, role, participantEmail, particip
                           )}
                           {sub.grade && (
                             <div className="text-[10px] text-white/90">
-                              Grade: <span className="font-bold text-emerald-400">{sub.grade}</span>
+                              Grade: <span className="font-bold text-primary">{sub.grade}</span>
                             </div>
                           )}
                           {sub.teacher_comment && (
@@ -571,7 +571,7 @@ export default function HomeworkPanel({ roomId, role, participantEmail, particip
                                 {STATUS_BADGE[s.completion_status]?.label || s.completion_status}
                               </span>
                               {s.delay_days > 0 && <span className="text-[10px] text-red-400 font-medium">{s.delay_days}d late</span>}
-                              <span className={cn('text-[10px] font-medium', s.grade ? 'text-emerald-400' : 'text-amber-400')}>
+                              <span className={cn('text-[10px] font-medium', s.grade ? 'text-primary' : 'text-amber-400')}>
                                 {s.grade || 'Ungraded'}
                               </span>
                             </div>

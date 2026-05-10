@@ -95,13 +95,13 @@ const BATCH_TEMPLATES = [
   { id: 'one_to_one_PCM',         type: 'one_to_one' as const, subjectLabel: 'PCM',              subjects: ['Physics', 'Chemistry', 'Mathematics'],                   label: '1:1 — PCM',              maxStudents: 1,   color: 'bg-blue-50 border-blue-200 text-blue-700',       selectedColor: 'bg-blue-100 border-blue-500 ring-2 ring-blue-300 text-blue-800' },
   { id: 'one_to_one_PCBM',        type: 'one_to_one' as const, subjectLabel: 'PCBM (All 4)',     subjects: ['Physics', 'Chemistry', 'Biology', 'Mathematics'],         label: '1:1 — PCBM',             maxStudents: 1,   color: 'bg-blue-50 border-blue-200 text-blue-700',       selectedColor: 'bg-blue-100 border-blue-500 ring-2 ring-blue-300 text-blue-800' },
   // ── 1:3 Small Group (per-class fee) ─────────────────────────────────
-  { id: 'one_to_three_Physics',     type: 'one_to_three' as const, subjectLabel: 'Physics',        subjects: ['Physics'],                                               label: '1:3 — Physics',          maxStudents: 3,   color: 'bg-emerald-50 border-emerald-200 text-emerald-700', selectedColor: 'bg-emerald-100 border-emerald-500 ring-2 ring-emerald-300 text-emerald-800' },
-  { id: 'one_to_three_Chemistry',   type: 'one_to_three' as const, subjectLabel: 'Chemistry',      subjects: ['Chemistry'],                                             label: '1:3 — Chemistry',        maxStudents: 3,   color: 'bg-emerald-50 border-emerald-200 text-emerald-700', selectedColor: 'bg-emerald-100 border-emerald-500 ring-2 ring-emerald-300 text-emerald-800' },
-  { id: 'one_to_three_Biology',     type: 'one_to_three' as const, subjectLabel: 'Biology',        subjects: ['Biology'],                                               label: '1:3 — Biology',          maxStudents: 3,   color: 'bg-emerald-50 border-emerald-200 text-emerald-700', selectedColor: 'bg-emerald-100 border-emerald-500 ring-2 ring-emerald-300 text-emerald-800' },
-  { id: 'one_to_three_Mathematics', type: 'one_to_three' as const, subjectLabel: 'Mathematics',    subjects: ['Mathematics'],                                           label: '1:3 — Mathematics',      maxStudents: 3,   color: 'bg-emerald-50 border-emerald-200 text-emerald-700', selectedColor: 'bg-emerald-100 border-emerald-500 ring-2 ring-emerald-300 text-emerald-800' },
-  { id: 'one_to_three_PCB',         type: 'one_to_three' as const, subjectLabel: 'PCB',            subjects: ['Physics', 'Chemistry', 'Biology'],                        label: '1:3 — PCB',              maxStudents: 3,   color: 'bg-emerald-50 border-emerald-200 text-emerald-700', selectedColor: 'bg-emerald-100 border-emerald-500 ring-2 ring-emerald-300 text-emerald-800' },
-  { id: 'one_to_three_PCM',         type: 'one_to_three' as const, subjectLabel: 'PCM',            subjects: ['Physics', 'Chemistry', 'Mathematics'],                   label: '1:3 — PCM',              maxStudents: 3,   color: 'bg-emerald-50 border-emerald-200 text-emerald-700', selectedColor: 'bg-emerald-100 border-emerald-500 ring-2 ring-emerald-300 text-emerald-800' },
-  { id: 'one_to_three_PCBM',        type: 'one_to_three' as const, subjectLabel: 'PCBM (All 4)',   subjects: ['Physics', 'Chemistry', 'Biology', 'Mathematics'],         label: '1:3 — PCBM',             maxStudents: 3,   color: 'bg-emerald-50 border-emerald-200 text-emerald-700', selectedColor: 'bg-emerald-100 border-emerald-500 ring-2 ring-emerald-300 text-emerald-800' },
+  { id: 'one_to_three_Physics',     type: 'one_to_three' as const, subjectLabel: 'Physics',        subjects: ['Physics'],                                               label: '1:3 — Physics',          maxStudents: 3,   color: 'bg-primary/5 border-primary/20 text-primary', selectedColor: 'bg-primary/10 border-primary ring-2 ring-emerald-300 text-primary' },
+  { id: 'one_to_three_Chemistry',   type: 'one_to_three' as const, subjectLabel: 'Chemistry',      subjects: ['Chemistry'],                                             label: '1:3 — Chemistry',        maxStudents: 3,   color: 'bg-primary/5 border-primary/20 text-primary', selectedColor: 'bg-primary/10 border-primary ring-2 ring-emerald-300 text-primary' },
+  { id: 'one_to_three_Biology',     type: 'one_to_three' as const, subjectLabel: 'Biology',        subjects: ['Biology'],                                               label: '1:3 — Biology',          maxStudents: 3,   color: 'bg-primary/5 border-primary/20 text-primary', selectedColor: 'bg-primary/10 border-primary ring-2 ring-emerald-300 text-primary' },
+  { id: 'one_to_three_Mathematics', type: 'one_to_three' as const, subjectLabel: 'Mathematics',    subjects: ['Mathematics'],                                           label: '1:3 — Mathematics',      maxStudents: 3,   color: 'bg-primary/5 border-primary/20 text-primary', selectedColor: 'bg-primary/10 border-primary ring-2 ring-emerald-300 text-primary' },
+  { id: 'one_to_three_PCB',         type: 'one_to_three' as const, subjectLabel: 'PCB',            subjects: ['Physics', 'Chemistry', 'Biology'],                        label: '1:3 — PCB',              maxStudents: 3,   color: 'bg-primary/5 border-primary/20 text-primary', selectedColor: 'bg-primary/10 border-primary ring-2 ring-emerald-300 text-primary' },
+  { id: 'one_to_three_PCM',         type: 'one_to_three' as const, subjectLabel: 'PCM',            subjects: ['Physics', 'Chemistry', 'Mathematics'],                   label: '1:3 — PCM',              maxStudents: 3,   color: 'bg-primary/5 border-primary/20 text-primary', selectedColor: 'bg-primary/10 border-primary ring-2 ring-emerald-300 text-primary' },
+  { id: 'one_to_three_PCBM',        type: 'one_to_three' as const, subjectLabel: 'PCBM (All 4)',   subjects: ['Physics', 'Chemistry', 'Biology', 'Mathematics'],         label: '1:3 — PCBM',             maxStudents: 3,   color: 'bg-primary/5 border-primary/20 text-primary', selectedColor: 'bg-primary/10 border-primary ring-2 ring-emerald-300 text-primary' },
   // ── 1:15 GCC CBSE Group (monthly fee) ───────────────────────────────
   { id: 'one_to_fifteen_PCB',  type: 'one_to_fifteen' as const, subjectLabel: 'PCB',  subjects: ['Physics', 'Chemistry', 'Biology'],              label: '1:15 — PCB',  maxStudents: 15,  color: 'bg-teal-50 border-teal-200 text-teal-700',     selectedColor: 'bg-teal-100 border-teal-500 ring-2 ring-teal-300 text-teal-800' },
   { id: 'one_to_fifteen_PCM',  type: 'one_to_fifteen' as const, subjectLabel: 'PCM',  subjects: ['Physics', 'Chemistry', 'Mathematics'],          label: '1:15 — PCM',  maxStudents: 15,  color: 'bg-teal-50 border-teal-200 text-teal-700',     selectedColor: 'bg-teal-100 border-teal-500 ring-2 ring-teal-300 text-teal-800' },
@@ -278,7 +278,7 @@ function TeacherPickerSelect({
         type="button"
         onClick={handleOpen}
         className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg border-2 bg-white text-left transition-all ${
-          open ? 'border-emerald-400 ring-2 ring-emerald-100' : 'border-gray-200 hover:border-emerald-300'
+          open ? 'border-primary ring-2 ring-primary/15' : 'border-gray-200 hover:border-emerald-300'
         }`}
       >
         {selected ? (
@@ -286,7 +286,7 @@ function TeacherPickerSelect({
             {selected.profile_image
               // eslint-disable-next-line @next/next/no-img-element
               ? <img src={selected.profile_image} alt="" className="h-8 w-8 rounded-full object-cover shrink-0" />
-              : <div className="h-8 w-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-bold shrink-0">{selected.full_name.charAt(0)}</div>
+              : <div className="h-8 w-8 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold shrink-0">{selected.full_name.charAt(0)}</div>
             }
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-gray-800 truncate">{selected.full_name}</p>
@@ -313,18 +313,18 @@ function TeacherPickerSelect({
               key={t.email}
               type="button"
               onClick={() => { onChange(t.email); setOpen(false); }}
-              className={`w-full flex items-center gap-3 px-4 py-3 transition hover:bg-emerald-50 ${t.email === value ? 'bg-emerald-50' : ''}`}
+              className={`w-full flex items-center gap-3 px-4 py-3 transition hover:bg-primary/5 ${t.email === value ? 'bg-primary/5' : ''}`}
             >
               {t.profile_image
                 // eslint-disable-next-line @next/next/no-img-element
                 ? <img src={t.profile_image} alt="" className="h-9 w-9 rounded-full object-cover shrink-0" />
-                : <div className="h-9 w-9 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-sm font-bold shrink-0">{t.full_name.charAt(0)}</div>
+                : <div className="h-9 w-9 rounded-full bg-primary/10 text-primary flex items-center justify-center text-sm font-bold shrink-0">{t.full_name.charAt(0)}</div>
               }
               <div className="flex-1 min-w-0 text-left">
                 <p className="text-sm font-medium text-gray-800 truncate">{t.full_name}</p>
                 {t.subjects && <p className="text-xs text-gray-400 truncate">{t.subjects.join(', ')}</p>}
               </div>
-              {t.email === value && <CheckCircle className="h-4 w-4 text-emerald-500 shrink-0" />}
+              {t.email === value && <CheckCircle className="h-4 w-4 text-primary shrink-0" />}
             </button>
           ))}
         </div>
@@ -519,7 +519,7 @@ function fmtMins(mins: number): string {
 
 // Subject group colors for visual distinction
 const SUBJECT_COLORS: { bg: string; border: string; text: string; dot: string }[] = [
-  { bg: 'bg-emerald-50', border: 'border-emerald-200', text: 'text-emerald-700', dot: 'bg-emerald-500' },
+  { bg: 'bg-primary/5', border: 'border-primary/20', text: 'text-primary', dot: 'bg-primary' },
   { bg: 'bg-blue-50', border: 'border-blue-200', text: 'text-blue-700', dot: 'bg-blue-500' },
   { bg: 'bg-purple-50', border: 'border-purple-200', text: 'text-purple-700', dot: 'bg-purple-500' },
   { bg: 'bg-amber-50', border: 'border-amber-200', text: 'text-amber-700', dot: 'bg-amber-500' },
@@ -1188,7 +1188,7 @@ function OverviewTab({ stats, sessions, batches, loading, changeTab, onRefresh }
             <p className="text-xl font-bold text-gray-900">{stats.todaySessions}</p>
             <p className="text-[11px] text-gray-400">
               {liveSessions.length > 0
-                ? <span className="text-green-600 font-semibold">{liveSessions.length} live</span>
+                ? <span className="text-primary font-semibold">{liveSessions.length} live</span>
                 : <span>{stats.scheduledSessions} upcoming</span>}
               {' · '}
               <span>{endedSessions.filter(s => isToday(s.scheduled_date)).length} done</span>
@@ -1198,7 +1198,7 @@ function OverviewTab({ stats, sessions, batches, loading, changeTab, onRefresh }
 
         {/* Batches & Students */}
         <div className="rounded-xl bg-white border border-gray-100 shadow-sm p-4 flex items-start gap-3">
-          <div className="rounded-lg bg-emerald-500 p-2 shrink-0">
+          <div className="rounded-lg bg-primary p-2 shrink-0">
             <BookOpen className="h-4 w-4 text-white" />
           </div>
           <div className="min-w-0">
@@ -1222,12 +1222,12 @@ function OverviewTab({ stats, sessions, batches, loading, changeTab, onRefresh }
 
         {/* Pending actions */}
         <div className={`rounded-xl bg-white border shadow-sm p-4 flex items-start gap-3 ${totalPending > 0 ? 'border-amber-200' : 'border-gray-100'}`}>
-          <div className={`rounded-lg p-2 shrink-0 ${totalPending > 0 ? 'bg-amber-500' : 'bg-emerald-500'}`}>
+          <div className={`rounded-lg p-2 shrink-0 ${totalPending > 0 ? 'bg-amber-500' : 'bg-primary'}`}>
             <Briefcase className="h-4 w-4 text-white" />
           </div>
           <div className="min-w-0">
             <p className="text-xs text-gray-400 font-medium">Actions Needed</p>
-            <p className={`text-xl font-bold ${totalPending > 0 ? 'text-amber-600' : 'text-emerald-600'}`}>{totalPending}</p>
+            <p className={`text-xl font-bold ${totalPending > 0 ? 'text-amber-600' : 'text-primary'}`}>{totalPending}</p>
             <p className="text-[11px] text-gray-400">
               {totalPending > 0 ? `${pendingCounts.leave}L · ${pendingCounts.sessionReq}R · ${pendingCounts.demo}D` : 'All clear'}
             </p>
@@ -1246,7 +1246,7 @@ function OverviewTab({ stats, sessions, batches, loading, changeTab, onRefresh }
         </div>
         <div className="rounded-xl bg-white border-l-4 border-l-emerald-400 border border-gray-100 shadow-sm p-4">
           <p className="text-xs text-gray-400 font-medium mb-1">Collected</p>
-          <p className="text-lg font-bold text-emerald-700 tabular-nums">{payData ? fmtMoney(payData.total_paid_paise) : '—'}</p>
+          <p className="text-lg font-bold text-primary tabular-nums">{payData ? fmtMoney(payData.total_paid_paise) : '—'}</p>
           <p className="text-[11px] text-gray-400 mt-0.5">{payData ? `${collectionRate}% collection rate · ${payData.paid_count} paid` : 'Loading…'}</p>
         </div>
         <div className="rounded-xl bg-white border-l-4 border-l-amber-400 border border-gray-100 shadow-sm p-4">
@@ -1267,12 +1267,12 @@ function OverviewTab({ stats, sessions, batches, loading, changeTab, onRefresh }
       {/* ALERT BARS                                                 */}
       {/* ══════════════════════════════════════════════════════════ */}
       {liveSessions.length > 0 && (
-        <div className="rounded-xl border border-green-300 bg-green-50/60 overflow-hidden">
-          <div className="px-4 py-2.5 flex items-center gap-3 border-b border-green-200/70">
-            <Radio className="h-5 w-5 text-green-600 animate-pulse shrink-0" />
+        <div className="rounded-xl border border-green-300 bg-primary/5/60 overflow-hidden">
+          <div className="px-4 py-2.5 flex items-center gap-3 border-b border-primary/20/70">
+            <Radio className="h-5 w-5 text-primary animate-pulse shrink-0" />
             <div className="flex-1 min-w-0">
               <span className="text-sm font-semibold text-green-800">{liveSessions.length} Live Now</span>
-              <span className="text-xs text-green-600 ml-2 hidden sm:inline">
+              <span className="text-xs text-primary ml-2 hidden sm:inline">
                 Join any session as a silent observer
               </span>
             </div>
@@ -1285,7 +1285,7 @@ function OverviewTab({ stats, sessions, batches, loading, changeTab, onRefresh }
                 const elapsedMin = startedMs ? Math.max(0, Math.floor((Date.now() - startedMs) / 60000)) : null;
                 return (
                   <div key={s.session_id} className="px-4 py-2.5 flex items-center gap-3 bg-white/40">
-                    <span className="inline-block h-2 w-2 rounded-full bg-green-500 animate-pulse shrink-0" />
+                    <span className="inline-block h-2 w-2 rounded-full bg-primary animate-pulse shrink-0" />
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2 flex-wrap">
                         <span className="text-sm font-semibold text-gray-900 truncate">{s.subject}</span>
@@ -1302,7 +1302,7 @@ function OverviewTab({ stats, sessions, batches, loading, changeTab, onRefresh }
                         if (!s.livekit_room_name) { toast.error('Room not yet ready'); return; }
                         window.open('/academic-operator/live', '_blank');
                       }}
-                      className="inline-flex items-center gap-1.5 rounded-lg bg-green-600 px-3 py-1.5 text-xs font-bold text-white hover:bg-green-700 shrink-0"
+                      className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-xs font-bold text-white hover:bg-green-700 shrink-0"
                       title="Join as silent observer"
                     >
                       <Eye className="h-3.5 w-3.5" />
@@ -1402,7 +1402,7 @@ function OverviewTab({ stats, sessions, batches, loading, changeTab, onRefresh }
               <h3 className="text-sm font-semibold text-gray-800">Weekly Sessions</h3>
               <p className="text-[11px] text-gray-400">This week by day</p>
             </div>
-            <button onClick={() => changeTab('sessions')} className="text-[11px] text-emerald-600 hover:underline font-medium">View all →</button>
+            <button onClick={() => changeTab('sessions')} className="text-[11px] text-primary hover:underline font-medium">View all →</button>
           </div>
           <div className="flex-1">
             {weeklyData.some(d => d.Completed + d.Upcoming + d.Live > 0) ? (
@@ -1439,7 +1439,7 @@ function OverviewTab({ stats, sessions, batches, loading, changeTab, onRefresh }
               <h3 className="text-sm font-semibold text-gray-800">Daily Collections</h3>
               <p className="text-[11px] text-gray-400">Payments received last 7 days</p>
             </div>
-            <button onClick={() => changeTab('payments')} className="text-[11px] text-emerald-600 hover:underline font-medium">Payments →</button>
+            <button onClick={() => changeTab('payments')} className="text-[11px] text-primary hover:underline font-medium">Payments →</button>
           </div>
           <div className="flex-1">
             {collectionData.some(d => d.collected > 0) ? (
@@ -1500,7 +1500,7 @@ function OverviewTab({ stats, sessions, batches, loading, changeTab, onRefresh }
                 ))}
                 <div className="flex items-center justify-between text-xs pt-1 border-t border-gray-100 mt-1">
                   <span className="text-gray-500 font-medium">Collection Rate</span>
-                  <span className={`font-bold tabular-nums ${collectionRate >= 80 ? 'text-emerald-600' : collectionRate >= 50 ? 'text-amber-600' : 'text-red-500'}`}>{collectionRate}%</span>
+                  <span className={`font-bold tabular-nums ${collectionRate >= 80 ? 'text-primary' : collectionRate >= 50 ? 'text-amber-600' : 'text-red-500'}`}>{collectionRate}%</span>
                 </div>
               </div>
             </div>
@@ -1519,7 +1519,7 @@ function OverviewTab({ stats, sessions, batches, loading, changeTab, onRefresh }
         <div className="lg:col-span-4 rounded-xl bg-white border border-gray-100 shadow-sm p-4">
           <div className="flex items-center justify-between mb-3">
             <h3 className="text-sm font-semibold text-gray-800">Today&apos;s Schedule</h3>
-            <button onClick={() => changeTab('sessions')} className="text-[11px] text-emerald-600 hover:underline font-medium">Full schedule →</button>
+            <button onClick={() => changeTab('sessions')} className="text-[11px] text-primary hover:underline font-medium">Full schedule →</button>
           </div>
           {todaySessions.length === 0 ? (
             <p className="text-xs text-gray-400 py-2">No sessions today</p>
@@ -1530,7 +1530,7 @@ function OverviewTab({ stats, sessions, batches, loading, changeTab, onRefresh }
                 const isLive = es === 'live';
                 const isDone = es === 'ended';
                 return (
-                  <div key={s.session_id} className={`flex items-center gap-3 rounded-lg px-3 py-2 text-xs ${isLive ? 'bg-green-50 border border-green-200' : isDone ? 'bg-gray-50' : 'bg-blue-50/40'}`}>
+                  <div key={s.session_id} className={`flex items-center gap-3 rounded-lg px-3 py-2 text-xs ${isLive ? 'bg-primary/5 border border-primary/20' : isDone ? 'bg-gray-50' : 'bg-blue-50/40'}`}>
                     <div className="shrink-0 text-center w-12">
                       <p className="font-bold text-gray-800">{fmtTime12(s.start_time)}</p>
                     </div>
@@ -1542,7 +1542,7 @@ function OverviewTab({ stats, sessions, batches, loading, changeTab, onRefresh }
                       <span className="text-gray-400">{s.student_count ?? '?'}</span>
                       <Users className="h-3 w-3 text-gray-400" />
                       {isLive && <Radio className="h-3.5 w-3.5 text-red-500 animate-pulse" />}
-                      {isDone && <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />}
+                      {isDone && <CheckCircle2 className="h-3.5 w-3.5 text-primary" />}
                     </div>
                   </div>
                 );
@@ -1569,12 +1569,12 @@ function OverviewTab({ stats, sessions, batches, loading, changeTab, onRefresh }
                 )}
               </p>
             </div>
-            <button onClick={() => changeTab('payments')} className="text-[11px] text-emerald-600 hover:underline font-medium">View all →</button>
+            <button onClick={() => changeTab('payments')} className="text-[11px] text-primary hover:underline font-medium">View all →</button>
           </div>
           {overdueStudents.length === 0 ? (
-            <div className="flex items-center gap-2 rounded-lg bg-emerald-50 border border-emerald-200 px-3 py-3 mt-2">
-              <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
-              <p className="text-xs text-emerald-700 font-medium">No pending payments — great collection!</p>
+            <div className="flex items-center gap-2 rounded-lg bg-primary/5 border border-primary/20 px-3 py-3 mt-2">
+              <CheckCircle2 className="h-4 w-4 text-primary shrink-0" />
+              <p className="text-xs text-primary font-medium">No pending payments — great collection!</p>
             </div>
           ) : (
             <div className="space-y-2">
@@ -1615,11 +1615,11 @@ function OverviewTab({ stats, sessions, batches, loading, changeTab, onRefresh }
                 {recentReceipts.slice(0, 4).map(r => (
                   <div key={r.receipt_number} className="flex items-center justify-between text-xs">
                     <div className="flex items-center gap-2 min-w-0">
-                      <div className="h-1.5 w-1.5 rounded-full bg-emerald-400 shrink-0" />
+                      <div className="h-1.5 w-1.5 rounded-full bg-primary shrink-0" />
                       <span className="text-gray-600 truncate">{r.student_name || r.student_email}</span>
                     </div>
                     <div className="flex items-center gap-2 shrink-0 ml-2">
-                      <span className="font-semibold text-emerald-700 tabular-nums">{fmtMoney(r.amount_paise, r.currency)}</span>
+                      <span className="font-semibold text-primary tabular-nums">{fmtMoney(r.amount_paise, r.currency)}</span>
                       <span className="text-gray-400 text-[10px]">{new Date(r.paid_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}</span>
                     </div>
                   </div>
@@ -1635,7 +1635,7 @@ function OverviewTab({ stats, sessions, batches, loading, changeTab, onRefresh }
           <div className="rounded-xl bg-white border border-gray-100 shadow-sm p-4">
             <div className="flex items-center justify-between mb-2">
               <h3 className="text-sm font-semibold text-gray-800">Active Batches</h3>
-              <button onClick={() => changeTab('batches')} className="text-[11px] text-emerald-600 hover:underline font-medium">View all →</button>
+              <button onClick={() => changeTab('batches')} className="text-[11px] text-primary hover:underline font-medium">View all →</button>
             </div>
             {batches.filter(b => b.status === 'active').length === 0 ? (
               <p className="text-xs text-gray-400">No active batches</p>
@@ -1689,8 +1689,8 @@ function TeacherReadinessWidget() {
       </div>
       <div className="flex flex-wrap gap-1.5">
         {online.map((t, i) => (
-          <div key={i} className="flex items-center gap-1.5 rounded-md border border-green-200 bg-green-50 px-2 py-1">
-            <div className="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse" />
+          <div key={i} className="flex items-center gap-1.5 rounded-md border border-primary/20 bg-primary/5 px-2 py-1">
+            <div className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
             <span className="text-[10px] font-medium text-green-800">{(t.full_name as string)?.split(' ')[0] || (t.email as string)}</span>
           </div>
         ))}
@@ -1737,9 +1737,9 @@ function AttendanceSummaryWidget() {
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
         {[
           { label: 'Students', value: String(summary.totalStudents), color: 'text-gray-900' },
-          { label: 'Avg Rate', value: `${(summary.avgAttendance as number).toFixed(1)}%`, color: (summary.avgAttendance as number) >= 75 ? 'text-emerald-600' : 'text-amber-600' },
-          { label: 'Above 75%', value: String(summary.highAttendance), color: 'text-emerald-600' },
-          { label: 'Below 50%', value: String(summary.lowAttendance), color: (summary.lowAttendance as number) > 0 ? 'text-red-500' : 'text-emerald-600' },
+          { label: 'Avg Rate', value: `${(summary.avgAttendance as number).toFixed(1)}%`, color: (summary.avgAttendance as number) >= 75 ? 'text-primary' : 'text-amber-600' },
+          { label: 'Above 75%', value: String(summary.highAttendance), color: 'text-primary' },
+          { label: 'Below 50%', value: String(summary.lowAttendance), color: (summary.lowAttendance as number) > 0 ? 'text-red-500' : 'text-primary' },
         ].map(s => (
           <div key={s.label} className="rounded-lg bg-gray-50 px-3 py-2 text-center">
             <p className={`text-base font-bold ${s.color}`}>{s.value}</p>
@@ -1937,7 +1937,7 @@ export function BatchesTab({ batches, sessions, loading, onRefresh, onSearch, us
                           title="Restore batch"
                           disabled={deleting}
                           onClick={() => handleUnarchive(b)}
-                          className="p-1.5 rounded-lg text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 transition-colors disabled:opacity-50"
+                          className="p-1.5 rounded-lg text-gray-400 hover:text-primary hover:bg-primary/5 transition-colors disabled:opacity-50"
                         >
                           <ArchiveRestore className="h-4 w-4" />
                         </button>
@@ -1954,7 +1954,7 @@ export function BatchesTab({ batches, sessions, loading, onRefresh, onSearch, us
                         type="button"
                         title="Edit batch"
                         onClick={() => setEditBatch(b)}
-                        className="p-1.5 rounded-lg text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 transition-colors"
+                        className="p-1.5 rounded-lg text-gray-400 hover:text-primary hover:bg-primary/5 transition-colors"
                       >
                         <Pencil className="h-4 w-4" />
                       </button>
@@ -2003,12 +2003,12 @@ export function BatchesTab({ batches, sessions, loading, onRefresh, onSearch, us
             <div className="grid grid-cols-2 gap-3 mb-4">
               <button
                 onClick={() => { setAutoScheduleBatch(schedulePickerBatch); setSchedulePickerBatch(null); }}
-                className="flex flex-col items-center gap-2 rounded-xl border-2 border-emerald-200 bg-emerald-50 hover:bg-emerald-100 hover:border-emerald-400 transition-colors p-4 text-left"
+                className="flex flex-col items-center gap-2 rounded-xl border-2 border-primary/20 bg-primary/5 hover:bg-primary/10 hover:border-primary transition-colors p-4 text-left"
               >
-                <CalendarDays className="h-7 w-7 text-emerald-600" />
+                <CalendarDays className="h-7 w-7 text-primary" />
                 <div>
-                  <p className="text-sm font-semibold text-emerald-800">Auto Schedule</p>
-                  <p className="text-[11px] text-emerald-600 mt-0.5">From academic calendar</p>
+                  <p className="text-sm font-semibold text-primary">Auto Schedule</p>
+                  <p className="text-[11px] text-primary mt-0.5">From academic calendar</p>
                 </div>
               </button>
               <button
@@ -2139,7 +2139,7 @@ interface TimetableSlot {
   duration: string;
 }
 
-const DAY_THEME_TT = { bg: 'bg-emerald-600', text: 'text-emerald-700', border: 'border-emerald-200', light: 'bg-emerald-50' };
+const DAY_THEME_TT = { bg: 'bg-primary', text: 'text-primary', border: 'border-primary/20', light: 'bg-primary/5' };
 
 const ALL_DAYS_TT = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'] as const;
 
@@ -2200,7 +2200,7 @@ function WeeklyTimetableModal({ batch, onClose }: { batch: Batch; onClose: () =>
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl mx-4 max-h-[90vh] flex flex-col overflow-hidden">
         {/* Header */}
-        <div className="bg-linear-to-r from-emerald-600 to-teal-700 px-6 py-5 relative overflow-hidden shrink-0">
+        <div className="bg-linear-to-r from-primary to-secondary px-6 py-5 relative overflow-hidden shrink-0">
           <div className="absolute -right-6 -top-6 w-28 h-28 rounded-full bg-white/10" />
           <div className="flex items-center justify-between relative z-10">
             <div className="flex items-center gap-4">
@@ -2224,12 +2224,12 @@ function WeeklyTimetableModal({ batch, onClose }: { batch: Batch; onClose: () =>
         {!loading && slots.length > 0 && (
           <div className="px-6 py-3 bg-gray-50 border-b border-gray-200 flex items-center gap-6 shrink-0">
             <div className="flex items-center gap-2 text-sm">
-              <Calendar className="h-4 w-4 text-emerald-600" />
+              <Calendar className="h-4 w-4 text-primary" />
               <span className="text-gray-500">Days:</span>
               <span className="font-semibold text-gray-800">{activeDays} / 6</span>
             </div>
             <div className="flex items-center gap-2 text-sm">
-              <BookOpen className="h-4 w-4 text-emerald-600" />
+              <BookOpen className="h-4 w-4 text-primary" />
               <span className="text-gray-500">Sessions/Week:</span>
               <span className="font-semibold text-gray-800">{slots.length}</span>
             </div>
@@ -2300,9 +2300,9 @@ function WeeklyTimetableModal({ batch, onClose }: { batch: Batch; onClose: () =>
         {/* Footer with send buttons */}
         <div className="px-6 py-4 bg-gray-50 border-t border-gray-200 shrink-0">
           {sentResult && (
-            <div className="flex items-center gap-2 mb-3 px-3 py-2 rounded-lg bg-green-50 border border-green-200">
-              <CheckCircle2 className="h-4 w-4 text-green-600 shrink-0" />
-              <span className="text-sm text-green-700">
+            <div className="flex items-center gap-2 mb-3 px-3 py-2 rounded-lg bg-primary/5 border border-primary/20">
+              <CheckCircle2 className="h-4 w-4 text-primary shrink-0" />
+              <span className="text-sm text-primary">
                 Timetable sent to {sentResult.sent} of {sentResult.total} recipient{sentResult.total > 1 ? 's' : ''}
               </span>
             </div>
@@ -2602,14 +2602,14 @@ function EditBatchModal({ batch, batches, userRole, onClose, onSaved }: {
         <h3 className="text-xl font-bold text-gray-900 mb-1">Add Students</h3>
         <p className="text-gray-500 mb-6">
           {formGrade
-            ? <>Showing students in <span className="font-semibold text-emerald-700">Grade {formGrade}</span>{formSection ? <> · Section {formSection}</> : ''}</>
+            ? <>Showing students in <span className="font-semibold text-primary">Grade {formGrade}</span>{formSection ? <> · Section {formSection}</> : ''}</>
             : 'Select students for this batch'}
         </p>
         <div className="flex items-center justify-between mb-5">
           <div className="flex items-center gap-3">
-            <div className="px-3 py-1.5 rounded-lg bg-emerald-50 border border-emerald-200">
-              <span className="text-sm font-semibold text-emerald-700">{selectedStudents.length}</span>
-              <span className="text-xs text-emerald-500 ml-1">/ {max === 999 ? '∞' : max}</span>
+            <div className="px-3 py-1.5 rounded-lg bg-primary/5 border border-primary/20">
+              <span className="text-sm font-semibold text-primary">{selectedStudents.length}</span>
+              <span className="text-xs text-primary ml-1">/ {max === 999 ? '∞' : max}</span>
             </div>
             <span className="text-sm text-gray-500">students selected</span>
           </div>
@@ -2626,10 +2626,10 @@ function EditBatchModal({ batch, batches, userRole, onClose, onSaved }: {
           <div className="mb-5 space-y-3">
             <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Selected Students</h4>
             {selectedStudents.map(s => (
-              <div key={s.email} className="rounded-xl border-2 border-emerald-200 overflow-hidden">
-                <div className="flex items-center justify-between bg-emerald-50/80 px-5 py-3.5">
+              <div key={s.email} className="rounded-xl border-2 border-primary/20 overflow-hidden">
+                <div className="flex items-center justify-between bg-primary/5 px-5 py-3.5">
                   <div className="flex items-center gap-3 min-w-0">
-                    <div className="w-9 h-9 rounded-full bg-emerald-500 text-white flex items-center justify-center text-sm font-bold shrink-0">
+                    <div className="w-9 h-9 rounded-full bg-primary text-white flex items-center justify-center text-sm font-bold shrink-0">
                       {s.name.charAt(0).toUpperCase()}
                     </div>
                     <div className="min-w-0">
@@ -2639,7 +2639,7 @@ function EditBatchModal({ batch, batches, userRole, onClose, onSaved }: {
                   </div>
                   <div className="flex items-center gap-3 shrink-0">
                     {s.parent_email ? (
-                      <span className="inline-flex items-center gap-1.5 text-xs font-medium text-emerald-700 bg-emerald-100 px-3 py-1.5 rounded-lg">
+                      <span className="inline-flex items-center gap-1.5 text-xs font-medium text-primary bg-primary/10 px-3 py-1.5 rounded-lg">
                         <CheckCircle className="h-3.5 w-3.5" /> Parent: {s.parent_name || s.parent_email}
                       </span>
                     ) : (
@@ -2677,13 +2677,13 @@ function EditBatchModal({ batch, batches, userRole, onClose, onSaved }: {
                   const selected = isStudentSelected(s.email);
                   const currentBatches: { batch_name: string }[] = Array.isArray(s.current_batches) ? s.current_batches : [];
                   return (
-                    <tr key={s.email} className={`border-t hover:bg-emerald-50/30 cursor-pointer transition-colors ${selected ? 'bg-emerald-50/50' : ''}`} onClick={() => toggleStudent(s)}>
+                    <tr key={s.email} className={`border-t hover:bg-primary/5/30 cursor-pointer transition-colors ${selected ? 'bg-primary/5/50' : ''}`} onClick={() => toggleStudent(s)}>
                       <td className="px-4 py-3"><p className="font-medium text-gray-800">{s.full_name}</p><p className="text-xs text-gray-400">{s.email}</p></td>
                       <td className="px-4 py-3 text-gray-500">{s.grade || '—'}</td>
                       <td className="px-4 py-3">{currentBatches.length > 0 ? <div className="flex flex-wrap gap-1">{currentBatches.map((b, i) => <span key={i} className="inline-block text-[10px] font-medium bg-blue-50 text-blue-700 border border-blue-200 rounded px-1.5 py-0.5">{b.batch_name}</span>)}</div> : <span className="text-xs text-gray-300">None</span>}</td>
                       <td className="px-4 py-3 text-xs text-gray-500">{s.assigned_region || '—'}</td>
-                      <td className="px-4 py-3">{s.parent_email ? <span className="text-xs text-emerald-600">{s.parent_name || s.parent_email}</span> : <span className="inline-flex items-center gap-1 text-xs font-medium text-amber-600 bg-amber-50 px-2 py-0.5 rounded"><AlertCircle className="h-3 w-3" /> No parent</span>}</td>
-                      <td className="px-4 py-3 text-right">{selected ? <span className="inline-flex items-center gap-1 text-xs text-emerald-600 font-medium"><CheckCircle className="h-3.5 w-3.5" /> Selected</span> : maxReached ? <span className="text-xs text-gray-300">Max reached</span> : <span className="text-xs text-gray-400 hover:text-emerald-600">+ Add</span>}</td>
+                      <td className="px-4 py-3">{s.parent_email ? <span className="text-xs text-primary">{s.parent_name || s.parent_email}</span> : <span className="inline-flex items-center gap-1 text-xs font-medium text-amber-600 bg-amber-50 px-2 py-0.5 rounded"><AlertCircle className="h-3 w-3" /> No parent</span>}</td>
+                      <td className="px-4 py-3 text-right">{selected ? <span className="inline-flex items-center gap-1 text-xs text-primary font-medium"><CheckCircle className="h-3.5 w-3.5" /> Selected</span> : maxReached ? <span className="text-xs text-gray-300">Max reached</span> : <span className="text-xs text-gray-400 hover:text-primary">+ Add</span>}</td>
                     </tr>
                   );
                 })}
@@ -2712,9 +2712,9 @@ function EditBatchModal({ batch, batches, userRole, onClose, onSaved }: {
             />
           </FormField>
           <FormField label="Section (auto)">
-            <div className={`flex items-center gap-3 px-4 py-2.5 rounded-lg border-2 ${formSection ? 'border-emerald-300 bg-emerald-50' : 'border-gray-200 bg-gray-50'}`}>
+            <div className={`flex items-center gap-3 px-4 py-2.5 rounded-lg border-2 ${formSection ? 'border-emerald-300 bg-primary/5' : 'border-gray-200 bg-gray-50'}`}>
               {formSection ? (
-                <span className="text-lg font-bold text-emerald-700">{formSection}</span>
+                <span className="text-lg font-bold text-primary">{formSection}</span>
               ) : <p className="text-sm text-gray-400">Select grade &amp; category</p>}
             </div>
           </FormField>
@@ -2783,10 +2783,10 @@ function EditBatchModal({ batch, batches, userRole, onClose, onSaved }: {
       <div className="mb-8">
         {GRADE_SUBJECTS[formGrade] ? (
           <>
-            <label className="block text-sm font-semibold text-gray-700 mb-3">Subjects <span className="text-xs font-normal text-emerald-600 ml-1">(auto-assigned for Grade {formGrade})</span></label>
+            <label className="block text-sm font-semibold text-gray-700 mb-3">Subjects <span className="text-xs font-normal text-primary ml-1">(auto-assigned for Grade {formGrade})</span></label>
             <div className="flex flex-wrap gap-2.5">
               {formSubjects.map(subj => (
-                <div key={subj} className="px-4 py-2.5 rounded-xl text-sm font-medium border-2 border-emerald-500 bg-emerald-50 text-emerald-700 shadow-sm">
+                <div key={subj} className="px-4 py-2.5 rounded-xl text-sm font-medium border-2 border-primary bg-primary/5 text-primary shadow-sm">
                   <span className="mr-1.5">✓</span>{subj}
                 </div>
               ))}
@@ -2802,7 +2802,7 @@ function EditBatchModal({ batch, batches, userRole, onClose, onSaved }: {
                 return (
                   <button key={subj} type="button" onClick={() => toggleSubject(subj)}
                     className={`px-4 py-2.5 rounded-xl text-sm font-medium border-2 transition-all ${
-                      isSelected ? 'border-emerald-500 bg-emerald-50 text-emerald-700 shadow-sm' : 'border-gray-200 bg-white text-gray-600 hover:border-emerald-300'
+                      isSelected ? 'border-primary bg-primary/5 text-primary shadow-sm' : 'border-gray-200 bg-white text-gray-600 hover:border-emerald-300'
                     }`}
                   >
                     {isSelected && <span className="mr-1.5">✓</span>}{subj}
@@ -2823,8 +2823,8 @@ function EditBatchModal({ batch, batches, userRole, onClose, onSaved }: {
             {formSubjects.map(subj => {
               const assigned = !!subjectTeachers[subj];
               return (
-                <div key={subj} className={`flex items-center gap-4 rounded-xl px-5 py-4 border-2 transition-all ${assigned ? 'border-emerald-200 bg-emerald-50/50' : 'border-gray-200 bg-gray-50/50'}`}>
-                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${assigned ? 'bg-emerald-500 text-white' : 'bg-gray-200 text-gray-500'}`}>
+                <div key={subj} className={`flex items-center gap-4 rounded-xl px-5 py-4 border-2 transition-all ${assigned ? 'border-primary/20 bg-primary/5/50' : 'border-gray-200 bg-gray-50/50'}`}>
+                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${assigned ? 'bg-primary text-white' : 'bg-gray-200 text-gray-500'}`}>
                     <BookOpen className="h-5 w-5" />
                   </div>
                   <div className="min-w-30"><span className="text-sm font-semibold text-gray-800">{subj}</span></div>
@@ -2835,7 +2835,7 @@ function EditBatchModal({ batch, batches, userRole, onClose, onSaved }: {
                       teachers={teachers.filter(t => { const ts = t.subjects || []; return ts.length === 0 || ts.some(x => x.toLowerCase() === subj.toLowerCase()); })}
                     />
                   </div>
-                  {assigned && <CheckCircle className="h-5 w-5 text-emerald-500 shrink-0" />}
+                  {assigned && <CheckCircle className="h-5 w-5 text-primary shrink-0" />}
                 </div>
               );
             })}
@@ -2851,8 +2851,8 @@ function EditBatchModal({ batch, batches, userRole, onClose, onSaved }: {
         <h3 className="text-xl font-bold text-gray-900 mb-1">Review &amp; Save</h3>
         <p className="text-gray-500 mb-6">Confirm the batch details before saving</p>
       </div>
-      <div className="bg-linear-to-r from-emerald-50 to-teal-50 rounded-xl p-5 border border-emerald-100">
-        <h4 className="text-sm font-bold text-emerald-800 mb-4">Batch Summary</h4>
+      <div className="bg-linear-to-r from-primary/5 to-secondary/5 rounded-xl p-5 border border-primary/15">
+        <h4 className="text-sm font-bold text-primary mb-4">Batch Summary</h4>
         <div className="grid grid-cols-2 gap-4 text-sm">
           <div><span className="text-gray-400">Name:</span> <span className="font-medium text-gray-800">{formName}</span></div>
           <div><span className="text-gray-400">Type:</span> <Badge label={batchTypeLabel(batch.batch_type)} variant={batchTypeBadgeVariant(batch.batch_type)} /></div>
@@ -2873,12 +2873,12 @@ function EditBatchModal({ batch, batches, userRole, onClose, onSaved }: {
               const teacher = teachers.find(t => t.email === teacherEmail);
               return (
                 <div key={subj} className="flex items-center gap-3 bg-white border rounded-xl px-4 py-3 text-sm">
-                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${teacher ? 'bg-emerald-500 text-white' : 'bg-gray-200 text-gray-400'}`}>
+                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${teacher ? 'bg-primary text-white' : 'bg-gray-200 text-gray-400'}`}>
                     <BookOpen className="h-4 w-4" />
                   </div>
                   <span className="font-semibold text-gray-700 min-w-30">{subj}</span>
                   <span className="text-gray-300">→</span>
-                  {teacher ? <span className="text-emerald-600">{teacher.full_name}</span> : <span className="text-amber-500 italic">No teacher assigned</span>}
+                  {teacher ? <span className="text-primary">{teacher.full_name}</span> : <span className="text-amber-500 italic">No teacher assigned</span>}
                 </div>
               );
             })}
@@ -2891,10 +2891,10 @@ function EditBatchModal({ batch, batches, userRole, onClose, onSaved }: {
           <div className="space-y-2">
             {selectedStudents.map(s => (
               <div key={s.email} className="flex items-center gap-3 bg-white border rounded-xl px-4 py-3 text-sm">
-                <div className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-bold shrink-0">{s.name.charAt(0).toUpperCase()}</div>
+                <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold shrink-0">{s.name.charAt(0).toUpperCase()}</div>
                 <span className="font-semibold text-gray-700">{s.name}</span>
                 <span className="text-gray-400 text-xs">{s.email}</span>
-                {s.parent_email ? <span className="ml-auto text-xs text-emerald-600">Parent: {s.parent_name || s.parent_email}</span> : <span className="ml-auto text-xs text-amber-500">No parent assigned</span>}
+                {s.parent_email ? <span className="ml-auto text-xs text-primary">Parent: {s.parent_name || s.parent_email}</span> : <span className="ml-auto text-xs text-amber-500">No parent assigned</span>}
               </div>
             ))}
           </div>
@@ -2915,13 +2915,13 @@ function EditBatchModal({ batch, batches, userRole, onClose, onSaved }: {
       <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4" onClick={onClose}>
         <div className="bg-white rounded-2xl shadow-2xl w-full max-w-5xl max-h-[92vh] flex overflow-hidden" onClick={e => e.stopPropagation()}>
           {/* Left sidebar */}
-          <div className="w-60 bg-linear-to-b from-emerald-600 via-emerald-700 to-teal-800 p-6 flex flex-col shrink-0">
+          <div className="w-60 bg-linear-to-b from-primary via-primary/90 to-secondary p-6 flex flex-col shrink-0">
             <div className="mb-8">
               <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center mb-3">
                 <Pencil className="h-5 w-5 text-white" />
               </div>
               <h2 className="text-white font-bold text-lg">Edit Batch</h2>
-              <p className="text-emerald-200 text-xs mt-1">Step {stepIdx + 1} of {EDIT_STEPS.length}</p>
+              <p className="text-primary/60 text-xs mt-1">Step {stepIdx + 1} of {EDIT_STEPS.length}</p>
             </div>
             <div className="space-y-1 flex-1">
               {EDIT_STEPS.map((step, idx) => {
@@ -2930,11 +2930,11 @@ function EditBatchModal({ batch, batches, userRole, onClose, onSaved }: {
                 return (
                   <div key={step.key}
                     className={`flex items-center gap-3 px-3 py-3 rounded-xl transition-all ${
-                      isCurrent ? 'bg-white/20 text-white shadow-lg shadow-black/10' : isDone ? 'text-emerald-200' : 'text-emerald-400/50'
+                      isCurrent ? 'bg-white/20 text-white shadow-lg shadow-black/10' : isDone ? 'text-primary/60' : 'text-primary/50'
                     }`}
                   >
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold shrink-0 ${
-                      isDone ? 'bg-emerald-400 text-emerald-900' : isCurrent ? 'bg-white text-emerald-700' : 'bg-emerald-500/30 text-emerald-300/70'
+                      isDone ? 'bg-primary text-emerald-900' : isCurrent ? 'bg-white text-primary' : 'bg-primary/30 text-primary/80/70'
                     }`}>
                       {isDone ? '✓' : idx + 1}
                     </div>
@@ -2943,7 +2943,7 @@ function EditBatchModal({ batch, batches, userRole, onClose, onSaved }: {
                 );
               })}
             </div>
-            <button onClick={onClose} className="mt-4 text-emerald-200 hover:text-white text-xs flex items-center gap-2 transition">
+            <button onClick={onClose} className="mt-4 text-primary/60 hover:text-white text-xs flex items-center gap-2 transition">
               <X className="h-3.5 w-3.5" /> Cancel &amp; Close
             </button>
           </div>
@@ -3013,7 +3013,7 @@ interface TeachingMaterial {
 const MATERIAL_TYPE_STYLE: Record<string, string> = {
   notes:      'bg-blue-50   text-blue-700   border-blue-200',
   assignment: 'bg-amber-50  text-amber-700  border-amber-200',
-  resource:   'bg-emerald-50 text-emerald-700 border-emerald-200',
+  resource:   'bg-primary/5 text-primary border-primary/20',
   video:      'bg-purple-50 text-purple-700  border-purple-200',
   other:      'bg-gray-50   text-gray-600   border-gray-200',
 };
@@ -3202,8 +3202,8 @@ function MaterialsTab({
 
       {/* -- Upload Form ------------------------------ */}
       {showForm && (
-        <div className="rounded-xl border border-emerald-200 bg-emerald-50/50 p-5 space-y-4">
-          <p className="text-sm font-semibold text-emerald-800">Upload New Material</p>
+        <div className="rounded-xl border border-primary/20 bg-primary/5/50 p-5 space-y-4">
+          <p className="text-sm font-semibold text-primary">Upload New Material</p>
           <FormGrid>
             <FormField label="Subject *">
               <Select
@@ -3243,7 +3243,7 @@ function MaterialsTab({
           <FormField label={`Assign to Batches * (${form.batch_ids.length} selected)`}>
             <div className="space-y-2 mt-1">
               <div className="flex gap-2 items-center text-xs">
-                <button type="button" className="text-emerald-700 hover:underline font-medium"
+                <button type="button" className="text-primary hover:underline font-medium"
                   onClick={() => setForm(f => ({ ...f, batch_ids: batches.map(b => b.batch_id) }))}>
                   Select all
                 </button>
@@ -3270,13 +3270,13 @@ function MaterialsTab({
                   <label key={b.batch_id}
                     className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-sm cursor-pointer transition-all ${
                       form.batch_ids.includes(b.batch_id)
-                        ? 'bg-emerald-100 border-emerald-400 text-emerald-800 shadow-sm'
+                        ? 'bg-primary/10 border-primary text-primary shadow-sm'
                         : 'bg-white border-gray-200 text-gray-600 hover:border-gray-300'
                     }`}>
                     <input type="checkbox" className="sr-only"
                       checked={form.batch_ids.includes(b.batch_id)}
                       onChange={() => toggleBatch(b.batch_id)} />
-                    <CheckCircle2 className={`h-3.5 w-3.5 shrink-0 ${form.batch_ids.includes(b.batch_id) ? 'text-emerald-600' : 'text-gray-300'}`} />
+                    <CheckCircle2 className={`h-3.5 w-3.5 shrink-0 ${form.batch_ids.includes(b.batch_id) ? 'text-primary' : 'text-gray-300'}`} />
                     <span className="truncate max-w-[200px]">{b.batch_name}</span>
                     {b.grade && <span className="text-[10px] text-gray-400 ml-0.5">Gr.{b.grade}</span>}
                   </label>
@@ -3288,12 +3288,12 @@ function MaterialsTab({
           {/* -- File picker ---------------------------- */}
           <FormField label="File * (PDF, Word, Excel, PowerPoint, images — max 50 MB)">
             <div className="mt-1">
-              <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-emerald-300 rounded-xl cursor-pointer bg-white hover:bg-emerald-50 transition-colors">
+              <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-emerald-300 rounded-xl cursor-pointer bg-white hover:bg-primary/5 transition-colors">
                 <div className="flex flex-col items-center justify-center pt-5 pb-6">
                   {selectedFile ? (
                     <>
-                      <FileText className="h-8 w-8 text-emerald-500 mb-2" />
-                      <p className="text-sm font-semibold text-emerald-700">{selectedFile.name}</p>
+                      <FileText className="h-8 w-8 text-primary mb-2" />
+                      <p className="text-sm font-semibold text-primary">{selectedFile.name}</p>
                       <p className="text-xs text-gray-400 mt-1">{fmtBytes(selectedFile.size)}</p>
                     </>
                   ) : (
@@ -3382,7 +3382,7 @@ function MaterialsTab({
                   {m.batches.length > 0 && (
                     <div className="flex items-center gap-1 flex-wrap mt-1">
                       {m.batches.map(b => (
-                        <span key={b.batch_id} className="text-[11px] bg-emerald-50 text-emerald-700 border border-emerald-100 px-1.5 py-0.5 rounded-full">
+                        <span key={b.batch_id} className="text-[11px] bg-primary/5 text-primary border border-primary/15 px-1.5 py-0.5 rounded-full">
                           {b.batch_name}
                         </span>
                       ))}
@@ -3417,7 +3417,7 @@ function MaterialsTab({
                   href={m.file_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700 hover:text-emerald-900 transition-colors"
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:text-emerald-900 transition-colors"
                 >
                   <ExternalLink className="h-3.5 w-3.5" />
                   {m.file_name || 'Open file'}
@@ -3450,7 +3450,7 @@ function MaterialsTab({
             <FormField label={`Assigned Batches (${editForm.batch_ids.length})`}>
               <div className="space-y-2 mt-1">
                 <div className="flex gap-2 items-center text-xs">
-                  <button type="button" className="text-emerald-700 hover:underline font-medium"
+                  <button type="button" className="text-primary hover:underline font-medium"
                     onClick={() => setEditForm(f => ({ ...f, batch_ids: batches.map(b => b.batch_id) }))}>
                     Select all
                   </button>
@@ -3465,13 +3465,13 @@ function MaterialsTab({
                     <label key={b.batch_id}
                       className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-sm cursor-pointer transition-all ${
                         editForm.batch_ids.includes(b.batch_id)
-                          ? 'bg-emerald-100 border-emerald-400 text-emerald-800 shadow-sm'
+                          ? 'bg-primary/10 border-primary text-primary shadow-sm'
                           : 'bg-white border-gray-200 text-gray-600 hover:border-gray-300'
                       }`}>
                       <input type="checkbox" className="sr-only"
                         checked={editForm.batch_ids.includes(b.batch_id)}
                         onChange={() => toggleEditBatch(b.batch_id)} />
-                      <CheckCircle2 className={`h-3.5 w-3.5 shrink-0 ${editForm.batch_ids.includes(b.batch_id) ? 'text-emerald-600' : 'text-gray-300'}`} />
+                      <CheckCircle2 className={`h-3.5 w-3.5 shrink-0 ${editForm.batch_ids.includes(b.batch_id) ? 'text-primary' : 'text-gray-300'}`} />
                       <span className="truncate max-w-[200px]">{b.batch_name}</span>
                       {b.grade && <span className="text-[10px] text-gray-400 ml-0.5">Gr.{b.grade}</span>}
                     </label>
@@ -3873,7 +3873,7 @@ function ExamTopicsTab({ userEmail, batches }: { userEmail: string; batches: Bat
                   onClick={() => setForm(f => ({ ...f, category: 'topic', paper_type: '', chapter_name: '', topic_name: '', title: '' }))}
                   className={`rounded-xl border-2 p-4 text-left transition-all ${
                     form.category === 'topic'
-                      ? 'border-emerald-500 bg-emerald-50 ring-2 ring-emerald-200'
+                      ? 'border-primary bg-primary/5 ring-2 ring-primary/20'
                       : 'border-gray-200 bg-white hover:border-gray-300'
                   }`}
                 >
@@ -4086,7 +4086,7 @@ function ExamTopicsTab({ userEmail, batches }: { userEmail: string; batches: Bat
                     {t.category === 'question_paper' ? (
                       <span className="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">📝 QP</span>
                     ) : t.category === 'topic' ? (
-                      <span className="text-xs bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full font-medium">📖 Topic</span>
+                      <span className="text-xs bg-primary/5 text-primary px-2 py-0.5 rounded-full font-medium">📖 Topic</span>
                     ) : null}
                     <span className="text-xs bg-purple-50 text-purple-700 px-2 py-0.5 rounded-full">{t.subject}</span>
                     <span className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">Gr.{t.grade}</span>
@@ -4094,7 +4094,7 @@ function ExamTopicsTab({ userEmail, batches }: { userEmail: string; batches: Bat
                       <span className="text-xs bg-amber-50 text-amber-700 px-2 py-0.5 rounded-full">{t.board}</span>
                     )}
                     {t.files?.length > 0 && (
-                      <span className="text-xs bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full">{t.files.length} file{t.files.length > 1 ? 's' : ''}</span>
+                      <span className="text-xs bg-primary/5 text-primary px-2 py-0.5 rounded-full">{t.files.length} file{t.files.length > 1 ? 's' : ''}</span>
                     )}
                   </div>
                   <p className="text-sm font-semibold text-gray-800 truncate mt-1">{t.title}</p>
@@ -4103,7 +4103,7 @@ function ExamTopicsTab({ userEmail, batches }: { userEmail: string; batches: Bat
                     <p className="text-xs text-blue-600 mt-0.5">{t.paper_type}</p>
                   )}
                   {t.category === 'topic' && (t.chapter_name || t.topic_name) && (
-                    <p className="text-xs text-emerald-600 mt-0.5">
+                    <p className="text-xs text-primary mt-0.5">
                       {t.chapter_name}{t.topic_name ? ` → ${t.topic_name}` : ''}
                     </p>
                   )}
@@ -4179,7 +4179,7 @@ function ExamTopicsTab({ userEmail, batches }: { userEmail: string; batches: Bat
                     {(t.generated_questions ?? 0) > 0 ? (
                       <button
                         onClick={() => handleViewQuestions(t.id)}
-                        className="flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 hover:bg-emerald-100 transition-colors"
+                        className="flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-lg bg-primary/5 text-primary hover:bg-primary/10 transition-colors"
                       >
                         <Eye className="h-3.5 w-3.5" /> {t.generated_questions} Qs
                       </button>
@@ -4206,8 +4206,8 @@ function ExamTopicsTab({ userEmail, batches }: { userEmail: string; batches: Bat
                 </div>
                 {/* Inline question count prompt for topic mode */}
                 {genCountPromptId === t.id && (
-                  <div className="flex items-center gap-2 mt-2 p-2.5 rounded-lg bg-emerald-50 border border-emerald-200">
-                    <label className="text-xs text-emerald-700 font-medium whitespace-nowrap">How many questions?</label>
+                  <div className="flex items-center gap-2 mt-2 p-2.5 rounded-lg bg-primary/5 border border-primary/20">
+                    <label className="text-xs text-primary font-medium whitespace-nowrap">How many questions?</label>
                     <input
                       type="number"
                       min={5}
@@ -4223,14 +4223,14 @@ function ExamTopicsTab({ userEmail, batches }: { userEmail: string; batches: Bat
                           setGenCountPromptId(null);
                         }
                       }}
-                      className="w-16 px-2 py-1 text-xs rounded-md border border-emerald-300 focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 outline-none text-center"
+                      className="w-16 px-2 py-1 text-xs rounded-md border border-emerald-300 focus:ring-2 focus:ring-emerald-400 focus:border-primary outline-none text-center"
                     />
                     <button
                       onClick={() => {
                         const n = Math.min(50, Math.max(5, parseInt(genCountValue) || 10));
                         handleGenerate(t.id, n);
                       }}
-                      className="text-xs font-medium px-2.5 py-1 rounded-md bg-emerald-600 text-white hover:bg-emerald-700 transition-colors"
+                      className="text-xs font-medium px-2.5 py-1 rounded-md bg-primary text-white hover:bg-primary/90 transition-colors"
                     >
                       Go
                     </button>
@@ -4408,7 +4408,7 @@ function BatchDetailInline({ batch, sessions, onRefresh }: {
   const teachers = detail?.teachers || batch.teachers;
 
   // Theme palette: emerald primary, teal secondary
-  const tc = { bg: 'bg-emerald-600', light: 'bg-emerald-50', border: 'border-emerald-200', text: 'text-emerald-700', accent: 'from-emerald-600 to-teal-700' };
+  const tc = { bg: 'bg-primary', light: 'bg-primary/5', border: 'border-primary/20', text: 'text-primary', accent: 'from-primary to-secondary' };
 
   const scheduledCount = sessions.filter(s => effectiveSessionStatus(s) === 'scheduled').length;
   const liveCount = sessions.filter(s => effectiveSessionStatus(s) === 'live').length;
@@ -4453,7 +4453,7 @@ function BatchDetailInline({ batch, sessions, onRefresh }: {
               <p className="text-[10px] text-white/70 uppercase tracking-wider">Sessions</p>
             </div>
             {liveCount > 0 && (
-              <div className="bg-green-500/30 backdrop-blur-sm rounded-xl px-3.5 py-2 text-center ring-1 ring-green-300/40">
+              <div className="bg-primary/30 backdrop-blur-sm rounded-xl px-3.5 py-2 text-center ring-1 ring-green-300/40">
                 <p className="text-lg font-bold text-white flex items-center gap-1"><Radio className="h-3.5 w-3.5 animate-pulse" />{liveCount}</p>
                 <p className="text-[10px] text-green-100 uppercase tracking-wider">Live</p>
               </div>
@@ -4566,7 +4566,7 @@ function BatchDetailInline({ batch, sessions, onRefresh }: {
           const isLoading = detailLoading || creditsLoading;
 
           const creditStatusColor = (status: string) => {
-            if (status === 'healthy') return { bg: 'bg-emerald-100', text: 'text-emerald-700', bar: 'bg-emerald-500', border: 'border-emerald-200' };
+            if (status === 'healthy') return { bg: 'bg-primary/10', text: 'text-primary', bar: 'bg-primary', border: 'border-primary/20' };
             if (status === 'low') return { bg: 'bg-amber-100', text: 'text-amber-700', bar: 'bg-amber-500', border: 'border-amber-200' };
             if (status === 'critical') return { bg: 'bg-red-100', text: 'text-red-700', bar: 'bg-red-500', border: 'border-red-200' };
             if (status === 'none') return { bg: 'bg-red-50', text: 'text-red-600', bar: 'bg-red-300', border: 'border-red-200' };
@@ -4597,7 +4597,7 @@ function BatchDetailInline({ batch, sessions, onRefresh }: {
                   </div>
                   <div className="grid grid-cols-5 gap-3">
                     {[
-                      { label: 'Healthy', val: summary.healthy, color: 'text-emerald-600 bg-emerald-50 border-emerald-200' },
+                      { label: 'Healthy', val: summary.healthy, color: 'text-primary bg-primary/5 border-primary/20' },
                       { label: 'Low (≤5)', val: summary.low, color: 'text-amber-600 bg-amber-50 border-amber-200' },
                       { label: 'Critical (≤2)', val: summary.critical, color: 'text-orange-600 bg-orange-50 border-orange-200' },
                       { label: 'Exhausted', val: summary.none, color: 'text-red-600 bg-red-50 border-red-200' },
@@ -4674,7 +4674,7 @@ function BatchDetailInline({ batch, sessions, onRefresh }: {
                                 </span>
                               )}
                               {paidCount > 0 && (
-                                <span className="inline-flex items-center gap-1 bg-emerald-100 text-emerald-700 border border-emerald-200 rounded-full px-2 py-0.5 text-[9px] font-bold">
+                                <span className="inline-flex items-center gap-1 bg-primary/10 text-primary border border-primary/20 rounded-full px-2 py-0.5 text-[9px] font-bold">
                                   {paidCount} PAID
                                 </span>
                               )}
@@ -4719,7 +4719,7 @@ function BatchDetailInline({ batch, sessions, onRefresh }: {
                             {/* Attendance badge */}
                             {s.total_classes != null && s.total_classes > 0 && (
                               <div className="text-right">
-                                <p className={`text-xs font-bold ${Number(s.attendance_rate) >= 75 ? 'text-green-600' : Number(s.attendance_rate) >= 50 ? 'text-amber-600' : 'text-red-600'}`}>{s.attendance_rate}%</p>
+                                <p className={`text-xs font-bold ${Number(s.attendance_rate) >= 75 ? 'text-primary' : Number(s.attendance_rate) >= 50 ? 'text-amber-600' : 'text-red-600'}`}>{s.attendance_rate}%</p>
                                 <p className="text-[10px] text-gray-400">attend</p>
                               </div>
                             )}
@@ -4750,7 +4750,7 @@ function BatchDetailInline({ batch, sessions, onRefresh }: {
                             <div className="space-y-2">
                               {credit.pools.map(pool => {
                                 const poolPct = pool.total_sessions > 0 ? Math.round(pool.used_sessions / pool.total_sessions * 100) : 0;
-                                const sourceColor = pool.source === 'enrollment' ? 'text-emerald-600 bg-emerald-50 border-emerald-200' :
+                                const sourceColor = pool.source === 'enrollment' ? 'text-primary bg-primary/5 border-primary/20' :
                                   pool.source === 'invoice_payment' ? 'text-blue-600 bg-blue-50 border-blue-200' :
                                   'text-purple-600 bg-purple-50 border-purple-200';
                                 return (
@@ -4764,7 +4764,7 @@ function BatchDetailInline({ batch, sessions, onRefresh }: {
                                       <span className="ml-auto text-xs font-bold text-gray-700">{pool.remaining} / {pool.total_sessions} left</span>
                                     </div>
                                     <div className="h-1 bg-gray-100 rounded-full overflow-hidden">
-                                      <div className="h-full bg-emerald-400 rounded-full" style={{ width: `${100 - poolPct}%` }} />
+                                      <div className="h-full bg-primary rounded-full" style={{ width: `${100 - poolPct}%` }} />
                                     </div>
                                     <div className="flex justify-between text-[10px] text-gray-400 mt-1">
                                       <span>{pool.used_sessions} used</span>
@@ -4790,7 +4790,7 @@ function BatchDetailInline({ batch, sessions, onRefresh }: {
                             <div className="flex items-center justify-between mb-2">
                               <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Invoices</p>
                               <div className="flex items-center gap-2 text-[10px] font-semibold">
-                                {paidCount > 0 && <span className="text-emerald-600">{paidCount} paid</span>}
+                                {paidCount > 0 && <span className="text-primary">{paidCount} paid</span>}
                                 {pendingCount > 0 && <span className="text-amber-600">{pendingCount} pending</span>}
                                 {overdueCount > 0 && <span className="text-red-600">{overdueCount} overdue</span>}
                                 {inv.cancelled_count > 0 && <span className="text-gray-400">{inv.cancelled_count} cancelled</span>}
@@ -4799,7 +4799,7 @@ function BatchDetailInline({ batch, sessions, onRefresh }: {
                             <div className="space-y-1.5">
                               {inv.invoices.map(invoice => {
                                 const statusColor =
-                                  invoice.status === 'paid' ? 'text-emerald-700 bg-emerald-50 border-emerald-200' :
+                                  invoice.status === 'paid' ? 'text-primary bg-primary/5 border-primary/20' :
                                   invoice.status === 'overdue' ? 'text-red-700 bg-red-50 border-red-200' :
                                   invoice.status === 'pending' ? 'text-amber-700 bg-amber-50 border-amber-200' :
                                   'text-gray-500 bg-gray-100 border-gray-200';
@@ -4833,7 +4833,7 @@ function BatchDetailInline({ batch, sessions, onRefresh }: {
                             {(inv.total_paid_paise > 0 || inv.total_outstanding_paise > 0) && (
                               <div className="flex items-center justify-end gap-4 mt-2 pt-2 border-t border-gray-200 text-[11px] font-semibold">
                                 {inv.total_paid_paise > 0 && (
-                                  <span className="text-emerald-700">Paid: ₹{(inv.total_paid_paise / 100).toLocaleString('en-IN')}</span>
+                                  <span className="text-primary">Paid: ₹{(inv.total_paid_paise / 100).toLocaleString('en-IN')}</span>
                                 )}
                                 {inv.total_outstanding_paise > 0 && (
                                   <span className="text-red-600">Outstanding: ₹{(inv.total_outstanding_paise / 100).toLocaleString('en-IN')}</span>
@@ -4922,7 +4922,7 @@ function BatchDetailInline({ batch, sessions, onRefresh }: {
                           </div>
                         </td>
                         <td className="px-3 py-2.5 text-sm text-gray-700 font-medium">{total}</td>
-                        <td className="px-3 py-2.5 text-sm text-emerald-600 font-semibold">{present}</td>
+                        <td className="px-3 py-2.5 text-sm text-primary font-semibold">{present}</td>
                         <td className="px-3 py-2.5 text-sm text-amber-600 font-semibold">{late}</td>
                         <td className="px-3 py-2.5 text-sm text-red-600 font-semibold">{absent + notJoined}</td>
                         <td className="px-3 py-2.5 text-sm text-orange-600 font-semibold">{leftEarly}</td>
@@ -4930,25 +4930,25 @@ function BatchDetailInline({ batch, sessions, onRefresh }: {
                           <div className="flex items-center gap-2">
                             <div className="w-14 h-1.5 bg-gray-100 rounded-full overflow-hidden">
                               <div
-                                className={`h-full rounded-full ${rate >= 75 ? 'bg-emerald-500' : rate >= 50 ? 'bg-amber-500' : 'bg-red-500'}`}
+                                className={`h-full rounded-full ${rate >= 75 ? 'bg-primary' : rate >= 50 ? 'bg-amber-500' : 'bg-red-500'}`}
                                 style={{ width: `${Math.min(rate, 100)}%` }}
                               />
                             </div>
-                            <span className={`text-xs font-bold ${rate >= 75 ? 'text-emerald-600' : rate >= 50 ? 'text-amber-600' : 'text-red-600'}`}>
+                            <span className={`text-xs font-bold ${rate >= 75 ? 'text-primary' : rate >= 50 ? 'text-amber-600' : 'text-red-600'}`}>
                               {rate}%
                             </span>
                           </div>
                         </td>
                         <td className="px-3 py-2.5">
                           {avgAtt > 0
-                            ? <span className={`text-xs font-bold ${avgAtt >= 70 ? 'text-emerald-600' : avgAtt >= 40 ? 'text-amber-600' : 'text-red-600'}`}>{avgAtt}%</span>
+                            ? <span className={`text-xs font-bold ${avgAtt >= 70 ? 'text-primary' : avgAtt >= 40 ? 'text-amber-600' : 'text-red-600'}`}>{avgAtt}%</span>
                             : <span className="text-xs text-gray-400">—</span>
                           }
                         </td>
                         <td className="px-3 py-2.5">
                           <button
                             onClick={() => setPerfStudent({ email: a.student_email, name: a.student_name })}
-                            className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium text-emerald-700 bg-emerald-50 hover:bg-emerald-100 rounded-md transition-colors"
+                            className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium text-primary bg-primary/5 hover:bg-primary/10 rounded-md transition-colors"
                           >
                             <BarChart3 className="w-3.5 h-3.5" />
                             Performance
@@ -5116,12 +5116,12 @@ function BatchDetailInline({ batch, sessions, onRefresh }: {
               <div className="flex items-center justify-between">
                 <div>
                   <h4 className="text-sm font-bold text-gray-900 flex items-center gap-2">
-                    <Video className="h-4 w-4 text-emerald-600" /> Sessions
+                    <Video className="h-4 w-4 text-primary" /> Sessions
                   </h4>
                   <p className="text-xs text-gray-400 mt-0.5">
                     {scheduledCount > 0 && <span className="text-teal-600 font-medium">{scheduledCount} upcoming</span>}
                     {scheduledCount > 0 && liveCount > 0 && <span> · </span>}
-                    {liveCount > 0 && <span className="text-green-600 font-medium">{liveCount} live</span>}
+                    {liveCount > 0 && <span className="text-primary font-medium">{liveCount} live</span>}
                     {scheduledCount === 0 && liveCount === 0 && 'No active sessions'}
                   </p>
                 </div>
@@ -5144,11 +5144,11 @@ function BatchDetailInline({ batch, sessions, onRefresh }: {
                   )}
                   {/* View toggle */}
                   <div className="flex rounded-lg border border-gray-200 overflow-hidden">
-                    <button onClick={() => setBatchViewMode('table')} className={`px-2.5 py-1 text-[11px] font-medium flex items-center gap-1 transition-colors ${batchViewMode === 'table' ? 'bg-emerald-50 text-emerald-700 border-r border-gray-200' : 'text-gray-500 hover:bg-gray-50 border-r border-gray-200'}`}>
+                    <button onClick={() => setBatchViewMode('table')} className={`px-2.5 py-1 text-[11px] font-medium flex items-center gap-1 transition-colors ${batchViewMode === 'table' ? 'bg-primary/5 text-primary border-r border-gray-200' : 'text-gray-500 hover:bg-gray-50 border-r border-gray-200'}`}>
                       <Table2 className="h-3 w-3" />
                       Table
                     </button>
-                    <button onClick={() => setBatchViewMode('calendar')} className={`px-2.5 py-1 text-[11px] font-medium flex items-center gap-1 transition-colors ${batchViewMode === 'calendar' ? 'bg-emerald-50 text-emerald-700' : 'text-gray-500 hover:bg-gray-50'}`}>
+                    <button onClick={() => setBatchViewMode('calendar')} className={`px-2.5 py-1 text-[11px] font-medium flex items-center gap-1 transition-colors ${batchViewMode === 'calendar' ? 'bg-primary/5 text-primary' : 'text-gray-500 hover:bg-gray-50'}`}>
                       <Calendar className="h-3 w-3" />
                       Calendar
                     </button>
@@ -5185,7 +5185,7 @@ function BatchDetailInline({ batch, sessions, onRefresh }: {
                 if (liveSession) {
                   highlight = liveSession;
                   label = 'LIVE NOW';
-                  theme = { ring: 'border-green-300 ring-2 ring-green-200', bg: 'bg-gradient-to-r from-green-50 to-emerald-50', chipBg: 'bg-green-600', chipText: 'text-white', pill: 'bg-white/80 text-green-700 border-green-200', iconColor: 'text-green-600' };
+                  theme = { ring: 'border-green-300 ring-2 ring-green-200', bg: 'bg-gradient-to-r from-primary/5 to-primary/5', chipBg: 'bg-primary', chipText: 'text-white', pill: 'bg-white/80 text-primary border-primary/20', iconColor: 'text-primary' };
                 } else if (todaysScheduled) {
                   highlight = todaysScheduled;
                   label = "TODAY'S NEXT SESSION";
@@ -5197,7 +5197,7 @@ function BatchDetailInline({ batch, sessions, onRefresh }: {
                 } else if (nextUpcoming) {
                   highlight = nextUpcoming;
                   label = 'NEXT UPCOMING SESSION';
-                  theme = { ring: 'border-teal-300', bg: 'bg-gradient-to-r from-teal-50 to-cyan-50', chipBg: 'bg-teal-600', chipText: 'text-white', pill: 'bg-white/80 text-teal-700 border-teal-200', iconColor: 'text-teal-600' };
+                  theme = { ring: 'border-teal-300', bg: 'bg-gradient-to-r from-teal-50 to-cyan-50', chipBg: 'bg-secondary', chipText: 'text-white', pill: 'bg-white/80 text-teal-700 border-teal-200', iconColor: 'text-teal-600' };
                 } else if (lastEnded) {
                   highlight = lastEnded;
                   label = 'LATEST SESSION';
@@ -5284,7 +5284,7 @@ function BatchDetailInline({ batch, sessions, onRefresh }: {
                         <div className={`${group.color.bg} px-4 py-2.5 flex items-center justify-between cursor-pointer select-none`} onClick={() => toggleSubjectExpand(group.subject)}>
                           <div className="flex items-center gap-3">
                             <input type="checkbox" checked={allGroupSelected} ref={el => { if (el) el.indeterminate = someGroupSelected && !allGroupSelected; }}
-                              onChange={(e) => { e.stopPropagation(); toggleGroupSelect(); }} className="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500" />
+                              onChange={(e) => { e.stopPropagation(); toggleGroupSelect(); }} className="rounded border-gray-300 text-primary focus:ring-primary" />
                             {expandedSubjects.has(group.subject) ? <ChevronDown className={`h-4 w-4 ${group.color.text}`} /> : <ChevronRight className={`h-4 w-4 ${group.color.text}`} />}
                             <div className={`w-2 h-2 rounded-full ${group.color.dot}`} />
                             <span className={`text-sm font-bold ${group.color.text}`}>{group.subject}</span>
@@ -5292,7 +5292,7 @@ function BatchDetailInline({ batch, sessions, onRefresh }: {
                           </div>
                           <div className="flex items-center gap-2 text-xs text-gray-400">
                             {scheduledInGroup > 0 && <span className="text-teal-600 font-medium">{scheduledInGroup} upcoming</span>}
-                            {group.sessions.some(s => effectiveSessionStatus(s) === 'live') && <span className="text-green-600 font-medium flex items-center gap-1"><Radio className="h-3 w-3 animate-pulse" />Live</span>}
+                            {group.sessions.some(s => effectiveSessionStatus(s) === 'live') && <span className="text-primary font-medium flex items-center gap-1"><Radio className="h-3 w-3 animate-pulse" />Live</span>}
                           </div>
                         </div>
                         {/* Table — collapsed by default */}
@@ -5317,7 +5317,7 @@ function BatchDetailInline({ batch, sessions, onRefresh }: {
                                 <TRow key={s.session_id} selected={isSel}>
                                   <td className="px-3 py-3 w-8">
                                     <input type="checkbox" checked={isSel} onChange={() => toggleSessionSelect(s.session_id)}
-                                      className="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500" />
+                                      className="rounded border-gray-300 text-primary focus:ring-primary" />
                                   </td>
                                   <td className="px-4 py-3">
                                     <div className="text-sm text-gray-700">{fmtDate(s.scheduled_date)}</div>
@@ -5544,8 +5544,8 @@ function SessionCard({ session, batch, onRefresh }: {
   const copyLink = (url: string) => { navigator.clipboard.writeText(url); toast.success('Link copied!'); };
 
   const es = effectiveSessionStatus(session);
-  const statusColor: Record<string, string> = { scheduled: 'border-teal-200 bg-teal-50/50', live: 'border-green-300 bg-green-50/50', ended: 'border-gray-200 bg-gray-50/50', cancelled: 'border-red-200 bg-red-50/50' };
-  const statusIcon: Record<string, React.ReactNode> = { scheduled: <Clock className="h-5 w-5 text-teal-600" />, live: <Radio className="h-5 w-5 text-green-600 animate-pulse" />, ended: <CheckCircle2 className="h-5 w-5 text-gray-400" />, cancelled: <XCircle className="h-5 w-5 text-red-400" /> };
+  const statusColor: Record<string, string> = { scheduled: 'border-teal-200 bg-teal-50/50', live: 'border-green-300 bg-primary/5/50', ended: 'border-gray-200 bg-gray-50/50', cancelled: 'border-red-200 bg-red-50/50' };
+  const statusIcon: Record<string, React.ReactNode> = { scheduled: <Clock className="h-5 w-5 text-teal-600" />, live: <Radio className="h-5 w-5 text-primary animate-pulse" />, ended: <CheckCircle2 className="h-5 w-5 text-gray-400" />, cancelled: <XCircle className="h-5 w-5 text-red-400" /> };
 
   return (
     <div className={`rounded-xl border ${statusColor[es] || 'border-gray-200'} overflow-hidden`}>
@@ -5590,7 +5590,7 @@ function SessionCard({ session, batch, onRefresh }: {
           {joinLinks && joinLinks.length > 0 ? (
             <>
               <h5 className="text-xs font-semibold text-gray-600 uppercase tracking-wider flex items-center gap-1.5">
-                <Link2 className="h-3.5 w-3.5 text-emerald-600" /> Join Links ({joinLinks.length} participants)
+                <Link2 className="h-3.5 w-3.5 text-primary" /> Join Links ({joinLinks.length} participants)
               </h5>
               <div className="space-y-2 max-h-75 overflow-auto">
                 {joinLinks.map(link => (
@@ -5911,11 +5911,11 @@ export function SessionsTab({ sessions, batches, loading, onRefresh, userRole }:
         <div className="flex items-center gap-2">
           {/* View toggle */}
           <div className="flex rounded-lg border border-gray-200 overflow-hidden">
-            <button onClick={() => setViewMode('table')} className={`px-3 py-1.5 text-xs font-medium flex items-center gap-1.5 transition-colors ${viewMode === 'table' ? 'bg-emerald-50 text-emerald-700 border-r border-gray-200' : 'text-gray-500 hover:bg-gray-50 border-r border-gray-200'}`}>
+            <button onClick={() => setViewMode('table')} className={`px-3 py-1.5 text-xs font-medium flex items-center gap-1.5 transition-colors ${viewMode === 'table' ? 'bg-primary/5 text-primary border-r border-gray-200' : 'text-gray-500 hover:bg-gray-50 border-r border-gray-200'}`}>
               <Table2 className="h-3.5 w-3.5" />
               Table
             </button>
-            <button onClick={() => setViewMode('calendar')} className={`px-3 py-1.5 text-xs font-medium flex items-center gap-1.5 transition-colors ${viewMode === 'calendar' ? 'bg-emerald-50 text-emerald-700' : 'text-gray-500 hover:bg-gray-50'}`}>
+            <button onClick={() => setViewMode('calendar')} className={`px-3 py-1.5 text-xs font-medium flex items-center gap-1.5 transition-colors ${viewMode === 'calendar' ? 'bg-primary/5 text-primary' : 'text-gray-500 hover:bg-gray-50'}`}>
               <Calendar className="h-3.5 w-3.5" />
               Calendar
             </button>
@@ -5972,7 +5972,7 @@ export function SessionsTab({ sessions, batches, loading, onRefresh, userRole }:
                 <div className={`${group.color.bg} px-4 py-2.5 flex items-center justify-between cursor-pointer select-none`} onClick={() => toggleSubjectExpand(group.subject)}>
                   <div className="flex items-center gap-3">
                     <input type="checkbox" checked={allGroupSelected} ref={el => { if (el) el.indeterminate = someGroupSelected && !allGroupSelected; }}
-                      onChange={(e) => { e.stopPropagation(); toggleGroupSelect(); }} className="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500" />
+                      onChange={(e) => { e.stopPropagation(); toggleGroupSelect(); }} className="rounded border-gray-300 text-primary focus:ring-primary" />
                     {expandedSubjects.has(group.subject) ? <ChevronDown className={`h-4 w-4 ${group.color.text}`} /> : <ChevronRight className={`h-4 w-4 ${group.color.text}`} />}
                     <div className={`w-2 h-2 rounded-full ${group.color.dot}`} />
                     <span className={`text-sm font-bold ${group.color.text}`}>{group.subject}</span>
@@ -5980,7 +5980,7 @@ export function SessionsTab({ sessions, batches, loading, onRefresh, userRole }:
                   </div>
                   <div className="flex items-center gap-2 text-xs text-gray-400">
                     {scheduledInGroup > 0 && <span className="text-teal-600 font-medium">{scheduledInGroup} upcoming</span>}
-                    {group.sessions.some(s => effectiveSessionStatus(s) === 'live') && <span className="text-green-600 font-medium flex items-center gap-1"><Radio className="h-3 w-3 animate-pulse" />Live</span>}
+                    {group.sessions.some(s => effectiveSessionStatus(s) === 'live') && <span className="text-primary font-medium flex items-center gap-1"><Radio className="h-3 w-3 animate-pulse" />Live</span>}
                   </div>
                 </div>
                 {/* Table — collapsed by default */}
@@ -6006,7 +6006,7 @@ export function SessionsTab({ sessions, batches, loading, onRefresh, userRole }:
                         <TRow key={s.session_id} selected={isSelected}>
                           <td className="px-3 py-3 w-8">
                             <input type="checkbox" checked={isSelected} onChange={() => toggleSelect(s.session_id)}
-                              className="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500" />
+                              className="rounded border-gray-300 text-primary focus:ring-primary" />
                           </td>
                           <td className="px-4 py-3">
                             <div className="text-sm text-gray-700">{s.batch_name || s.batch_id}</div>
@@ -6223,12 +6223,12 @@ function EditSessionModal({ session, batch, onClose, onSaved }: {
     <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4" onClick={onClose}>
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden" onClick={e => e.stopPropagation()}>
         {/* Header */}
-        <div className="px-6 py-4 border-b bg-linear-to-r from-emerald-600 to-teal-700 flex items-center justify-between">
+        <div className="px-6 py-4 border-b bg-linear-to-r from-primary to-secondary flex items-center justify-between">
           <div>
             <h2 className="text-lg font-bold text-white">Edit Session</h2>
-            <p className="text-emerald-200 text-xs mt-0.5">{session.subject} — {fmtDate(session.scheduled_date)}</p>
+            <p className="text-primary/60 text-xs mt-0.5">{session.subject} — {fmtDate(session.scheduled_date)}</p>
           </div>
-          <button onClick={onClose} className="text-emerald-200 hover:text-white transition"><X className="h-5 w-5" /></button>
+          <button onClick={onClose} className="text-primary/60 hover:text-white transition"><X className="h-5 w-5" /></button>
         </div>
 
         {/* Body — scrollable */}
@@ -6275,7 +6275,7 @@ function EditSessionModal({ session, batch, onClose, onSaved }: {
                 <button key={d} type="button" onClick={() => f('duration_minutes', d)}
                   className={`rounded-xl border-2 px-3 py-2.5 text-sm font-medium transition-all ${
                     form.duration_minutes === d
-                      ? 'border-emerald-500 bg-emerald-50 text-emerald-700 shadow-sm'
+                      ? 'border-primary bg-primary/5 text-primary shadow-sm'
                       : 'border-gray-200 bg-white text-gray-600 hover:border-gray-300'
                   }`}
                 >
@@ -6299,7 +6299,7 @@ function EditSessionModal({ session, batch, onClose, onSaved }: {
               <div className="w-px h-8 bg-gray-200" />
               <div className="flex-1 text-center">
                 <p className="text-xs text-gray-500">Total</p>
-                <p className="text-sm font-bold text-emerald-600">{form.duration_minutes}m</p>
+                <p className="text-sm font-bold text-primary">{form.duration_minutes}m</p>
               </div>
             </div>
           </div>
@@ -6645,8 +6645,8 @@ function TimePicker12({ value, onChange, disabled, compact, minTime }: { value: 
   const isPast = minMins >= 0 && h24 * 60 + min < minMins;
 
   const sel = compact
-    ? 'rounded border border-gray-200 bg-white px-1.5 py-1 text-xs text-gray-700 focus:border-emerald-400 focus:outline-none disabled:opacity-50'
-    : 'rounded-lg border border-gray-200 bg-white px-2 py-2 text-sm text-gray-700 focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-100 disabled:opacity-50';
+    ? 'rounded border border-gray-200 bg-white px-1.5 py-1 text-xs text-gray-700 focus:border-primary focus:outline-none disabled:opacity-50'
+    : 'rounded-lg border border-gray-200 bg-white px-2 py-2 text-sm text-gray-700 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/15 disabled:opacity-50';
 
   return (
     <div>
@@ -7218,17 +7218,17 @@ function ScheduleSessionModal({ batch: initialBatch, batches: availableBatches, 
                   }}
                   className={`w-full text-left rounded-xl border-2 px-5 py-4 transition-all ${
                     isSelected
-                      ? 'border-emerald-500 bg-emerald-50 shadow-sm ring-2 ring-emerald-200'
+                      ? 'border-primary bg-primary/5 shadow-sm ring-2 ring-primary/20'
                       : 'border-gray-200 bg-white hover:border-gray-300 hover:shadow-sm'
                   }`}
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${isSelected ? 'bg-emerald-500 text-white' : 'bg-gray-100 text-gray-400'}`}>
+                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${isSelected ? 'bg-primary text-white' : 'bg-gray-100 text-gray-400'}`}>
                         <BookOpen className="h-5 w-5" />
                       </div>
                       <div>
-                        <p className={`text-sm font-bold ${isSelected ? 'text-emerald-700' : 'text-gray-900'}`}>{b.batch_name}</p>
+                        <p className={`text-sm font-bold ${isSelected ? 'text-primary' : 'text-gray-900'}`}>{b.batch_name}</p>
                         <p className="text-xs text-gray-400 mt-0.5">
                           Grade {b.grade}{b.section ? ` - ${b.section}` : ''} · {b.subjects?.join(', ') || 'No subjects'}
                         </p>
@@ -7237,7 +7237,7 @@ function ScheduleSessionModal({ batch: initialBatch, batches: availableBatches, 
                     <div className="flex items-center gap-3 text-xs text-gray-400">
                       <span>{b.student_count} student{b.student_count !== 1 ? 's' : ''}</span>
                       <span>{b.teacher_count} teacher{b.teacher_count !== 1 ? 's' : ''}</span>
-                      {isSelected && <CheckCircle2 className="h-5 w-5 text-emerald-500" />}
+                      {isSelected && <CheckCircle2 className="h-5 w-5 text-primary" />}
                     </div>
                   </div>
                 </button>
@@ -7257,7 +7257,7 @@ function ScheduleSessionModal({ batch: initialBatch, batches: availableBatches, 
       <div className="flex items-center justify-between mb-4">
         <div className="flex gap-2">
           <button type="button" onClick={() => setSubjectSlots(prev => prev.map(s => ({ ...s, enabled: true })))}
-            className="text-xs font-medium text-emerald-600 hover:text-emerald-700 px-2 py-1 rounded-lg hover:bg-emerald-50 transition">
+            className="text-xs font-medium text-primary hover:text-primary px-2 py-1 rounded-lg hover:bg-primary/5 transition">
             Select All
           </button>
           <button type="button" onClick={() => setSubjectSlots(prev => prev.map(s => ({ ...s, enabled: false })))}
@@ -7272,7 +7272,7 @@ function ScheduleSessionModal({ batch: initialBatch, batches: availableBatches, 
         {subjectSlots.map((slot, idx) => (
           <div key={slot.subject}
             className={`rounded-xl border-2 px-5 py-4 transition-all ${
-              slot.enabled ? 'border-emerald-300 bg-emerald-50/30' : 'border-gray-200 bg-gray-50/50 opacity-60'
+              slot.enabled ? 'border-emerald-300 bg-primary/5/30' : 'border-gray-200 bg-gray-50/50 opacity-60'
             }`}
           >
             {/* Subject header row */}
@@ -7281,7 +7281,7 @@ function ScheduleSessionModal({ batch: initialBatch, batches: availableBatches, 
                 type="checkbox"
                 checked={slot.enabled}
                 onChange={() => toggleSlot(idx)}
-                className="h-4.5 w-4.5 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
+                className="h-4.5 w-4.5 rounded border-gray-300 text-primary focus:ring-primary"
               />
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-semibold text-gray-900">{slot.subject}</p>
@@ -7290,7 +7290,7 @@ function ScheduleSessionModal({ batch: initialBatch, batches: availableBatches, 
                     <>
                       <Avatar name={slot.teacher_name} size="sm" />
                       <span className="text-xs text-gray-600">{slot.teacher_name}</span>
-                      <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />
+                      <CheckCircle2 className="h-3.5 w-3.5 text-primary" />
                     </>
                   ) : (
                     <span className="text-xs text-amber-600 flex items-center gap-1">
@@ -7301,7 +7301,7 @@ function ScheduleSessionModal({ batch: initialBatch, batches: availableBatches, 
               </div>
               {slot.enabled && (
                 <button type="button" onClick={() => toggleSlotOverride(idx)}
-                  className="text-xs text-emerald-600 hover:text-emerald-700 font-medium flex items-center gap-1 shrink-0">
+                  className="text-xs text-primary hover:text-primary font-medium flex items-center gap-1 shrink-0">
                   <RefreshCw className="h-3 w-3" />
                   {slot.override_teacher ? 'Use default' : 'Change'}
                 </button>
@@ -7317,8 +7317,8 @@ function ScheduleSessionModal({ batch: initialBatch, batches: availableBatches, 
                     <button key={day} type="button" onClick={() => toggleSlotDay(idx, day)}
                       className={`w-10 h-10 rounded-lg text-[11px] font-bold transition-all ${
                         slot.days.includes(day)
-                          ? 'bg-emerald-500 text-white shadow-sm'
-                          : 'bg-white border-2 border-gray-200 text-gray-400 hover:border-emerald-300 hover:text-emerald-600'
+                          ? 'bg-primary text-white shadow-sm'
+                          : 'bg-white border-2 border-gray-200 text-gray-400 hover:border-emerald-300 hover:text-primary'
                       }`}
                     >
                       {day}
@@ -7370,7 +7370,7 @@ function ScheduleSessionModal({ batch: initialBatch, batches: availableBatches, 
       {slotsWithDays.length > 0 && (
         <div className="mt-5 rounded-xl border border-gray-200 bg-gray-50 p-4">
           <h4 className="text-xs font-semibold text-gray-600 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-            <Calendar className="h-3.5 w-3.5 text-emerald-600" /> Weekly Timetable Preview
+            <Calendar className="h-3.5 w-3.5 text-primary" /> Weekly Timetable Preview
           </h4>
           <div className="flex gap-2 flex-wrap">
             {DAY_NAMES.map(day => {
@@ -7447,10 +7447,10 @@ function ScheduleSessionModal({ batch: initialBatch, batches: availableBatches, 
       <div className="mt-5">
         <div className="flex items-center justify-between mb-3">
           <h3 className="text-sm font-semibold text-gray-700 flex items-center gap-2">
-            <Calendar className="h-4 w-4 text-emerald-600" /> Subject Timings
+            <Calendar className="h-4 w-4 text-primary" /> Subject Timings
           </h3>
           <button type="button" onClick={autoArrangeSlots}
-            className="text-xs font-medium text-emerald-600 hover:text-emerald-700 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 transition">
+            className="text-xs font-medium text-primary hover:text-primary flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary/5 hover:bg-primary/10 transition">
             <RefreshCw className="h-3 w-3" /> Auto-arrange
           </button>
         </div>
@@ -7482,7 +7482,7 @@ function ScheduleSessionModal({ batch: initialBatch, batches: availableBatches, 
                 {/* Header: subject + days + time summary */}
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-3">
-                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${conflicts.length > 0 ? 'bg-red-100 text-red-600' : 'bg-emerald-100 text-emerald-600'}`}>
+                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${conflicts.length > 0 ? 'bg-red-100 text-red-600' : 'bg-primary/10 text-primary'}`}>
                       <BookOpen className="h-4 w-4" />
                     </div>
                     <div>
@@ -7508,7 +7508,7 @@ function ScheduleSessionModal({ batch: initialBatch, batches: availableBatches, 
                 {/* Day badges */}
                 <div className="flex gap-1.5 mb-3">
                   {slot.days.map(d => (
-                    <span key={d} className="rounded-lg bg-emerald-100 text-emerald-700 px-2 py-0.5 text-[10px] font-bold">{d}</span>
+                    <span key={d} className="rounded-lg bg-primary/10 text-primary px-2 py-0.5 text-[10px] font-bold">{d}</span>
                   ))}
                 </div>
 
@@ -7539,7 +7539,7 @@ function ScheduleSessionModal({ batch: initialBatch, batches: availableBatches, 
                         <button key={d} type="button" onClick={() => updateSlotDuration(idx, d)}
                           className={`rounded-lg border px-2.5 py-1.5 text-xs font-medium transition-all ${
                             slot.duration_minutes === d
-                              ? 'border-emerald-500 bg-emerald-50 text-emerald-700'
+                              ? 'border-primary bg-primary/5 text-primary'
                               : 'border-gray-200 bg-white text-gray-500 hover:border-gray-300'
                           }`}
                         >
@@ -7585,14 +7585,14 @@ function ScheduleSessionModal({ batch: initialBatch, batches: availableBatches, 
                 <div className="mt-3 pt-3 border-t border-gray-100">
                   <label className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider block mb-1">
                     Topic {slot.topic ? '' : '(optional)'}
-                    {slot.topic && <span className="ml-1 text-emerald-600 font-normal normal-case">— from calendar</span>}
+                    {slot.topic && <span className="ml-1 text-primary font-normal normal-case">— from calendar</span>}
                   </label>
                   <input
                     type="text"
                     value={slot.topic}
                     onChange={(e) => setSubjectSlots(prev => prev.map((s, i) => i === idx ? { ...s, topic: e.target.value } : s))}
                     placeholder={`e.g. Chapter 3 — Quadratic Equations`}
-                    className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-xs text-gray-900 placeholder:text-gray-400 focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400 outline-none transition"
+                    className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-xs text-gray-900 placeholder:text-gray-400 focus:border-primary focus:ring-1 focus:ring-emerald-400 outline-none transition"
                   />
                 </div>
 
@@ -7620,17 +7620,17 @@ function ScheduleSessionModal({ batch: initialBatch, batches: availableBatches, 
       <div className="mt-6">
         <div className="flex items-center justify-between mb-3">
           <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
-            <Repeat className="h-4 w-4 text-emerald-600" /> Recurring Schedule
+            <Repeat className="h-4 w-4 text-primary" /> Recurring Schedule
           </label>
           <button type="button" onClick={() => f('recurring', !form.recurring)}
-            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${form.recurring ? 'bg-emerald-500' : 'bg-gray-200'}`}
+            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${form.recurring ? 'bg-primary' : 'bg-gray-200'}`}
           >
             <span className={`inline-block h-4 w-4 rounded-full bg-white transition-transform ${form.recurring ? 'translate-x-6' : 'translate-x-1'}`} />
           </button>
         </div>
 
         {form.recurring && (
-          <div className="rounded-xl border border-emerald-200 bg-emerald-50/50 p-4 space-y-4">
+          <div className="rounded-xl border border-primary/20 bg-primary/5/50 p-4 space-y-4">
             {/* Days from subject assignments (read-only) */}
             <div>
               <label className="text-xs font-semibold text-gray-600 uppercase tracking-wider mb-2 block">Session Days (from subjects)</label>
@@ -7639,7 +7639,7 @@ function ScheduleSessionModal({ batch: initialBatch, batches: availableBatches, 
                   <div key={day}
                     className={`w-11 h-11 rounded-xl text-xs font-bold flex items-center justify-center ${
                       allAssignedDays.includes(day)
-                        ? 'bg-emerald-500 text-white shadow-sm'
+                        ? 'bg-primary text-white shadow-sm'
                         : 'bg-white border-2 border-gray-200 text-gray-300'
                     }`}
                   >
@@ -7657,7 +7657,7 @@ function ScheduleSessionModal({ batch: initialBatch, batches: availableBatches, 
                   <button key={u} type="button" onClick={() => { f('recurring_unit', u); f('recurring_count', 1); }}
                     className={`flex-1 py-2 rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-1.5 ${
                       form.recurring_unit === u
-                        ? 'bg-emerald-500 text-white shadow-sm'
+                        ? 'bg-primary text-white shadow-sm'
                         : 'bg-white border-2 border-gray-200 text-gray-500 hover:border-emerald-300'
                     }`}
                   >
@@ -7682,7 +7682,7 @@ function ScheduleSessionModal({ batch: initialBatch, batches: availableBatches, 
             {recurringDates.length > 0 && (
               <div>
                 <p className="text-xs font-semibold text-gray-600 mb-2">
-                  <span className="text-emerald-700 font-bold">{totalJobs} sessions</span> total
+                  <span className="text-primary font-bold">{totalJobs} sessions</span> total
                   <span className="text-gray-400 ml-1">({slotsWithDays.length} subject{slotsWithDays.length > 1 ? 's' : ''} across {recurringDates.length} date{recurringDates.length > 1 ? 's' : ''})</span>
                 </p>
                 <div className="max-h-40 overflow-auto space-y-1">
@@ -7751,13 +7751,13 @@ function ScheduleSessionModal({ batch: initialBatch, batches: availableBatches, 
                 <span className="text-sm text-gray-500">Session Days</span>
                 <div className="flex gap-1">
                   {allAssignedDays.map(d => (
-                    <span key={d} className="rounded bg-emerald-100 text-emerald-700 px-2 py-0.5 text-xs font-medium">{d}</span>
+                    <span key={d} className="rounded bg-primary/10 text-primary px-2 py-0.5 text-xs font-medium">{d}</span>
                   ))}
                 </div>
               </div>
               <div className="px-5 py-3 flex items-center justify-between">
                 <span className="text-sm text-gray-500">Total Sessions</span>
-                <span className="text-sm font-bold text-emerald-600">{totalSessions} sessions</span>
+                <span className="text-sm font-bold text-primary">{totalSessions} sessions</span>
               </div>
             </>
           )}
@@ -7767,7 +7767,7 @@ function ScheduleSessionModal({ batch: initialBatch, batches: availableBatches, 
         {/* Per-subject schedule */}
         <div className="mt-5">
           <h4 className="text-xs font-semibold text-gray-600 uppercase tracking-wider mb-3 flex items-center gap-1.5">
-            <BookOpen className="h-3.5 w-3.5 text-emerald-600" /> Subject Schedule
+            <BookOpen className="h-3.5 w-3.5 text-primary" /> Subject Schedule
           </h4>
           <div className="space-y-2">
             {enabledSlots.map(slot => {
@@ -7792,7 +7792,7 @@ function ScheduleSessionModal({ batch: initialBatch, batches: availableBatches, 
                     {slot.days.length > 0 && (
                       <>
                         <span className="flex gap-1">
-                          {slot.days.map(d => <span key={d} className="rounded bg-emerald-100 text-emerald-600 px-1.5 py-0.5 text-[10px] font-bold">{d}</span>)}
+                          {slot.days.map(d => <span key={d} className="rounded bg-primary/10 text-primary px-1.5 py-0.5 text-[10px] font-bold">{d}</span>)}
                         </span>
                         <span>·</span>
                       </>
@@ -7804,7 +7804,7 @@ function ScheduleSessionModal({ batch: initialBatch, batches: availableBatches, 
                     <span>{slot.prep_buffer_minutes}m prep</span>
                   </div>
                   {slot.topic && (
-                    <p className="mt-1 text-xs text-emerald-600 flex items-center gap-1">
+                    <p className="mt-1 text-xs text-primary flex items-center gap-1">
                       <BookOpen className="h-3 w-3" /> {slot.topic}
                     </p>
                   )}
@@ -7817,7 +7817,7 @@ function ScheduleSessionModal({ batch: initialBatch, batches: availableBatches, 
         {/* Participants */}
         <div className="mt-5 rounded-xl border border-gray-200 bg-gray-50 p-4">
           <h5 className="text-xs font-semibold text-gray-600 uppercase tracking-wider mb-3 flex items-center gap-1.5">
-            <Users className="h-3.5 w-3.5 text-emerald-600" /> Participants (auto-assigned)
+            <Users className="h-3.5 w-3.5 text-primary" /> Participants (auto-assigned)
           </h5>
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
             {[
@@ -7850,7 +7850,7 @@ function ScheduleSessionModal({ batch: initialBatch, batches: availableBatches, 
                     <span className="text-xs">{g.flag}</span>
                     <span className="text-[10px] font-medium text-gray-700">{g.region}</span>
                     <span className="text-[10px] text-gray-400">({g.tzLabel})</span>
-                    <span className="text-[10px] font-bold text-emerald-600">{g.count}</span>
+                    <span className="text-[10px] font-bold text-primary">{g.count}</span>
                   </div>
                 ))}
               </div>
@@ -7858,8 +7858,8 @@ function ScheduleSessionModal({ batch: initialBatch, batches: availableBatches, 
           )}
         </div>
 
-        <div className="mt-4 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3">
-          <p className="text-sm text-emerald-700">
+        <div className="mt-4 rounded-xl border border-primary/20 bg-primary/5 px-4 py-3">
+          <p className="text-sm text-primary">
             <Zap className="h-4 w-4 inline-block mr-1.5 align-text-bottom" />
             {totalSessions > 1
               ? `${totalSessions} sessions will be created. Start each from the Sessions tab to generate LiveKit rooms.`
@@ -7919,7 +7919,7 @@ function ScheduleSessionModal({ batch: initialBatch, batches: availableBatches, 
                     <span className="text-sm">{g.flag}</span>
                     <span className="text-xs font-bold text-gray-800">{g.region}</span>
                     <span className="text-[10px] text-gray-400">({g.tzLabel})</span>
-                    <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 rounded px-1.5 py-0.5">{g.count}</span>
+                    <span className="text-[10px] font-bold text-primary bg-primary/5 rounded px-1.5 py-0.5">{g.count}</span>
                     <div className="flex-1 h-px bg-gray-200 ml-2" />
                   </div>
                   {/* Per-student rows */}
@@ -7972,13 +7972,13 @@ function ScheduleSessionModal({ batch: initialBatch, batches: availableBatches, 
     <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4" onClick={onClose}>
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-5xl max-h-[92vh] flex overflow-hidden" onClick={e => e.stopPropagation()}>
         {/* Left sidebar */}
-        <div className="w-60 bg-linear-to-b from-emerald-600 via-emerald-700 to-teal-800 p-6 flex flex-col shrink-0">
+        <div className="w-60 bg-linear-to-b from-primary via-primary/90 to-secondary p-6 flex flex-col shrink-0">
           <div className="mb-8">
             <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center mb-3">
               <Video className="h-5 w-5 text-white" />
             </div>
             <h2 className="text-white font-bold text-lg">Schedule Session</h2>
-            <p className="text-emerald-200 text-xs mt-1">Step {stepIdx + 1} of {SCHEDULE_STEPS.length}</p>
+            <p className="text-primary/60 text-xs mt-1">Step {stepIdx + 1} of {SCHEDULE_STEPS.length}</p>
           </div>
           <div className="space-y-1 flex-1">
             {SCHEDULE_STEPS.map((step, idx) => {
@@ -7988,11 +7988,11 @@ function ScheduleSessionModal({ batch: initialBatch, batches: availableBatches, 
               return (
                 <button key={step.key} type="button" onClick={() => { if (idx < stepIdx) setStepIdx(idx); }}
                   className={`w-full flex items-center gap-3 px-3 py-3.5 rounded-xl transition-all text-left ${
-                    isCurrent ? 'bg-white/20 text-white shadow-lg shadow-black/10' : isDone ? 'text-emerald-200 hover:bg-white/10 cursor-pointer' : 'text-emerald-400/50 cursor-default'
+                    isCurrent ? 'bg-white/20 text-white shadow-lg shadow-black/10' : isDone ? 'text-primary/60 hover:bg-white/10 cursor-pointer' : 'text-primary/50 cursor-default'
                   }`}
                 >
                   <div className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 ${
-                    isDone ? 'bg-emerald-400 text-emerald-900' : isCurrent ? 'bg-white text-emerald-700' : 'bg-emerald-500/30 text-emerald-300/70'
+                    isDone ? 'bg-primary text-emerald-900' : isCurrent ? 'bg-white text-primary' : 'bg-primary/30 text-primary/80/70'
                   }`}>
                     {isDone ? '✓' : <StepIcon className="h-4 w-4" />}
                   </div>
@@ -8004,7 +8004,7 @@ function ScheduleSessionModal({ batch: initialBatch, batches: availableBatches, 
               );
             })}
           </div>
-          <button onClick={onClose} className="mt-4 text-emerald-200 hover:text-white text-xs flex items-center gap-2 transition">
+          <button onClick={onClose} className="mt-4 text-primary/60 hover:text-white text-xs flex items-center gap-2 transition">
             <X className="h-3.5 w-3.5" /> Cancel &amp; Close
           </button>
         </div>
@@ -8411,15 +8411,15 @@ function CreateBatchWizard({ batches, userRole, userEmail, onClose, onCreated }:
         <h3 className="text-xl font-bold text-gray-900 mb-1">Add Students</h3>
         <p className="text-gray-500 mb-6">
           {formGrade
-            ? <>Grade <span className="font-semibold text-emerald-700">{formGrade}</span>{formSection ? <> · {formSection}</> : ''} · <span className="font-semibold text-emerald-700">{BATCH_TYPE_LABELS[formType] || formType}</span> students</>
-            : <>Showing <span className="font-semibold text-emerald-700">{BATCH_TYPE_LABELS[formType] || formType}</span> students</>}
+            ? <>Grade <span className="font-semibold text-primary">{formGrade}</span>{formSection ? <> · {formSection}</> : ''} · <span className="font-semibold text-primary">{BATCH_TYPE_LABELS[formType] || formType}</span> students</>
+            : <>Showing <span className="font-semibold text-primary">{BATCH_TYPE_LABELS[formType] || formType}</span> students</>}
           {['one_to_one', 'one_to_three'].includes(formType) && <span className="text-amber-600 text-xs ml-2">· At least 1 required</span>}
         </p>
         <div className="flex items-center justify-between mb-5">
           <div className="flex items-center gap-3">
-            <div className="px-3 py-1.5 rounded-lg bg-emerald-50 border border-emerald-200">
-              <span className="text-sm font-semibold text-emerald-700">{selectedStudents.length}</span>
-              <span className="text-xs text-emerald-500 ml-1">/ {max === 999 ? '∞' : max}</span>
+            <div className="px-3 py-1.5 rounded-lg bg-primary/5 border border-primary/20">
+              <span className="text-sm font-semibold text-primary">{selectedStudents.length}</span>
+              <span className="text-xs text-primary ml-1">/ {max === 999 ? '∞' : max}</span>
             </div>
             <span className="text-sm text-gray-500">students selected</span>
           </div>
@@ -8436,10 +8436,10 @@ function CreateBatchWizard({ batches, userRole, userEmail, onClose, onCreated }:
           <div className="mb-5 space-y-3">
             <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Selected Students</h4>
             {selectedStudents.map(s => (
-              <div key={s.email} className="rounded-xl border-2 border-emerald-200 overflow-hidden">
-                <div className="flex items-center justify-between bg-emerald-50/80 px-5 py-3.5">
+              <div key={s.email} className="rounded-xl border-2 border-primary/20 overflow-hidden">
+                <div className="flex items-center justify-between bg-primary/5 px-5 py-3.5">
                   <div className="flex items-center gap-3 min-w-0">
-                    <div className="w-9 h-9 rounded-full bg-emerald-500 text-white flex items-center justify-center text-sm font-bold shrink-0">
+                    <div className="w-9 h-9 rounded-full bg-primary text-white flex items-center justify-center text-sm font-bold shrink-0">
                       {s.name.charAt(0).toUpperCase()}
                     </div>
                     <div className="min-w-0">
@@ -8449,7 +8449,7 @@ function CreateBatchWizard({ batches, userRole, userEmail, onClose, onCreated }:
                   </div>
                   <div className="flex items-center gap-3 shrink-0">
                     {s.parent_email ? (
-                      <span className="inline-flex items-center gap-1.5 text-xs font-medium text-emerald-700 bg-emerald-100 px-3 py-1.5 rounded-lg">
+                      <span className="inline-flex items-center gap-1.5 text-xs font-medium text-primary bg-primary/10 px-3 py-1.5 rounded-lg">
                         <CheckCircle className="h-3.5 w-3.5" /> Parent: {s.parent_name || s.parent_email}
                       </span>
                     ) : (
@@ -8487,13 +8487,13 @@ function CreateBatchWizard({ batches, userRole, userEmail, onClose, onCreated }:
                   const selected = isStudentSelected(s.email);
                   const currentBatches: { batch_name: string }[] = Array.isArray(s.current_batches) ? s.current_batches : [];
                   return (
-                    <tr key={s.email} className={`border-t hover:bg-emerald-50/30 cursor-pointer transition-colors ${selected ? 'bg-emerald-50/50' : ''}`} onClick={() => toggleStudent(s)}>
+                    <tr key={s.email} className={`border-t hover:bg-primary/5/30 cursor-pointer transition-colors ${selected ? 'bg-primary/5/50' : ''}`} onClick={() => toggleStudent(s)}>
                       <td className="px-4 py-3"><p className="font-medium text-gray-800">{s.full_name}</p><p className="text-xs text-gray-400">{s.email}</p></td>
                       <td className="px-4 py-3 text-gray-500">{s.grade || '—'}</td>
                       <td className="px-4 py-3">{currentBatches.length > 0 ? <div className="flex flex-wrap gap-1">{currentBatches.map((b, i) => <span key={i} className="inline-block text-[10px] font-medium bg-blue-50 text-blue-700 border border-blue-200 rounded px-1.5 py-0.5">{b.batch_name}</span>)}</div> : <span className="text-xs text-gray-300">None</span>}</td>
                       <td className="px-4 py-3 text-xs text-gray-500">{s.assigned_region || '—'}</td>
-                      <td className="px-4 py-3">{s.parent_email ? <span className="text-xs text-emerald-600">{s.parent_name || s.parent_email}</span> : <span className="inline-flex items-center gap-1 text-xs font-medium text-amber-600 bg-amber-50 px-2 py-0.5 rounded"><AlertCircle className="h-3 w-3" /> No parent</span>}</td>
-                      <td className="px-4 py-3 text-right">{selected ? <span className="inline-flex items-center gap-1 text-xs text-emerald-600 font-medium"><CheckCircle className="h-3.5 w-3.5" /> Selected</span> : maxReached ? <span className="text-xs text-gray-300">Max reached</span> : <span className="text-xs text-gray-400 hover:text-emerald-600">+ Add</span>}</td>
+                      <td className="px-4 py-3">{s.parent_email ? <span className="text-xs text-primary">{s.parent_name || s.parent_email}</span> : <span className="inline-flex items-center gap-1 text-xs font-medium text-amber-600 bg-amber-50 px-2 py-0.5 rounded"><AlertCircle className="h-3 w-3" /> No parent</span>}</td>
+                      <td className="px-4 py-3 text-right">{selected ? <span className="inline-flex items-center gap-1 text-xs text-primary font-medium"><CheckCircle className="h-3.5 w-3.5" /> Selected</span> : maxReached ? <span className="text-xs text-gray-300">Max reached</span> : <span className="text-xs text-gray-400 hover:text-primary">+ Add</span>}</td>
                     </tr>
                   );
                 })}
@@ -8522,9 +8522,9 @@ function CreateBatchWizard({ batches, userRole, userEmail, onClose, onCreated }:
             />
           </FormField>
           <FormField label="Section (auto)">
-            <div className={`flex items-center gap-3 px-4 py-2.5 rounded-lg border-2 ${formSection ? 'border-emerald-300 bg-emerald-50' : 'border-gray-200 bg-gray-50'}`}>
+            <div className={`flex items-center gap-3 px-4 py-2.5 rounded-lg border-2 ${formSection ? 'border-emerald-300 bg-primary/5' : 'border-gray-200 bg-gray-50'}`}>
               {formSection ? (
-                <span className="text-lg font-bold text-emerald-700">{formSection}</span>
+                <span className="text-lg font-bold text-primary">{formSection}</span>
               ) : <p className="text-sm text-gray-400">Select grade &amp; category</p>}
             </div>
           </FormField>
@@ -8581,11 +8581,11 @@ function CreateBatchWizard({ batches, userRole, userEmail, onClose, onCreated }:
       <p className="text-gray-500 mb-8">Select subjects and assign a teacher to each one</p>
       <div className="mb-8">
         <label className="block text-sm font-semibold text-gray-700 mb-3">
-          Subjects <span className="text-xs font-normal text-emerald-600 ml-1">(locked from selected template)</span>
+          Subjects <span className="text-xs font-normal text-primary ml-1">(locked from selected template)</span>
         </label>
         <div className="flex flex-wrap gap-2.5">
           {formSubjects.map(subj => (
-            <div key={subj} className="px-4 py-2.5 rounded-xl text-sm font-medium border-2 border-emerald-500 bg-emerald-50 text-emerald-700 shadow-sm">
+            <div key={subj} className="px-4 py-2.5 rounded-xl text-sm font-medium border-2 border-primary bg-primary/5 text-primary shadow-sm">
               <span className="mr-1.5">✓</span>{subj}
             </div>
           ))}
@@ -8601,8 +8601,8 @@ function CreateBatchWizard({ batches, userRole, userEmail, onClose, onCreated }:
             {formSubjects.map(subj => {
               const assigned = !!subjectTeachers[subj];
               return (
-                <div key={subj} className={`flex items-center gap-4 rounded-xl px-5 py-4 border-2 transition-all ${assigned ? 'border-emerald-200 bg-emerald-50/50' : 'border-gray-200 bg-gray-50/50'}`}>
-                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${assigned ? 'bg-emerald-500 text-white' : 'bg-gray-200 text-gray-500'}`}>
+                <div key={subj} className={`flex items-center gap-4 rounded-xl px-5 py-4 border-2 transition-all ${assigned ? 'border-primary/20 bg-primary/5/50' : 'border-gray-200 bg-gray-50/50'}`}>
+                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${assigned ? 'bg-primary text-white' : 'bg-gray-200 text-gray-500'}`}>
                     <BookOpen className="h-5 w-5" />
                   </div>
                   <div className="min-w-30"><span className="text-sm font-semibold text-gray-800">{subj}</span></div>
@@ -8613,7 +8613,7 @@ function CreateBatchWizard({ batches, userRole, userEmail, onClose, onCreated }:
                       teachers={teachers.filter(t => { const ts = t.subjects || []; return ts.length === 0 || ts.some(x => x.toLowerCase() === subj.toLowerCase()); })}
                     />
                   </div>
-                  {assigned && <CheckCircle className="h-5 w-5 text-emerald-500 shrink-0" />}
+                  {assigned && <CheckCircle className="h-5 w-5 text-primary shrink-0" />}
                 </div>
               );
             })}
@@ -8629,8 +8629,8 @@ function CreateBatchWizard({ batches, userRole, userEmail, onClose, onCreated }:
         <h3 className="text-xl font-bold text-gray-900 mb-1">Review &amp; Create</h3>
         <p className="text-gray-500 mb-6">Confirm the batch details before creating</p>
       </div>
-      <div className="bg-linear-to-r from-emerald-50 to-teal-50 rounded-xl p-5 border border-emerald-100">
-        <h4 className="text-sm font-bold text-emerald-800 mb-4">Batch Summary</h4>
+      <div className="bg-linear-to-r from-primary/5 to-secondary/5 rounded-xl p-5 border border-primary/15">
+        <h4 className="text-sm font-bold text-primary mb-4">Batch Summary</h4>
         <div className="grid grid-cols-2 gap-4 text-sm">
           <div><span className="text-gray-400">Name:</span> <span className="font-medium text-gray-800">{formName}</span></div>
           <div><span className="text-gray-400">Type:</span> <Badge label={batchTypeLabel(formType)} variant={batchTypeBadgeVariant(formType)} /></div>
@@ -8650,12 +8650,12 @@ function CreateBatchWizard({ batches, userRole, userEmail, onClose, onCreated }:
               const teacher = teachers.find(t => t.email === teacherEmail);
               return (
                 <div key={subj} className="flex items-center gap-3 bg-white border rounded-xl px-4 py-3 text-sm">
-                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${teacher ? 'bg-emerald-500 text-white' : 'bg-gray-200 text-gray-400'}`}>
+                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${teacher ? 'bg-primary text-white' : 'bg-gray-200 text-gray-400'}`}>
                     <BookOpen className="h-4 w-4" />
                   </div>
                   <span className="font-semibold text-gray-700 min-w-30">{subj}</span>
                   <span className="text-gray-300">→</span>
-                  {teacher ? <span className="text-emerald-600">{teacher.full_name}</span> : <span className="text-amber-500 italic">No teacher assigned</span>}
+                  {teacher ? <span className="text-primary">{teacher.full_name}</span> : <span className="text-amber-500 italic">No teacher assigned</span>}
                 </div>
               );
             })}
@@ -8668,10 +8668,10 @@ function CreateBatchWizard({ batches, userRole, userEmail, onClose, onCreated }:
           <div className="space-y-2">
             {selectedStudents.map(s => (
               <div key={s.email} className="flex items-center gap-3 bg-white border rounded-xl px-4 py-3 text-sm">
-                <div className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-bold shrink-0">{s.name.charAt(0).toUpperCase()}</div>
+                <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold shrink-0">{s.name.charAt(0).toUpperCase()}</div>
                 <span className="font-semibold text-gray-700">{s.name}</span>
                 <span className="text-gray-400 text-xs">{s.email}</span>
-                {s.parent_email ? <span className="ml-auto text-xs text-emerald-600">Parent: {s.parent_name || s.parent_email}</span> : <span className="ml-auto text-xs text-amber-500">No parent assigned</span>}
+                {s.parent_email ? <span className="ml-auto text-xs text-primary">Parent: {s.parent_name || s.parent_email}</span> : <span className="ml-auto text-xs text-amber-500">No parent assigned</span>}
               </div>
             ))}
           </div>
@@ -8692,13 +8692,13 @@ function CreateBatchWizard({ batches, userRole, userEmail, onClose, onCreated }:
       <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4" onClick={onClose}>
         <div className="bg-white rounded-2xl shadow-2xl w-full max-w-5xl max-h-[92vh] flex overflow-hidden" onClick={e => e.stopPropagation()}>
           {/* Left sidebar */}
-          <div className="w-60 bg-linear-to-b from-emerald-600 via-emerald-700 to-teal-800 p-6 flex flex-col shrink-0">
+          <div className="w-60 bg-linear-to-b from-primary via-primary/90 to-secondary p-6 flex flex-col shrink-0">
             <div className="mb-8">
               <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center mb-3">
                 <Database className="h-5 w-5 text-white" />
               </div>
               <h2 className="text-white font-bold text-lg">New Batch</h2>
-              <p className="text-emerald-200 text-xs mt-1">Step {stepIdx + 1} of {wizardSteps.length}</p>
+              <p className="text-primary/60 text-xs mt-1">Step {stepIdx + 1} of {wizardSteps.length}</p>
             </div>
             <div className="space-y-1 flex-1">
               {wizardSteps.map((step, idx) => {
@@ -8707,11 +8707,11 @@ function CreateBatchWizard({ batches, userRole, userEmail, onClose, onCreated }:
                 return (
                   <div key={step.key}
                     className={`flex items-center gap-3 px-3 py-3 rounded-xl transition-all ${
-                      isCurrent ? 'bg-white/20 text-white shadow-lg shadow-black/10' : isDone ? 'text-emerald-200' : 'text-emerald-400/50'
+                      isCurrent ? 'bg-white/20 text-white shadow-lg shadow-black/10' : isDone ? 'text-primary/60' : 'text-primary/50'
                     }`}
                   >
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold shrink-0 ${
-                      isDone ? 'bg-emerald-400 text-emerald-900' : isCurrent ? 'bg-white text-emerald-700' : 'bg-emerald-500/30 text-emerald-300/70'
+                      isDone ? 'bg-primary text-emerald-900' : isCurrent ? 'bg-white text-primary' : 'bg-primary/30 text-primary/80/70'
                     }`}>
                       {isDone ? '✓' : idx + 1}
                     </div>
@@ -8720,7 +8720,7 @@ function CreateBatchWizard({ batches, userRole, userEmail, onClose, onCreated }:
                 );
               })}
             </div>
-            <button onClick={onClose} className="mt-4 text-emerald-200 hover:text-white text-xs flex items-center gap-2 transition">
+            <button onClick={onClose} className="mt-4 text-primary/60 hover:text-white text-xs flex items-center gap-2 transition">
               <X className="h-3.5 w-3.5" /> Cancel &amp; Close
             </button>
           </div>
@@ -9311,7 +9311,7 @@ function AORequestsTab({ sessionRequests, leaveRequests, videoRequests, loadingR
                           {/* Same-subject teachers */}
                           {sameSubjectTeachers.length > 0 && (
                             <div>
-                              <p className="text-[10px] font-semibold text-green-700 mb-1">
+                              <p className="text-[10px] font-semibold text-primary mb-1">
                                 <Check className="h-3 w-3 inline" /> {s.subject} Teachers ({sameSubjectTeachers.length} free)
                               </p>
                               <div className="flex flex-wrap gap-1">
@@ -9323,7 +9323,7 @@ function AORequestsTab({ sessionRequests, leaveRequests, videoRequests, loadingR
                                       setSubjectOverride('');
                                     }}
                                     className={`text-[10px] px-2 py-0.5 rounded-full border transition ${
-                                      ft.inBatch ? 'border-green-400 bg-green-100 text-green-700 hover:bg-green-200 font-semibold' : 'border-blue-300 bg-blue-50 text-blue-700 hover:bg-blue-100'
+                                      ft.inBatch ? 'border-green-400 bg-primary/10 text-primary hover:bg-green-200 font-semibold' : 'border-blue-300 bg-blue-50 text-blue-700 hover:bg-blue-100'
                                     }`}>
                                     {ft.name}{ft.inBatch ? ' ★ batch' : ''}
                                   </button>
@@ -9530,10 +9530,10 @@ function AORequestsTab({ sessionRequests, leaveRequests, videoRequests, loadingR
                       const sess = affectedSessions.find(s => s.session_id === item.session_id);
                       const executed = leaveActions.some(a => a.batch_session_id === item.session_id);
                       return (
-                        <div key={item.session_id} className={`rounded-xl border p-3 ${executed ? 'border-green-200 bg-green-50/30' : 'border-gray-200 bg-white'}`}>
+                        <div key={item.session_id} className={`rounded-xl border p-3 ${executed ? 'border-primary/20 bg-primary/5/30' : 'border-gray-200 bg-white'}`}>
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2">
-                              {executed ? <CheckCircle2 className="h-4 w-4 text-green-600" /> : <Clock className="h-4 w-4 text-gray-400" />}
+                              {executed ? <CheckCircle2 className="h-4 w-4 text-primary" /> : <Clock className="h-4 w-4 text-gray-400" />}
                               <span className="text-sm font-medium">{item.subject_override || item.original_subject || sess?.subject || item.session_id}</span>
                               {item.subject_override && item.original_subject && item.subject_override !== item.original_subject && (
                                 <span className="text-[10px] text-purple-500 line-through">{item.original_subject}</span>
@@ -9546,7 +9546,7 @@ function AORequestsTab({ sessionRequests, leaveRequests, videoRequests, loadingR
                               <Badge label={item.action === 'substitute' ? 'Substitute' : item.action === 'reschedule' ? 'Reschedule' : 'Cancel'} variant={item.action === 'substitute' ? 'info' : item.action === 'cancel' ? 'danger' : 'warning'} />
                               {item.substitute_name && <span className="text-xs text-blue-600">→ {item.substitute_name}</span>}
                               {item.new_date && <span className="text-xs text-amber-600">→ {new Date(item.new_date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}</span>}
-                              {executed && <span className="text-[10px] text-green-600 font-medium"><Check className="h-3 w-3 inline" /> Done</span>}
+                              {executed && <span className="text-[10px] text-primary font-medium"><Check className="h-3 w-3 inline" /> Done</span>}
                             </div>
                           </div>
                         </div>
@@ -9590,10 +9590,10 @@ function AORequestsTab({ sessionRequests, leaveRequests, videoRequests, loadingR
                       const displaySubject = planItem?.subject_override || planItem?.original_subject || s.subject;
                       const hadSubjectChange = planItem?.subject_override && planItem?.original_subject && planItem.subject_override !== planItem.original_subject;
                       return (
-                        <div key={s.session_id} className="rounded-xl border border-green-200 bg-green-50/30 p-3">
+                        <div key={s.session_id} className="rounded-xl border border-primary/20 bg-primary/5/30 p-3">
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2">
-                              <CheckCircle2 className="h-4 w-4 text-green-600" />
+                              <CheckCircle2 className="h-4 w-4 text-primary" />
                               <span className="text-sm font-medium">{displaySubject}</span>
                               {hadSubjectChange && (
                                 <span className="text-[10px] text-purple-500 line-through">{planItem.original_subject}</span>
@@ -9675,18 +9675,18 @@ function AORequestsTab({ sessionRequests, leaveRequests, videoRequests, loadingR
 
       <div className="flex gap-2">
         <button onClick={() => setView('sessions')} className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition
-          ${view === 'sessions' ? 'bg-emerald-600 text-white' : 'bg-gray-100 text-gray-500 hover:text-gray-900'}`}>
+          ${view === 'sessions' ? 'bg-primary text-white' : 'bg-gray-100 text-gray-500 hover:text-gray-900'}`}>
           <CalendarClock className="h-4 w-4" />Session Requests{pendingSessionCount > 0 && <Badge label={String(pendingSessionCount)} variant="warning" />}
         </button>
         <button onClick={() => setView('leave')} className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition
-          ${view === 'leave' ? 'bg-emerald-600 text-white' : 'bg-gray-100 text-gray-500 hover:text-gray-900'}`}>
+          ${view === 'leave' ? 'bg-primary text-white' : 'bg-gray-100 text-gray-500 hover:text-gray-900'}`}>
           <Briefcase className="h-4 w-4" />Leave Requests
           {(pendingAOCount > 0 || approvedLeaveCount > 0) && (
             <Badge label={String(pendingAOCount + approvedLeaveCount)} variant="warning" />
           )}
         </button>
         <button onClick={() => setView('video')} className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition
-          ${view === 'video' ? 'bg-emerald-600 text-white' : 'bg-gray-100 text-gray-500 hover:text-gray-900'}`}>
+          ${view === 'video' ? 'bg-primary text-white' : 'bg-gray-100 text-gray-500 hover:text-gray-900'}`}>
           <Video className="h-4 w-4" />Video Requests
           {videoRequests.filter(v => v.status === 'pending').length > 0 && (
             <Badge label={String(videoRequests.filter(v => v.status === 'pending').length)} variant="warning" />
@@ -9735,7 +9735,7 @@ function AORequestsTab({ sessionRequests, leaveRequests, videoRequests, loadingR
                     {r.status === 'pending' && (
                       <div className="flex gap-1.5">
                         <button disabled={actionId === r.id} onClick={() => handleSessionAction(r.id, 'approve')}
-                          className="flex items-center gap-1 rounded-lg bg-green-600 px-2.5 py-1 text-[11px] text-white font-medium hover:bg-green-700 disabled:opacity-50 transition">
+                          className="flex items-center gap-1 rounded-lg bg-primary px-2.5 py-1 text-[11px] text-white font-medium hover:bg-green-700 disabled:opacity-50 transition">
                           <CheckCircle2 className="h-3 w-3" />Approve
                         </button>
                         {showReject === r.id ? (
@@ -9771,7 +9771,7 @@ function AORequestsTab({ sessionRequests, leaveRequests, videoRequests, loadingR
               <div className="flex items-center gap-3">
                 <input type="checkbox" checked={selectedLeaveIds.size === leaveRequests.length}
                   onChange={toggleSelectAll}
-                  className="h-4 w-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500" />
+                  className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary" />
                 <span className="text-sm font-medium text-gray-700">
                   {selectedLeaveIds.size > 0 ? `${selectedLeaveIds.size} selected` : 'Select all'}
                 </span>
@@ -9790,8 +9790,8 @@ function AORequestsTab({ sessionRequests, leaveRequests, videoRequests, loadingR
                 switch (lr.status) {
                   case 'pending_ao': return { border: 'border-amber-300', bg: 'bg-amber-50/30', label: 'Pending Your Review', color: 'text-amber-700' };
                   case 'pending_hr': return { border: 'border-blue-200', bg: 'bg-blue-50/20', label: 'Forwarded to HR', color: 'text-blue-600' };
-                  case 'approved': return { border: 'border-emerald-300', bg: 'bg-emerald-50/30', label: 'HR Approved — Sessions Managed', color: 'text-emerald-700' };
-                  case 'confirmed': return { border: 'border-green-200', bg: 'bg-green-50/20', label: 'Confirmed', color: 'text-green-600' };
+                  case 'approved': return { border: 'border-emerald-300', bg: 'bg-primary/5/30', label: 'HR Approved — Sessions Managed', color: 'text-primary' };
+                  case 'confirmed': return { border: 'border-primary/20', bg: 'bg-primary/5/20', label: 'Confirmed', color: 'text-primary' };
                   case 'rejected': return { border: 'border-red-200', bg: 'bg-red-50/20', label: 'Rejected', color: 'text-red-500' };
                   case 'withdrawn': return { border: 'border-gray-200', bg: 'bg-gray-50/20', label: 'Withdrawn', color: 'text-gray-500' };
                   default: return { border: 'border-gray-200', bg: 'bg-white', label: lr.status, color: 'text-gray-500' };
@@ -9805,7 +9805,7 @@ function AORequestsTab({ sessionRequests, leaveRequests, videoRequests, loadingR
                     <div className="flex items-start gap-3 flex-1 min-w-0">
                       <input type="checkbox" checked={selectedLeaveIds.has(lr.id)}
                         onChange={() => toggleSelectLeave(lr.id)}
-                        className="mt-2.5 h-4 w-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500" />
+                        className="mt-2.5 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary" />
                       <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-orange-100">
                         <Briefcase className="h-4.5 w-4.5 text-orange-600" />
                       </div>
@@ -9914,7 +9914,7 @@ function AORequestsTab({ sessionRequests, leaveRequests, videoRequests, loadingR
                     {vr.status === 'pending' && (
                       <div className="flex gap-1.5">
                         <button disabled={actionId === vr.id} onClick={() => handleVideoAction(vr.id, 'approve')}
-                          className="flex items-center gap-1 rounded-lg bg-green-600 px-2.5 py-1 text-[11px] text-white font-medium hover:bg-green-700 disabled:opacity-50 transition">
+                          className="flex items-center gap-1 rounded-lg bg-primary px-2.5 py-1 text-[11px] text-white font-medium hover:bg-green-700 disabled:opacity-50 transition">
                           <CheckCircle2 className="h-3 w-3" />Approve
                         </button>
                         <button disabled={actionId === vr.id} onClick={() => handleVideoAction(vr.id, 'reject')}
@@ -10037,7 +10037,7 @@ function fmtMoney(paise: number, currency = 'INR') {
 }
 
 function invoiceStatusColor(status: string) {
-  if (status === 'paid') return 'bg-green-100 text-green-700';
+  if (status === 'paid') return 'bg-primary/10 text-primary';
   if (status === 'pending') return 'bg-amber-100 text-amber-700';
   if (status === 'overdue') return 'bg-red-100 text-red-700';
   if (status === 'cancelled') return 'bg-gray-100 text-gray-500';
@@ -10150,7 +10150,7 @@ function AOPaymentsTab() {
               value: fmtMoney(summary.total_paid_paise),
               sub: `${summary.paid_count} paid`,
               border: 'border-l-emerald-500',
-              icon: <CheckCircle2 className="h-4 w-4 text-emerald-500" />,
+              icon: <CheckCircle2 className="h-4 w-4 text-primary" />,
             },
             {
               label: 'Pending',
@@ -10300,7 +10300,7 @@ function AOPaymentsTab() {
                       <span className="text-xs text-gray-400">of total collected</span>
                     </div>
                     <div className="flex h-3 w-full overflow-hidden rounded-full bg-gray-100">
-                      <div className="bg-emerald-500 h-full transition-all" style={{ width: `${collPct}%` }} title={`Collected ${collPct}%`} />
+                      <div className="bg-primary h-full transition-all" style={{ width: `${collPct}%` }} title={`Collected ${collPct}%`} />
                       <div className="bg-amber-400 h-full transition-all" style={{ width: `${pendPct}%` }} title={`Pending ${pendPct}%`} />
                       <div className="bg-red-400 h-full transition-all" style={{ width: `${overPct}%` }} title={`Overdue ${overPct}%`} />
                     </div>
@@ -10309,7 +10309,7 @@ function AOPaymentsTab() {
                   {/* Legend rows */}
                   <div className="space-y-2.5">
                     {[
-                      { label: 'Collected', paise: summary.total_paid_paise, pct: collPct, dot: 'bg-emerald-500' },
+                      { label: 'Collected', paise: summary.total_paid_paise, pct: collPct, dot: 'bg-primary' },
                       { label: 'Pending',   paise: summary.total_pending_paise, pct: pendPct, dot: 'bg-amber-400' },
                       { label: 'Overdue',   paise: summary.total_overdue_paise, pct: overPct, dot: 'bg-red-400' },
                     ].map(row => (
@@ -10339,7 +10339,7 @@ function AOPaymentsTab() {
                 <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-4">Invoice Status</p>
                 <div className="space-y-3">
                   {[
-                    { label: 'Paid',      count: summary.paid_count,      amount: summary.total_paid_paise,    badge: 'bg-emerald-100 text-emerald-700' },
+                    { label: 'Paid',      count: summary.paid_count,      amount: summary.total_paid_paise,    badge: 'bg-primary/10 text-primary' },
                     { label: 'Pending',   count: summary.pending_count,   amount: summary.total_pending_paise, badge: 'bg-amber-100 text-amber-700' },
                     { label: 'Overdue',   count: summary.overdue_count,   amount: summary.total_overdue_paise, badge: 'bg-red-100 text-red-700' },
                     { label: 'Cancelled', count: summary.cancelled_count, amount: 0,                           badge: 'bg-gray-100 text-gray-500' },
@@ -10376,7 +10376,7 @@ function AOPaymentsTab() {
               </div>
               {studentSummary.filter(s => s.due_amount > 0).length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-10 text-center px-4">
-                  <CheckCircle2 className="h-8 w-8 text-emerald-400 mb-2" />
+                  <CheckCircle2 className="h-8 w-8 text-primary mb-2" />
                   <p className="text-sm font-medium text-gray-500">All payments up to date</p>
                 </div>
               ) : (
@@ -10426,15 +10426,15 @@ function AOPaymentsTab() {
                 <div className="divide-y divide-gray-50">
                   {receipts.slice(0, 8).map(r => (
                     <div key={r.receipt_number} className="flex items-center gap-3 px-5 py-3">
-                      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-emerald-100">
-                        <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+                      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10">
+                        <CheckCircle2 className="h-4 w-4 text-primary" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium text-gray-900 truncate">{r.student_name || r.student_email}</p>
                         <p className="text-[11px] text-gray-400 truncate font-mono">{r.receipt_number}</p>
                       </div>
                       <div className="text-right shrink-0">
-                        <p className="text-sm font-bold text-emerald-700">{fmtMoney(r.amount_paise, r.currency)}</p>
+                        <p className="text-sm font-bold text-primary">{fmtMoney(r.amount_paise, r.currency)}</p>
                         <p className="text-[11px] text-gray-400">
                           {new Date(r.paid_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}
                         </p>
@@ -10529,7 +10529,7 @@ function AOPaymentsTab() {
                     className="w-full flex items-center gap-4 px-4 py-3.5 hover:bg-gray-50/80 transition-colors text-left"
                     onClick={() => setExpandedStudent(isExpanded ? null : s.student_email)}
                   >
-                    <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-bold ${s.overdue_count > 0 ? 'bg-red-100 text-red-700' : s.due_amount > 0 ? 'bg-amber-100 text-amber-700' : 'bg-emerald-100 text-emerald-700'}`}>
+                    <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-bold ${s.overdue_count > 0 ? 'bg-red-100 text-red-700' : s.due_amount > 0 ? 'bg-amber-100 text-amber-700' : 'bg-primary/10 text-primary'}`}>
                       {(s.student_name || s.student_email).charAt(0).toUpperCase()}
                     </div>
                     <div className="flex-1 min-w-0">
@@ -10544,13 +10544,13 @@ function AOPaymentsTab() {
                       <p className="text-xs text-gray-400 truncate mt-0.5">{s.student_email}</p>
                       <div className="mt-2 flex items-center gap-2">
                         <div className="h-1 flex-1 max-w-[160px] overflow-hidden rounded-full bg-gray-100">
-                          <div className="h-full rounded-full bg-emerald-500 transition-all" style={{ width: `${collectionPct}%` }} />
+                          <div className="h-full rounded-full bg-primary transition-all" style={{ width: `${collectionPct}%` }} />
                         </div>
                         <span className="text-[10px] text-gray-400 tabular-nums">{collectionPct}% collected</span>
                       </div>
                     </div>
                     <div className="shrink-0 text-right space-y-0.5">
-                      <p className="text-sm font-bold text-emerald-700 tabular-nums">{fmtMoney(s.paid_amount)}</p>
+                      <p className="text-sm font-bold text-primary tabular-nums">{fmtMoney(s.paid_amount)}</p>
                       {s.due_amount > 0 && (
                         <p className={`text-xs font-semibold tabular-nums ${s.overdue_count > 0 ? 'text-red-600' : 'text-amber-600'}`}>
                           {fmtMoney(s.due_amount)} due
@@ -10623,7 +10623,7 @@ function AOPaymentsTab() {
               <tbody>
                 {receipts.map(r => (
                   <TRow key={r.receipt_number}>
-                    <td className="px-3 py-2.5 font-mono text-xs font-semibold text-emerald-700">{r.receipt_number}</td>
+                    <td className="px-3 py-2.5 font-mono text-xs font-semibold text-primary">{r.receipt_number}</td>
                     <td className="px-3 py-2.5 overflow-hidden">
                       <p className="font-medium text-gray-900 truncate">{r.student_name || r.student_email}</p>
                       <p className="text-xs text-gray-400 truncate">{r.student_email}</p>
@@ -10631,7 +10631,7 @@ function AOPaymentsTab() {
                     <td className="px-3 py-2.5 text-xs text-gray-500 overflow-hidden">
                       <span className="line-clamp-2">{r.description || r.invoice_number || '—'}</span>
                     </td>
-                    <td className="px-3 py-2.5 font-bold text-emerald-700 text-right tabular-nums whitespace-nowrap">
+                    <td className="px-3 py-2.5 font-bold text-primary text-right tabular-nums whitespace-nowrap">
                       {fmtMoney(r.amount_paise, r.currency)}
                     </td>
                     <td className="px-3 py-2.5 text-xs capitalize">
@@ -10683,7 +10683,7 @@ function AOPaymentsTab() {
               <div className="space-y-3">
                 {filtered.map(r => (
                   <div key={r.id} className={`rounded-xl border bg-white shadow-sm overflow-hidden ${
-                    r.status === 'pending' ? 'border-amber-200' : r.status === 'approved' ? 'border-emerald-200' : 'border-gray-200'
+                    r.status === 'pending' ? 'border-amber-200' : r.status === 'approved' ? 'border-primary/20' : 'border-gray-200'
                   }`}>
                     <div className="px-4 py-3 space-y-2">
                       {/* Header row */}
@@ -10698,7 +10698,7 @@ function AOPaymentsTab() {
                             </span>
                             <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase ${
                               r.status === 'pending' ? 'bg-amber-100 text-amber-700'
-                                : r.status === 'approved' ? 'bg-emerald-100 text-emerald-700'
+                                : r.status === 'approved' ? 'bg-primary/10 text-primary'
                                 : 'bg-red-100 text-red-700'
                             }`}>
                               {r.status}
@@ -10768,7 +10768,7 @@ function AOPaymentsTab() {
 
                       {/* Review info for processed requests */}
                       {r.status !== 'pending' && r.reviewed_at && (
-                        <div className={`rounded-lg px-3 py-2 ${r.status === 'approved' ? 'bg-emerald-50' : 'bg-red-50'}`}>
+                        <div className={`rounded-lg px-3 py-2 ${r.status === 'approved' ? 'bg-primary/5' : 'bg-red-50'}`}>
                           <p className="text-xs text-gray-500">
                             {r.status === 'approved' ? 'Approved' : 'Rejected'} by <span className="font-medium">{r.reviewed_by}</span>
                             {' '}on {new Date(r.reviewed_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
@@ -10799,7 +10799,7 @@ function AOPaymentsTab() {
                             <button
                               onClick={() => handleRefundAction(r.id, 'approve')}
                               disabled={actionLoading === r.id}
-                              className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-bold text-white hover:bg-emerald-700 disabled:bg-emerald-300 transition-colors"
+                              className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-xs font-bold text-white hover:bg-primary/90 disabled:bg-emerald-300 transition-colors"
                             >
                               <CheckCircle2 className="h-3.5 w-3.5" />
                               {actionLoading === r.id ? 'Processing…' : `Approve ${r.request_type === 'refund' ? 'Refund' : 'Reschedule'}`}
@@ -10896,15 +10896,15 @@ function TodaysLiveTab({ sessions, loading, onRefresh }: {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-green-100">
-            <Tv className="h-5 w-5 text-green-600" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10">
+            <Tv className="h-5 w-5 text-primary" />
           </div>
           <div>
             <h2 className="text-lg font-semibold text-gray-900">Today&apos;s Live</h2>
             <p className="text-sm text-gray-500">
               {loading ? 'Loading…' : (
                 <>
-                  {liveCount > 0 && <span className="text-green-600 font-medium">{liveCount} live</span>}
+                  {liveCount > 0 && <span className="text-primary font-medium">{liveCount} live</span>}
                   {liveCount > 0 && scheduledCount > 0 && <span className="mx-1 text-gray-300">·</span>}
                   {scheduledCount > 0 && <span>{scheduledCount} upcoming</span>}
                   {liveCount === 0 && scheduledCount === 0 && todaySessions.length > 0 && <span>All sessions ended</span>}
@@ -10919,10 +10919,10 @@ function TodaysLiveTab({ sessions, loading, onRefresh }: {
 
       {/* Live pulse banner */}
       {liveCount > 0 && (
-        <div className="flex items-center gap-2.5 rounded-xl border border-green-200 bg-green-50 px-4 py-3">
+        <div className="flex items-center gap-2.5 rounded-xl border border-primary/20 bg-primary/5 px-4 py-3">
           <span className="relative flex h-3 w-3">
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
-            <span className="relative inline-flex h-3 w-3 rounded-full bg-green-500" />
+            <span className="relative inline-flex h-3 w-3 rounded-full bg-primary" />
           </span>
           <span className="text-sm font-medium text-green-800">
             {liveCount} session{liveCount > 1 ? 's' : ''} live right now
@@ -10957,7 +10957,7 @@ function TodaysLiveTab({ sessions, loading, onRefresh }: {
                   isLive
                     ? overtime
                       ? 'border-amber-300 bg-amber-50/60 shadow-sm ring-1 ring-amber-200'
-                      : 'border-green-300 bg-green-50/60 shadow-sm ring-1 ring-green-200'
+                      : 'border-green-300 bg-primary/5/60 shadow-sm ring-1 ring-green-200'
                     : isScheduled
                     ? 'border-teal-200 bg-teal-50/40'
                     : 'border-gray-200 bg-gray-50/50 opacity-75'
@@ -10966,7 +10966,7 @@ function TodaysLiveTab({ sessions, loading, onRefresh }: {
                 <div className="flex items-start gap-3">
                   {/* Status icon */}
                   <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white border border-gray-100 shadow-sm">
-                    {isLive && !overtime && <Radio className="h-4 w-4 text-green-600 animate-pulse" />}
+                    {isLive && !overtime && <Radio className="h-4 w-4 text-primary animate-pulse" />}
                     {isLive && overtime && <Radio className="h-4 w-4 text-amber-500 animate-pulse" />}
                     {isScheduled && <Clock className="h-4 w-4 text-teal-600" />}
                     {isEnded && <CheckCircle2 className="h-4 w-4 text-gray-400" />}
@@ -10977,8 +10977,8 @@ function TodaysLiveTab({ sessions, loading, onRefresh }: {
                     <div className="flex items-center gap-2 flex-wrap">
                       <span className="font-semibold text-gray-900 text-sm">{s.subject}</span>
                       {isLive && !overtime && (
-                        <span className="inline-flex items-center gap-1 rounded-full bg-green-100 px-2 py-0.5 text-xs font-bold text-green-700 uppercase tracking-wide">
-                          <span className="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse inline-block" />
+                        <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-xs font-bold text-primary uppercase tracking-wide">
+                          <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse inline-block" />
                           Live
                         </span>
                       )}
@@ -11035,7 +11035,7 @@ function TodaysLiveTab({ sessions, loading, onRefresh }: {
                         <button
                           onClick={() => observe(s)}
                           title="Observe session in new tab"
-                          className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-bold text-white transition-colors shadow-sm ${overtime ? 'bg-amber-500 hover:bg-amber-600' : 'bg-green-600 hover:bg-green-700'}`}
+                          className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-bold text-white transition-colors shadow-sm ${overtime ? 'bg-amber-500 hover:bg-amber-600' : 'bg-primary hover:bg-green-700'}`}
                         >
                           <Eye className="h-3.5 w-3.5" />
                           Observe

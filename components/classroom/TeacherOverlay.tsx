@@ -209,7 +209,7 @@ export default function TeacherOverlay({
 
       {/* FPS indicator (dev mode only) */}
       {process.env.NODE_ENV === 'development' && isProcessing && (
-        <div className="absolute -top-5 left-0 rounded bg-black/60 px-1.5 py-0.5 text-[10px] text-green-400">
+        <div className="absolute -top-5 left-0 rounded bg-black/60 px-1.5 py-0.5 text-[10px] text-primary">
           {fps} FPS
         </div>
       )}

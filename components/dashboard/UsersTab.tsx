@@ -234,8 +234,8 @@ function StudentReportView({ user, onBack }: { user: UserRow; onBack: () => void
   }, [user.email, periodStart, periodEnd]);
 
   const pct = (v: number) => `${v}%`;
-  const attColor = (r: number) => r >= 75 ? 'text-green-600' : r >= 50 ? 'text-amber-600' : 'text-red-600';
-  const attBg = (r: number) => r >= 75 ? 'bg-green-500' : r >= 50 ? 'bg-amber-500' : 'bg-red-500';
+  const attColor = (r: number) => r >= 75 ? 'text-primary' : r >= 50 ? 'text-amber-600' : 'text-red-600';
+  const attBg = (r: number) => r >= 75 ? 'bg-primary' : r >= 50 ? 'bg-amber-500' : 'bg-red-500';
   const moveMonth = (dir: -1 | 1) => {
     const [y, m] = month.split('-').map(Number);
     const d = new Date(y, m - 1 + dir, 1);
@@ -729,8 +729,8 @@ function TeacherReportView({ user, onBack }: { user: UserRow; onBack: () => void
   const overallRating = ratings?.overall ?? 0;
   const hasAnyData = metrics || sessions || batches.length > 0 || (ratings && ratings.total_count > 0);
 
-  const ringColor = (v: number) => v >= 75 ? 'text-green-600' : v >= 50 ? 'text-amber-600' : 'text-red-600';
-  const barBg = (v: number) => v >= 75 ? 'bg-green-500' : v >= 50 ? 'bg-amber-500' : 'bg-red-500';
+  const ringColor = (v: number) => v >= 75 ? 'text-primary' : v >= 50 ? 'text-amber-600' : 'text-red-600';
+  const barBg = (v: number) => v >= 75 ? 'bg-primary' : v >= 50 ? 'bg-amber-500' : 'bg-red-500';
 
   return (
     <div className="space-y-0">
@@ -1174,13 +1174,13 @@ function AddToBatchModal({ student, onClose, onCreateNew }: { student: UserRow; 
                   key={b.batch_id}
                   className={`flex items-start gap-3 p-3 rounded-lg border transition ${
                     full ? 'opacity-60 border-gray-200 bg-gray-50' :
-                    isMatch ? 'border-emerald-300 bg-emerald-50/60' : 'border-gray-200 bg-white hover:border-emerald-200'
+                    isMatch ? 'border-emerald-300 bg-primary/5/60' : 'border-gray-200 bg-white hover:border-primary/20'
                   }`}
                 >
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
                       <span className="text-sm font-medium text-gray-900 truncate">{b.batch_name}</span>
-                      {isMatch && <span className="text-[10px] font-semibold px-1.5 py-0.5 bg-emerald-100 text-emerald-700 rounded-full">Best match</span>}
+                      {isMatch && <span className="text-[10px] font-semibold px-1.5 py-0.5 bg-primary/10 text-primary rounded-full">Best match</span>}
                       {full && <span className="text-[10px] font-semibold px-1.5 py-0.5 bg-red-100 text-red-600 rounded-full">Full</span>}
                     </div>
                     <div className="flex items-center gap-3 mt-1 text-xs text-gray-500 flex-wrap">
@@ -1382,11 +1382,11 @@ function UserDetailPanel({ user }: { user: UserRow }) {
     ['Account created', fmtDateTimeIST(user.created_at), Clock],
   ] as FieldPair[]).filter(([, v]) => v != null && v !== '');
 
-  const attColor = (r: number) => r >= 75 ? 'text-green-700' : r >= 50 ? 'text-amber-700' : 'text-red-600';
-  const attBar   = (r: number) => r >= 75 ? 'bg-green-500' : r >= 50 ? 'bg-amber-500' : 'bg-red-500';
+  const attColor = (r: number) => r >= 75 ? 'text-primary' : r >= 50 ? 'text-amber-700' : 'text-red-600';
+  const attBar   = (r: number) => r >= 75 ? 'bg-primary' : r >= 50 ? 'bg-amber-500' : 'bg-red-500';
 
   return (
-    <div className="rounded-xl border border-emerald-200/60 bg-white p-4 shadow-sm space-y-4">
+    <div className="rounded-xl border border-primary/20 bg-white p-4 shadow-sm space-y-4">
       <div className="flex items-center gap-3 pb-3 border-b border-gray-100">
         <Avatar name={user.full_name} size="md" />
         <div>
@@ -1514,7 +1514,7 @@ function UserDetailPanel({ user }: { user: UserRow }) {
                   <p className="text-[10px] text-gray-400">Sessions</p>
                 </div>
                 <div className="rounded-lg bg-gray-50 p-3 text-center">
-                  <p className="text-lg font-bold text-green-700">{perf.attendance.present}</p>
+                  <p className="text-lg font-bold text-primary">{perf.attendance.present}</p>
                   <p className="text-[10px] text-gray-400">Present</p>
                 </div>
                 <div className="rounded-lg bg-gray-50 p-3 text-center">
@@ -1596,7 +1596,7 @@ function UserDetailPanel({ user }: { user: UserRow }) {
                             </span>
                           )}
                           {link.payment_plan && (
-                            <span className="text-[11px] font-medium px-2 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700">
+                            <span className="text-[11px] font-medium px-2 py-0.5 rounded-full bg-primary/5 border border-primary/20 text-primary">
                               {PAYMENT_PLAN_LABELS[link.payment_plan] || link.payment_plan}
                             </span>
                           )}
@@ -1627,7 +1627,7 @@ function UserDetailPanel({ user }: { user: UserRow }) {
                           {link.amount_paise != null && link.amount_paise > 0 && (
                             <div>
                               <p className="text-[10px] text-gray-400 mb-1">Enrollment fee paid</p>
-                              <p className="text-sm font-semibold text-emerald-700">{fmtPaise(link.amount_paise)}</p>
+                              <p className="text-sm font-semibold text-primary">{fmtPaise(link.amount_paise)}</p>
                             </div>
                           )}
                         </div>
@@ -1646,8 +1646,8 @@ function UserDetailPanel({ user }: { user: UserRow }) {
                   <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
                     {enrollSummary.credits.map(c => {
                       const pct = c.total_sessions > 0 ? Math.round((c.remaining / c.total_sessions) * 100) : 0;
-                      const barColor = pct > 40 ? 'bg-emerald-500' : pct > 15 ? 'bg-amber-400' : 'bg-red-500';
-                      const textColor = pct > 40 ? 'text-emerald-700' : pct > 15 ? 'text-amber-700' : 'text-red-600';
+                      const barColor = pct > 40 ? 'bg-primary' : pct > 15 ? 'bg-amber-400' : 'bg-red-500';
+                      const textColor = pct > 40 ? 'text-primary' : pct > 15 ? 'text-amber-700' : 'text-red-600';
                       return (
                         <div key={c.id} className="rounded-lg border border-gray-200 bg-white p-3 space-y-1.5">
                           <div className="flex items-center justify-between">
@@ -1690,7 +1690,7 @@ function UserDetailPanel({ user }: { user: UserRow }) {
               <div className="grid grid-cols-3 gap-2">
                 {[
                   { label: 'Total Billed', value: fmtPaise(enrollSummary.invoice_stats.total_billed_paise), color: 'text-gray-800' },
-                  { label: 'Total Paid', value: fmtPaise(enrollSummary.invoice_stats.total_paid_paise), color: 'text-emerald-700' },
+                  { label: 'Total Paid', value: fmtPaise(enrollSummary.invoice_stats.total_paid_paise), color: 'text-primary' },
                   { label: 'Outstanding', value: fmtPaise(enrollSummary.invoice_stats.total_outstanding_paise), color: parseInt(enrollSummary.invoice_stats.total_outstanding_paise as unknown as string) > 0 ? 'text-red-600' : 'text-gray-400' },
                 ].map(s => (
                   <div key={s.label} className="rounded-lg bg-gray-50 border border-gray-100 p-3 text-center">
@@ -1712,7 +1712,7 @@ function UserDetailPanel({ user }: { user: UserRow }) {
                   </span>
                 )}
                 {enrollSummary.invoice_stats.paid_count > 0 && (
-                  <span className="inline-flex items-center gap-1 text-[11px] font-medium bg-emerald-50 border border-emerald-200 text-emerald-700 px-2 py-0.5 rounded-full">
+                  <span className="inline-flex items-center gap-1 text-[11px] font-medium bg-primary/5 border border-primary/20 text-primary px-2 py-0.5 rounded-full">
                     <CheckCircle2 className="h-3 w-3" /> {enrollSummary.invoice_stats.paid_count} paid
                   </span>
                 )}
@@ -1749,7 +1749,7 @@ function UserDetailPanel({ user }: { user: UserRow }) {
                           <p className="text-xs font-medium text-gray-800 truncate">{r.invoice_description || r.billing_period || 'Payment'}</p>
                           <p className="text-[10px] text-gray-400">{r.receipt_number} · {fmtDate(r.created_at)}{r.payment_method ? ` · ${r.payment_method.replace(/_/g, ' ')}` : ''}</p>
                         </div>
-                        <span className="text-xs font-bold text-emerald-700 shrink-0">{fmtPaise(r.amount_paise)}</span>
+                        <span className="text-xs font-bold text-primary shrink-0">{fmtPaise(r.amount_paise)}</span>
                       </div>
                     ))}
                   </div>
@@ -2037,13 +2037,13 @@ function EditTeacherModal({ user, onClose, onSaved }: { user: UserRow; onClose: 
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-5xl max-h-[92vh] flex overflow-hidden" onClick={e => e.stopPropagation()}>
 
         {/* Sidebar */}
-        <div className="w-60 bg-linear-to-b from-emerald-600 via-emerald-700 to-teal-800 p-6 flex flex-col shrink-0">
+        <div className="w-60 bg-linear-to-b from-primary via-primary/90 to-secondary p-6 flex flex-col shrink-0">
           <div className="mb-8">
             <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center mb-3">
               <GraduationCap className="h-5 w-5 text-white" />
             </div>
             <h2 className="text-white font-bold text-lg">Edit Teacher</h2>
-            <p className="text-emerald-200 text-xs mt-1">Step {stepIdx + 1} of {STEPS.length}</p>
+            <p className="text-primary/60 text-xs mt-1">Step {stepIdx + 1} of {STEPS.length}</p>
           </div>
           <div className="space-y-1 flex-1">
             {STEPS.map((step, idx) => {
@@ -2054,10 +2054,10 @@ function EditTeacherModal({ user, onClose, onSaved }: { user: UserRow; onClose: 
                 <button key={step.key} type="button"
                   onClick={() => { if (idx < stepIdx) setStepIdx(idx); }}
                   className={`w-full flex items-center gap-3 px-3 py-3.5 rounded-xl transition-all text-left ${
-                    isCurrent ? 'bg-white/20 text-white shadow-lg shadow-black/10' : isDone ? 'text-emerald-200 hover:bg-white/10 cursor-pointer' : 'text-emerald-400/50 cursor-default'
+                    isCurrent ? 'bg-white/20 text-white shadow-lg shadow-black/10' : isDone ? 'text-primary/60 hover:bg-white/10 cursor-pointer' : 'text-primary/50 cursor-default'
                   }`}>
                   <div className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 ${
-                    isDone ? 'bg-emerald-400 text-emerald-900' : isCurrent ? 'bg-white text-emerald-700' : 'bg-emerald-500/30 text-emerald-300/70'
+                    isDone ? 'bg-primary text-emerald-900' : isCurrent ? 'bg-white text-primary' : 'bg-primary/30 text-primary/80/70'
                   }`}>
                     {isDone ? <CheckCircle className="h-4 w-4" /> : <StepIcon className="h-4 w-4" />}
                   </div>
@@ -2069,7 +2069,7 @@ function EditTeacherModal({ user, onClose, onSaved }: { user: UserRow; onClose: 
               );
             })}
           </div>
-          <button onClick={onClose} className="mt-4 text-emerald-200 hover:text-white text-xs flex items-center gap-2 transition">
+          <button onClick={onClose} className="mt-4 text-primary/60 hover:text-white text-xs flex items-center gap-2 transition">
             Cancel &amp; Close
           </button>
         </div>
@@ -2090,16 +2090,16 @@ function EditTeacherModal({ user, onClose, onSaved }: { user: UserRow; onClose: 
                   <div className="relative h-20 w-20 shrink-0">
                     {avatarPreview ? (
                       // eslint-disable-next-line @next/next/no-img-element
-                      <img src={avatarPreview} alt="Preview" className="h-20 w-20 rounded-full object-cover ring-2 ring-emerald-200" />
+                      <img src={avatarPreview} alt="Preview" className="h-20 w-20 rounded-full object-cover ring-2 ring-primary/20" />
                     ) : (
-                      <div className="h-20 w-20 rounded-full bg-emerald-50 flex items-center justify-center ring-2 ring-emerald-100">
-                        <Camera className="h-8 w-8 text-emerald-300" />
+                      <div className="h-20 w-20 rounded-full bg-primary/5 flex items-center justify-center ring-2 ring-primary/15">
+                        <Camera className="h-8 w-8 text-primary/80" />
                       </div>
                     )}
                     <button
                       type="button"
                       onClick={() => avatarInputRef.current?.click()}
-                      className="absolute bottom-0 right-0 h-7 w-7 rounded-full bg-emerald-600 text-white flex items-center justify-center shadow hover:bg-emerald-700 transition"
+                      className="absolute bottom-0 right-0 h-7 w-7 rounded-full bg-primary text-white flex items-center justify-center shadow hover:bg-primary/90 transition"
                       title="Upload photo"
                     >
                       <Camera className="h-3.5 w-3.5" />
@@ -2156,7 +2156,7 @@ function EditTeacherModal({ user, onClose, onSaved }: { user: UserRow; onClose: 
                     <select
                       value={form.phoneCode}
                       onChange={(e) => f('phoneCode', e.target.value)}
-                      className="w-24 shrink-0 rounded-lg border border-gray-200 bg-white py-2 px-2 text-sm text-gray-900 outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100"
+                      className="w-24 shrink-0 rounded-lg border border-gray-200 bg-white py-2 px-2 text-sm text-gray-900 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/15"
                     >
                       <option value="+91">🇮🇳 +91</option>
                       <option value="+971">🇦🇪 +971</option>
@@ -2372,13 +2372,13 @@ function EditStudentModal({ user, onClose, onSaved }: { user: UserRow; onClose: 
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-5xl max-h-[92vh] flex overflow-hidden" onClick={e => e.stopPropagation()}>
 
         {/* Sidebar */}
-        <div className="w-60 bg-linear-to-b from-emerald-600 via-emerald-700 to-teal-800 p-6 flex flex-col shrink-0">
+        <div className="w-60 bg-linear-to-b from-primary via-primary/90 to-secondary p-6 flex flex-col shrink-0">
           <div className="mb-8">
             <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center mb-3">
               <GraduationCap className="h-5 w-5 text-white" />
             </div>
             <h2 className="text-white font-bold text-lg">Edit Student</h2>
-            <p className="text-emerald-200 text-xs mt-1">Step {stepIdx + 1} of {STEPS.length}</p>
+            <p className="text-primary/60 text-xs mt-1">Step {stepIdx + 1} of {STEPS.length}</p>
           </div>
           <div className="space-y-1 flex-1">
             {STEPS.map((step, idx) => {
@@ -2389,10 +2389,10 @@ function EditStudentModal({ user, onClose, onSaved }: { user: UserRow; onClose: 
                 <button key={step.key} type="button"
                   onClick={() => { if (idx < stepIdx) setStepIdx(idx); }}
                   className={`w-full flex items-center gap-3 px-3 py-3.5 rounded-xl transition-all text-left ${
-                    isCurrent ? 'bg-white/20 text-white shadow-lg shadow-black/10' : isDone ? 'text-emerald-200 hover:bg-white/10 cursor-pointer' : 'text-emerald-400/50 cursor-default'
+                    isCurrent ? 'bg-white/20 text-white shadow-lg shadow-black/10' : isDone ? 'text-primary/60 hover:bg-white/10 cursor-pointer' : 'text-primary/50 cursor-default'
                   }`}>
                   <div className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 ${
-                    isDone ? 'bg-emerald-400 text-emerald-900' : isCurrent ? 'bg-white text-emerald-700' : 'bg-emerald-500/30 text-emerald-300/70'
+                    isDone ? 'bg-primary text-emerald-900' : isCurrent ? 'bg-white text-primary' : 'bg-primary/30 text-primary/80/70'
                   }`}>
                     {isDone ? <CheckCircle className="h-4 w-4" /> : <StepIcon className="h-4 w-4" />}
                   </div>
@@ -2404,7 +2404,7 @@ function EditStudentModal({ user, onClose, onSaved }: { user: UserRow; onClose: 
               );
             })}
           </div>
-          <button onClick={onClose} className="mt-4 text-emerald-200 hover:text-white text-xs flex items-center gap-2 transition">
+          <button onClick={onClose} className="mt-4 text-primary/60 hover:text-white text-xs flex items-center gap-2 transition">
             Cancel &amp; Close
           </button>
         </div>
@@ -2428,7 +2428,7 @@ function EditStudentModal({ user, onClose, onSaved }: { user: UserRow; onClose: 
                     <select
                       value={form.phoneCode}
                       onChange={(e) => f('phoneCode', e.target.value)}
-                      className="w-24 shrink-0 rounded-lg border border-gray-200 bg-white py-2 px-2 text-sm text-gray-900 outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100"
+                      className="w-24 shrink-0 rounded-lg border border-gray-200 bg-white py-2 px-2 text-sm text-gray-900 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/15"
                     >
                       <option value="+91">🇮🇳 +91</option>
                       <option value="+971">🇦🇪 +971</option>
@@ -2587,9 +2587,9 @@ function ResetPasswordModal({ user, onClose }: { user: UserRow; onClose: () => v
         <div className="space-y-4">
           <Alert variant={result.success ? 'success' : 'error'} message={result.message} />
           {result.success && result.new_password && (
-            <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-4">
+            <div className="rounded-xl border border-primary/20 bg-primary/5 p-4">
               <p className="text-xs text-gray-500 mb-1">New Password</p>
-              <p className="font-mono text-lg font-bold text-emerald-700">{result.new_password}</p>
+              <p className="font-mono text-lg font-bold text-primary">{result.new_password}</p>
               <p className="mt-1 text-xs text-gray-400">Also emailed to {user.email}</p>
             </div>
           )}
@@ -2948,16 +2948,16 @@ function UsersTabInner({ role, label, permissions, hideCreate, hideActions, acti
 
       {/* ── Bulk Action Bar ────────────────────────── */}
       {selectedEmails.size > 0 && (
-        <div className="flex items-center gap-3 bg-emerald-50 border border-emerald-200 rounded-xl px-4 py-2.5 animate-in fade-in slide-in-from-top-2">
+        <div className="flex items-center gap-3 bg-primary/5 border border-primary/20 rounded-xl px-4 py-2.5 animate-in fade-in slide-in-from-top-2">
           <div className="flex items-center gap-2">
-            <div className="h-6 w-6 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs font-bold">
+            <div className="h-6 w-6 rounded-full bg-primary text-white flex items-center justify-center text-xs font-bold">
               {selectedEmails.size}
             </div>
-            <span className="text-sm font-medium text-emerald-800">
+            <span className="text-sm font-medium text-primary">
               {selectedEmails.size} selected
             </span>
           </div>
-          <div className="h-4 w-px bg-emerald-200" />
+          <div className="h-4 w-px bg-primary/20" />
           {canDeactivate && (
             <button
               onClick={handleBulkDeactivate}
@@ -2971,7 +2971,7 @@ function UsersTabInner({ role, label, permissions, hideCreate, hideActions, acti
             <button
               onClick={handleBulkActivate}
               disabled={bulkLoading}
-              className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg bg-white border border-green-200 text-green-700 hover:bg-green-50 transition-colors disabled:opacity-50"
+              className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg bg-white border border-primary/20 text-primary hover:bg-primary/5 transition-colors disabled:opacity-50"
             >
               <UserCheck2 className="h-3.5 w-3.5" /> Activate
             </button>
@@ -2991,7 +2991,7 @@ function UsersTabInner({ role, label, permissions, hideCreate, hideActions, acti
           >
             <X className="h-3.5 w-3.5" /> Clear
           </button>
-          {bulkLoading && <Loader2 className="h-4 w-4 animate-spin text-emerald-600" />}
+          {bulkLoading && <Loader2 className="h-4 w-4 animate-spin text-primary" />}
         </div>
       )}
 
@@ -3015,7 +3015,7 @@ function UsersTabInner({ role, label, permissions, hideCreate, hideActions, acti
                 type="checkbox"
                 checked={filtered.length > 0 && filtered.every(u => selectedEmails.has(u.email))}
                 onChange={() => toggleSelectAll(filtered)}
-                className="h-4 w-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer"
+                className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary cursor-pointer"
               />
             </TH>
             <TH>Name</TH>
@@ -3045,7 +3045,7 @@ function UsersTabInner({ role, label, permissions, hideCreate, hideActions, acti
                         type="checkbox"
                         checked={selectedEmails.has(u.email)}
                         onChange={() => toggleSelect(u.email)}
-                        className="h-4 w-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer"
+                        className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary cursor-pointer"
                       />
                     </td>
                     <td className="px-4 py-3">
@@ -3101,7 +3101,7 @@ function UsersTabInner({ role, label, permissions, hideCreate, hideActions, acti
                           {batches.length > 0 ? (
                             <div className="flex flex-col gap-0.5">
                               {batches.slice(0, 2).map(b => (
-                                <span key={b.batch_id} title={b.batch_name} className="inline-block text-[10px] font-medium bg-emerald-50 border border-emerald-200 text-emerald-700 rounded px-1.5 py-0.5 max-w-[140px] truncate">
+                                <span key={b.batch_id} title={b.batch_name} className="inline-block text-[10px] font-medium bg-primary/5 border border-primary/20 text-primary rounded px-1.5 py-0.5 max-w-[140px] truncate">
                                   {b.batch_name}
                                 </span>
                               ))}
@@ -3169,7 +3169,7 @@ function UsersTabInner({ role, label, permissions, hideCreate, hideActions, acti
                             label: u.is_active ? 'Deactivate' : 'Reactivate',
                             icon: u.is_active ? UserX : UserCheck2,
                             onClick: () => handleDeactivate(u.email, u.is_active),
-                            className: u.is_active ? 'text-red-600 hover:bg-red-50' : 'text-green-600 hover:bg-green-50',
+                            className: u.is_active ? 'text-red-600 hover:bg-red-50' : 'text-primary hover:bg-primary/5',
                           }] : []),
                           { label: 'Delete', icon: Trash2, onClick: () => handlePermanentDelete(u.email, u.full_name), className: 'text-red-600 hover:bg-red-50' },
                         ] : []),
@@ -3179,7 +3179,7 @@ function UsersTabInner({ role, label, permissions, hideCreate, hideActions, acti
                   {/* Expanded detail row */}
                   {isExpanded && (
                     <tr>
-                      <td colSpan={role === 'student' ? 10 : role === 'teacher' ? 8 : role === 'parent' ? 7 : 6} className="bg-emerald-50/40 border-b border-emerald-100 px-4 py-4">
+                      <td colSpan={role === 'student' ? 10 : role === 'teacher' ? 8 : role === 'parent' ? 7 : 6} className="bg-primary/5/40 border-b border-primary/15 px-4 py-4">
                         <UserDetailPanel user={u} />
                       </td>
                     </tr>

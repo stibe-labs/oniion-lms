@@ -277,7 +277,7 @@ export default function AOManagementPanel() {
                                     {s.full_name || s.email}
                                   </p>
                                   {s.student_status === 'active' && (
-                                    <CheckCircle2 className="h-3 w-3 text-emerald-500 shrink-0" />
+                                    <CheckCircle2 className="h-3 w-3 text-primary shrink-0" />
                                   )}
                                 </div>
                                 <div className="flex items-center gap-1.5 mt-0.5">
@@ -310,7 +310,7 @@ export default function AOManagementPanel() {
       {toast && (
         <div className={cn(
           'fixed bottom-4 right-4 z-[9999] rounded-xl px-4 py-2.5 text-sm font-medium shadow-xl',
-          toast.ok ? 'bg-emerald-600 text-white' : 'bg-red-600 text-white'
+          toast.ok ? 'bg-primary text-white' : 'bg-red-600 text-white'
         )}>
           {toast.msg}
         </div>

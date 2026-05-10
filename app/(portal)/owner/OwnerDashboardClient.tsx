@@ -236,7 +236,7 @@ export default function OwnerDashboardClient({ userName, userEmail, userRole }: 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-5">
         <div>
           <h1 className="text-xl font-bold text-gray-900 flex items-center gap-2">
-            <Shield className="h-6 w-6 text-emerald-600" />
+            <Shield className="h-6 w-6 text-primary" />
             Welcome, {userName || 'Owner'}
           </h1>
           <p className="text-sm text-gray-500 mt-0.5">System command center — monitor, approve &amp; manage everything</p>
@@ -338,9 +338,9 @@ function OverviewTab({ data, live, onSwitchTab }: {
         <SectionHeader icon={Calendar} title="Today's Sessions" />
         <div className="grid grid-cols-5 gap-3 mt-3">
           <MiniStatCard label="Total" value={today.total} icon={Calendar} color="text-gray-600" bg="bg-gray-50" />
-          <MiniStatCard label="Live" value={today.live} icon={Radio} color="text-green-600" bg="bg-green-50" pulse={today.live > 0} />
+          <MiniStatCard label="Live" value={today.live} icon={Radio} color="text-primary" bg="bg-primary/5" pulse={today.live > 0} />
           <MiniStatCard label="Upcoming" value={today.upcoming} icon={Clock} color="text-blue-600" bg="bg-blue-50" />
-          <MiniStatCard label="Completed" value={today.completed} icon={CheckCircle2} color="text-emerald-600" bg="bg-emerald-50" />
+          <MiniStatCard label="Completed" value={today.completed} icon={CheckCircle2} color="text-primary" bg="bg-primary/5" />
           <MiniStatCard label="Cancelled" value={today.cancelled} icon={XCircle} color="text-red-600" bg="bg-red-50" />
         </div>
       </div>
@@ -363,9 +363,9 @@ function OverviewTab({ data, live, onSwitchTab }: {
 
       {/* ── Live Classes Marquee ── */}
       {live.length > 0 && (
-        <div className="rounded-xl border border-green-200 bg-green-50 p-4">
+        <div className="rounded-xl border border-primary/20 bg-primary/5 p-4">
           <div className="flex items-center gap-2 mb-3">
-            <Activity className="h-4 w-4 text-green-600" />
+            <Activity className="h-4 w-4 text-primary" />
             <h3 className="text-sm font-semibold text-green-800">
               {live.length} Live {live.length === 1 ? 'Session' : 'Sessions'} in Progress
             </h3>
@@ -375,7 +375,7 @@ function OverviewTab({ data, live, onSwitchTab }: {
               <div key={room.room_id} className="flex items-center gap-3 rounded-lg bg-white border border-green-100 p-3">
                 <div className="relative">
                   <Radio className="h-5 w-5 text-green-500" />
-                  <span className="absolute -top-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-green-500 animate-ping" />
+                  <span className="absolute -top-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-primary animate-ping" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-gray-800 truncate">{room.room_name}</p>
@@ -490,9 +490,9 @@ function OverviewTab({ data, live, onSwitchTab }: {
           {usersByRole.map((u) => {
             const Icon = ROLE_ICON_MAP[u.role] || Users;
             return (
-              <div key={u.role} className="flex items-center gap-3 rounded-lg border border-gray-100 p-3 hover:border-emerald-200 transition">
-                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-50">
-                  <Icon className="h-4 w-4 text-emerald-600" />
+              <div key={u.role} className="flex items-center gap-3 rounded-lg border border-gray-100 p-3 hover:border-primary/20 transition">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/5">
+                  <Icon className="h-4 w-4 text-primary" />
                 </div>
                 <div>
                   <p className="text-lg font-bold text-gray-900">{u.count}</p>
@@ -579,16 +579,16 @@ function LiveTab({ data, live }: { data: DashboardData | null; live: Room[] }) {
         <div className="flex items-center justify-between border-b border-gray-100 p-4">
           <div className="flex items-center gap-2">
             <div className="relative">
-              <Radio className="h-4 w-4 text-green-600" />
+              <Radio className="h-4 w-4 text-primary" />
               {live.length > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 h-2 w-2 rounded-full bg-green-500 animate-ping" />
+                <span className="absolute -top-0.5 -right-0.5 h-2 w-2 rounded-full bg-primary animate-ping" />
               )}
             </div>
             <h3 className="text-sm font-semibold text-gray-800">
               {live.length === 0 ? 'No live sessions' : `${live.length} live session${live.length === 1 ? '' : 's'}`}
             </h3>
           </div>
-          <a href="/owner/live" className="text-xs text-emerald-600 hover:text-emerald-700 font-medium flex items-center gap-1">
+          <a href="/owner/live" className="text-xs text-primary hover:text-primary font-medium flex items-center gap-1">
             Live Monitor <ChevronRight className="h-3 w-3" />
           </a>
         </div>
@@ -599,12 +599,12 @@ function LiveTab({ data, live }: { data: DashboardData | null; live: Room[] }) {
         ) : (
           <div className="grid grid-cols-1 gap-3 p-4 sm:grid-cols-2 lg:grid-cols-3">
             {live.map((room) => (
-              <div key={room.room_id} className="rounded-xl border border-green-200 bg-green-50 p-4 hover:border-green-300 hover:shadow-md transition">
+              <div key={room.room_id} className="rounded-xl border border-primary/20 bg-primary/5 p-4 hover:border-green-300 hover:shadow-md transition">
                 <div className="flex items-start justify-between mb-2">
                   <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-white">
-                    <Radio className="h-4 w-4 text-green-600" />
+                    <Radio className="h-4 w-4 text-primary" />
                   </div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-green-700 bg-white px-2 py-0.5 rounded-full">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-primary bg-white px-2 py-0.5 rounded-full">
                     LIVE
                   </span>
                 </div>
@@ -656,17 +656,17 @@ function ClassesTab({ data, live, rooms, filteredRooms, searchTerm, setSearchTer
       {/* ── Status Overview ── */}
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-5">
         <StatMini label="All Batches" value={summary.totalBatches} color="text-gray-700" />
-        <StatMini label="Live" value={summary.liveBatches} color="text-green-600" />
+        <StatMini label="Live" value={summary.liveBatches} color="text-primary" />
         <StatMini label="Scheduled" value={summary.scheduledBatches} color="text-blue-600" />
-        <StatMini label="Completed" value={summary.completedBatches} color="text-emerald-600" />
+        <StatMini label="Completed" value={summary.completedBatches} color="text-primary" />
         <StatMini label="Cancelled" value={summary.cancelledBatches} color="text-red-600" />
       </div>
 
       {/* ── Live Sessions ── */}
       {live.length > 0 && (
-        <div className="rounded-xl border border-green-200 bg-green-50 p-4">
+        <div className="rounded-xl border border-primary/20 bg-primary/5 p-4">
           <div className="flex items-center gap-2 mb-3">
-            <Activity className="h-4 w-4 text-green-600" />
+            <Activity className="h-4 w-4 text-primary" />
             <h3 className="text-sm font-semibold text-green-800">
               {live.length} Live {live.length === 1 ? 'Session' : 'Sessions'} in Progress
             </h3>
@@ -676,7 +676,7 @@ function ClassesTab({ data, live, rooms, filteredRooms, searchTerm, setSearchTer
               <div key={room.room_id} className="flex items-center gap-3 rounded-lg bg-white border border-green-100 p-3">
                 <div className="relative">
                   <Radio className="h-5 w-5 text-green-500" />
-                  <span className="absolute -top-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-green-500 animate-ping" />
+                  <span className="absolute -top-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-primary animate-ping" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-gray-800 truncate">{room.room_name}</p>
@@ -755,7 +755,7 @@ function ClassesTab({ data, live, rooms, filteredRooms, searchTerm, setSearchTer
         </div>
         <div className="flex items-center justify-between border-t border-gray-100 px-4 py-3 text-xs text-gray-400">
           <span>Showing {Math.min(filteredRooms.length, 50)} of {rooms.length} batches</span>
-          <a href="/academic-operator" className="text-emerald-600 hover:text-emerald-700 font-medium flex items-center gap-1">
+          <a href="/academic-operator" className="text-primary hover:text-primary font-medium flex items-center gap-1">
             Full Batch Management <ChevronRight className="h-3 w-3" />
           </a>
         </div>
@@ -849,7 +849,7 @@ function FinanceTab({ data }: { data: DashboardData | null }) {
           </div>
           {/* Legend strip */}
           <div className="flex justify-center gap-4 mt-2 text-[11px]">
-            <span className="flex items-center gap-1"><span className="h-2.5 w-2.5 rounded-full bg-emerald-600" /> Paid</span>
+            <span className="flex items-center gap-1"><span className="h-2.5 w-2.5 rounded-full bg-primary" /> Paid</span>
             <span className="flex items-center gap-1"><span className="h-2.5 w-2.5 rounded-full bg-amber-500" /> Pending</span>
             <span className="flex items-center gap-1"><span className="h-2.5 w-2.5 rounded-full bg-red-500" /> Overdue</span>
           </div>
@@ -860,7 +860,7 @@ function FinanceTab({ data }: { data: DashboardData | null }) {
       <div className="rounded-xl border border-gray-200 bg-white shadow-sm p-5">
         <div className="flex items-center justify-between mb-4">
           <SectionHeader icon={Briefcase} title="Payroll Summary" />
-          <a href="/hr" className="text-xs text-emerald-600 hover:text-emerald-700 font-medium flex items-center gap-1">
+          <a href="/hr" className="text-xs text-primary hover:text-primary font-medium flex items-center gap-1">
             Manage in HR <ChevronRight className="h-3 w-3" />
           </a>
         </div>
@@ -868,8 +868,8 @@ function FinanceTab({ data }: { data: DashboardData | null }) {
           <MiniStatCard label="Total Periods" value={payroll.totalPeriods} icon={Calendar} color="text-gray-600" bg="bg-gray-50" />
           <MiniStatCard label="Draft" value={payroll.draftPeriods} icon={FileText} color="text-amber-600" bg="bg-amber-50" />
           <MiniStatCard label="Finalized" value={payroll.finalizedPeriods} icon={FileCheck} color="text-blue-600" bg="bg-blue-50" />
-          <MiniStatCard label="Paid" value={payroll.paidPeriods} icon={CheckCircle2} color="text-green-600" bg="bg-green-50" />
-          <MiniStatCard label="Total Paid" value={money(payroll.totalPaidPaise)} icon={IndianRupee} color="text-emerald-600" bg="bg-emerald-50" />
+          <MiniStatCard label="Paid" value={payroll.paidPeriods} icon={CheckCircle2} color="text-primary" bg="bg-primary/5" />
+          <MiniStatCard label="Total Paid" value={money(payroll.totalPaidPaise)} icon={IndianRupee} color="text-primary" bg="bg-primary/5" />
         </div>
       </div>
 
@@ -881,7 +881,7 @@ function FinanceTab({ data }: { data: DashboardData | null }) {
               <h3 className="text-sm font-semibold text-gray-800">Recent Payments</h3>
               <p className="text-xs text-gray-400 mt-0.5">Last 10 received payments</p>
             </div>
-            <a href="/owner/invoices" className="text-xs text-emerald-600 hover:text-emerald-700 font-medium flex items-center gap-1">
+            <a href="/owner/invoices" className="text-xs text-primary hover:text-primary font-medium flex items-center gap-1">
               All Invoices <ChevronRight className="h-3 w-3" />
             </a>
           </div>
@@ -905,12 +905,12 @@ function FinanceTab({ data }: { data: DashboardData | null }) {
                         </div>
                       </div>
                     </td>
-                    <td className="px-4 py-3 font-semibold text-emerald-700">{money(p.amountPaise)}</td>
+                    <td className="px-4 py-3 font-semibold text-primary">{money(p.amountPaise)}</td>
                     <td className="px-4 py-3 text-xs text-gray-500">
                       {p.paidAt ? fmtDateBriefIST(new Date(p.paidAt)) : '—'}
                     </td>
                     <td className="px-4 py-3">
-                      <a href={`/api/v1/payment/receipt/${p.id}`} target="_blank" rel="noreferrer" className="text-xs text-emerald-600 hover:underline flex items-center gap-1">
+                      <a href={`/api/v1/payment/receipt/${p.id}`} target="_blank" rel="noreferrer" className="text-xs text-primary hover:underline flex items-center gap-1">
                         <Receipt className="h-3 w-3" /> View
                       </a>
                     </td>
@@ -943,17 +943,17 @@ function PayrollTab({ data }: { data: DashboardData | null }) {
 
   return (
     <div className="space-y-6">
-      <div className="rounded-xl border border-gray-200 bg-gradient-to-r from-emerald-50 to-teal-50 p-5">
+      <div className="rounded-xl border border-gray-200 bg-gradient-to-r from-primary/5 to-secondary/5 p-5">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-sm text-emerald-700 font-medium">Total Paid Out (lifetime)</p>
-            <p className="text-3xl font-bold text-emerald-800 mt-1">{money(payroll.totalPaidPaise)}</p>
-            <p className="text-xs text-emerald-700/70 mt-1">
+            <p className="text-sm text-primary font-medium">Total Paid Out (lifetime)</p>
+            <p className="text-3xl font-bold text-primary mt-1">{money(payroll.totalPaidPaise)}</p>
+            <p className="text-xs text-primary/70 mt-1">
               Across {payroll.paidPeriods} paid period{payroll.paidPeriods === 1 ? '' : 's'}
             </p>
           </div>
           <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-white/80 shadow-sm">
-            <Briefcase className="h-7 w-7 text-emerald-600" />
+            <Briefcase className="h-7 w-7 text-primary" />
           </div>
         </div>
       </div>
@@ -1000,7 +1000,7 @@ function ApprovalsTab({ data }: {
 
       {/* ── Approvals ── */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <a href="/academic-operator" className="group rounded-xl border border-gray-200 bg-white p-5 hover:border-emerald-200 hover:shadow-md transition-all">
+        <a href="/academic-operator" className="group rounded-xl border border-gray-200 bg-white p-5 hover:border-primary/20 hover:shadow-md transition-all">
           <div className="flex items-center gap-3 mb-2">
             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-red-50">
               <Ban className="h-5 w-5 text-red-500" />
@@ -1013,12 +1013,12 @@ function ApprovalsTab({ data }: {
               <span className="ml-auto text-xs bg-red-100 text-red-700 font-bold px-2 py-0.5 rounded-full">{pending.cancellations}</span>
             )}
           </div>
-          <p className="text-xs text-emerald-600 group-hover:text-emerald-700 font-medium flex items-center gap-1">
+          <p className="text-xs text-primary group-hover:text-primary font-medium flex items-center gap-1">
             Manage in Academic Ops <ChevronRight className="h-3 w-3" />
           </p>
         </a>
 
-        <a href="/academic-operator" className="group rounded-xl border border-gray-200 bg-white p-5 hover:border-emerald-200 hover:shadow-md transition-all">
+        <a href="/academic-operator" className="group rounded-xl border border-gray-200 bg-white p-5 hover:border-primary/20 hover:shadow-md transition-all">
           <div className="flex items-center gap-3 mb-2">
             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-50">
               <Send className="h-5 w-5 text-blue-500" />
@@ -1031,12 +1031,12 @@ function ApprovalsTab({ data }: {
               <span className="ml-auto text-xs bg-blue-100 text-blue-700 font-bold px-2 py-0.5 rounded-full">{pending.sessionRequests}</span>
             )}
           </div>
-          <p className="text-xs text-emerald-600 group-hover:text-emerald-700 font-medium flex items-center gap-1">
+          <p className="text-xs text-primary group-hover:text-primary font-medium flex items-center gap-1">
             Manage in Academic Ops <ChevronRight className="h-3 w-3" />
           </p>
         </a>
 
-        <a href="/coordinator" className="group rounded-xl border border-gray-200 bg-white p-5 hover:border-emerald-200 hover:shadow-md transition-all">
+        <a href="/coordinator" className="group rounded-xl border border-gray-200 bg-white p-5 hover:border-primary/20 hover:shadow-md transition-all">
           <div className="flex items-center gap-3 mb-2">
             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-50">
               <AlertTriangle className="h-5 w-5 text-amber-500" />
@@ -1049,7 +1049,7 @@ function ApprovalsTab({ data }: {
               <span className="ml-auto text-xs bg-amber-100 text-amber-700 font-bold px-2 py-0.5 rounded-full">{pending.alerts}</span>
             )}
           </div>
-          <p className="text-xs text-emerald-600 group-hover:text-emerald-700 font-medium flex items-center gap-1">
+          <p className="text-xs text-primary group-hover:text-primary font-medium flex items-center gap-1">
             View in Coordinator <ChevronRight className="h-3 w-3" />
           </p>
         </a>
@@ -1069,14 +1069,14 @@ function PeopleTab({ data }: { data: DashboardData | null }) {
   return (
     <div className="space-y-6">
       {/* ── Total Users Banner ── */}
-      <div className="rounded-xl border border-gray-200 bg-gradient-to-r from-emerald-50 to-teal-50 p-5">
+      <div className="rounded-xl border border-gray-200 bg-gradient-to-r from-primary/5 to-secondary/5 p-5">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-sm text-emerald-700 font-medium">Total Active Users</p>
-            <p className="text-3xl font-bold text-emerald-800 mt-1">{summary.totalUsers}</p>
+            <p className="text-sm text-primary font-medium">Total Active Users</p>
+            <p className="text-3xl font-bold text-primary mt-1">{summary.totalUsers}</p>
           </div>
           <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-white/80 shadow-sm">
-            <Users className="h-7 w-7 text-emerald-600" />
+            <Users className="h-7 w-7 text-primary" />
           </div>
         </div>
       </div>
@@ -1089,10 +1089,10 @@ function PeopleTab({ data }: { data: DashboardData | null }) {
             const Icon = ROLE_ICON_MAP[u.role] || Users;
             const pct = summary.totalUsers > 0 ? ((u.count / summary.totalUsers) * 100).toFixed(1) : '0';
             return (
-              <div key={u.role} className="rounded-xl border border-gray-100 p-4 hover:border-emerald-200 hover:shadow-sm transition">
+              <div key={u.role} className="rounded-xl border border-gray-100 p-4 hover:border-primary/20 hover:shadow-sm transition">
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-50">
-                    <Icon className="h-5 w-5 text-emerald-600" />
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/5">
+                    <Icon className="h-5 w-5 text-primary" />
                   </div>
                   <div>
                     <p className="text-2xl font-bold text-gray-900">{u.count}</p>
@@ -1100,7 +1100,7 @@ function PeopleTab({ data }: { data: DashboardData | null }) {
                   </div>
                 </div>
                 <div className="h-1.5 rounded-full bg-gray-100 overflow-hidden">
-                  <div className="h-full rounded-full bg-emerald-500 transition-all" style={{ width: `${pct}%` }} />
+                  <div className="h-full rounded-full bg-primary transition-all" style={{ width: `${pct}%` }} />
                 </div>
                 <p className="text-[10px] text-gray-400 mt-1">{pct}% of total</p>
               </div>
@@ -1117,7 +1117,7 @@ function PeopleTab({ data }: { data: DashboardData | null }) {
               <h3 className="text-sm font-semibold text-gray-800">Recently Added Users</h3>
               <p className="text-xs text-gray-400 mt-0.5">Latest team members and students</p>
             </div>
-            <a href="/hr" className="text-xs text-emerald-600 hover:text-emerald-700 font-medium flex items-center gap-1">
+            <a href="/hr" className="text-xs text-primary hover:text-primary font-medium flex items-center gap-1">
               Manage All Users <ChevronRight className="h-3 w-3" />
             </a>
           </div>
@@ -1157,15 +1157,15 @@ function PeopleTab({ data }: { data: DashboardData | null }) {
 function SectionHeader({ icon: Icon, title }: { icon: React.ElementType; title: string }) {
   return (
     <div className="flex items-center gap-2">
-      <Icon className="h-4 w-4 text-emerald-600" />
+      <Icon className="h-4 w-4 text-primary" />
       <h3 className="text-sm font-semibold text-gray-800">{title}</h3>
     </div>
   );
 }
 
 const KPI_VARIANTS: Record<string, { icon: string; light: string }> = {
-  primary: { icon: 'text-emerald-500', light: 'bg-emerald-50' },
-  success: { icon: 'text-green-500', light: 'bg-green-50' },
+  primary: { icon: 'text-primary', light: 'bg-primary/5' },
+  success: { icon: 'text-green-500', light: 'bg-primary/5' },
   info:    { icon: 'text-teal-500', light: 'bg-teal-50' },
   warning: { icon: 'text-amber-500', light: 'bg-amber-50' },
   danger:  { icon: 'text-red-500', light: 'bg-red-50' },
@@ -1184,7 +1184,7 @@ function KpiCard({ label, value, icon: Icon, variant = 'primary', pulse }: {
         {pulse && (
           <span className="relative flex h-3 w-3">
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
-            <span className="relative inline-flex h-3 w-3 rounded-full bg-green-500" />
+            <span className="relative inline-flex h-3 w-3 rounded-full bg-primary" />
           </span>
         )}
       </div>
@@ -1201,7 +1201,7 @@ function MiniStatCard({ label, value, icon: Icon, color, bg, pulse }: {
     <div className="flex items-center gap-2.5 rounded-lg border border-gray-100 p-3">
       <div className={`flex h-8 w-8 items-center justify-center rounded-lg ${bg} shrink-0 relative`}>
         <Icon className={`h-4 w-4 ${color}`} />
-        {pulse && <span className="absolute -top-0.5 -right-0.5 h-2 w-2 rounded-full bg-green-500 animate-ping" />}
+        {pulse && <span className="absolute -top-0.5 -right-0.5 h-2 w-2 rounded-full bg-primary animate-ping" />}
       </div>
       <div>
         <p className={`text-lg font-bold ${color}`}>{typeof value === 'number' ? value.toLocaleString() : value}</p>
@@ -1221,11 +1221,11 @@ function StatMini({ label, value, color }: { label: string; value: number; color
 }
 
 const QUICK_VARIANT: Record<string, string> = {
-  primary: 'bg-emerald-50 text-emerald-600',
+  primary: 'bg-primary/5 text-primary',
   info:    'bg-teal-50 text-teal-600',
   warning: 'bg-amber-50 text-amber-600',
   danger:  'bg-red-50 text-red-600',
-  success: 'bg-green-50 text-green-600',
+  success: 'bg-primary/5 text-primary',
   default: 'bg-gray-50 text-gray-600',
 };
 
@@ -1234,11 +1234,11 @@ function QuickLink({ href, icon: Icon, label, desc, variant = 'primary' }: {
 }) {
   const color = QUICK_VARIANT[variant] || QUICK_VARIANT.primary;
   return (
-    <a href={href} className="group flex flex-col rounded-xl border border-gray-200 bg-white p-4 hover:border-emerald-200 hover:shadow-md transition-all">
+    <a href={href} className="group flex flex-col rounded-xl border border-gray-200 bg-white p-4 hover:border-primary/20 hover:shadow-md transition-all">
       <div className={`flex h-9 w-9 items-center justify-center rounded-lg ${color} mb-3`}>
         <Icon className="h-4 w-4" />
       </div>
-      <p className="text-sm font-medium text-gray-800 group-hover:text-emerald-700 transition-colors">{label}</p>
+      <p className="text-sm font-medium text-gray-800 group-hover:text-primary transition-colors">{label}</p>
       <p className="text-xs text-gray-400 mt-0.5">{desc}</p>
     </a>
   );

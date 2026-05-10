@@ -168,7 +168,7 @@ export default function EnrollmentLinkModal({ open, onClose }: EnrollmentLinkMod
                 onClick={handleCopy}
                 className={`shrink-0 inline-flex items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-lg transition ${
                   copied
-                    ? 'bg-emerald-100 text-emerald-700'
+                    ? 'bg-primary/10 text-primary'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
               >
@@ -265,18 +265,18 @@ export default function EnrollmentLinkModal({ open, onClose }: EnrollmentLinkMod
 
           {/* Fee preview */}
           {matchedFee && (
-            <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-3 flex items-center gap-3">
-              <div className="shrink-0 w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center">
-                <IndianRupee className="w-4 h-4 text-emerald-600" />
+            <div className="rounded-lg border border-primary/20 bg-primary/5 p-3 flex items-center gap-3">
+              <div className="shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                <IndianRupee className="w-4 h-4 text-primary" />
               </div>
               <div>
-                <div className="text-sm font-semibold text-emerald-800">
+                <div className="text-sm font-semibold text-primary">
                   ₹{(matchedFee.fee_paise / 100).toLocaleString('en-IN')}
-                  <span className="font-normal text-emerald-600">
+                  <span className="font-normal text-primary">
                     {matchedFee.fee_unit === 'session' ? ' per session' : ' per year'}
                   </span>
                 </div>
-                <div className="text-xs text-emerald-600">
+                <div className="text-xs text-primary">
                   {category} · {BATCH_TYPE_LABELS[batchType] || batchType} · Grade {normalizeGrade(grade)}
                   {isSessionBased(batchType) && ' · 50 sessions min advance'}
                   {!isSessionBased(batchType) && ' · All subjects included'}

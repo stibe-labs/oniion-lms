@@ -211,8 +211,8 @@ export default function ConferenceUserView({
             <p className="text-[9px] sm:text-[10px] text-zinc-500">{totalCount} participant{totalCount !== 1 ? 's' : ''}</p>
           </div>
         </div>
-        <span className="flex items-center gap-1 sm:gap-1.5 rounded-full bg-emerald-600/15 px-2 sm:px-2.5 py-0.5 text-[10px] sm:text-[11px] font-medium text-emerald-400 shrink-0 ml-2">
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+        <span className="flex items-center gap-1 sm:gap-1.5 rounded-full bg-primary/15 px-2 sm:px-2.5 py-0.5 text-[10px] sm:text-[11px] font-medium text-primary shrink-0 ml-2">
+          <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
           Live
         </span>
       </div>
@@ -275,7 +275,7 @@ export default function ConferenceUserView({
                   <div
                     key={p.identity}
                     className={`relative overflow-hidden rounded-lg bg-zinc-900 aspect-video shrink-0 w-28 sm:w-auto cursor-pointer hover:ring-2 hover:ring-white/20 transition-all ${
-                      meta.conference_role === 'admin' ? 'ring-1 ring-emerald-500/30' : ''
+                      meta.conference_role === 'admin' ? 'ring-1 ring-primary/30' : ''
                     } ${isLocal ? 'ring-1 ring-blue-500/30' : ''}`}
                     onClick={() => setSpotlightIdentity(p.identity)}
                   >
@@ -303,7 +303,7 @@ export default function ConferenceUserView({
                   <div
                     key={p.identity}
                     className={`relative overflow-hidden rounded-lg sm:rounded-xl bg-zinc-900 min-h-[80px] sm:min-h-[120px] cursor-pointer hover:ring-2 hover:ring-white/20 transition-all ${
-                      meta.conference_role === 'admin' ? 'ring-1 ring-emerald-500/30' : ''
+                      meta.conference_role === 'admin' ? 'ring-1 ring-primary/30' : ''
                     } ${isLocal ? 'ring-1 ring-blue-500/30' : ''}`}
                     onClick={() => setSpotlightIdentity(p.identity)}
                   >
@@ -389,7 +389,7 @@ function ParticipantTile({
         <div className="flex items-center gap-1.5">
           <span className="shrink-0">
             {hasMic ? (
-              <svg className="h-3 w-3 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>
+              <svg className="h-3 w-3 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>
             ) : (
               <svg className="h-3 w-3 text-red-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="2" x2="22" y1="2" y2="22"/><path d="M18.89 13.23A7.12 7.12 0 0 0 19 12v-2"/><path d="M5 10v2a7 7 0 0 0 12 5.29"/><path d="M15 9.34V5a3 3 0 0 0-5.68-1.33"/><path d="M9 9v3a3 3 0 0 0 5.12 2.12"/></svg>
             )}
@@ -397,11 +397,11 @@ function ParticipantTile({
           <div className="min-w-0 flex-1">
             <span className={`block truncate font-medium text-white drop-shadow-sm ${size === 'small' ? 'text-[10px]' : 'text-xs'}`}>{displayName}</span>
             {subtitle && size !== 'small' && (
-              <span className="block truncate text-[10px] text-emerald-300/80 drop-shadow-sm">{subtitle}</span>
+              <span className="block truncate text-[10px] text-primary/80/80 drop-shadow-sm">{subtitle}</span>
             )}
           </div>
           {isAdmin && size !== 'small' && (
-            <span className="ml-auto shrink-0 rounded bg-emerald-600/80 px-1.5 py-0.5 text-[9px] font-bold text-white uppercase">Host</span>
+            <span className="ml-auto shrink-0 rounded bg-primary/80 px-1.5 py-0.5 text-[9px] font-bold text-white uppercase">Host</span>
           )}
         </div>
       </div>
@@ -437,7 +437,7 @@ function ScreenShareTile({ trackRef }: { trackRef: TrackReference }) {
         <AudioTrack trackRef={{ participant: trackRef.participant, publication: trackRef.participant.getTrackPublication(Track.Source.ScreenShareAudio)!, source: Track.Source.ScreenShareAudio } as TrackReference} />
       )}
       <div className="absolute top-2 left-2 sm:top-3 sm:left-3 flex items-center gap-1.5 sm:gap-2 rounded-full bg-black/60 backdrop-blur-sm px-2 sm:px-3 py-1 sm:py-1.5">
-        <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M13 3H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-3"/><polyline points="8 21 12 21 16 21"/><line x1="12" x2="12" y1="17" y2="21"/></svg>
+        <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M13 3H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-3"/><polyline points="8 21 12 21 16 21"/><line x1="12" x2="12" y1="17" y2="21"/></svg>
         <span className="text-[10px] sm:text-xs font-medium text-white truncate max-w-[120px] sm:max-w-none">{displayName}&apos;s screen</span>
       </div>
     </div>

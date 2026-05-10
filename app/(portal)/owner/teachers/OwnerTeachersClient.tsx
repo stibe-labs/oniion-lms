@@ -262,7 +262,7 @@ export default function OwnerTeachersClient({ userName, userEmail, userRole }: P
                 onClick={() => setFilter(f)}
                 className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium capitalize transition-colors ${
                   filter === f
-                    ? 'bg-emerald-600 text-white shadow-sm'
+                    ? 'bg-primary text-white shadow-sm'
                     : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                 }`}
               >
@@ -334,7 +334,7 @@ export default function OwnerTeachersClient({ userName, userEmail, userRole }: P
                         <p className="text-[10px]">Total</p>
                       </div>
                       <div className="text-center">
-                        <p className="text-sm font-bold text-emerald-600">{teacher.completed_classes}</p>
+                        <p className="text-sm font-bold text-primary">{teacher.completed_classes}</p>
                         <p className="text-[10px]">Done</p>
                       </div>
                       <div className="text-center">
@@ -377,7 +377,7 @@ export default function OwnerTeachersClient({ userName, userEmail, userRole }: P
                           onClick={() => setDetailTab('schedule')}
                           className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
                             detailTab === 'schedule'
-                              ? 'bg-emerald-600 text-white'
+                              ? 'bg-primary text-white'
                               : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                           }`}
                         >
@@ -389,7 +389,7 @@ export default function OwnerTeachersClient({ userName, userEmail, userRole }: P
                           onClick={() => setDetailTab('cancellations')}
                           className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
                             detailTab === 'cancellations'
-                              ? 'bg-emerald-600 text-white'
+                              ? 'bg-primary text-white'
                               : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                           }`}
                         >
@@ -473,11 +473,11 @@ function TeacherClassesPanel({ rooms }: { rooms: Room[] }) {
             className="flex items-center gap-3 rounded-lg border border-gray-100 bg-white px-3 py-2.5"
           >
             <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${
-              es === 'live' ? 'bg-green-50' :
+              es === 'live' ? 'bg-primary/5' :
               es === 'scheduled' ? 'bg-teal-50' :
               es === 'cancelled' ? 'bg-red-50' : 'bg-gray-100'
             }`}>
-              {es === 'live' && <Radio className="h-4 w-4 text-green-600" />}
+              {es === 'live' && <Radio className="h-4 w-4 text-primary" />}
               {es === 'scheduled' && <Calendar className="h-4 w-4 text-teal-600" />}
               {es === 'ended' && <CheckCircle2 className="h-4 w-4 text-gray-400" />}
               {es === 'cancelled' && <XCircle className="h-4 w-4 text-red-500" />}
@@ -534,11 +534,11 @@ function TeacherCancellationsPanel({ cancellations }: { cancellations: Cancellat
           className="flex items-center gap-3 rounded-lg border border-gray-100 bg-white px-3 py-2.5"
         >
           <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${
-            req.status === 'approved' ? 'bg-green-50' :
+            req.status === 'approved' ? 'bg-primary/5' :
             req.status === 'rejected' ? 'bg-red-50' :
             'bg-amber-50'
           }`}>
-            {req.status === 'approved' && <CheckCircle2 className="h-4 w-4 text-green-600" />}
+            {req.status === 'approved' && <CheckCircle2 className="h-4 w-4 text-primary" />}
             {req.status === 'rejected' && <XCircle className="h-4 w-4 text-red-500" />}
             {!['approved', 'rejected'].includes(req.status) && <Clock className="h-4 w-4 text-amber-600" />}
           </div>

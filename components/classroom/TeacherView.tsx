@@ -2629,13 +2629,13 @@ export default function TeacherView({
             className={cn(
               'flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-colors select-none',
               bcReplyActive
-                ? 'bg-emerald-600/30 text-emerald-300 ring-1 ring-emerald-500/60'
+                ? 'bg-primary/30 text-primary/80 ring-1 ring-primary/60'
                 : 'bg-[#292a2d] text-[#9aa0a6] hover:text-[#e8eaed] hover:bg-[#3c4043]',
             )}
             title={`Hold to talk privately to the ${bcLabel === 'AO' ? 'academic operator' : bcLabel === 'BC/AO' ? 'coordinator / academic operator' : 'batch coordinator'}`}
             aria-pressed={bcReplyActive}
           >
-            <span className={cn('h-2 w-2 rounded-full shrink-0', bcReplyActive ? 'bg-emerald-400 animate-pulse' : 'bg-[#5f6368]')} />
+            <span className={cn('h-2 w-2 rounded-full shrink-0', bcReplyActive ? 'bg-primary animate-pulse' : 'bg-[#5f6368]')} />
             <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
               <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
               <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
@@ -3001,7 +3001,7 @@ export default function TeacherView({
                           'absolute top-1.5 right-1.5 z-10 flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[9px] font-bold backdrop-blur-sm shadow-sm pointer-events-none',
                           isSleeping ? 'bg-red-600/80 text-white' :
                           isLowAtt ? 'bg-amber-500/80 text-white' :
-                          'bg-green-600/70 text-white'
+                          'bg-primary/70 text-white'
                         )}>
                           {isSleeping ? (
                             <svg className="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round"><path d="M2 4h4l2-2"/><path d="M6 8h4l2-2"/><path d="M10 12h4l2-2"/></svg>
@@ -3128,7 +3128,7 @@ export default function TeacherView({
             <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
               <div className="text-center space-y-5 animate-in fade-in duration-500">
                 <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-teal-500/20 ring-2 ring-teal-500/40">
-                  <svg className="h-12 w-12 text-teal-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                  <svg className="h-12 w-12 text-secondary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
                 </div>
                 <div>
                   <h2 className="text-xl font-bold text-white">Student is taking the exam</h2>
@@ -3159,7 +3159,7 @@ export default function TeacherView({
             <div className="absolute bottom-4 right-4 z-40 animate-in slide-in-from-right duration-300">
               <div className="flex items-center gap-3 rounded-xl bg-[#303134] px-4 py-3 shadow-xl border border-white/10">
                 <div className={`flex h-12 w-12 items-center justify-center rounded-full text-lg font-bold ${
-                  examResult.percentage >= 80 ? 'bg-emerald-500/20 text-emerald-400' :
+                  examResult.percentage >= 80 ? 'bg-primary/20 text-primary' :
                   examResult.percentage >= 50 ? 'bg-amber-500/20 text-amber-400' :
                   'bg-red-500/20 text-red-400'
                 }`}>
@@ -3429,12 +3429,12 @@ export default function TeacherView({
                 className={cn(
                   'flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-semibold transition-all',
                   examSent
-                    ? 'bg-teal-500/10 text-teal-400 border border-teal-500/20 cursor-default'
+                    ? 'bg-secondary/10 text-secondary border border-secondary/20 cursor-default'
                     : 'bg-teal-500 text-white hover:bg-teal-400 active:scale-95 shadow-lg shadow-teal-900/20',
                 )}
               >
                 <span className="flex items-center">{examSent ? (
-                  <svg className="h-4 w-4 text-teal-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                  <svg className="h-4 w-4 text-secondary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                 ) : (
                   <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
                 )}</span>
@@ -3615,12 +3615,12 @@ export default function TeacherView({
                           </div>
                           <div className="flex gap-1.5">
                             {req.bcHandled ? (
-                              <span className={cn('rounded-full px-2 py-0.5 text-[10px] font-bold', req.bcHandled === 'approved' ? 'bg-emerald-900/30 text-emerald-400' : 'bg-red-900/30 text-red-400')}>
+                              <span className={cn('rounded-full px-2 py-0.5 text-[10px] font-bold', req.bcHandled === 'approved' ? 'bg-primary/10 text-primary' : 'bg-red-900/30 text-red-400')}>
                                 BC {req.bcHandled === 'approved' ? '✓ Approved' : '✗ Denied'}
                               </span>
                             ) : (
                               <>
-                                <button onClick={() => approveRequest(req)} className="flex-1 rounded-lg py-1 text-[10px] font-semibold bg-emerald-900/30 text-emerald-400 hover:bg-emerald-900/50 transition-colors">Approve</button>
+                                <button onClick={() => approveRequest(req)} className="flex-1 rounded-lg py-1 text-[10px] font-semibold bg-primary/10 text-primary hover:bg-primary/20 transition-colors">Approve</button>
                                 <button onClick={() => denyRequest(req)} className="flex-1 rounded-lg py-1 text-[10px] font-semibold bg-red-900/30 text-red-400 hover:bg-red-900/50 transition-colors">Deny</button>
                               </>
                             )}
@@ -3653,12 +3653,12 @@ export default function TeacherView({
                           </div>
                           <div className="flex gap-1.5">
                             {req.bcHandled ? (
-                              <span className={cn('rounded-full px-2 py-0.5 text-[10px] font-bold', req.bcHandled === 'approved' ? 'bg-emerald-900/30 text-emerald-400' : 'bg-red-900/30 text-red-400')}>
+                              <span className={cn('rounded-full px-2 py-0.5 text-[10px] font-bold', req.bcHandled === 'approved' ? 'bg-primary/10 text-primary' : 'bg-red-900/30 text-red-400')}>
                                 BC {req.bcHandled === 'approved' ? '✓ Approved' : '✗ Denied'}
                               </span>
                             ) : (
                               <>
-                                <button onClick={() => approveLeave(req)} className="flex-1 rounded-lg py-1 text-[10px] font-semibold bg-emerald-900/30 text-emerald-400 hover:bg-emerald-900/50 transition-colors">Allow</button>
+                                <button onClick={() => approveLeave(req)} className="flex-1 rounded-lg py-1 text-[10px] font-semibold bg-primary/10 text-primary hover:bg-primary/20 transition-colors">Allow</button>
                                 <button onClick={() => denyLeave(req)} className="flex-1 rounded-lg py-1 text-[10px] font-semibold bg-red-900/30 text-red-400 hover:bg-red-900/50 transition-colors">Deny</button>
                               </>
                             )}
@@ -3691,12 +3691,12 @@ export default function TeacherView({
                           </div>
                           <div className="flex gap-1.5">
                             {req.bcHandled ? (
-                              <span className={cn('rounded-full px-2 py-0.5 text-[10px] font-bold', req.bcHandled === 'approved' ? 'bg-emerald-900/30 text-emerald-400' : 'bg-red-900/30 text-red-400')}>
+                              <span className={cn('rounded-full px-2 py-0.5 text-[10px] font-bold', req.bcHandled === 'approved' ? 'bg-primary/10 text-primary' : 'bg-red-900/30 text-red-400')}>
                                 BC {req.bcHandled === 'approved' ? '✓ Approved' : '✗ Denied'}
                               </span>
                             ) : (
                               <>
-                                <button onClick={() => approveRejoin(req)} className="flex-1 rounded-lg py-1 text-[10px] font-semibold bg-emerald-900/30 text-emerald-400 hover:bg-emerald-900/50 transition-colors">Allow</button>
+                                <button onClick={() => approveRejoin(req)} className="flex-1 rounded-lg py-1 text-[10px] font-semibold bg-primary/10 text-primary hover:bg-primary/20 transition-colors">Allow</button>
                                 <button onClick={() => denyRejoin(req)} className="flex-1 rounded-lg py-1 text-[10px] font-semibold bg-red-900/30 text-red-400 hover:bg-red-900/50 transition-colors">Deny</button>
                               </>
                             )}
@@ -3725,7 +3725,7 @@ export default function TeacherView({
                             </div>
                           </div>
                           <div className="flex gap-1.5">
-                            <button onClick={() => handleExtensionAction(req, 'approve')} disabled={extensionActionLoading === req.request_id} className="flex-1 rounded-lg py-1 text-[10px] font-semibold bg-emerald-900/30 text-emerald-400 hover:bg-emerald-900/50 disabled:opacity-50 transition-colors">{extensionActionLoading === req.request_id ? '…' : 'Approve'}</button>
+                            <button onClick={() => handleExtensionAction(req, 'approve')} disabled={extensionActionLoading === req.request_id} className="flex-1 rounded-lg py-1 text-[10px] font-semibold bg-primary/10 text-primary hover:bg-primary/20 disabled:opacity-50 transition-colors">{extensionActionLoading === req.request_id ? '…' : 'Approve'}</button>
                             <button onClick={() => handleExtensionAction(req, 'reject')} disabled={extensionActionLoading === req.request_id} className="flex-1 rounded-lg py-1 text-[10px] font-semibold bg-red-900/30 text-red-400 hover:bg-red-900/50 disabled:opacity-50 transition-colors">Deny</button>
                           </div>
                         </div>
@@ -3743,7 +3743,7 @@ export default function TeacherView({
                           <span className="text-[11px] font-semibold text-[#8ab4f8]">Join Requests</span>
                           <span className="bg-[#4285f4]/20 text-[#8ab4f8] text-[9px] font-bold rounded-full px-1.5">{ocJoinRequests.length}</span>
                         </div>
-                        <button onClick={() => ocJoinRequests.forEach(r => handleOcJoinAction(r.id, 'approve'))} className="text-[9px] text-emerald-400 hover:text-emerald-300 transition-colors">Approve all</button>
+                        <button onClick={() => ocJoinRequests.forEach(r => handleOcJoinAction(r.id, 'approve'))} className="text-[9px] text-primary hover:text-primary/80 transition-colors">Approve all</button>
                       </div>
                       {ocJoinRequests.map((req) => (
                         <div key={req.id} className="px-3 py-2.5 border-b border-[#2d2e32]/60 last:border-0 hover:bg-[#2d2e32]/40 transition-colors">
@@ -3755,7 +3755,7 @@ export default function TeacherView({
                             </div>
                           </div>
                           <div className="flex gap-1.5">
-                            <button onClick={() => handleOcJoinAction(req.id, 'approve')} className="flex-1 rounded-lg py-1 text-[10px] font-semibold bg-emerald-900/30 text-emerald-400 hover:bg-emerald-900/50 transition-colors">Approve</button>
+                            <button onClick={() => handleOcJoinAction(req.id, 'approve')} className="flex-1 rounded-lg py-1 text-[10px] font-semibold bg-primary/10 text-primary hover:bg-primary/20 transition-colors">Approve</button>
                             <button onClick={() => handleOcJoinAction(req.id, 'deny')} className="flex-1 rounded-lg py-1 text-[10px] font-semibold bg-red-900/30 text-red-400 hover:bg-red-900/50 transition-colors">Deny</button>
                           </div>
                         </div>
@@ -3804,17 +3804,17 @@ export default function TeacherView({
                         <div className="flex items-center gap-2">
                           <div className="flex-1 h-2 rounded-full bg-[#3c4043] overflow-hidden">
                             <div
-                              className={cn('h-full rounded-full transition-all', avg >= 70 ? 'bg-green-500' : avg >= 40 ? 'bg-amber-500' : 'bg-red-500')}
+                              className={cn('h-full rounded-full transition-all', avg >= 70 ? 'bg-primary' : avg >= 40 ? 'bg-amber-500' : 'bg-red-500')}
                               style={{ width: `${avg}%` }}
                             />
                           </div>
-                          <span className={cn('text-sm font-bold', avg >= 70 ? 'text-green-400' : avg >= 40 ? 'text-amber-400' : 'text-red-400')}>
+                          <span className={cn('text-sm font-bold', avg >= 70 ? 'text-primary' : avg >= 40 ? 'text-amber-400' : 'text-red-400')}>
                             {avg}%
                           </span>
                         </div>
                         {allStudents.length > 0 && (
                           <div className="grid grid-cols-4 gap-1 text-[10px] text-center">
-                            <div className="rounded bg-green-900/30 px-1 py-0.5 text-green-400 flex items-center justify-center gap-0.5">{attentiveCount} <svg className="h-2.5 w-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+                            <div className="rounded bg-green-900/30 px-1 py-0.5 text-primary flex items-center justify-center gap-0.5">{attentiveCount} <svg className="h-2.5 w-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
                             <div className="rounded bg-red-900/30 px-1 py-0.5 text-red-400 flex items-center justify-center gap-0.5">{sleepingCount} <svg className="h-2.5 w-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round"><path d="M2 4h4l2-2"/><path d="M6 8h4l2-2"/><path d="M10 12h4l2-2"/></svg></div>
                             <div className="rounded bg-purple-900/30 px-1 py-0.5 text-purple-400 flex items-center justify-center gap-0.5">{tabSwitched} <svg className="h-2.5 w-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div>
                             <div className="rounded bg-amber-900/30 px-1 py-0.5 text-amber-400 flex items-center justify-center gap-0.5">{notInFrame} <svg className="h-2.5 w-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></div>
@@ -3831,7 +3831,7 @@ export default function TeacherView({
                     const stateConfig: Record<string, { label: string; color: string }> = {
                       eyes_closed:    { label: 'Sleeping', color: 'text-red-400' },
                       tab_switched:   { label: 'Tab Switched', color: 'text-purple-400' },
-                      in_exam:        { label: 'Taking Exam', color: 'text-teal-400' },
+                      in_exam:        { label: 'Taking Exam', color: 'text-secondary' },
                       not_in_frame:   { label: 'Not in Frame', color: 'text-red-400' },
                       multiple_faces: { label: 'Multiple Faces', color: 'text-amber-400' },
                       head_turned:    { label: 'Not Looking', color: 'text-amber-400' },
@@ -3840,7 +3840,7 @@ export default function TeacherView({
                       inactive:       { label: 'Inactive', color: 'text-amber-400' },
                       distracted:     { label: 'Distracted', color: 'text-amber-400' },
                       low_engagement: { label: 'Low Engagement', color: 'text-amber-400' },
-                      attentive:      { label: 'Attentive', color: 'text-green-400' },
+                      attentive:      { label: 'Attentive', color: 'text-primary' },
                       // v3 positive/neutral states — NOT critical, NOT distracted
                       writing_notes:  { label: '📝 Writing', color: 'text-blue-400' },
                       brief_absence:  { label: 'Briefly Away', color: 'text-sky-400' },
@@ -3861,7 +3861,7 @@ export default function TeacherView({
                       <div className="flex items-center justify-between">
                         <span className="text-xs font-medium text-[#e8eaed] truncate">{att.name}</span>
                         <span className={cn('text-xs font-bold',
-                          att.attentionScore >= 70 ? 'text-green-400' :
+                          att.attentionScore >= 70 ? 'text-primary' :
                           att.attentionScore >= 40 ? 'text-amber-400' : 'text-red-400',
                         )}>{att.attentionScore}%</span>
                       </div>
@@ -4236,10 +4236,10 @@ export default function TeacherView({
                       )}
                       <div className="flex items-center justify-between">
                         <p className="text-sm font-medium text-[#e8eaed]">Generating Questions…</p>
-                        <span className="text-xs font-mono text-teal-400">{mm}:{ss.toString().padStart(2, '0')}</span>
+                        <span className="text-xs font-mono text-secondary">{mm}:{ss.toString().padStart(2, '0')}</span>
                       </div>
                       <div className="h-2 rounded-full bg-white/10 overflow-hidden">
-                        <div className="h-full rounded-full bg-linear-to-r from-teal-500 to-emerald-500 transition-all duration-700" style={{ width: `${pct}%` }} />
+                        <div className="h-full rounded-full bg-linear-to-r from-secondary to-primary transition-all duration-700" style={{ width: `${pct}%` }} />
                       </div>
                       <div className="flex justify-between">
                         {stages.map((s, i) => (
@@ -4248,7 +4248,7 @@ export default function TeacherView({
                               i < activeIdx ? 'bg-teal-400' : i === activeIdx ? 'bg-teal-400 animate-pulse' : 'bg-white/20'
                             }`} />
                             <span className={`text-[9px] leading-tight text-center max-w-[52px] ${
-                              i <= activeIdx ? 'text-teal-300' : 'text-[#5f6368]'
+                              i <= activeIdx ? 'text-secondary/80' : 'text-[#5f6368]'
                             }`}>{s}</span>
                           </div>
                         ))}
@@ -4264,8 +4264,8 @@ export default function TeacherView({
                   return (
                     <div className="space-y-3">
                       {/* Topic header */}
-                      <div className="rounded-xl bg-teal-500/10 border border-teal-500/20 px-4 py-3">
-                        <p className="text-sm font-semibold text-teal-300">
+                      <div className="rounded-xl bg-secondary/10 border border-secondary/20 px-4 py-3">
+                        <p className="text-sm font-semibold text-secondary/80">
                           {topicInfo?.title || 'Questions ready'}
                         </p>
                         <p className="text-xs text-[#9aa0a6] mt-1">
@@ -4312,7 +4312,7 @@ export default function TeacherView({
                                       className={cn(
                                         'rounded-md px-2.5 py-1.5 text-[11px] border',
                                         oi === q.correct_answer
-                                          ? 'border-emerald-500/40 bg-emerald-900/20 text-emerald-300'
+                                          ? 'border-primary/40 bg-primary/15/20 text-primary/80'
                                           : 'border-[#3c4043]/50 bg-[#202124] text-[#9aa0a6]',
                                       )}
                                     >
@@ -4352,14 +4352,14 @@ export default function TeacherView({
 
         {/* ── BC whisper alert banner ─────────────────────────── */}
         {bcWhisperActive && (
-          <div className="fixed top-4 left-1/2 z-[100] -translate-x-1/2 flex items-center gap-3 rounded-xl border border-emerald-500/40 bg-[#1a2e1e]/95 px-5 py-3 shadow-2xl backdrop-blur-sm">
+          <div className="fixed top-4 left-1/2 z-[100] -translate-x-1/2 flex items-center gap-3 rounded-xl border border-primary/40 bg-[#1a2e1e]/95 px-5 py-3 shadow-2xl backdrop-blur-sm">
             <span className="relative flex h-3 w-3 shrink-0">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-              <span className="relative inline-flex h-3 w-3 rounded-full bg-emerald-400" />
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75" />
+              <span className="relative inline-flex h-3 w-3 rounded-full bg-primary" />
             </span>
             <div className="flex flex-col">
-              <span className="text-xs font-semibold text-emerald-300">{bcWhisperName} is talking to you</span>
-              <span className="text-[10px] text-emerald-400/70">Private message — only you can hear this</span>
+              <span className="text-xs font-semibold text-primary/80">{bcWhisperName} is talking to you</span>
+              <span className="text-[10px] text-primary/70">Private message — only you can hear this</span>
             </div>
           </div>
         )}

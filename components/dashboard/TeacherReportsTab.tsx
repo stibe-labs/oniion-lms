@@ -77,7 +77,7 @@ const SEVERITY_STYLES: Record<string, { bg: string; text: string; badge: string 
 const STATUS_STYLES: Record<string, { bg: string; text: string; icon: typeof Clock }> = {
   open:          { bg: 'bg-red-100',    text: 'text-red-700',    icon: AlertTriangle },
   investigating: { bg: 'bg-amber-100',  text: 'text-amber-700',  icon: Eye },
-  resolved:      { bg: 'bg-green-100',  text: 'text-green-700',  icon: CheckCircle2 },
+  resolved:      { bg: 'bg-primary/10',  text: 'text-primary',  icon: CheckCircle2 },
   dismissed:     { bg: 'bg-gray-100',   text: 'text-gray-500',   icon: X },
 };
 
@@ -147,7 +147,7 @@ export default function TeacherReportsTab() {
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
           <SummaryCard label="Open" count={summary.open_count} color="text-red-600" bg="bg-red-50" icon={AlertTriangle} />
           <SummaryCard label="Investigating" count={summary.investigating_count} color="text-amber-600" bg="bg-amber-50" icon={Eye} />
-          <SummaryCard label="Resolved" count={summary.resolved_count} color="text-green-600" bg="bg-green-50" icon={CheckCircle2} />
+          <SummaryCard label="Resolved" count={summary.resolved_count} color="text-primary" bg="bg-primary/5" icon={CheckCircle2} />
           <SummaryCard label="Dismissed" count={summary.dismissed_count} color="text-gray-500" bg="bg-gray-50" icon={X} />
           <SummaryCard label="Critical Active" count={summary.critical_active} color="text-red-700" bg="bg-red-100" icon={Shield} />
         </div>
@@ -161,7 +161,7 @@ export default function TeacherReportsTab() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search teacher, student, room..."
-            className="w-full rounded-xl border border-gray-200 bg-white pl-9 pr-3 py-2 text-sm placeholder:text-gray-400 focus:border-emerald-300 focus:outline-none focus:ring-2 focus:ring-emerald-100"
+            className="w-full rounded-xl border border-gray-200 bg-white pl-9 pr-3 py-2 text-sm placeholder:text-gray-400 focus:border-emerald-300 focus:outline-none focus:ring-2 focus:ring-primary/15"
           />
         </div>
         <select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}
@@ -180,7 +180,7 @@ export default function TeacherReportsTab() {
           <option value="medium">Medium</option>
           <option value="low">Low</option>
         </select>
-        <button onClick={fetchReports} className="rounded-xl border border-gray-200 bg-white p-2 text-gray-500 hover:text-emerald-600 hover:border-emerald-300 transition-colors">
+        <button onClick={fetchReports} className="rounded-xl border border-gray-200 bg-white p-2 text-gray-500 hover:text-primary hover:border-emerald-300 transition-colors">
           <RefreshCw className={cn('h-4 w-4', loading && 'animate-spin')} />
         </button>
       </div>
@@ -276,7 +276,7 @@ export default function TeacherReportsTab() {
                     {report.resolution && (
                       <div className="mb-4">
                         <p className="text-[10px] uppercase tracking-wider text-gray-400 font-semibold mb-1">Resolution</p>
-                        <div className="rounded-lg bg-green-50 border border-green-200 p-3">
+                        <div className="rounded-lg bg-primary/5 border border-primary/20 p-3">
                           <p className="text-sm text-green-800 leading-relaxed">{report.resolution}</p>
                         </div>
                       </div>
@@ -296,7 +296,7 @@ export default function TeacherReportsTab() {
                         <ActionBtn
                           label="Mark Resolved"
                           loading={isActioning}
-                          className="bg-green-600 hover:bg-green-700 text-white"
+                          className="bg-primary hover:bg-green-700 text-white"
                           onClick={() => {
                             const resolution = prompt('Enter resolution notes:');
                             if (resolution !== null) {

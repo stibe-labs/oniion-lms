@@ -98,7 +98,7 @@ function demoCombinedStatus(status: string, outcome: string | null): { label: st
     case 'submitted':    return { label: 'Registered', style: 'bg-blue-100 text-blue-700 border-blue-200' };
     case 'pending_teacher': return { label: 'Pending Teacher', style: 'bg-amber-100 text-amber-700 border-amber-200' };
     case 'accepted':     return { label: 'Demo Scheduled', style: 'bg-indigo-100 text-indigo-700 border-indigo-200' };
-    case 'live':         return { label: '● Live Now', style: 'bg-emerald-100 text-emerald-700 border-emerald-200' };
+    case 'live':         return { label: '● Live Now', style: 'bg-primary/10 text-primary border-primary/20' };
     case 'rejected':     return { label: 'Teacher Rejected', style: 'bg-red-100 text-red-700 border-red-200' };
     case 'expired':      return { label: 'Expired', style: 'bg-gray-100 text-gray-500 border-gray-200' };
     case 'cancelled':    return { label: 'Cancelled', style: 'bg-gray-100 text-gray-500 border-gray-200' };
@@ -106,7 +106,7 @@ function demoCombinedStatus(status: string, outcome: string | null): { label: st
   // completed — use outcome for clear status
   if (status === 'completed') {
     switch (outcome) {
-      case 'completed_with_exam': return { label: 'Completed + Exam', style: 'bg-emerald-100 text-emerald-700 border-emerald-200' };
+      case 'completed_with_exam': return { label: 'Completed + Exam', style: 'bg-primary/10 text-primary border-primary/20' };
       case 'student_no_show':     return { label: 'Student No-Show', style: 'bg-red-100 text-red-700 border-red-200' };
       case 'cancelled_by_teacher': return { label: 'Ended Early', style: 'bg-amber-100 text-amber-700 border-amber-200' };
       case 'time_expired':        return { label: 'Time Expired', style: 'bg-gray-100 text-gray-600 border-gray-200' };
@@ -160,7 +160,7 @@ function outcomeLabel(outcome: string | null): string {
 
 function outcomeBadgeStyle(outcome: string | null): string {
   switch (outcome) {
-    case 'completed_with_exam': return 'bg-emerald-100 text-emerald-700 border-emerald-200';
+    case 'completed_with_exam': return 'bg-primary/10 text-primary border-primary/20';
     case 'completed': return 'bg-blue-100 text-blue-700 border-blue-200';
     case 'student_no_show': return 'bg-red-100 text-red-700 border-red-200';
     case 'cancelled_by_teacher': return 'bg-amber-100 text-amber-700 border-amber-200';
@@ -431,7 +431,7 @@ export default function DemoTab() {
         >
           <UserCheck className="h-4 w-4" />
           Student Leads
-          <span className="text-xs bg-emerald-100 text-emerald-700 rounded-full px-1.5 py-0.5 ml-0.5">
+          <span className="text-xs bg-primary/10 text-primary rounded-full px-1.5 py-0.5 ml-0.5">
             {leads.length}
           </span>
         </button>
@@ -446,7 +446,7 @@ export default function DemoTab() {
           <div className="rounded-xl border border-gray-200 bg-white shadow-sm p-5">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
-                <User className="h-5 w-5 text-emerald-600" />
+                <User className="h-5 w-5 text-primary" />
                 <h3 className="font-semibold text-gray-900">All Teachers</h3>
                 <Badge variant="success" label={`${teachers.filter(t => t.isFree).length} free now`} />
                 <span className="text-xs text-gray-400">{teachers.length} total</span>
@@ -467,10 +467,10 @@ export default function DemoTab() {
             ) : (
               <div className="space-y-2">
                 {teachers.map(t => (
-                  <div key={t.email} className={`rounded-lg border p-3 ${t.isFree ? 'border-emerald-200 bg-emerald-50/50' : 'border-gray-200 bg-gray-50'}`}>
+                  <div key={t.email} className={`rounded-lg border p-3 ${t.isFree ? 'border-primary/20 bg-primary/5/50' : 'border-gray-200 bg-gray-50'}`}>
                     <div className="flex items-center gap-3">
                       <div className={`h-9 w-9 rounded-full flex items-center justify-center text-sm font-bold shrink-0 ${
-                        t.isFree ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-200 text-gray-500'
+                        t.isFree ? 'bg-primary/10 text-primary' : 'bg-gray-200 text-gray-500'
                       }`}>
                         {t.name.charAt(0).toUpperCase()}
                       </div>
@@ -479,7 +479,7 @@ export default function DemoTab() {
                           <span className="text-sm font-medium text-gray-900 truncate">{t.name}</span>
                           <span className={`inline-flex items-center rounded-full px-1.5 py-0.5 text-[10px] font-semibold ${
                             t.isFree
-                              ? 'bg-emerald-100 text-emerald-700 border border-emerald-200'
+                              ? 'bg-primary/10 text-primary border border-primary/20'
                               : 'bg-amber-100 text-amber-700 border border-amber-200'
                           }`}>
                             {t.isFree ? '● Free' : '● Busy'}
@@ -501,7 +501,7 @@ export default function DemoTab() {
                             Next: {new Date(t.schedule[0].start).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true, timeZone: 'Asia/Kolkata' })}
                           </div>
                         ) : (
-                          <div className="text-[10px] text-emerald-500">No upcoming sessions</div>
+                          <div className="text-[10px] text-primary">No upcoming sessions</div>
                         )}
                       </div>
                     </div>
@@ -557,7 +557,7 @@ export default function DemoTab() {
                   onClick={() => { setFilter(key); setSelected(new Set()); }}
                   className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
                     filter === key
-                      ? 'bg-emerald-600 text-white shadow-sm'
+                      ? 'bg-primary text-white shadow-sm'
                       : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
                   }`}
                 >
@@ -580,7 +580,7 @@ export default function DemoTab() {
                   onClick={() => toggleSelectAll(filtered)}
                   className="text-xs text-gray-600 hover:text-gray-900 flex items-center gap-1.5 font-medium"
                 >
-                  {allFilteredSelected ? <CheckSquare className="h-4 w-4 text-emerald-600" /> : <Square className="h-4 w-4" />}
+                  {allFilteredSelected ? <CheckSquare className="h-4 w-4 text-primary" /> : <Square className="h-4 w-4" />}
                   {allFilteredSelected ? 'Deselect All' : 'Select All'}
                 </button>
                 <span className="text-sm font-medium text-gray-700">
@@ -612,7 +612,7 @@ export default function DemoTab() {
                 <div
                   key={req.id}
                   className={`rounded-xl border bg-white shadow-sm hover:shadow-md transition-all ${
-                    selected.has(req.id) ? 'border-emerald-400 ring-1 ring-emerald-200' : 'border-gray-200'
+                    selected.has(req.id) ? 'border-primary ring-1 ring-primary/20' : 'border-gray-200'
                   }`}
                 >
                   {/* ── Top bar: checkbox + link + status ── */}
@@ -620,10 +620,10 @@ export default function DemoTab() {
                     <div className="flex items-center gap-2 min-w-0">
                       <button
                         onClick={() => toggleSelect(req.id)}
-                        className="shrink-0 text-gray-400 hover:text-emerald-600 transition-colors"
+                        className="shrink-0 text-gray-400 hover:text-primary transition-colors"
                       >
                         {selected.has(req.id)
-                          ? <CheckSquare className="h-4 w-4 text-emerald-600" />
+                          ? <CheckSquare className="h-4 w-4 text-primary" />
                           : <Square className="h-4 w-4" />
                         }
                       </button>
@@ -637,7 +637,7 @@ export default function DemoTab() {
                         title="Copy link"
                       >
                         {copiedId === req.demo_link_id ? (
-                          <CheckCircle className="h-3.5 w-3.5 text-green-600" />
+                          <CheckCircle className="h-3.5 w-3.5 text-primary" />
                         ) : (
                           <Copy className="h-3.5 w-3.5" />
                         )}
@@ -664,7 +664,7 @@ export default function DemoTab() {
                   {req.student_name ? (
                     <div className="mx-4 mb-3 rounded-lg border border-gray-100 bg-gray-50 p-3">
                       <div className="flex items-start gap-3">
-                        <div className="h-10 w-10 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-sm font-bold shrink-0">
+                        <div className="h-10 w-10 rounded-full bg-primary/10 text-primary flex items-center justify-center text-sm font-bold shrink-0">
                           {req.student_name.charAt(0).toUpperCase()}
                         </div>
                         <div className="min-w-0 flex-1">
@@ -698,7 +698,7 @@ export default function DemoTab() {
                           {(req.portions || (req.sample_portions && req.sample_portions.length > 0)) && (
                             <div className="mt-2 flex flex-wrap gap-1">
                               {req.sample_portions?.map(p => (
-                                <span key={p} className="inline-flex items-center rounded-full bg-emerald-50 border border-emerald-200 px-2 py-0.5 text-[11px] font-medium text-emerald-700">
+                                <span key={p} className="inline-flex items-center rounded-full bg-primary/5 border border-primary/20 px-2 py-0.5 text-[11px] font-medium text-primary">
                                   {p}
                                 </span>
                               ))}
@@ -736,8 +736,8 @@ export default function DemoTab() {
                           disabled={sendingWA === req.id || !waPhones[req.id]?.trim()}
                           className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
                             waSent.has(req.id)
-                              ? 'bg-green-100 text-green-700 border border-green-200'
-                              : 'bg-green-600 text-white hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed'
+                              ? 'bg-primary/10 text-primary border border-primary/20'
+                              : 'bg-primary text-white hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed'
                           }`}
                         >
                           {sendingWA === req.id ? (
@@ -761,7 +761,7 @@ export default function DemoTab() {
                         {req.exam_grade && (
                           <span className={`ml-auto inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-bold ${
                             req.exam_grade === 'A+' || req.exam_grade === 'A'
-                              ? 'bg-emerald-100 text-emerald-700 border border-emerald-200'
+                              ? 'bg-primary/10 text-primary border border-primary/20'
                               : req.exam_grade === 'B+' || req.exam_grade === 'B'
                                 ? 'bg-blue-100 text-blue-700 border border-blue-200'
                                 : 'bg-amber-100 text-amber-700 border border-amber-200'
@@ -890,7 +890,7 @@ export default function DemoTab() {
                     onClick={() => toggleSelectAll(leads)}
                     className="text-xs text-gray-600 hover:text-gray-900 flex items-center gap-1.5 font-medium"
                   >
-                    {allLeadsSelected ? <CheckSquare className="h-4 w-4 text-emerald-600" /> : <Square className="h-4 w-4" />}
+                    {allLeadsSelected ? <CheckSquare className="h-4 w-4 text-primary" /> : <Square className="h-4 w-4" />}
                     {allLeadsSelected ? 'Deselect All' : 'Select All'}
                   </button>
                   <span className="text-sm font-medium text-gray-700">
@@ -911,7 +911,7 @@ export default function DemoTab() {
               {/* Table header */}
               <div className="hidden sm:grid grid-cols-[30px_1fr_1fr_80px_100px_70px_120px_80px_110px] gap-4 px-4 py-3 border-b border-gray-100 bg-gray-50 text-xs font-semibold text-gray-500 uppercase">
                 <button onClick={() => toggleSelectAll(leads)} className="flex items-center justify-center">
-                  {allLeadsSelected ? <CheckSquare className="h-4 w-4 text-emerald-600" /> : <Square className="h-4 w-4 text-gray-400" />}
+                  {allLeadsSelected ? <CheckSquare className="h-4 w-4 text-primary" /> : <Square className="h-4 w-4 text-gray-400" />}
                 </button>
                 <span>Student</span>
                 <span>Contact</span>
@@ -932,11 +932,11 @@ export default function DemoTab() {
                   <div key={req.id} className={`sm:grid sm:grid-cols-[30px_1fr_1fr_80px_100px_70px_120px_80px_110px] gap-4 px-4 py-3 items-center hover:bg-gray-50 transition-colors ${selected.has(req.id) ? 'bg-red-50/50' : ''}`}>
                     {/* Checkbox */}
                     <button onClick={() => toggleSelect(req.id)} className="hidden sm:flex items-center justify-center">
-                      {selected.has(req.id) ? <CheckSquare className="h-4 w-4 text-emerald-600" /> : <Square className="h-4 w-4 text-gray-300 hover:text-gray-500" />}
+                      {selected.has(req.id) ? <CheckSquare className="h-4 w-4 text-primary" /> : <Square className="h-4 w-4 text-gray-300 hover:text-gray-500" />}
                     </button>
                     {/* Student */}
                     <div className="flex items-center gap-2.5 min-w-0">
-                      <div className="h-8 w-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-bold shrink-0">
+                      <div className="h-8 w-8 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold shrink-0">
                         {req.student_name!.charAt(0).toUpperCase()}
                       </div>
                       <div className="min-w-0">
@@ -985,13 +985,13 @@ export default function DemoTab() {
                     {/* Action */}
                     <div className="flex justify-end mt-2 sm:mt-0">
                       {isExisting ? (
-                        <span className="inline-flex items-center gap-1 text-[11px] font-medium text-emerald-600 bg-emerald-50 border border-emerald-200 rounded-full px-2.5 py-1">
+                        <span className="inline-flex items-center gap-1 text-[11px] font-medium text-primary bg-primary/5 border border-primary/20 rounded-full px-2.5 py-1">
                           <CheckCircle className="h-3 w-3" /> Student Added
                         </span>
                       ) : (
                         <button
                           onClick={() => setConvertingLead(req)}
-                          className="inline-flex items-center gap-1 text-[11px] font-semibold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg px-3 py-1.5 transition-colors shadow-sm"
+                          className="inline-flex items-center gap-1 text-[11px] font-semibold text-white bg-primary hover:bg-primary/90 rounded-lg px-3 py-1.5 transition-colors shadow-sm"
                         >
                           <UserPlus className="h-3 w-3" /> Add as Student
                         </button>
@@ -1134,14 +1134,14 @@ function DemoActions({
                       disabled={assigning}
                       onClick={() => onAssignTeacher(t.email)}
                       className={`w-full text-left text-xs px-2.5 py-2 rounded-lg transition-colors flex items-center justify-between gap-2 disabled:opacity-50 ${
-                        !t.isFree ? 'opacity-60 hover:bg-gray-50' : subjectMatch ? 'hover:bg-emerald-50 bg-emerald-50/30' : 'hover:bg-indigo-50'
+                        !t.isFree ? 'opacity-60 hover:bg-gray-50' : subjectMatch ? 'hover:bg-primary/5 bg-primary/5/30' : 'hover:bg-indigo-50'
                       }`}
                     >
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-1.5">
                           <span className="font-medium text-gray-700">{t.name}</span>
                           {subjectMatch && (
-                            <span className="inline-flex items-center rounded-full bg-emerald-100 text-emerald-700 border border-emerald-200 px-1 py-0 text-[9px] font-semibold">
+                            <span className="inline-flex items-center rounded-full bg-primary/10 text-primary border border-primary/20 px-1 py-0 text-[9px] font-semibold">
                               <Check className="h-3 w-3 inline" /> {req.subject}
                             </span>
                           )}
@@ -1154,7 +1154,7 @@ function DemoActions({
                         )}
                       </div>
                       <div className="flex items-center gap-1 shrink-0">
-                        <span className={`inline-block h-1.5 w-1.5 rounded-full ${t.isFree ? 'bg-emerald-500' : 'bg-amber-400'}`} />
+                        <span className={`inline-block h-1.5 w-1.5 rounded-full ${t.isFree ? 'bg-primary' : 'bg-amber-400'}`} />
                         {assigning ? <Loader2 className="h-3 w-3 animate-spin text-indigo-400" /> : <UserCheck className="h-3 w-3 text-indigo-400" />}
                       </div>
                     </button>
@@ -1173,12 +1173,12 @@ function DemoActions({
           href={`/classroom/${req.room_id}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-xs px-2.5 py-1.5 rounded-lg bg-emerald-50 text-emerald-600 hover:bg-emerald-100 transition-colors flex items-center gap-1 font-medium"
+          className="text-xs px-2.5 py-1.5 rounded-lg bg-primary/5 text-primary hover:bg-primary/10 transition-colors flex items-center gap-1 font-medium"
         >
           <Eye className="h-3 w-3" /> Join as Ghost
         </a>
       ) : (
-        <span className="text-xs px-2.5 py-1.5 rounded-lg bg-emerald-50 text-emerald-600 flex items-center gap-1 font-medium">
+        <span className="text-xs px-2.5 py-1.5 rounded-lg bg-primary/5 text-primary flex items-center gap-1 font-medium">
           <CheckCircle className="h-3 w-3" /> Ready
         </span>
       );
@@ -1189,7 +1189,7 @@ function DemoActions({
           href={`/classroom/${req.room_id}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-xs px-2.5 py-1.5 rounded-lg bg-green-50 text-green-600 hover:bg-green-100 transition-colors flex items-center gap-1 font-medium"
+          className="text-xs px-2.5 py-1.5 rounded-lg bg-primary/5 text-primary hover:bg-primary/10 transition-colors flex items-center gap-1 font-medium"
         >
           <PlayCircle className="h-3 w-3" /> Live — Watch
         </a>

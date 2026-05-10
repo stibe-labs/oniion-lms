@@ -120,7 +120,7 @@ export default function GhostDashboardClient({ userName, userEmail, userRole, pe
     <DashboardShell role={userRole} userName={userName} userEmail={userEmail} permissions={permissions}>
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-          <EyeOff className="h-6 w-6 text-emerald-600" /> Ghost Observer
+          <EyeOff className="h-6 w-6 text-primary" /> Ghost Observer
         </h1>
         <p className="mt-1 text-sm text-gray-500">
           Silent observation mode — invisible to all participants
@@ -139,9 +139,9 @@ export default function GhostDashboardClient({ userName, userEmail, userRole, pe
 
       {/* Stats */}
       <div className="mb-6 grid grid-cols-3 gap-3">
-        <div className="rounded-xl border border-green-200 bg-white p-4 shadow-sm">
+        <div className="rounded-xl border border-primary/20 bg-white p-4 shadow-sm">
           <p className="text-xs text-gray-500">Live Now</p>
-          <p className="mt-1 text-2xl font-bold text-green-700">{live.length}</p>
+          <p className="mt-1 text-2xl font-bold text-primary">{live.length}</p>
         </div>
         <div className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
           <p className="text-xs text-gray-500">Scheduled</p>
@@ -161,7 +161,7 @@ export default function GhostDashboardClient({ userName, userEmail, userRole, pe
             onClick={() => setViewMode(mode)}
             className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium transition ${
               viewMode === mode
-                ? 'bg-emerald-600 text-white shadow-sm'
+                ? 'bg-primary text-white shadow-sm'
                 : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
             }`}
           >
@@ -183,30 +183,30 @@ export default function GhostDashboardClient({ userName, userEmail, userRole, pe
       <div className="mb-6 grid grid-cols-1 sm:grid-cols-2 gap-3">
         <a
           href="/ghost/monitor"
-          className="group flex items-center gap-3 rounded-xl border border-gray-200 bg-white p-4 shadow-sm transition-all hover:border-emerald-200 hover:shadow-md"
+          className="group flex items-center gap-3 rounded-xl border border-gray-200 bg-white p-4 shadow-sm transition-all hover:border-primary/20 hover:shadow-md"
         >
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-50">
-            <Monitor className="h-5 w-5 text-emerald-600" />
+          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/5">
+            <Monitor className="h-5 w-5 text-primary" />
           </div>
           <div className="flex-1">
-            <h3 className="text-sm font-medium text-gray-800 group-hover:text-emerald-700 transition-colors">Oversight Console</h3>
+            <h3 className="text-sm font-medium text-gray-800 group-hover:text-primary transition-colors">Oversight Console</h3>
             <p className="text-xs text-gray-400 mt-0.5">Multi-view grid of all sessions</p>
           </div>
-          <span className="rounded-lg bg-emerald-50 px-3 py-1.5 text-xs font-medium text-emerald-700">Open</span>
+          <span className="rounded-lg bg-primary/5 px-3 py-1.5 text-xs font-medium text-primary">Open</span>
         </a>
         {live.length > 1 && (
           <a
             href={`/ghost/monitor?mode=combined&rooms=${live.map(r => r.room_id).join(',')}`}
-            className="group flex items-center gap-3 rounded-xl border border-green-200 bg-green-50 p-4 shadow-sm transition-all hover:shadow-md"
+            className="group flex items-center gap-3 rounded-xl border border-primary/20 bg-primary/5 p-4 shadow-sm transition-all hover:shadow-md"
           >
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-green-100">
-              <Layers className="h-5 w-5 text-green-600" />
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10">
+              <Layers className="h-5 w-5 text-primary" />
             </div>
             <div className="flex-1">
               <h3 className="text-sm font-medium text-green-800">Combined Monitor</h3>
-              <p className="text-xs text-green-600/70 mt-0.5">Watch all {live.length} live sessions</p>
+              <p className="text-xs text-primary/70 mt-0.5">Watch all {live.length} live sessions</p>
             </div>
-            <span className="rounded-lg bg-green-100 px-3 py-1.5 text-xs font-medium text-green-700">Enter</span>
+            <span className="rounded-lg bg-primary/10 px-3 py-1.5 text-xs font-medium text-primary">Enter</span>
           </a>
         )}
       </div>
@@ -231,10 +231,10 @@ export default function GhostDashboardClient({ userName, userEmail, userRole, pe
                 <div key={batch.batch_id} className="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden">
                   <div className="flex items-center justify-between border-b border-gray-100 px-4 py-3 bg-gray-50/80">
                     <div className="flex items-center gap-2">
-                      <BookOpen className="h-4 w-4 text-emerald-600" />
+                      <BookOpen className="h-4 w-4 text-primary" />
                       <span className="font-medium text-sm text-gray-800">{batch.batch_name}</span>
                       {batchLive.length > 0 && (
-                        <span className="inline-flex items-center gap-1 rounded-full border border-green-200 bg-green-50 px-2 py-0.5 text-[10px] font-medium text-green-700">
+                        <span className="inline-flex items-center gap-1 rounded-full border border-primary/20 bg-primary/5 px-2 py-0.5 text-[10px] font-medium text-primary">
                           <Radio className="h-2.5 w-2.5 animate-pulse" /> {batchLive.length} live
                         </span>
                       )}
@@ -266,7 +266,7 @@ export default function GhostDashboardClient({ userName, userEmail, userRole, pe
                 <div key={teacher.teacher_email} className="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden">
                   <div className="flex items-center justify-between border-b border-gray-100 px-4 py-3 bg-gray-50/80">
                     <div className="flex items-center gap-2">
-                      <div className="h-7 w-7 rounded-full bg-emerald-50 text-emerald-700 flex items-center justify-center text-xs font-bold">
+                      <div className="h-7 w-7 rounded-full bg-primary/5 text-primary flex items-center justify-center text-xs font-bold">
                         {teacher.teacher_name.charAt(0).toUpperCase()}
                       </div>
                       <div>
@@ -274,7 +274,7 @@ export default function GhostDashboardClient({ userName, userEmail, userRole, pe
                         <p className="text-[11px] text-gray-400">{teacher.teacher_email}</p>
                       </div>
                       {tLive.length > 0 && (
-                        <span className="inline-flex items-center gap-1 rounded-full border border-green-200 bg-green-50 px-2 py-0.5 text-[10px] font-medium text-green-700">
+                        <span className="inline-flex items-center gap-1 rounded-full border border-primary/20 bg-primary/5 px-2 py-0.5 text-[10px] font-medium text-primary">
                           <Radio className="h-2.5 w-2.5 animate-pulse" /> {tLive.length} live
                         </span>
                       )}
@@ -282,7 +282,7 @@ export default function GhostDashboardClient({ userName, userEmail, userRole, pe
                     {tLive.length > 0 && (
                       <a
                         href={`/ghost/monitor?teacher=${encodeURIComponent(teacher.teacher_email)}`}
-                        className="inline-flex items-center gap-1 rounded-lg bg-emerald-600 px-2.5 py-1.5 text-[11px] font-medium text-white hover:bg-emerald-700 shadow-sm transition"
+                        className="inline-flex items-center gap-1 rounded-lg bg-primary px-2.5 py-1.5 text-[11px] font-medium text-white hover:bg-primary/90 shadow-sm transition"
                       >
                         <Monitor className="h-3 w-3" /> Monitor All
                       </a>
@@ -304,7 +304,7 @@ export default function GhostDashboardClient({ userName, userEmail, userRole, pe
           {/* Live */}
           {live.length > 0 && (
             <div>
-              <h2 className="mb-3 text-xs font-semibold text-green-700 uppercase tracking-wide flex items-center gap-2">
+              <h2 className="mb-3 text-xs font-semibold text-primary uppercase tracking-wide flex items-center gap-2">
                 <Radio className="h-4 w-4 animate-pulse" /> Live — Enter Silently
               </h2>
               <div className="space-y-3">
@@ -345,10 +345,10 @@ function RoomRow({ room }: { room: Room }) {
   const elapsed = isLive ? Math.round((Date.now() - d.getTime()) / 60000) : 0;
 
   return (
-    <div className={`flex items-center gap-4 rounded-xl border p-4 transition ${isLive ? 'border-green-200 bg-green-50' : 'border-gray-200 bg-white'}`}>
+    <div className={`flex items-center gap-4 rounded-xl border p-4 transition ${isLive ? 'border-primary/20 bg-primary/5' : 'border-gray-200 bg-white'}`}>
       {isLive ? (
-        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-green-100 shrink-0">
-          <Radio className="h-4 w-4 text-green-600 animate-pulse" />
+        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 shrink-0">
+          <Radio className="h-4 w-4 text-primary animate-pulse" />
         </div>
       ) : (
         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-100 shrink-0">
@@ -369,7 +369,7 @@ function RoomRow({ room }: { room: Room }) {
           <span className="text-xs text-gray-500 shrink-0">{elapsed}m</span>
           <a
             href={`/classroom/${room.room_id}?mode=ghost`}
-            className="inline-flex items-center gap-1 rounded-lg bg-emerald-600 px-3 py-2 text-xs font-medium text-white hover:bg-emerald-700 shadow-sm shrink-0 transition"
+            className="inline-flex items-center gap-1 rounded-lg bg-primary px-3 py-2 text-xs font-medium text-white hover:bg-primary/90 shadow-sm shrink-0 transition"
           >
             <Eye className="h-3.5 w-3.5" /> Enter Ghost
           </a>

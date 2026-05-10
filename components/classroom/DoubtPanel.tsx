@@ -35,7 +35,7 @@ interface DoubtPanelProps {
 
 const STATUS_STYLE: Record<string, { bg: string; text: string; label: string }> = {
   open: { bg: 'bg-amber-500/15', text: 'text-amber-400', label: 'Open' },
-  answered: { bg: 'bg-emerald-500/15', text: 'text-emerald-400', label: 'Answered' },
+  answered: { bg: 'bg-primary/15', text: 'text-primary', label: 'Answered' },
   deferred: { bg: 'bg-blue-500/15', text: 'text-blue-400', label: 'Deferred' },
   closed: { bg: 'bg-zinc-500/15', text: 'text-zinc-400', label: 'Closed' },
 };
@@ -334,8 +334,8 @@ function DoubtCard({
 
       {/* Teacher reply (if exists) */}
       {doubt.teacher_reply && (
-        <div className="mx-3 mb-2 rounded-lg bg-emerald-500/10 ring-1 ring-emerald-500/20 px-3 py-2">
-          <p className="text-[10px] text-emerald-400 font-semibold mb-0.5">Teacher Reply</p>
+        <div className="mx-3 mb-2 rounded-lg bg-primary/10 ring-1 ring-primary/20 px-3 py-2">
+          <p className="text-[10px] text-primary font-semibold mb-0.5">Teacher Reply</p>
           <p className="text-[12px] text-[#e8eaed] leading-relaxed break-words">{doubt.teacher_reply}</p>
           {doubt.replied_at && (
             <p className="text-[10px] text-[#9aa0a6] mt-1">{fmtTime(doubt.replied_at)}</p>
@@ -348,7 +348,7 @@ function DoubtCard({
         <div className="flex gap-1.5 px-3 pb-2">
           <button
             onClick={onStartReply}
-            className="rounded-md bg-emerald-600/80 hover:bg-emerald-500 text-white px-3 py-1 text-[11px] font-medium transition-colors"
+            className="rounded-md bg-primary/80 hover:bg-primary text-white px-3 py-1 text-[11px] font-medium transition-colors"
           >
             Reply
           </button>
@@ -370,13 +370,13 @@ function DoubtCard({
             placeholder="Type your answer..."
             rows={2}
             maxLength={2000}
-            className="w-full bg-[#202124] rounded-lg px-3 py-2 text-[12px] text-[#e8eaed] placeholder:text-[#9aa0a6] outline-none ring-1 ring-[#3c4043] focus:ring-emerald-500/50 resize-none transition-colors"
+            className="w-full bg-[#202124] rounded-lg px-3 py-2 text-[12px] text-[#e8eaed] placeholder:text-[#9aa0a6] outline-none ring-1 ring-[#3c4043] focus:ring-primary/50 resize-none transition-colors"
           />
           <div className="flex gap-1.5">
             <button
               onClick={() => onSubmitReply('answered')}
               disabled={submitting}
-              className="rounded-md bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1 text-[11px] font-medium transition-colors disabled:opacity-40"
+              className="rounded-md bg-primary hover:bg-primary text-white px-3 py-1 text-[11px] font-medium transition-colors disabled:opacity-40"
             >
               {submitting ? '...' : 'Send Answer'}
             </button>

@@ -81,13 +81,13 @@ export default function LoginSlideshow() {
                 transform: i === current ? 'translateY(0)' : 'translateY(20px)',
               }}
             >
-              <p className="text-emerald-300 text-sm font-semibold tracking-widest uppercase mb-3 drop-shadow-lg">
+              <p className="text-primary/80 text-sm font-semibold tracking-widest uppercase mb-3 drop-shadow-lg">
                 {platformName}
               </p>
               <h2 className="text-white text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight drop-shadow-xl">
                 {headlines[imgIdx].top}
                 <br />
-                <span className="text-emerald-300">{headlines[imgIdx].bottom}</span>
+                <span className="text-primary/80">{headlines[imgIdx].bottom}</span>
               </h2>
               <p className="mt-4 text-white/70 text-base sm:text-lg max-w-md leading-relaxed drop-shadow-lg">
                 {headlines[imgIdx].sub}

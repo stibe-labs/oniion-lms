@@ -27,11 +27,11 @@ interface LiveKitTestResult {
 }
 
 const DEV_ROLES = [
-  { role: 'teacher', name: 'Priya Sharma', color: 'border-emerald-500 bg-emerald-500/10', accent: 'bg-emerald-600' },
+  { role: 'teacher', name: 'Priya Sharma', color: 'border-primary bg-primary/10', accent: 'bg-primary' },
   { role: 'student', name: 'Rahul Nair', color: 'border-blue-500 bg-blue-500/10', accent: 'bg-blue-600' },
   { role: 'ghost', name: 'Ghost Observer', color: 'border-purple-500 bg-purple-500/10', accent: 'bg-purple-600' },
   { role: 'coordinator', name: 'Seema Verma', color: 'border-indigo-500 bg-indigo-500/10', accent: 'bg-indigo-600' },
-  { role: 'academic_operator', name: 'Dr. Mehta', color: 'border-teal-500 bg-teal-500/10', accent: 'bg-teal-600' },
+  { role: 'academic_operator', name: 'Dr. Mehta', color: 'border-teal-500 bg-secondary/10', accent: 'bg-secondary' },
   { role: 'parent', name: 'Nair Parent', color: 'border-orange-500 bg-orange-500/10', accent: 'bg-orange-600' },
   { role: 'owner', name: 'Admin', color: 'border-purple-500 bg-purple-500/10', accent: 'bg-purple-600' },
 ];
@@ -290,7 +290,7 @@ export default function DevPage() {
             <div className="space-y-1.5">
               {lkTest.steps.map((step, i) => (
                 <div key={i} className="flex items-center gap-2 text-sm">
-                  <span className={step.pass ? 'text-green-400' : 'text-red-400'}>
+                  <span className={step.pass ? 'text-primary' : 'text-red-400'}>
                     {step.pass ? '●' : '●'}
                   </span>
                   <span className="text-foreground/80">{step.name}</span>
@@ -373,7 +373,7 @@ function HealthRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-center justify-between">
       <span className="text-muted-foreground">{label}</span>
-      <span className={cn('flex items-center gap-1', isOk ? 'text-green-400' : 'text-red-400')}>
+      <span className={cn('flex items-center gap-1', isOk ? 'text-primary' : 'text-red-400')}>
         <span>{isOk ? '●' : '●'}</span>
         <span className="text-xs">{value}</span>
       </span>

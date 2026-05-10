@@ -776,7 +776,7 @@ export default function ParentDashboardClient({ userName, userEmail, userRole, p
             {/* Quick Actions */}
             <Card className="p-4">
               <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2 mb-3">
-                <BarChart3 className="h-4 w-4 text-emerald-600" /> Quick Actions
+                <BarChart3 className="h-4 w-4 text-primary" /> Quick Actions
               </h3>
               <div className="flex flex-wrap gap-2">
                 <button onClick={() => setActiveTab('fees')}
@@ -788,7 +788,7 @@ export default function ParentDashboardClient({ userName, userEmail, userRole, p
                   <FileText className="h-3.5 w-3.5" /> View Reports
                 </button>
                 <button onClick={() => setActiveTab('attendance')}
-                  className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs font-medium text-emerald-700 hover:bg-emerald-100 transition">
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-primary/20 bg-primary/5 px-3 py-2 text-xs font-medium text-primary hover:bg-primary/10 transition">
                   <ClipboardList className="h-3.5 w-3.5" /> Attendance
                 </button>
               </div>
@@ -797,15 +797,15 @@ export default function ParentDashboardClient({ userName, userEmail, userRole, p
             {/* Live classes with observe */}
             {live.length > 0 && (
               <div>
-                <h2 className="mb-3 text-sm font-semibold text-emerald-600 uppercase tracking-wider flex items-center gap-2">
+                <h2 className="mb-3 text-sm font-semibold text-primary uppercase tracking-wider flex items-center gap-2">
                   <Radio className="h-4 w-4 animate-pulse" /> Live Now
                 </h2>
                 <div className="space-y-3">
                   {live.map((room) => (
                     <Card key={room.room_id} className="p-4">
                       <div className="flex items-center gap-4">
-                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-emerald-50">
-                          <Radio className="h-5 w-5 text-emerald-600" />
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/5">
+                          <Radio className="h-5 w-5 text-primary" />
                         </div>
                         <div className="flex-1 min-w-0">
                           <h3 className="font-medium text-gray-900 truncate">{room.room_name}</h3>
@@ -823,7 +823,7 @@ export default function ParentDashboardClient({ userName, userEmail, userRole, p
                         ) : (
                           <a
                             href={`/classroom/${room.room_id}?mode=observe`}
-                            className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-2 text-xs font-medium text-white hover:bg-emerald-700 transition"
+                            className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-xs font-medium text-white hover:bg-primary/90 transition"
                           >
                             <Eye className="h-3.5 w-3.5" /> Observe
                           </a>
@@ -849,7 +849,7 @@ export default function ParentDashboardClient({ userName, userEmail, userRole, p
                   {upcoming.map((room) => (
                     <Card key={room.room_id} className="p-4">
                       <div className="flex items-center gap-4">
-                        <Calendar className="h-8 w-8 text-emerald-600 shrink-0" />
+                        <Calendar className="h-8 w-8 text-primary shrink-0" />
                         <div className="flex-1 min-w-0">
                           <h3 className="font-medium text-gray-900 truncate">{room.room_name}</h3>
                           <div className="flex gap-3 mt-1 text-xs text-gray-500">
@@ -908,7 +908,7 @@ export default function ParentDashboardClient({ userName, userEmail, userRole, p
                     return (
                       <Card key={idx} className="p-3">
                         <div className="flex items-center gap-3">
-                          <FileText className="h-5 w-5 text-emerald-600 shrink-0" />
+                          <FileText className="h-5 w-5 text-primary shrink-0" />
                           <div className="flex-1 min-w-0">
                             <p className="text-sm text-gray-900 truncate">{inv.invoice_number as string || `Invoice #${idx + 1}`}</p>
                             <p className="text-xs text-gray-500">
@@ -941,7 +941,7 @@ export default function ParentDashboardClient({ userName, userEmail, userRole, p
                       </Card>
                     );
                   })}
-                  <button onClick={() => setActiveTab('fees')} className="text-xs text-emerald-600 hover:underline">
+                  <button onClick={() => setActiveTab('fees')} className="text-xs text-primary hover:underline">
                     View all {invoices.length} invoice{invoices.length !== 1 ? 's' : ''} →
                   </button>
                 </div>
@@ -955,7 +955,7 @@ export default function ParentDashboardClient({ userName, userEmail, userRole, p
           <div className="space-y-5">
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                <Calendar className="h-5 w-5 text-emerald-600" /> Classes
+                <Calendar className="h-5 w-5 text-primary" /> Classes
               </h2>
               <span className="text-xs text-gray-400">{rooms.length} session{rooms.length !== 1 ? 's' : ''}</span>
             </div>
@@ -976,14 +976,14 @@ export default function ParentDashboardClient({ userName, userEmail, userRole, p
                 {live.length > 0 && (
                   <div className="rounded-2xl border-2 border-green-300 bg-gradient-to-r from-green-50 via-emerald-50 to-teal-50 p-4 shadow-sm">
                     <div className="flex items-center gap-2 mb-3">
-                      <Radio className="h-4 w-4 text-green-600 animate-pulse" />
-                      <span className="text-sm font-bold text-green-700 uppercase tracking-wide">Live Now</span>
-                      <span className="ml-auto rounded-full bg-green-100 px-2 py-0.5 text-[10px] font-bold text-green-700">{live.length} live</span>
+                      <Radio className="h-4 w-4 text-primary animate-pulse" />
+                      <span className="text-sm font-bold text-primary uppercase tracking-wide">Live Now</span>
+                      <span className="ml-auto rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-bold text-primary">{live.length} live</span>
                     </div>
                     <div className="space-y-2">
                       {live.map(room => (
                         <div key={room.room_id} className="flex items-center gap-3 rounded-xl bg-white/80 px-3 py-2.5 shadow-sm">
-                          <div className="h-2.5 w-2.5 rounded-full bg-green-500 animate-pulse shrink-0" />
+                          <div className="h-2.5 w-2.5 rounded-full bg-primary animate-pulse shrink-0" />
                           <div className="flex-1 min-w-0">
                             <p className="text-sm font-semibold text-gray-900 truncate">{room.subject} — {room.room_name}</p>
                             <p className="text-xs text-gray-500">
@@ -994,7 +994,7 @@ export default function ParentDashboardClient({ userName, userEmail, userRole, p
                           </div>
                           <a
                             href={`/classroom/${room.room_id}?mode=observe`}
-                            className="inline-flex items-center gap-1.5 rounded-xl bg-green-600 px-3 py-2 text-xs font-bold text-white hover:bg-green-700 transition shadow-sm shrink-0"
+                            className="inline-flex items-center gap-1.5 rounded-xl bg-primary px-3 py-2 text-xs font-bold text-white hover:bg-green-700 transition shadow-sm shrink-0"
                           >
                             <Eye className="h-3.5 w-3.5" /> Observe
                           </a>
@@ -1025,7 +1025,7 @@ export default function ParentDashboardClient({ userName, userEmail, userRole, p
                               <p className="text-sm font-semibold text-gray-900 truncate">{room.subject}</p>
                               <p className="text-xs text-gray-500 mt-0.5">{room.room_name} · {fmtTimeIST(room.scheduled_start)} · {room.duration_minutes}min</p>
                               {room.student_name && (
-                                <p className="text-xs text-emerald-600 font-medium mt-0.5 flex items-center gap-1">
+                                <p className="text-xs text-primary font-medium mt-0.5 flex items-center gap-1">
                                   <Users className="h-3 w-3" />{room.student_name}
                                 </p>
                               )}
@@ -1053,7 +1053,7 @@ export default function ParentDashboardClient({ userName, userEmail, userRole, p
                             <span className="text-[10px] font-medium text-gray-400">{mon}</span>
                           </div>
                           <div className="flex flex-1 items-center gap-3 px-3 py-3 min-w-0">
-                            <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
+                            <CheckCircle2 className="h-4 w-4 text-primary shrink-0" />
                             <div className="flex-1 min-w-0">
                               <p className="text-sm font-medium text-gray-700 truncate">{room.subject} — {room.room_name}</p>
                               <p className="text-xs text-gray-400 mt-0.5">{room.grade}{room.student_name ? ` · ${room.student_name}` : ''}</p>
@@ -1075,7 +1075,7 @@ export default function ParentDashboardClient({ userName, userEmail, userRole, p
           <div className="space-y-6">
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                <ClipboardList className="h-5 w-5 text-emerald-600" /> Attendance Reports
+                <ClipboardList className="h-5 w-5 text-primary" /> Attendance Reports
               </h2>
             </div>
 
@@ -1087,7 +1087,7 @@ export default function ParentDashboardClient({ userName, userEmail, userRole, p
               attendanceChildren.map((child) => (
                 <div key={child.student_email} className="space-y-4">
                   <h3 className="font-medium text-gray-900 flex items-center gap-2">
-                    <Users className="h-4 w-4 text-emerald-600" />
+                    <Users className="h-4 w-4 text-primary" />
                     {child.student_name}
                   </h3>
 
@@ -1112,7 +1112,7 @@ export default function ParentDashboardClient({ userName, userEmail, userRole, p
                         <Card key={idx} className="p-3">
                           <div className="flex items-center gap-3">
                             <div className={`h-2.5 w-2.5 rounded-full shrink-0 ${
-                              session.status === 'present' ? 'bg-emerald-500' :
+                              session.status === 'present' ? 'bg-primary' :
                               session.status === 'absent' ? 'bg-red-500' : 'bg-amber-500'
                             }`} />
                             <div className="flex-1 min-w-0">
@@ -1143,7 +1143,7 @@ export default function ParentDashboardClient({ userName, userEmail, userRole, p
           <div className="space-y-6">
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                <GraduationCap className="h-5 w-5 text-emerald-600" /> Exam Results
+                <GraduationCap className="h-5 w-5 text-primary" /> Exam Results
               </h2>
             </div>
 
@@ -1155,7 +1155,7 @@ export default function ParentDashboardClient({ userName, userEmail, userRole, p
               examChildren.map((child) => (
                 <div key={child.student_email} className="space-y-4">
                   <h3 className="font-medium text-gray-900 flex items-center gap-2">
-                    <Users className="h-4 w-4 text-emerald-600" />
+                    <Users className="h-4 w-4 text-primary" />
                     {child.student_name}
                   </h3>
 
@@ -1193,7 +1193,7 @@ export default function ParentDashboardClient({ userName, userEmail, userRole, p
                         <div className="space-y-2.5">
                           {subjects.map(([subject, data]) => {
                             const avg = Math.round(data.sum / data.count);
-                            const barColor = avg >= 75 ? 'bg-emerald-500' : avg >= 50 ? 'bg-amber-500' : 'bg-red-500';
+                            const barColor = avg >= 75 ? 'bg-primary' : avg >= 50 ? 'bg-amber-500' : 'bg-red-500';
                             return (
                               <div key={subject}>
                                 <div className="flex items-center justify-between mb-1">
@@ -1218,7 +1218,7 @@ export default function ParentDashboardClient({ userName, userEmail, userRole, p
                     {child.exams.map((exam) => (
                       <Card key={exam.attempt_id} className="p-3">
                         <div className="flex items-center gap-3">
-                          <BookOpen className={`h-5 w-5 ${exam.passed ? 'text-emerald-600' : 'text-red-500'}`} />
+                          <BookOpen className={`h-5 w-5 ${exam.passed ? 'text-primary' : 'text-red-500'}`} />
                           <div className="flex-1 min-w-0">
                             <p className="text-sm text-gray-900 truncate">{exam.exam_title}</p>
                             <p className="text-xs text-gray-500">
@@ -1226,7 +1226,7 @@ export default function ParentDashboardClient({ userName, userEmail, userRole, p
                             </p>
                           </div>
                           <div className="text-right">
-                            <p className={`text-sm font-bold ${exam.passed ? 'text-emerald-600' : 'text-red-500'}`}>
+                            <p className={`text-sm font-bold ${exam.passed ? 'text-primary' : 'text-red-500'}`}>
                               {exam.total_marks_obtained}/{exam.total_marks}
                             </p>
                             <p className="text-[10px] text-gray-400">
@@ -1249,7 +1249,7 @@ export default function ParentDashboardClient({ userName, userEmail, userRole, p
             {/* Section header */}
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                <CreditCard className="h-5 w-5 text-emerald-600" /> Fees & Payments
+                <CreditCard className="h-5 w-5 text-primary" /> Fees & Payments
               </h2>
             </div>
 
@@ -1273,9 +1273,9 @@ export default function ParentDashboardClient({ userName, userEmail, userRole, p
                       </div>
                       <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-500 to-green-600 p-4 text-white shadow-md shadow-emerald-500/20">
                         <div className="absolute -right-4 -top-4 h-16 w-16 rounded-full bg-white/10" />
-                        <p className="text-[11px] font-semibold uppercase tracking-wider text-emerald-100">Paid</p>
+                        <p className="text-[11px] font-semibold uppercase tracking-wider text-primary/40">Paid</p>
                         <p className="mt-1.5 text-xl font-black tracking-tight">{money(ledgerSummary.total_paid_paise, ledgerSummary.currency)}</p>
-                        <p className="mt-0.5 text-[11px] text-emerald-200">{paidCount} settled</p>
+                        <p className="mt-0.5 text-[11px] text-primary/60">{paidCount} settled</p>
                       </div>
                       <div className={`relative overflow-hidden rounded-2xl p-4 text-white shadow-md ${
                         pendingAmt > 0 ? 'bg-gradient-to-br from-amber-500 to-orange-600 shadow-amber-500/20' : 'bg-gradient-to-br from-slate-400 to-slate-500 shadow-slate-400/20'
@@ -1392,7 +1392,7 @@ export default function ParentDashboardClient({ userName, userEmail, userRole, p
                             <button
                               onClick={() => handlePayInvoice(inv.id as string)}
                               disabled={payingInvoice === inv.id as string}
-                              className="flex items-center gap-1.5 rounded-xl bg-teal-600 px-4 py-2 text-xs font-bold text-white hover:bg-teal-700 disabled:opacity-50 transition shadow-sm shadow-teal-500/30"
+                              className="flex items-center gap-1.5 rounded-xl bg-secondary px-4 py-2 text-xs font-bold text-white hover:bg-teal-700 disabled:opacity-50 transition shadow-sm shadow-teal-500/30"
                             >
                               <CreditCard className="h-3 w-3" />
                               {payingInvoice === inv.id as string ? 'Processing…' : 'Pay Now'}
@@ -1429,26 +1429,26 @@ export default function ParentDashboardClient({ userName, userEmail, userRole, p
                       Paid Receipts ({invoices.filter(inv => inv.status === 'paid').length})
                     </p>
                     {invoices.filter(inv => inv.status === 'paid').slice(0, 20).map(inv => (
-                        <div key={inv.id as string} className="flex items-center gap-3 rounded-2xl border border-emerald-100 bg-white p-4 shadow-sm">
-                          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-50">
-                            <CheckCircle2 className="h-5 w-5 text-emerald-500" />
+                        <div key={inv.id as string} className="flex items-center gap-3 rounded-2xl border border-primary/15 bg-white p-4 shadow-sm">
+                          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/5">
+                            <CheckCircle2 className="h-5 w-5 text-primary" />
                           </div>
                           <div className="flex-1 min-w-0">
                             <div className="flex flex-wrap items-center gap-2">
                               <span className="font-mono text-xs font-bold text-gray-700">{inv.invoice_number as string}</span>
-                              <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-700">Paid</span>
+                              <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-bold text-primary">Paid</span>
                             </div>
                             <p className="text-sm font-medium text-gray-700 truncate">{(inv.description as string) || 'Fee Invoice'}</p>
                             <div className="flex flex-wrap gap-x-3 mt-0.5">
                               {!!inv.paid_at && (
-                                <p className="text-xs text-emerald-600 font-medium">
+                                <p className="text-xs text-primary font-medium">
                                   Paid {new Date(inv.paid_at as string).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
                                 </p>
                               )}
                             </div>
                           </div>
                           <div className="text-right shrink-0">
-                            <p className="text-base font-black text-emerald-700">{money(inv.amount_paise as number, inv.currency as string)}</p>
+                            <p className="text-base font-black text-primary">{money(inv.amount_paise as number, inv.currency as string)}</p>
                             <div className="mt-1.5 flex items-center justify-end gap-1.5">
                               {!!inv.pay_token ? (
                                 <a
@@ -1500,10 +1500,10 @@ export default function ParentDashboardClient({ userName, userEmail, userRole, p
                               <td className="px-4 py-2.5 text-xs text-right font-medium text-red-600">
                                 {entry.debit_paise > 0 ? money(entry.debit_paise, entry.currency) : <span className="text-gray-300">—</span>}
                               </td>
-                              <td className="px-4 py-2.5 text-xs text-right font-medium text-emerald-600">
+                              <td className="px-4 py-2.5 text-xs text-right font-medium text-primary">
                                 {entry.credit_paise > 0 ? money(entry.credit_paise, entry.currency) : <span className="text-gray-300">—</span>}
                               </td>
-                              <td className={`px-4 py-2.5 text-xs text-right font-bold ${entry.balance_paise > 0 ? 'text-red-600' : 'text-emerald-600'}`}>
+                              <td className={`px-4 py-2.5 text-xs text-right font-bold ${entry.balance_paise > 0 ? 'text-red-600' : 'text-primary'}`}>
                                 {money(entry.balance_paise, entry.currency)}
                               </td>
                             </TRow>
@@ -1533,7 +1533,7 @@ export default function ParentDashboardClient({ userName, userEmail, userRole, p
           <div className="space-y-6">
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                <BarChart3 className="h-5 w-5 text-emerald-600" /> Progress Reports
+                <BarChart3 className="h-5 w-5 text-primary" /> Progress Reports
               </h2>
             </div>
 
@@ -1558,7 +1558,7 @@ export default function ParentDashboardClient({ userName, userEmail, userRole, p
                         onClick={() => setExpandedReport(isExpanded ? null : id)}
                         className="w-full flex items-center gap-3 p-4 text-left hover:bg-gray-50 transition-colors"
                       >
-                        <BarChart3 className="h-5 w-5 text-emerald-600" />
+                        <BarChart3 className="h-5 w-5 text-primary" />
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-medium text-gray-900 truncate">{report.title as string}</p>
                           <p className="text-xs text-gray-500">
@@ -1581,17 +1581,17 @@ export default function ParentDashboardClient({ userName, userEmail, userRole, p
                                 <div className="grid grid-cols-3 gap-2 text-xs">
                                   <div className="rounded-lg bg-gray-50 p-2">
                                     <p className="text-gray-500">Attendance</p>
-                                    <p className="font-bold text-emerald-600">{att.attendance_rate || 0}%</p>
+                                    <p className="font-bold text-primary">{att.attendance_rate || 0}%</p>
                                     <p className="text-[10px] text-gray-400">{att.present || 0}/{att.total_sessions || 0} sessions</p>
                                   </div>
                                   <div className="rounded-lg bg-gray-50 p-2">
                                     <p className="text-gray-500">Academics</p>
-                                    <p className="font-bold text-emerald-600">{academic.avg_percentage || 0}%</p>
+                                    <p className="font-bold text-primary">{academic.avg_percentage || 0}%</p>
                                     <p className="text-[10px] text-gray-400">{academic.exams_taken || 0} exams</p>
                                   </div>
                                   <div className="rounded-lg bg-gray-50 p-2">
                                     <p className="text-gray-500">Fees</p>
-                                    <p className={`font-bold ${(fees.overdue || 0) > 0 ? 'text-red-600' : 'text-emerald-600'}`}>
+                                    <p className={`font-bold ${(fees.overdue || 0) > 0 ? 'text-red-600' : 'text-primary'}`}>
                                       {(fees.pending || 0) + (fees.overdue || 0) > 0 ? `${fees.pending || 0} pending` : 'Clear'}
                                     </p>
                                     <p className="text-[10px] text-gray-400">{fees.paid || 0} paid</p>
@@ -1602,7 +1602,7 @@ export default function ParentDashboardClient({ userName, userEmail, userRole, p
                                     <p className="text-[10px] text-gray-400 uppercase mb-1">Topics Covered</p>
                                     <div className="flex flex-wrap gap-1">
                                       {(student.topics_covered as Array<Record<string, unknown>>).slice(0, 8).map((t, tIdx) => (
-                                        <span key={tIdx} className="text-[10px] rounded bg-emerald-50 text-emerald-700 px-1.5 py-0.5">
+                                        <span key={tIdx} className="text-[10px] rounded bg-primary/5 text-primary px-1.5 py-0.5">
                                           {t.class_portion as string}
                                         </span>
                                       ))}
@@ -1641,7 +1641,7 @@ export default function ParentDashboardClient({ userName, userEmail, userRole, p
           <div className="space-y-6">
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                <Brain className="h-5 w-5 text-emerald-600" /> AI Monitoring Reports
+                <Brain className="h-5 w-5 text-primary" /> AI Monitoring Reports
               </h2>
               <RefreshButton loading={monitorLoading} onClick={fetchMonitorReports} label="Refresh" />
             </div>
@@ -1706,7 +1706,7 @@ export default function ParentDashboardClient({ userName, userEmail, userRole, p
                       <Card key={email}>
                         <div className="border-b border-gray-200 bg-gray-50 px-4 py-3 rounded-t-xl">
                           <h3 className="flex items-center gap-2 text-sm font-semibold text-gray-900">
-                            <Users className="h-4 w-4 text-emerald-600" />
+                            <Users className="h-4 w-4 text-primary" />
                             {childName}
                             <Badge label={`${childReports.length} report${childReports.length !== 1 ? 's' : ''}`} variant="primary" />
                           </h3>
@@ -1829,7 +1829,7 @@ export default function ParentDashboardClient({ userName, userEmail, userRole, p
                                     )}
 
                                     {m.overall_summary ? (
-                                      <div className="rounded-lg bg-emerald-50 border border-emerald-200 p-3 text-xs text-emerald-800">
+                                      <div className="rounded-lg bg-primary/5 border border-primary/20 p-3 text-xs text-primary">
                                         <div className="mb-1 flex items-center gap-1 font-semibold">
                                           <Shield className="h-3.5 w-3.5" /> AI Summary
                                         </div>

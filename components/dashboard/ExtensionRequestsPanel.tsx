@@ -126,7 +126,7 @@ export default function ExtensionRequestsPanel() {
                 <button
                   onClick={() => handleAction(req.id, 'approve')}
                   disabled={isLoading}
-                  className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 transition"
+                  className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold text-white bg-primary hover:bg-primary/90 disabled:opacity-50 transition"
                 >
                   <CheckCircle className="h-3 w-3" />
                   {isLoading ? '…' : 'Approve & Extend'}

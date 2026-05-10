@@ -253,7 +253,7 @@ export default function AgentDemoView({
       <div className="flex h-14 items-center justify-between border-t border-zinc-800 bg-zinc-900 px-4">
         <div className="flex items-center gap-3">
           <span className="text-xs text-zinc-400">⏱ {fmtElapsed(elapsed)}</span>
-          <span className="rounded bg-emerald-600/20 px-2 py-0.5 text-xs font-medium text-emerald-400">
+          <span className="rounded bg-primary/20 px-2 py-0.5 text-xs font-medium text-primary">
             Sales Agent
           </span>
         </div>

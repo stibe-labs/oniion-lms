@@ -362,7 +362,7 @@ export default function AutoScheduleModal({
 
       {loading ? (
         <div className="flex items-center justify-center py-12">
-          <Loader2 className="h-6 w-6 animate-spin text-emerald-600 mr-3" />
+          <Loader2 className="h-6 w-6 animate-spin text-primary mr-3" />
           <span className="text-sm text-gray-500">Loading calendars...</span>
         </div>
       ) : calendars.length === 0 ? (
@@ -386,10 +386,10 @@ export default function AutoScheduleModal({
                       onClick={() => setSelectedCalendar(cal)}
                       className={`relative w-full text-left p-5 rounded-2xl border-2 transition-all duration-200 hover:shadow-lg ${
                         isSelected
-                          ? 'border-emerald-500 bg-emerald-50 shadow-emerald-100 shadow-md ring-2 ring-emerald-200'
+                          ? 'border-primary bg-primary/5 shadow-primary/10 shadow-md ring-2 ring-primary/20'
                           : isRecommended
                             ? 'border-amber-300 bg-amber-50/30 hover:border-amber-400 hover:bg-amber-50/50 ring-1 ring-amber-200'
-                            : 'border-gray-200 bg-white hover:border-emerald-300 hover:bg-emerald-50/30'
+                            : 'border-gray-200 bg-white hover:border-emerald-300 hover:bg-primary/5/30'
                       }`}
                     >
                       <div className="absolute top-3 right-3 flex items-center gap-2">
@@ -399,12 +399,12 @@ export default function AutoScheduleModal({
                             Recommended
                           </span>
                         )}
-                        {isSelected && <CheckCircle2 className="h-5 w-5 text-emerald-600" />}
+                        {isSelected && <CheckCircle2 className="h-5 w-5 text-primary" />}
                       </div>
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center gap-3">
                           <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-                            isSelected ? 'bg-emerald-500 text-white'
+                            isSelected ? 'bg-primary text-white'
                               : cal.category.includes('Excellent') ? 'bg-violet-100 text-violet-600'
                               : cal.category.includes('Good') ? 'bg-blue-100 text-blue-600'
                               : cal.category.includes('Average') ? 'bg-orange-100 text-orange-600'
@@ -426,7 +426,7 @@ export default function AutoScheduleModal({
                           </div>
                         </div>
                         <div className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold ${
-                          isSelected ? 'bg-emerald-200 text-emerald-800' : 'bg-gray-100 text-gray-600'
+                          isSelected ? 'bg-primary/20 text-primary' : 'bg-gray-100 text-gray-600'
                         }`}>
                           {cal.total_sessions} sessions
                         </div>
@@ -436,7 +436,7 @@ export default function AutoScheduleModal({
                           .filter(([k]) => k !== 'TOTAL')
                           .map(([k, v]) => (
                             <span key={k} className={`text-xs px-2 py-1 rounded-lg ${
-                              isSelected ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-50 text-gray-500'
+                              isSelected ? 'bg-primary/10 text-primary' : 'bg-gray-50 text-gray-500'
                             }`}>
                               {subjectLabel[k] || k}: <span className="font-semibold">{v}</span>
                             </span>
@@ -487,7 +487,7 @@ export default function AutoScheduleModal({
               value={startDate}
               min={new Date().toISOString().slice(0, 10)}
               onChange={e => setStartDate(e.target.value)}
-              className="text-sm border-2 border-gray-200 rounded-xl px-3 py-2 bg-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all"
+              className="text-sm border-2 border-gray-200 rounded-xl px-3 py-2 bg-white focus:ring-2 focus:ring-primary focus:border-primary transition-all"
             />
           </div>
           <span className="text-gray-400 mt-5">→</span>
@@ -498,7 +498,7 @@ export default function AutoScheduleModal({
               value={endDate}
               min={startDate || new Date().toISOString().slice(0, 10)}
               onChange={e => setEndDate(e.target.value)}
-              className={`text-sm border-2 rounded-xl px-3 py-2 bg-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all ${
+              className={`text-sm border-2 rounded-xl px-3 py-2 bg-white focus:ring-2 focus:ring-primary focus:border-primary transition-all ${
                 endDate && endDate < startDate ? 'border-red-300' : 'border-gray-200'
               }`}
             />
@@ -528,11 +528,11 @@ export default function AutoScheduleModal({
             const subjectOptions = [...effectiveSubjects, 'Special Class'].filter((v, i, a) => a.indexOf(v) === i);
             return (
               <div key={day} className={`rounded-xl px-5 py-4 border-2 transition-all ${
-                hasTeacher ? 'border-emerald-200 bg-emerald-50/50' : 'border-gray-200 bg-gray-50/50'
+                hasTeacher ? 'border-primary/20 bg-primary/5/50' : 'border-gray-200 bg-gray-50/50'
               }`}>
                 <div className="flex items-center gap-4">
                   <div className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${
-                    hasTeacher ? 'bg-emerald-500 text-white' : 'bg-gray-200 text-gray-500'
+                    hasTeacher ? 'bg-primary text-white' : 'bg-gray-200 text-gray-500'
                   }`}>
                     <Clock className="h-5 w-5" />
                   </div>
@@ -560,7 +560,7 @@ export default function AutoScheduleModal({
                     <select
                       value={istTime}
                       onChange={e => setTimeSlots(prev => ({ ...prev, [day]: e.target.value }))}
-                      className="w-full text-sm border-2 border-gray-200 rounded-xl px-3 py-2 bg-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all"
+                      className="w-full text-sm border-2 border-gray-200 rounded-xl px-3 py-2 bg-white focus:ring-2 focus:ring-primary focus:border-primary transition-all"
                     >
                       {TIME_OPTIONS.map(t => (
                         <option key={t} value={t}>{to12h(t)} IST</option>
@@ -571,7 +571,7 @@ export default function AutoScheduleModal({
                     <select
                       value={teacherMap[subject] || ''}
                       onChange={e => setTeacherMap(prev => ({ ...prev, [subject]: e.target.value }))}
-                      className="w-full text-sm border-2 border-gray-200 rounded-xl px-3 py-2 bg-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all"
+                      className="w-full text-sm border-2 border-gray-200 rounded-xl px-3 py-2 bg-white focus:ring-2 focus:ring-primary focus:border-primary transition-all"
                     >
                       <option value="">Select Teacher…</option>
                       {uniqueTeachers.map(t => (
@@ -581,7 +581,7 @@ export default function AutoScheduleModal({
                       ))}
                     </select>
                   </div>
-                  {hasTeacher && <CheckCircle2 className="h-5 w-5 text-emerald-500 shrink-0" />}
+                  {hasTeacher && <CheckCircle2 className="h-5 w-5 text-primary shrink-0" />}
                 </div>
                 {/* GCC / regional times */}
                 {nonIstGroups.length > 0 && (
@@ -615,7 +615,7 @@ export default function AutoScheduleModal({
                 type="checkbox"
                 checked={opt.checked}
                 onChange={e => opt.onChange(e.target.checked)}
-                className="w-5 h-5 rounded-lg border-2 border-gray-300 text-emerald-600 focus:ring-emerald-500 transition-all"
+                className="w-5 h-5 rounded-lg border-2 border-gray-300 text-primary focus:ring-primary transition-all"
               />
               <div>
                 <span className="text-sm text-gray-700 group-hover:text-gray-900">{opt.label}</span>
@@ -637,8 +637,8 @@ export default function AutoScheduleModal({
                 onClick={() => setDurationMinutes(d)}
                 className={`px-4 py-2.5 rounded-xl text-sm font-medium border-2 transition-all duration-150 ${
                   durationMinutes === d
-                    ? 'border-emerald-500 bg-emerald-50 text-emerald-700 shadow-sm'
-                    : 'border-gray-200 bg-white text-gray-600 hover:border-emerald-300 hover:bg-emerald-50/50'
+                    ? 'border-primary bg-primary/5 text-primary shadow-sm'
+                    : 'border-gray-200 bg-white text-gray-600 hover:border-emerald-300 hover:bg-primary/5/50'
                 }`}
               >
                 {durationMinutes === d && <Check className="h-3.5 w-3.5 inline mr-1.5" />}
@@ -651,13 +651,13 @@ export default function AutoScheduleModal({
 
       {/* Calendar info badge */}
       {selectedCalendar && (
-        <div className="bg-linear-to-r from-emerald-50 to-teal-50 rounded-xl p-4 border border-emerald-100">
+        <div className="bg-linear-to-r from-primary/5 to-secondary/5 rounded-xl p-4 border border-primary/15">
           <div className="flex items-center gap-2">
-            <CalendarDays className="h-4 w-4 text-emerald-600" />
-            <span className="text-sm font-semibold text-emerald-800">{selectedCalendar.category}</span>
-            <span className="text-xs text-emerald-600">— {selectedCalendar.total_sessions} subject sessions</span>
+            <CalendarDays className="h-4 w-4 text-primary" />
+            <span className="text-sm font-semibold text-primary">{selectedCalendar.category}</span>
+            <span className="text-xs text-primary">— {selectedCalendar.total_sessions} subject sessions</span>
           </div>
-          <p className="text-xs text-emerald-500 mt-1">
+          <p className="text-xs text-primary mt-1">
             {fmtDate(selectedCalendar.start_date)} → {fmtDate(selectedCalendar.end_date)}
           </p>
         </div>
@@ -673,8 +673,8 @@ export default function AutoScheduleModal({
         <p className="text-gray-500 mb-6">Confirm the schedule before creating {preview.total_sessions} sessions</p>
 
         {/* Summary card */}
-        <div className="bg-linear-to-r from-emerald-50 to-teal-50 rounded-xl p-5 border border-emerald-100 mb-6">
-          <h4 className="text-sm font-bold text-emerald-800 mb-4">Schedule Summary</h4>
+        <div className="bg-linear-to-r from-primary/5 to-secondary/5 rounded-xl p-5 border border-primary/15 mb-6">
+          <h4 className="text-sm font-bold text-primary mb-4">Schedule Summary</h4>
           <div className="grid grid-cols-2 gap-4 text-sm">
             <div><span className="text-gray-400">Calendar:</span> <span className="font-medium text-gray-800">{selectedCalendar?.category}</span></div>
             <div><span className="text-gray-400">Total Sessions:</span> <span className="font-medium text-gray-800">{preview.total_sessions}</span></div>
@@ -688,18 +688,18 @@ export default function AutoScheduleModal({
             </div>
             {preview.date_range && (
               <>
-                <div><span className="text-gray-400">First Session:</span> <span className="font-medium text-emerald-700">{fmtDate(preview.date_range.start)}</span></div>
-                <div><span className="text-gray-400">Last Session:</span> <span className="font-medium text-emerald-700">{fmtDate(preview.date_range.end)}</span></div>
+                <div><span className="text-gray-400">First Session:</span> <span className="font-medium text-primary">{fmtDate(preview.date_range.start)}</span></div>
+                <div><span className="text-gray-400">Last Session:</span> <span className="font-medium text-primary">{fmtDate(preview.date_range.end)}</span></div>
               </>
             )}
             <div><span className="text-gray-400">Duration:</span> <span className="font-medium text-gray-800">{durationMinutes} min per session</span></div>
           </div>
           {/* Regional timetable summary */}
           {nonIstGroups.length > 0 && (
-            <div className="mt-4 pt-3 border-t border-emerald-200">
+            <div className="mt-4 pt-3 border-t border-primary/20">
               <div className="flex items-center gap-2 mb-2">
-                <Globe className="h-3.5 w-3.5 text-emerald-600" />
-                <span className="text-xs font-semibold text-emerald-700">Regional Timetable</span>
+                <Globe className="h-3.5 w-3.5 text-primary" />
+                <span className="text-xs font-semibold text-primary">Regional Timetable</span>
               </div>
               <div className="space-y-1">
                 {DAYS_ORDER.map(day => {
@@ -707,8 +707,8 @@ export default function AutoScheduleModal({
                   const uniqueTzs = nonIstGroups.filter((g, i, a) => a.findIndex(x => x.tzLabel === g.tzLabel) === i);
                   return (
                     <div key={day} className="flex items-center gap-3 text-xs">
-                      <span className="font-medium text-emerald-800 w-8">{day}</span>
-                      <span className="text-emerald-600">{to12h(istTime)} IST</span>
+                      <span className="font-medium text-primary w-8">{day}</span>
+                      <span className="text-primary">{to12h(istTime)} IST</span>
                       {uniqueTzs.map(g => (
                         <span key={g.tzLabel} className="text-blue-600">{g.flag} {istToRegionTime(istTime, g.region)} {g.tzLabel}</span>
                       ))}
@@ -730,7 +730,7 @@ export default function AutoScheduleModal({
               return (
                 <div key={subj} className="flex items-center gap-3 bg-white border rounded-xl px-4 py-3 text-sm">
                   <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
-                    teacherData ? 'bg-emerald-500 text-white' : 'bg-gray-200 text-gray-400'
+                    teacherData ? 'bg-primary text-white' : 'bg-gray-200 text-gray-400'
                   }`}>
                     <BookOpen className="h-4 w-4" />
                   </div>
@@ -738,7 +738,7 @@ export default function AutoScheduleModal({
                   <Badge label={`${count} sessions`} variant="info" />
                   <span className="text-gray-300">→</span>
                   {teacherData ? (
-                    <span className="text-emerald-600">{teacherData.teacher_name || teacherData.teacher_email}</span>
+                    <span className="text-primary">{teacherData.teacher_name || teacherData.teacher_email}</span>
                   ) : (
                     <span className="text-amber-500 italic">No teacher assigned</span>
                   )}
@@ -804,8 +804,8 @@ export default function AutoScheduleModal({
       <div className="py-4 space-y-6">
         {/* ── Success header ── */}
         <div className="text-center">
-          <div className="w-14 h-14 rounded-full bg-emerald-100 flex items-center justify-center mx-auto mb-3">
-            <CheckCircle2 className="h-7 w-7 text-emerald-600" />
+          <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-3">
+            <CheckCircle2 className="h-7 w-7 text-primary" />
           </div>
           <h3 className="text-lg font-bold text-gray-800">{result.sessions_created} Sessions Created</h3>
           <p className="text-xs text-gray-400 mt-1">
@@ -816,9 +816,9 @@ export default function AutoScheduleModal({
         {/* ── Per-subject grid ── */}
         <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 max-w-xl mx-auto">
           {Object.entries(result.per_subject).map(([subj, count]) => (
-            <div key={subj} className="rounded-lg bg-emerald-50 border border-emerald-200 px-2 py-2 text-center">
-              <p className="text-[9px] font-semibold text-emerald-600 uppercase tracking-wide truncate">{subj}</p>
-              <p className="text-xl font-bold text-emerald-700">{count}</p>
+            <div key={subj} className="rounded-lg bg-primary/5 border border-primary/20 px-2 py-2 text-center">
+              <p className="text-[9px] font-semibold text-primary uppercase tracking-wide truncate">{subj}</p>
+              <p className="text-xl font-bold text-primary">{count}</p>
             </div>
           ))}
         </div>
@@ -835,10 +835,10 @@ export default function AutoScheduleModal({
           <div className="space-y-3">
             {/* Summary stats */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-              <div className="rounded-lg bg-green-50 border border-green-200 p-2.5 text-center">
-                <ShieldCheck className="h-4 w-4 text-green-600 mx-auto mb-1" />
-                <p className="text-lg font-bold text-green-700">{creditCheck.summary.fully_covered}</p>
-                <p className="text-[9px] text-green-600 font-medium">Fully Prepaid</p>
+              <div className="rounded-lg bg-primary/5 border border-primary/20 p-2.5 text-center">
+                <ShieldCheck className="h-4 w-4 text-primary mx-auto mb-1" />
+                <p className="text-lg font-bold text-primary">{creditCheck.summary.fully_covered}</p>
+                <p className="text-[9px] text-primary font-medium">Fully Prepaid</p>
               </div>
               <div className="rounded-lg bg-amber-50 border border-amber-200 p-2.5 text-center">
                 <CreditCard className="h-4 w-4 text-amber-600 mx-auto mb-1" />
@@ -883,7 +883,7 @@ export default function AutoScheduleModal({
                         </td>
                         <td className="px-3 py-1.5 text-center text-gray-600">{s.credits_available}</td>
                         <td className="px-3 py-1.5 text-center">
-                          <span className={s.sessions_covered > 0 ? 'text-green-600 font-medium' : 'text-gray-400'}>
+                          <span className={s.sessions_covered > 0 ? 'text-primary font-medium' : 'text-gray-400'}>
                             {s.sessions_covered}/{s.sessions_scheduled}
                           </span>
                         </td>
@@ -895,11 +895,11 @@ export default function AutoScheduleModal({
                         <td className="px-3 py-1.5 text-right font-medium">
                           {s.billable_amount_paise > 0
                             ? <span className="text-amber-700">{money(s.billable_amount_paise, s.currency)}</span>
-                            : <span className="text-green-600">₹0</span>}
+                            : <span className="text-primary">₹0</span>}
                         </td>
                         <td className="px-3 py-1.5 text-center">
                           {s.status === 'fully_covered' && (
-                            <span className="inline-flex items-center gap-0.5 text-[10px] font-medium text-green-700 bg-green-100 px-1.5 py-0.5 rounded-full">
+                            <span className="inline-flex items-center gap-0.5 text-[10px] font-medium text-primary bg-primary/10 px-1.5 py-0.5 rounded-full">
                               <ShieldCheck className="h-2.5 w-2.5" /> Prepaid
                             </span>
                           )}
@@ -983,13 +983,13 @@ export default function AutoScheduleModal({
         onClick={e => e.stopPropagation()}
       >
         {/* ── Left sidebar — step indicator ── */}
-        <div className="w-60 bg-linear-to-b from-emerald-600 via-emerald-700 to-teal-800 p-6 flex flex-col shrink-0">
+        <div className="w-60 bg-linear-to-b from-primary via-primary/90 to-secondary p-6 flex flex-col shrink-0">
           <div className="mb-8">
             <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center mb-3">
               <CalendarDays className="h-5 w-5 text-white" />
             </div>
             <h2 className="text-white font-bold text-lg">Auto-Schedule</h2>
-            <p className="text-emerald-200 text-xs mt-1">Step {stepIdx + 1} of {WIZARD_STEPS.length}</p>
+            <p className="text-primary/60 text-xs mt-1">Step {stepIdx + 1} of {WIZARD_STEPS.length}</p>
           </div>
           <div className="space-y-1 flex-1">
             {WIZARD_STEPS.map((step, idx) => {
@@ -999,11 +999,11 @@ export default function AutoScheduleModal({
                 <div
                   key={step.key}
                   className={`flex items-center gap-3 px-3 py-3 rounded-xl transition-all ${
-                    isCurrent ? 'bg-white/20 text-white shadow-lg shadow-black/10' : isDone ? 'text-emerald-200' : 'text-emerald-400/50'
+                    isCurrent ? 'bg-white/20 text-white shadow-lg shadow-black/10' : isDone ? 'text-primary/60' : 'text-primary/50'
                   }`}
                 >
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold shrink-0 ${
-                    isDone ? 'bg-emerald-400 text-emerald-900' : isCurrent ? 'bg-white text-emerald-700' : 'bg-emerald-500/30 text-emerald-300/70'
+                    isDone ? 'bg-primary text-emerald-900' : isCurrent ? 'bg-white text-primary' : 'bg-primary/30 text-primary/80/70'
                   }`}>
                     {isDone ? <Check className="h-4 w-4" /> : idx + 1}
                   </div>
@@ -1012,7 +1012,7 @@ export default function AutoScheduleModal({
               );
             })}
           </div>
-          <button onClick={closeWizard} className="mt-4 text-emerald-200 hover:text-white text-xs flex items-center gap-2 transition">
+          <button onClick={closeWizard} className="mt-4 text-primary/60 hover:text-white text-xs flex items-center gap-2 transition">
             <X className="h-3.5 w-3.5" /> Cancel & Close
           </button>
         </div>
@@ -1107,7 +1107,7 @@ function SessionPreviewList({ sessions, nonIstGroups }: {
         {sessions.length > 10 && (
           <button
             onClick={() => setExpanded(!expanded)}
-            className="w-full text-center py-2 text-xs font-medium text-emerald-600 hover:bg-emerald-50 border-t border-gray-200 transition-colors"
+            className="w-full text-center py-2 text-xs font-medium text-primary hover:bg-primary/5 border-t border-gray-200 transition-colors"
           >
             {expanded ? 'Show less' : `Show all ${sessions.length} sessions`}
           </button>

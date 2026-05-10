@@ -233,7 +233,7 @@ export default function ReportTeacherDialog({
         {/* ── Step 5: Done ── */}
         {step === 'done' && (
           <div className="p-6 text-center">
-            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
+            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
               <span className="text-3xl">✅</span>
             </div>
             <h2 className="text-base font-bold text-gray-900">Report Submitted</h2>

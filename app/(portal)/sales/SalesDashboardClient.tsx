@@ -112,7 +112,7 @@ const STAGES = [
   { value: 'demo_scheduled', label: 'Demo Scheduled', color: 'bg-cyan-100 text-cyan-800' },
   { value: 'demo_completed', label: 'Demo Completed', color: 'bg-teal-100 text-teal-800' },
   { value: 'negotiation', label: 'Negotiation', color: 'bg-amber-100 text-amber-800' },
-  { value: 'enrolled', label: 'Enrolled', color: 'bg-green-100 text-green-800' },
+  { value: 'enrolled', label: 'Enrolled', color: 'bg-primary/10 text-green-800' },
   { value: 'lost', label: 'Lost', color: 'bg-red-100 text-red-800' },
   { value: 'disqualified', label: 'Disqualified', color: 'bg-gray-100 text-gray-600' },
 ];
@@ -293,7 +293,7 @@ function OverviewTab({ userEmail }: { userEmail: string }) {
           </div>
           <div className="flex items-center gap-3">
             {syncResult && (
-              <span className="text-xs text-green-700 bg-green-50 px-3 py-1 rounded-full">
+              <span className="text-xs text-primary bg-primary/5 px-3 py-1 rounded-full">
                 +{syncResult.leads_imported} imported, {syncResult.leads_skipped} skipped
               </span>
             )}
@@ -640,8 +640,8 @@ function LeadsTab({ userEmail }: { userEmail: string }) {
   const SortIcon = ({ col }: { col: string }) => {
     if (filters.sort !== col) return <ArrowUpDown className="w-3 h-3 opacity-30" />;
     return filters.order === 'asc'
-      ? <ArrowUp className="w-3 h-3 text-emerald-600" />
-      : <ArrowDown className="w-3 h-3 text-emerald-600" />;
+      ? <ArrowUp className="w-3 h-3 text-primary" />
+      : <ArrowDown className="w-3 h-3 text-primary" />;
   };
 
   return (
@@ -655,7 +655,7 @@ function LeadsTab({ userEmail }: { userEmail: string }) {
             value={filters.search}
             onChange={e => setFilter('search', e.target.value)}
             placeholder="Search by name, phone, or email…"
-            className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-xl text-sm bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-400 transition"
+            className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-xl text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition"
           />
           {filters.search && (
             <button onClick={() => setFilter('search', '')} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
@@ -678,7 +678,7 @@ function LeadsTab({ userEmail }: { userEmail: string }) {
           onClick={() => setLivePolling(v => !v)}
           className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium transition ${
             livePolling
-              ? 'bg-green-50 border border-green-200 text-green-700'
+              ? 'bg-primary/5 border border-primary/20 text-primary'
               : 'bg-gray-50 border border-gray-200 text-gray-400'
           }`}
           title={livePolling ? 'Live updates ON (30s)' : 'Live updates OFF'}
@@ -704,7 +704,7 @@ function LeadsTab({ userEmail }: { userEmail: string }) {
         <button
           onClick={() => setFilter('stage', '')}
           className={`px-3 py-1.5 rounded-lg text-xs font-medium transition ${
-            !filters.stage ? 'bg-emerald-600 text-white shadow-sm' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            !filters.stage ? 'bg-primary text-white shadow-sm' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
           }`}
         >
           All Stages
@@ -714,7 +714,7 @@ function LeadsTab({ userEmail }: { userEmail: string }) {
             key={s.value}
             onClick={() => setFilter('stage', filters.stage === s.value ? '' : s.value)}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition ${
-              filters.stage === s.value ? 'bg-emerald-600 text-white shadow-sm' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              filters.stage === s.value ? 'bg-primary text-white shadow-sm' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
             }`}
           >
             {s.label}
@@ -749,7 +749,7 @@ function LeadsTab({ userEmail }: { userEmail: string }) {
           <select
             value={filters.campaign}
             onChange={e => setFilter('campaign', e.target.value)}
-            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary/20"
           >
             <option value="">All Campaigns</option>
             {campaigns.map(c => (
@@ -768,7 +768,7 @@ function LeadsTab({ userEmail }: { userEmail: string }) {
             value={filters.adName}
             onChange={e => setFilter('adName', e.target.value)}
             disabled={adSetsLoading}
-            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 disabled:opacity-50"
+            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:opacity-50"
           >
             <option value="">{filters.campaign ? 'All Ad Sets in Campaign' : 'All Ad Sets'}</option>
             {adSets.map(a => (
@@ -783,7 +783,7 @@ function LeadsTab({ userEmail }: { userEmail: string }) {
           <select
             value={filters.priority}
             onChange={e => setFilter('priority', e.target.value)}
-            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary/20"
           >
             <option value="">All Priorities</option>
             {PRIORITIES.map(p => <option key={p.value} value={p.value}>{p.label}</option>)}
@@ -794,7 +794,7 @@ function LeadsTab({ userEmail }: { userEmail: string }) {
           <select
             value={filters.source}
             onChange={e => setFilter('source', e.target.value)}
-            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary/20"
           >
             <option value="">All Sources</option>
             {SOURCES.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
@@ -803,7 +803,7 @@ function LeadsTab({ userEmail }: { userEmail: string }) {
         <button
           onClick={() => setShowFilters(v => !v)}
           className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium border transition ${
-            showFilters ? 'bg-emerald-50 border-emerald-200 text-emerald-700' : 'bg-white border-gray-200 text-gray-500 hover:bg-gray-50'
+            showFilters ? 'bg-primary/5 border-primary/20 text-primary' : 'bg-white border-gray-200 text-gray-500 hover:bg-gray-50'
           }`}
         >
           <SlidersHorizontal className="w-3.5 h-3.5" />
@@ -820,7 +820,7 @@ function LeadsTab({ userEmail }: { userEmail: string }) {
               type="date"
               value={filters.dateFrom}
               onChange={e => setFilter('dateFrom', e.target.value)}
-              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary/20"
             />
           </div>
           <div>
@@ -829,7 +829,7 @@ function LeadsTab({ userEmail }: { userEmail: string }) {
               type="date"
               value={filters.dateTo}
               onChange={e => setFilter('dateTo', e.target.value)}
-              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary/20"
             />
           </div>
           <div>
@@ -839,7 +839,7 @@ function LeadsTab({ userEmail }: { userEmail: string }) {
             <select
               value={filters.hasPhone}
               onChange={e => setFilter('hasPhone', e.target.value)}
-              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary/20"
             >
               <option value="">Any</option>
               <option value="true">Has phone</option>
@@ -853,7 +853,7 @@ function LeadsTab({ userEmail }: { userEmail: string }) {
             <select
               value={filters.hasEmail}
               onChange={e => setFilter('hasEmail', e.target.value)}
-              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary/20"
             >
               <option value="">Any</option>
               <option value="true">Has email</option>
@@ -932,7 +932,7 @@ function LeadsTab({ userEmail }: { userEmail: string }) {
               <Users className="w-12 h-12 mx-auto mb-3 opacity-30" />
               <p className="text-sm">No leads found</p>
               {activeFilterCount > 0 && (
-                <button onClick={clearFilters} className="mt-2 text-xs text-emerald-600 hover:underline">
+                <button onClick={clearFilters} className="mt-2 text-xs text-primary hover:underline">
                   Clear all filters
                 </button>
               )}
@@ -982,8 +982,8 @@ function LeadsTab({ userEmail }: { userEmail: string }) {
                     <tr
                       key={lead.id}
                       onClick={() => setSelectedLead(lead.id)}
-                      className={`border-b border-gray-50 hover:bg-emerald-50/30 cursor-pointer transition ${
-                        selectedLead === lead.id ? 'bg-emerald-50 border-emerald-100' : ''
+                      className={`border-b border-gray-50 hover:bg-primary/5/30 cursor-pointer transition ${
+                        selectedLead === lead.id ? 'bg-primary/5 border-primary/15' : ''
                       }`}
                     >
                       <td className="px-4 py-3">
@@ -1035,7 +1035,7 @@ function LeadsTab({ userEmail }: { userEmail: string }) {
                         </span>
                       </td>
                       <td className="px-4 py-3">
-                        <span className={`text-xs font-semibold ${lead.lead_score >= 61 ? 'text-green-600' : lead.lead_score >= 31 ? 'text-amber-600' : 'text-gray-400'}`}>
+                        <span className={`text-xs font-semibold ${lead.lead_score >= 61 ? 'text-primary' : lead.lead_score >= 31 ? 'text-amber-600' : 'text-gray-400'}`}>
                           {lead.lead_score}
                         </span>
                       </td>
@@ -1075,7 +1075,7 @@ function LeadsTab({ userEmail }: { userEmail: string }) {
                         onClick={() => setPage(pageNum)}
                         className={`w-8 h-8 rounded text-xs transition ${
                           pageNum === page
-                            ? 'bg-emerald-600 text-white font-medium'
+                            ? 'bg-primary text-white font-medium'
                             : 'border border-gray-200 hover:bg-gray-50'
                         }`}
                       >
@@ -1137,7 +1137,7 @@ function LeadsTab({ userEmail }: { userEmail: string }) {
 
 function FilterChip({ label, onRemove }: { label: string; onRemove: () => void }) {
   return (
-    <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-emerald-50 text-emerald-700 text-xs rounded-full border border-emerald-200">
+    <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-primary/5 text-primary text-xs rounded-full border border-primary/20">
       {label}
       <button onClick={onRemove} className="hover:text-red-600 transition">
         <X className="w-3 h-3" />
@@ -1216,7 +1216,7 @@ function LeadDetailPanel({
       onClick={() => setActiveSection(key)}
       className={`px-3 py-2 text-xs font-medium rounded-lg transition ${
         activeSection === key
-          ? 'bg-emerald-100 text-emerald-700'
+          ? 'bg-primary/10 text-primary'
           : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'
       }`}
     >
@@ -1246,7 +1246,7 @@ function LeadDetailPanel({
                   <input
                     value={editForm.full_name}
                     onChange={e => setEditForm(f => ({ ...f, full_name: e.target.value }))}
-                    className="text-lg font-bold text-gray-900 border-b-2 border-emerald-400 outline-none bg-transparent w-full"
+                    className="text-lg font-bold text-gray-900 border-b-2 border-primary outline-none bg-transparent w-full"
                   />
                 ) : (
                   <h2 className="text-lg font-bold text-gray-900 truncate">{lead.full_name}</h2>
@@ -1265,7 +1265,7 @@ function LeadDetailPanel({
                   <button onClick={() => setEditing(false)} className="p-1.5 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100 transition">
                     <X className="w-4 h-4" />
                   </button>
-                  <button onClick={handleSaveEdit} disabled={saving} className="p-1.5 text-emerald-600 hover:text-emerald-700 rounded-lg hover:bg-emerald-50 transition">
+                  <button onClick={handleSaveEdit} disabled={saving} className="p-1.5 text-primary hover:text-primary rounded-lg hover:bg-primary/5 transition">
                     {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
                   </button>
                 </>
@@ -1291,7 +1291,7 @@ function LeadDetailPanel({
             {(lead.whatsapp || lead.phone) && (
               <a href={`https://wa.me/${(lead.whatsapp || lead.phone || '').replace(/\D/g, '')}`}
                 target="_blank" rel="noopener noreferrer"
-                className="flex items-center gap-1.5 px-3 py-1.5 bg-green-50 text-green-700 rounded-lg text-xs font-medium hover:bg-green-100 transition">
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-primary/5 text-primary rounded-lg text-xs font-medium hover:bg-primary/10 transition">
                 <MessageCircle className="w-3.5 h-3.5" /> WhatsApp
               </a>
             )}
@@ -1311,7 +1311,7 @@ function LeadDetailPanel({
             <select
               value={lead.pipeline_stage}
               onChange={e => onStageChange(e.target.value)}
-              className="w-full border border-gray-200 rounded-lg px-2.5 py-1.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-400"
+              className="w-full border border-gray-200 rounded-lg px-2.5 py-1.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
             >
               {STAGES.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
             </select>
@@ -1322,7 +1322,7 @@ function LeadDetailPanel({
               <select
                 value={editForm.priority}
                 onChange={e => setEditForm(f => ({ ...f, priority: e.target.value }))}
-                className="w-full border border-gray-200 rounded-lg px-2.5 py-1.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                className="w-full border border-gray-200 rounded-lg px-2.5 py-1.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary/20"
               >
                 {PRIORITIES.map(p => <option key={p.value} value={p.value}>{p.label}</option>)}
               </select>
@@ -1334,7 +1334,7 @@ function LeadDetailPanel({
           </div>
           <div className="w-16 text-center">
             <label className="text-[10px] text-gray-400 uppercase tracking-wider mb-1 block">Score</label>
-            <div className={`py-1.5 text-sm font-bold ${lead.lead_score >= 61 ? 'text-green-600' : lead.lead_score >= 31 ? 'text-amber-600' : 'text-gray-400'}`}>
+            <div className={`py-1.5 text-sm font-bold ${lead.lead_score >= 61 ? 'text-primary' : lead.lead_score >= 31 ? 'text-amber-600' : 'text-gray-400'}`}>
               {lead.lead_score}
             </div>
           </div>
@@ -1360,17 +1360,17 @@ function LeadDetailPanel({
                     <div>
                       <label className="text-xs text-gray-500 mb-0.5 block">Phone</label>
                       <input value={editForm.phone} onChange={e => setEditForm(f => ({ ...f, phone: e.target.value }))}
-                        className="w-full border border-gray-200 rounded-lg px-2.5 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20" placeholder="+91..." />
+                        className="w-full border border-gray-200 rounded-lg px-2.5 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20" placeholder="+91..." />
                     </div>
                     <div>
                       <label className="text-xs text-gray-500 mb-0.5 block">Email</label>
                       <input value={editForm.email} onChange={e => setEditForm(f => ({ ...f, email: e.target.value }))}
-                        className="w-full border border-gray-200 rounded-lg px-2.5 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20" placeholder="email@..." />
+                        className="w-full border border-gray-200 rounded-lg px-2.5 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20" placeholder="email@..." />
                     </div>
                     <div>
                       <label className="text-xs text-gray-500 mb-0.5 block">WhatsApp</label>
                       <input value={editForm.whatsapp} onChange={e => setEditForm(f => ({ ...f, whatsapp: e.target.value }))}
-                        className="w-full border border-gray-200 rounded-lg px-2.5 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20" placeholder="WhatsApp" />
+                        className="w-full border border-gray-200 rounded-lg px-2.5 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20" placeholder="WhatsApp" />
                     </div>
                   </div>
                 ) : (
@@ -1403,12 +1403,12 @@ function LeadDetailPanel({
                       <div>
                         <label className="text-xs text-gray-500 mb-0.5 block">Grade</label>
                         <input value={editForm.student_grade} onChange={e => setEditForm(f => ({ ...f, student_grade: e.target.value }))}
-                          className="w-full border border-gray-200 rounded-lg px-2.5 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20" />
+                          className="w-full border border-gray-200 rounded-lg px-2.5 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20" />
                       </div>
                       <div>
                         <label className="text-xs text-gray-500 mb-0.5 block">Board</label>
                         <input value={editForm.student_board} onChange={e => setEditForm(f => ({ ...f, student_board: e.target.value }))}
-                          className="w-full border border-gray-200 rounded-lg px-2.5 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20" />
+                          className="w-full border border-gray-200 rounded-lg px-2.5 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20" />
                       </div>
                     </div>
                   ) : (
@@ -1488,7 +1488,7 @@ function LeadDetailPanel({
               <div className="flex justify-between items-center">
                 <h4 className="text-xs text-gray-500 font-medium">{activities.length} activities</h4>
                 <button onClick={() => setShowLogActivity(true)}
-                  className="flex items-center gap-1 px-3 py-1.5 bg-emerald-50 text-emerald-700 rounded-lg text-xs font-medium hover:bg-emerald-100 transition">
+                  className="flex items-center gap-1 px-3 py-1.5 bg-primary/5 text-primary rounded-lg text-xs font-medium hover:bg-primary/10 transition">
                   <Plus className="w-3 h-3" /> Log Activity
                 </button>
               </div>
@@ -1496,7 +1496,7 @@ function LeadDetailPanel({
                 <div className="text-center py-8 text-gray-400">
                   <FileText className="w-8 h-8 mx-auto mb-2 opacity-30" />
                   <p className="text-xs">No activities yet</p>
-                  <button onClick={() => setShowLogActivity(true)} className="mt-2 text-xs text-emerald-600 hover:underline">
+                  <button onClick={() => setShowLogActivity(true)} className="mt-2 text-xs text-primary hover:underline">
                     Log first activity
                   </button>
                 </div>
@@ -1509,14 +1509,14 @@ function LeadDetailPanel({
                       <div key={act.id} className="flex gap-3 relative">
                         <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 z-10 ${
                           act.activity_type === 'call' ? 'bg-blue-100' :
-                          act.activity_type.includes('whatsapp') ? 'bg-green-100' :
+                          act.activity_type.includes('whatsapp') ? 'bg-primary/10' :
                           act.activity_type === 'stage_change' ? 'bg-purple-100' :
                           act.activity_type === 'system' ? 'bg-gray-100' :
                           act.activity_type === 'meeting' ? 'bg-amber-100' :
                           'bg-gray-100'
                         }`}>
                           {act.activity_type === 'call' ? <PhoneCall className="w-3.5 h-3.5 text-blue-600" /> :
-                           act.activity_type.includes('whatsapp') ? <MessageCircle className="w-3.5 h-3.5 text-green-600" /> :
+                           act.activity_type.includes('whatsapp') ? <MessageCircle className="w-3.5 h-3.5 text-primary" /> :
                            act.activity_type === 'stage_change' ? <Layers className="w-3.5 h-3.5 text-purple-600" /> :
                            act.activity_type === 'meeting' ? <Calendar className="w-3.5 h-3.5 text-amber-600" /> :
                            <FileText className="w-3.5 h-3.5 text-gray-500" />}
@@ -1524,7 +1524,7 @@ function LeadDetailPanel({
                         <div className="flex-1 bg-gray-50 rounded-xl p-3">
                           <p className="text-sm font-medium text-gray-700">{act.title}</p>
                           {act.description && <p className="text-xs text-gray-500 mt-1">{act.description}</p>}
-                          {act.outcome && <p className="text-xs text-emerald-700 mt-1">Outcome: {act.outcome}</p>}
+                          {act.outcome && <p className="text-xs text-primary mt-1">Outcome: {act.outcome}</p>}
                           <p className="text-[10px] text-gray-400 mt-1.5">{fmtDateTime(act.created_at)}</p>
                         </div>
                       </div>
@@ -1910,7 +1910,7 @@ function PipelineTab({ userEmail }: { userEmail: string }) {
                   <p className="text-xs text-gray-400 mt-1">{lead.phone || lead.email || '—'}</p>
                   <div className="flex items-center justify-between mt-2">
                     <span className="text-xs text-gray-400">{sourceLabel(lead.source)}</span>
-                    <span className={`text-xs font-bold ${lead.lead_score >= 61 ? 'text-green-600' : lead.lead_score >= 31 ? 'text-amber-600' : 'text-gray-400'}`}>
+                    <span className={`text-xs font-bold ${lead.lead_score >= 61 ? 'text-primary' : lead.lead_score >= 31 ? 'text-amber-600' : 'text-gray-400'}`}>
                       {lead.lead_score}
                     </span>
                   </div>
@@ -1978,7 +1978,7 @@ function ActivitiesTab({ userEmail }: { userEmail: string }) {
             <div key={act.id} className="flex gap-4 p-3 bg-white border rounded-lg">
               <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0">
                 {act.activity_type === 'call' ? <Phone className="w-4 h-4 text-blue-500" /> :
-                 act.activity_type.includes('whatsapp') ? <MessageSquare className="w-4 h-4 text-green-600" /> :
+                 act.activity_type.includes('whatsapp') ? <MessageSquare className="w-4 h-4 text-primary" /> :
                  act.activity_type === 'stage_change' ? <Layers className="w-4 h-4 text-purple-500" /> :
                  act.activity_type === 'system' ? <AlertCircle className="w-4 h-4 text-gray-400" /> :
                  <FileText className="w-4 h-4 text-gray-500" />}
@@ -1987,7 +1987,7 @@ function ActivitiesTab({ userEmail }: { userEmail: string }) {
                 <p className="text-sm font-medium text-gray-800">{act.title}</p>
                 {act.lead_name && <p className="text-xs text-blue-600">Lead: {act.lead_name}</p>}
                 {act.description && <p className="text-sm text-gray-500 mt-1">{act.description}</p>}
-                {act.outcome && <p className="text-sm text-green-700 mt-1">Outcome: {act.outcome}</p>}
+                {act.outcome && <p className="text-sm text-primary mt-1">Outcome: {act.outcome}</p>}
                 <p className="text-xs text-gray-400 mt-1">{fmtDateTime(act.created_at)} · {act.performed_by}</p>
               </div>
             </div>
@@ -2083,7 +2083,7 @@ function RemindersTab({ userEmail }: { userEmail: string }) {
                     <div className="flex gap-2">
                       <button
                         onClick={() => handleAction(r.id, 'complete')}
-                        className="px-3 py-1 text-xs bg-green-100 text-green-700 rounded-lg hover:bg-green-200"
+                        className="px-3 py-1 text-xs bg-primary/10 text-primary rounded-lg hover:bg-green-200"
                       >
                         <CheckCircle2 className="w-3 h-3 inline mr-1" />Complete
                       </button>
@@ -2096,7 +2096,7 @@ function RemindersTab({ userEmail }: { userEmail: string }) {
                     </div>
                   )}
                   {r.status === 'completed' && (
-                    <span className="text-xs text-green-600 font-medium">Completed</span>
+                    <span className="text-xs text-primary font-medium">Completed</span>
                   )}
                 </div>
               </div>
@@ -2235,7 +2235,7 @@ function ReportsTab() {
         </Card>
         <Card>
           <p className="text-xs text-gray-400">Enrolled</p>
-          <p className="text-2xl font-bold text-green-600">{enrolled}</p>
+          <p className="text-2xl font-bold text-primary">{enrolled}</p>
         </Card>
         <Card>
           <p className="text-xs text-gray-400">Conversion Rate</p>
@@ -2287,7 +2287,7 @@ function ReportsTab() {
                 <tr key={src.source} className="border-b last:border-0">
                   <td className="py-2">{sourceLabel(src.source)}</td>
                   <td className="py-2 text-right">{src.count}</td>
-                  <td className="py-2 text-right text-green-600">{src.converted}</td>
+                  <td className="py-2 text-right text-primary">{src.converted}</td>
                   <td className="py-2 text-right font-medium">
                     {src.count > 0 ? ((src.converted / src.count) * 100).toFixed(0) : 0}%
                   </td>

@@ -215,7 +215,7 @@ export default function FeesClient({ userName, userEmail, userRole }: Props) {
                   <TH className="w-10">
                     <input type="checkbox" checked={selectedInvoices.size === invoices.length && invoices.length > 0}
                       onChange={toggleAllInvoices}
-                      className="h-3.5 w-3.5 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer" />
+                      className="h-3.5 w-3.5 rounded border-gray-300 text-primary focus:ring-primary cursor-pointer" />
                   </TH>
                   <TH>Student</TH>
                   <TH>Description</TH>
@@ -231,7 +231,7 @@ export default function FeesClient({ userName, userEmail, userRole }: Props) {
                       <td className="px-4 py-3">
                         <input type="checkbox" checked={selectedInvoices.has(inv.id)}
                           onChange={() => toggleInvoice(inv.id)}
-                          className="h-3.5 w-3.5 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer" />
+                          className="h-3.5 w-3.5 rounded border-gray-300 text-primary focus:ring-primary cursor-pointer" />
                       </td>
                       <td className="px-4 py-3 text-gray-800 text-xs">
                         <span className="font-medium">{inv.student_name || inv.student_email}</span>
@@ -240,7 +240,7 @@ export default function FeesClient({ userName, userEmail, userRole }: Props) {
                       <td className="px-4 py-3 text-gray-500 text-xs max-w-sm">
                         <DescriptionDisplay text={inv.description} />
                       </td>
-                      <td className="px-4 py-3 text-right text-green-700 font-medium">{money(inv.amount_paise, inv.currency)}</td>
+                      <td className="px-4 py-3 text-right text-primary font-medium">{money(inv.amount_paise, inv.currency)}</td>
                       <td className="px-4 py-3 text-center"><StatusBadge status={inv.status} icon={inv.status === 'paid' ? CheckCircle : inv.status === 'overdue' ? AlertCircle : Clock} /></td>
                       <td className="px-4 py-3 text-gray-500 text-xs">{new Date(inv.due_date).toLocaleDateString('en-IN')}</td>
                       <td className="px-4 py-3 text-gray-500 text-xs">{inv.paid_at ? new Date(inv.paid_at).toLocaleDateString('en-IN') : '—'}</td>
@@ -251,7 +251,7 @@ export default function FeesClient({ userName, userEmail, userRole }: Props) {
                         </a>
                         {inv.status === 'paid' && (
                           <a href={`/api/v1/payment/receipt/${inv.id}?type=invoice`} target="_blank" rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 text-xs text-green-600 hover:text-green-700">
+                            className="inline-flex items-center gap-1 text-xs text-primary hover:text-primary">
                             <ExternalLink className="h-3 w-3" /> Receipt
                           </a>
                         )}
@@ -582,14 +582,14 @@ function EnrollmentFeesTab() {
 
         return (
           <div className={`rounded-xl border p-4 flex flex-col sm:flex-row sm:items-center gap-4 ${
-            anyActive ? 'border-emerald-200 bg-emerald-50' : 'border-red-100 bg-red-50'
+            anyActive ? 'border-primary/20 bg-primary/5' : 'border-red-100 bg-red-50'
           }`}>
             {/* Status */}
             <div className="flex items-center gap-2.5 flex-1 min-w-0">
-              <Tag className={`w-4 h-4 shrink-0 ${anyActive ? 'text-emerald-600' : 'text-red-500'}`} />
+              <Tag className={`w-4 h-4 shrink-0 ${anyActive ? 'text-primary' : 'text-red-500'}`} />
               <div>
                 <p className="text-sm font-semibold text-gray-800">{offerLabel}</p>
-                <p className={`text-xs font-medium ${anyActive ? 'text-emerald-700' : 'text-red-600'}`}>
+                <p className={`text-xs font-medium ${anyActive ? 'text-primary' : 'text-red-600'}`}>
                   {anyActive ? 'Active' : 'Ended'}
                   {sampleExpiry && anyActive && (
                     <> · expires {new Date(sampleExpiry).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</>
@@ -615,7 +615,7 @@ function EnrollmentFeesTab() {
                 <button
                   disabled={!offerExpiry || offerPatching}
                   onClick={() => { patchOffer('set_expiry', offerExpiry); setOfferExpiry(''); }}
-                  className="h-8 px-3 text-xs font-medium rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 disabled:opacity-40 transition"
+                  className="h-8 px-3 text-xs font-medium rounded-lg bg-primary text-white hover:bg-primary/90 disabled:opacity-40 transition"
                 >
                   Set End Date
                 </button>
@@ -635,7 +635,7 @@ function EnrollmentFeesTab() {
                 <button
                   disabled={offerPatching}
                   onClick={() => patchOffer('reenable')}
-                  className="flex items-center gap-1.5 h-8 px-3 text-xs font-medium rounded-lg border border-emerald-200 text-emerald-700 bg-white hover:bg-emerald-50 disabled:opacity-40 transition"
+                  className="flex items-center gap-1.5 h-8 px-3 text-xs font-medium rounded-lg border border-primary/20 text-primary bg-white hover:bg-primary/5 disabled:opacity-40 transition"
                 >
                   {offerPatching ? <Loader2 className="w-3 h-3 animate-spin" /> : <ToggleLeft className="w-3.5 h-3.5" />}
                   Re-enable Offer
@@ -932,7 +932,7 @@ function EnrollmentFeesTab() {
                       className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-[11px] font-semibold transition ${
                         row.payment_gate_enabled
                           ? 'bg-red-50 border-red-200 text-red-700 hover:bg-red-100'
-                          : 'bg-emerald-50 border-emerald-200 text-emerald-700 hover:bg-emerald-100'
+                          : 'bg-primary/5 border-primary/20 text-primary hover:bg-primary/10'
                       }`}
                       title={row.payment_gate_enabled ? 'Gate ON — click to allow free entry' : 'Gate OFF — click to require payment'}
                     >

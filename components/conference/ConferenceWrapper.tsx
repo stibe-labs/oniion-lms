@@ -227,8 +227,8 @@ export default function ConferenceWrapper({ token }: ConferenceWrapperProps) {
           <div className="bg-zinc-900 rounded-2xl p-8 border border-zinc-800">
             {/* Header */}
             <div className="text-center mb-8">
-              <div className="w-16 h-16 rounded-2xl bg-emerald-600/20 flex items-center justify-center mx-auto mb-4">
-                <svg className="w-8 h-8 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <div className="w-16 h-16 rounded-2xl bg-primary/20 flex items-center justify-center mx-auto mb-4">
+                <svg className="w-8 h-8 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M15.6 11.6L22 7v10l-6.4-4.5v-1Z" />
                   <rect width="14" height="10" x="2" y="7" rx="2" ry="2" />
                 </svg>
@@ -273,7 +273,7 @@ export default function ConferenceWrapper({ token }: ConferenceWrapperProps) {
                   onChange={(e) => setName(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleJoin()}
                   placeholder="Enter your name"
-                  className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                  className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                   autoFocus
                   maxLength={50}
                 />
@@ -284,7 +284,7 @@ export default function ConferenceWrapper({ token }: ConferenceWrapperProps) {
             <button
               onClick={handleJoin}
               disabled={!name.trim() || joining || !canJoinNow}
-              className="w-full py-3 px-4 rounded-xl font-semibold text-white bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
+              className="w-full py-3 px-4 rounded-xl font-semibold text-white bg-primary hover:bg-primary disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
             >
               {joining ? (
                 <>

@@ -14,7 +14,7 @@ export function CharacterLoader({
   const spinnerSize = Math.round(size * 0.35);
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, justifyContent: 'center', minHeight: '100%' }}>
-      <div style={{ width: spinnerSize, height: spinnerSize, borderRadius: '50%', border: `${Math.max(3, Math.round(spinnerSize / 12))}px solid #e5e7eb`, borderTopColor: '#10b981', animation: 'charLoaderSpin 0.8s linear infinite' }} />
+      <div style={{ width: spinnerSize, height: spinnerSize, borderRadius: '50%', border: `${Math.max(3, Math.round(spinnerSize / 12))}px solid #e5e7eb`, borderTopColor: 'var(--primary)', animation: 'charLoaderSpin 0.8s linear infinite' }} />
       {text && (
         <p style={{ fontSize: 13, fontWeight: 600, letterSpacing: 1.5, textTransform: 'uppercase', color: '#6b7280' }}>
           {text}
@@ -35,7 +35,7 @@ export function MiniCharacterLoader({
 }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '20px 0' }}>
-      <div style={{ width: 28, height: 28, borderRadius: '50%', border: '3px solid #e5e7eb', borderTopColor: '#10b981', animation: 'charLoaderSpin 0.8s linear infinite' }} />
+      <div style={{ width: 28, height: 28, borderRadius: '50%', border: '3px solid #e5e7eb', borderTopColor: 'var(--primary)', animation: 'charLoaderSpin 0.8s linear infinite' }} />
       {text && (
         <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: 1, textTransform: 'uppercase', color: '#6b7280' }}>
           {text}
