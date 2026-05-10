@@ -14,6 +14,7 @@ import { AUTH_CONFIG_DEFAULTS } from '@/lib/auth-config';
 import SplashConfigSection from './SplashConfigSection';
 import AuthConfigSection from './AuthConfigSection';
 import ThemeConfigSection from './ThemeConfigSection';
+import IntegrationsSection from './IntegrationsSection';
 
 interface Props {
   user: PortalUser;
@@ -465,6 +466,11 @@ export default function SuperadminClient({ user: _user }: Props) {
 
       {/* Brand Theme Colors */}
       {!fetching && <ThemeConfigSection initialPrimary={themePrimary} initialSecondary={themeSecondary} initialTextColor={themeTextColor} initialMutedColor={themeMutedColor} />}
+
+      {/* Integrations */}
+      <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+        <IntegrationsSection />
+      </div>
     </div>
   );
 }

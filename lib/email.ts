@@ -7,8 +7,8 @@
 // ═══════════════════════════════════════════════════════════════
 
 import nodemailer from 'nodemailer';
-import type { Transporter } from 'nodemailer';
 import { db } from '@/lib/db';
+import { getIntegrationConfig } from '@/lib/integration-config';
 import { fireWhatsApp, type MetaButtonUrl } from '@/lib/whatsapp';
 import { generatePayToken } from '@/lib/pay-token';
 import {
@@ -48,36 +48,16 @@ import {
   type LowCreditsWarningData,
 } from '@/lib/email-templates';
 
-// ── Singleton Transporter ───────────────────────────────────
+// ── Transporter Factory ─────────────────────────────────────
 
-const globalForEmail = globalThis as unknown as {
-  emailTransporter: Transporter | undefined;
-};
-
-function getTransporter(): Transporter {
-  if (globalForEmail.emailTransporter) {
-    return globalForEmail.emailTransporter;
-  }
-
-  const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST || 'smtp.gmail.com',
-    port: Number(process.env.SMTP_PORT || 587),
-    secure: process.env.SMTP_SECURE === 'true',
-    auth: {
-      user: process.env.SMTP_USER || process.env.SMTP_USERNAME,
-      // Gmail App Passwords are displayed with spaces but must be used without
-      pass: (process.env.SMTP_PASS || process.env.SMTP_PASSWORD || '').replace(/\s/g, ''),
-    },
-    tls: {
-      rejectUnauthorized: false, // allow self-signed certs in dev
-    },
+function buildTransporter(cfg: Awaited<ReturnType<typeof getIntegrationConfig>>['email']) {
+  return nodemailer.createTransport({
+    host: cfg.smtpHost,
+    port: cfg.smtpPort,
+    secure: cfg.smtpSecure,
+    auth: { user: cfg.smtpUser, pass: cfg.smtpPass },
+    tls: { rejectUnauthorized: false },
   });
-
-  if (process.env.NODE_ENV !== 'production') {
-    globalForEmail.emailTransporter = transporter;
-  }
-
-  return transporter;
 }
 
 // ── Send Options ────────────────────────────────────────────
@@ -109,18 +89,16 @@ export interface SendEmailResult {
 
 // ── Core Send Function ──────────────────────────────────────
 
-const DEV_LOG_MODE = process.env.EMAIL_MODE === 'log';
-
 /**
- * Core email send function. In dev mode with EMAIL_MODE=log,
- * prints to console instead of sending. Includes single retry
- * on first failure (30s delay).
+ * Core email send function. In log mode (email.mode=log in DB or EMAIL_MODE=log),
+ * prints to console instead of sending. Includes single retry on first failure (30s delay).
  */
 export async function sendEmail(options: SendEmailOptions): Promise<SendEmailResult> {
-  const from = `"${process.env.EMAIL_FROM_NAME || 'stibe Classes'}" <${process.env.EMAIL_FROM_ADDRESS || 'noreply@stibelearning.online'}>`;
+  const emailCfg = (await getIntegrationConfig()).email;
+  const from = `"${emailCfg.fromName}" <${emailCfg.fromAddress}>`;
 
   // ── Dev log mode — print to console, skip SMTP ────────
-  if (DEV_LOG_MODE) {
+  if (emailCfg.mode === 'log') {
     const recipients = Array.isArray(options.to) ? options.to.join(', ') : options.to;
     console.log('\n┌─── EMAIL (DEV LOG MODE) ────────────────────────────┐');
     console.log(`│ To:      ${recipients}`);
@@ -147,7 +125,7 @@ export async function sendEmail(options: SendEmailOptions): Promise<SendEmailRes
     priority: options.priority,
   };
 
-  const transporter = getTransporter();
+  const transporter = buildTransporter(emailCfg);
 
   // First attempt
   try {
@@ -155,12 +133,9 @@ export async function sendEmail(options: SendEmailOptions): Promise<SendEmailRes
     mirrorToWhatsApp(options);
     return { success: true, messageId: info.messageId };
   } catch (firstError: any) {
-    // Don't retry on authentication errors — password is wrong, retrying is pointless
-    // Also flush cached transporter so next call re-reads env vars
     if (firstError?.code === 'EAUTH' || firstError?.responseCode === 535) {
       const errMsg = firstError instanceof Error ? firstError.message : String(firstError);
       console.error('[Email] Auth error (not retrying):', errMsg);
-      globalForEmail.emailTransporter = undefined; // flush stale transporter
       return { success: false, error: errMsg };
     }
     console.warn('[Email] First attempt failed, retrying in 30s...', firstError);

@@ -83,7 +83,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Verify signature
-    const valid = verifyRazorpaySignature({
+    const valid = await verifyRazorpaySignature({
       orderId: razorpay_order_id,
       paymentId: razorpay_payment_id,
       signature: razorpay_signature || '',

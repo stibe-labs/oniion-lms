@@ -9,11 +9,10 @@ import { execFile } from 'child_process';
 import { promisify } from 'util';
 import path from 'path';
 import os from 'os';
+import { getIntegrationConfig } from '@/lib/integration-config';
 
 const execFileAsync = promisify(execFile);
 
-const GROQ_TEXT_MODEL = process.env.GROQ_MODEL || 'llama-3.3-70b-versatile';
-const GROQ_VISION_MODEL = process.env.GROQ_VISION_MODEL || 'meta-llama/llama-4-scout-17b-16e-instruct';
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 const GROQ_TIMEOUT_MS = 120_000; // 2 minutes
 const MAX_PDF_PAGES = 20;
@@ -210,20 +209,21 @@ async function savePageImages(
 
 // ── Groq text generation (70B model) ─────────────────────────
 async function callGroq(prompt: string): Promise<string> {
-  const apiKey = process.env.GROQ_API_KEY || '';
+  const cfg = await getIntegrationConfig();
+  const apiKey = cfg.groq.apiKey;
   if (!apiKey) throw new Error('GROQ_API_KEY not configured');
 
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), GROQ_TIMEOUT_MS);
 
   try {
-    console.log(`[ai-exam] Calling Groq text (${GROQ_TEXT_MODEL}), prompt: ${prompt.length} chars`);
+    console.log(`[ai-exam] Calling Groq text (${cfg.groq.model}), prompt: ${prompt.length} chars`);
     const res = await fetch(GROQ_API_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
       signal: controller.signal,
       body: JSON.stringify({
-        model: GROQ_TEXT_MODEL,
+        model: cfg.groq.model,
         messages: [
           { role: 'system', content: 'You are an expert exam question extractor and generator. Always respond with valid JSON. Never use LaTeX notation — write math in plain text.' },
           { role: 'user', content: prompt },
@@ -253,7 +253,8 @@ async function callGroq(prompt: string): Promise<string> {
 
 // ── Groq vision (Scout model — images + text prompt) ─────────
 async function callGroqVision(prompt: string, imageBase64s: string[]): Promise<string> {
-  const apiKey = process.env.GROQ_API_KEY || '';
+  const cfg = await getIntegrationConfig();
+  const apiKey = cfg.groq.apiKey;
   if (!apiKey) throw new Error('GROQ_API_KEY not configured');
 
   const controller = new AbortController();
@@ -267,13 +268,13 @@ async function callGroqVision(prompt: string, imageBase64s: string[]): Promise<s
   }
 
   try {
-    console.log(`[ai-exam] Calling Groq vision (${GROQ_VISION_MODEL}), ${imageBase64s.length} images`);
+    console.log(`[ai-exam] Calling Groq vision (${cfg.groq.visionModel}), ${imageBase64s.length} images`);
     const res = await fetch(GROQ_API_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
       signal: controller.signal,
       body: JSON.stringify({
-        model: GROQ_VISION_MODEL,
+        model: cfg.groq.visionModel,
         messages: [{ role: 'user', content }],
         temperature: 0.2,
         max_tokens: 8192,

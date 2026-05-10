@@ -5,28 +5,29 @@ import {
   type VideoGrant,
 } from 'livekit-server-sdk';
 import type { PortalRole } from '@/types';
+import { getIntegrationConfig } from '@/lib/integration-config';
 
-/**
- * LiveKit server utilities.
- * Uses LIVEKIT_API_KEY + LIVEKIT_API_SECRET from environment.
- * These are server-side only — never import this in client components.
- *
- * LIVEKIT_URL = direct HTTP URL for server-side API calls (e.g. http://76.13.244.54:7880)
- * NEXT_PUBLIC_LIVEKIT_URL = client-facing WSS URL sent to browsers (e.g. wss://stibelearning.online)
- */
-
-const livekitHost =
+/** Env-based fallback (used by module-level exports for backward compat) */
+const _envHost =
   process.env.LIVEKIT_URL ||
   process.env.NEXT_PUBLIC_LIVEKIT_URL?.replace('ws://', 'http://').replace('wss://', 'https://') ||
   'http://localhost:7880';
-const apiKey = process.env.LIVEKIT_API_KEY!;
-const apiSecret = process.env.LIVEKIT_API_SECRET!;
+const _envKey    = process.env.LIVEKIT_API_KEY || '';
+const _envSecret = process.env.LIVEKIT_API_SECRET || '';
 
-// ── Room Service Client (admin operations) ──────────────────
-export const roomService = new RoomServiceClient(livekitHost, apiKey, apiSecret);
+// ── Lazy DB-aware room service ──────────────────────────────
+export async function getLiveKitRoomService(): Promise<RoomServiceClient> {
+  const cfg = await getIntegrationConfig();
+  return new RoomServiceClient(
+    cfg.livekit.url || _envHost,
+    cfg.livekit.apiKey || _envKey,
+    cfg.livekit.apiSecret || _envSecret,
+  );
+}
 
-// ── Webhook Receiver (verify LiveKit signatures) ────────────
-export const webhookReceiver = new WebhookReceiver(apiKey, apiSecret);
+// ── Backward-compat module-level exports (env only, for webhooks) ──
+export const roomService = new RoomServiceClient(_envHost, _envKey, _envSecret);
+export const webhookReceiver = new WebhookReceiver(_envKey, _envSecret);
 
 // ── Role-based LiveKit grants ───────────────────────────────
 // See 04_API_ROUTES.md §4.1 for grant matrix
@@ -178,7 +179,11 @@ export async function createLiveKitToken(options: {
     grant.canPublishData = true; // needed for chat + hand-raise data channels
   }
 
-  const token = new AccessToken(apiKey, apiSecret, {
+  const cfg = await getIntegrationConfig();
+  const key    = cfg.livekit.apiKey    || _envKey;
+  const secret = cfg.livekit.apiSecret || _envSecret;
+
+  const token = new AccessToken(key, secret, {
     identity: participantIdentity,
     name: participantName,
     ttl: ttl || '4h',
@@ -212,36 +217,30 @@ export async function ensureRoom(
   roomName: string,
   metadata?: string
 ): Promise<{ name: string; sid: string }> {
-  const rooms = await roomService.listRooms([roomName]);
+  const svc = await getLiveKitRoomService();
+  const rooms = await svc.listRooms([roomName]);
   if (rooms.length > 0) {
     return { name: rooms[0].name, sid: rooms[0].sid };
   }
 
-  const room = await roomService.createRoom({
+  const room = await svc.createRoom({
     name: roomName,
-    // 4 hours — long enough to survive PM2 restarts, network blips, and
-    // scheduled-end-to-manual-end overtime. Teacher must explicitly end via
-    // DELETE /api/v1/room/[room_id] to close the room.
     emptyTimeout: 14400,
-    maxParticipants: 0, // 0 = unlimited (governed by server config max_participants)
+    maxParticipants: 0,
     metadata,
   });
 
   return { name: room.name, sid: room.sid };
 }
 
-/**
- * Delete a LiveKit room. Used when teacher ends the class.
- */
 export async function deleteRoom(roomName: string): Promise<void> {
-  await roomService.deleteRoom(roomName);
+  const svc = await getLiveKitRoomService();
+  await svc.deleteRoom(roomName);
 }
 
-/**
- * List current participants in a room (excludes hidden by default).
- */
 export async function listParticipants(roomName: string) {
-  return roomService.listParticipants(roomName);
+  const svc = await getLiveKitRoomService();
+  return svc.listParticipants(roomName);
 }
 
 /**
@@ -255,9 +254,11 @@ export async function testLiveKitConnectivity(): Promise<{
   const testRoom = 'dev_ping_room';
   const steps: { name: string; pass: boolean; error?: string }[] = [];
 
+  const svc = await getLiveKitRoomService();
+
   // Step 1: Create test room
   try {
-    await roomService.createRoom({ name: testRoom, emptyTimeout: 10 });
+    await svc.createRoom({ name: testRoom, emptyTimeout: 10 });
     steps.push({ name: 'Create test room', pass: true });
   } catch (e) {
     steps.push({ name: 'Create test room', pass: false, error: String(e) });
@@ -266,7 +267,7 @@ export async function testLiveKitConnectivity(): Promise<{
 
   // Step 2: List rooms to verify it exists
   try {
-    const rooms = await roomService.listRooms([testRoom]);
+    const rooms = await svc.listRooms([testRoom]);
     const found = rooms.some((r) => r.name === testRoom);
     steps.push({ name: 'List rooms (verify exists)', pass: found, error: found ? undefined : 'Room not found in list' });
   } catch (e) {
@@ -275,7 +276,7 @@ export async function testLiveKitConnectivity(): Promise<{
 
   // Step 3: Delete test room
   try {
-    await roomService.deleteRoom(testRoom);
+    await svc.deleteRoom(testRoom);
     steps.push({ name: 'Delete test room', pass: true });
   } catch (e) {
     steps.push({ name: 'Delete test room', pass: false, error: String(e) });

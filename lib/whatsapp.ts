@@ -17,33 +17,38 @@
 
 import { db } from '@/lib/db';
 import { buildPayUrl } from '@/lib/pay-token';
+import { getIntegrationConfig } from '@/lib/integration-config';
 
-// ── Configuration ───────────────────────────────────────────
+// ── Configuration (read from DB with env fallback) ──────────
 
-const WHATSAPP_API_TOKEN = process.env.WHATSAPP_API_TOKEN || '';
-const WHATSAPP_PHONE_ID  = process.env.WHATSAPP_PHONE_NUMBER_ID || '';
-const WHATSAPP_MODE      = process.env.WHATSAPP_MODE || 'mock'; // 'live' | 'mock'
-const GRAPH_API          = 'https://graph.facebook.com/v21.0';
+const GRAPH_API = 'https://graph.facebook.com/v21.0';
 
 // Cache auto-discovered phone number ID
 let cachedPhoneId: string | null = null;
 
+async function getWAConfig() {
+  const cfg = await getIntegrationConfig();
+  return cfg.whatsapp;
+}
+
 /**
  * Resolve the WhatsApp phone number ID.
- * Uses env var first; falls back to auto-discovery via Meta API.
+ * Uses DB/env config first; falls back to auto-discovery via Meta API.
  */
 async function getPhoneNumberId(): Promise<string> {
-  if (WHATSAPP_PHONE_ID) return WHATSAPP_PHONE_ID;
+  const wa = await getWAConfig();
+  if (wa.phoneNumberId) return wa.phoneNumberId;
   if (cachedPhoneId) return cachedPhoneId;
 
   try {
+    const wa = await getWAConfig();
     // Auto-discover: token → WABA ID → phone numbers
-    const meRes = await fetch(`${GRAPH_API}/me?access_token=${WHATSAPP_API_TOKEN}`);
+    const meRes = await fetch(`${GRAPH_API}/me?access_token=${wa.apiToken}`);
     const me = await meRes.json() as { id?: string };
     if (!me.id) throw new Error('Could not determine WABA ID');
 
     const phonesRes = await fetch(
-      `${GRAPH_API}/${me.id}/phone_numbers?access_token=${WHATSAPP_API_TOKEN}`
+      `${GRAPH_API}/${me.id}/phone_numbers?access_token=${wa.apiToken}`
     );
     const phones = await phonesRes.json() as { data?: Array<{ id: string }> };
     if (phones.data?.[0]?.id) {
@@ -105,9 +110,10 @@ async function metaSendTemplate(
   bodyParams: MetaTemplateParam[],
   buttonUrls?: MetaButtonUrl[],
 ): Promise<{ success: boolean; messageId?: string; error?: string }> {
+  const wa = await getWAConfig();
   const cleanPhone = phone.replace(/[\s+\-()]/g, '');
 
-  if (WHATSAPP_MODE !== 'live' || !WHATSAPP_API_TOKEN) {
+  if (wa.mode !== 'live' || !wa.apiToken) {
     const mockId = `mock_wa_tpl_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
     console.log(`\n┌─── WHATSAPP TEMPLATE (MOCK) ─────────────────────┐`);
     console.log(`│ To: ${cleanPhone}  Template: ${templateName}`);
@@ -158,7 +164,7 @@ async function metaSendTemplate(
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${WHATSAPP_API_TOKEN}`,
+        Authorization: `Bearer ${wa.apiToken}`,
       },
       body: JSON.stringify(payload),
     });
@@ -187,9 +193,10 @@ async function metaSend(
   message: string,
 ): Promise<{ success: boolean; messageId?: string; error?: string }> {
   // Strip +, spaces, dashes, parens — Meta expects pure digits with country code
+  const wa2 = await getWAConfig();
   const cleanPhone = phone.replace(/[\s+\-()]/g, '');
 
-  if (WHATSAPP_MODE !== 'live' || !WHATSAPP_API_TOKEN) {
+  if (wa2.mode !== 'live' || !wa2.apiToken) {
     const mockId = `mock_wa_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
     console.log(`\n┌─── WHATSAPP (MOCK) ──────────────────────────────┐`);
     console.log(`│ To: ${cleanPhone}`);
@@ -206,7 +213,7 @@ async function metaSend(
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${WHATSAPP_API_TOKEN}`,
+        Authorization: `Bearer ${wa2.apiToken}`,
       },
       body: JSON.stringify({
         messaging_product: 'whatsapp',

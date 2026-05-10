@@ -3,9 +3,7 @@
  * Sends HMAC-SHA256 signed webhook notifications to CRM on demo lifecycle events.
  */
 import { createHmac } from 'crypto';
-
-const CRM_WEBHOOK_URL = process.env.STIBE_CRM_WEBHOOK_URL || '';
-const CRM_WEBHOOK_SECRET = process.env.STIBE_CRM_WEBHOOK_SECRET || '';
+import { getIntegrationConfig } from '@/lib/integration-config';
 
 export type CRMWebhookEvent =
   | 'demo_registered'
@@ -28,6 +26,10 @@ interface CRMWebhookPayload {
  * Fire-and-forget — errors are logged but never thrown.
  */
 export async function notifyCRM(payload: CRMWebhookPayload): Promise<void> {
+  const cfg = await getIntegrationConfig();
+  const CRM_WEBHOOK_URL    = cfg.crm.webhookUrl;
+  const CRM_WEBHOOK_SECRET = cfg.crm.webhookSecret;
+
   if (!CRM_WEBHOOK_URL || !CRM_WEBHOOK_SECRET) {
     console.log('[crm-webhook] Not configured, skipping:', payload.event);
     return;

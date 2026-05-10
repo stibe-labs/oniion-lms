@@ -14,14 +14,7 @@ import { hash } from 'bcryptjs';
 import { notifyCRM } from '@/lib/crm-webhook';
 import { sendEmail } from '@/lib/email';
 import { credentialsTemplate } from '@/lib/email-templates';
-
-// ── Configuration ───────────────────────────────────────────
-
-const PAYMENT_MODE = process.env.PAYMENT_MODE || 'test';
-const RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID || '';
-const RAZORPAY_KEY_SECRET = process.env.RAZORPAY_KEY_SECRET || '';
-const CALLBACK_URL = process.env.PAYMENT_CALLBACK_URL ||
-  `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/v1/payment/callback`;
+import { getIntegrationConfig } from '@/lib/integration-config';
 
 const LOGIN_URL = process.env.NEXT_PUBLIC_APP_URL
   ? `${process.env.NEXT_PUBLIC_APP_URL}/login`
@@ -137,6 +130,8 @@ export interface PaymentOrder {
 }
 
 export async function createPaymentOrder(input: CreateOrderInput): Promise<PaymentOrder> {
+  const { keyId: RAZORPAY_KEY_ID, keySecret: RAZORPAY_KEY_SECRET, mode: PAYMENT_MODE, callbackUrl: CALLBACK_URL } = (await getIntegrationConfig()).razorpay;
+
   // If Razorpay keys are set, create a real order
   if (RAZORPAY_KEY_ID && RAZORPAY_KEY_SECRET && PAYMENT_MODE === 'live') {
     const response = await fetch('https://api.razorpay.com/v1/orders', {
@@ -204,10 +199,11 @@ export interface VerifyPaymentInput {
   signature: string;
 }
 
-export function verifyRazorpaySignature(input: VerifyPaymentInput): boolean {
-  if (!RAZORPAY_KEY_SECRET) return true; // test mode
+export async function verifyRazorpaySignature(input: VerifyPaymentInput): Promise<boolean> {
+  const secret = (await getIntegrationConfig()).razorpay.keySecret;
+  if (!secret) return true; // test mode
   const expectedSignature = crypto
-    .createHmac('sha256', RAZORPAY_KEY_SECRET)
+    .createHmac('sha256', secret)
     .update(`${input.orderId}|${input.paymentId}`)
     .digest('hex');
   return expectedSignature === input.signature;

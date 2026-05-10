@@ -10,23 +10,19 @@
 
 import { google, youtube_v3 } from 'googleapis';
 import { Readable } from 'stream';
-
-// ── Configuration ───────────────────────────────────────────
-
-const CLIENT_ID = process.env.YOUTUBE_CLIENT_ID!;
-const CLIENT_SECRET = process.env.YOUTUBE_CLIENT_SECRET!;
-const REFRESH_TOKEN = process.env.YOUTUBE_REFRESH_TOKEN!;
+import { getIntegrationConfig } from '@/lib/integration-config';
 
 // ── OAuth2 Client ───────────────────────────────────────────
 
-function getAuth() {
-  const oauth2 = new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET);
-  oauth2.setCredentials({ refresh_token: REFRESH_TOKEN });
+async function getAuth() {
+  const { clientId, clientSecret, refreshToken } = (await getIntegrationConfig()).youtube;
+  const oauth2 = new google.auth.OAuth2(clientId, clientSecret);
+  oauth2.setCredentials({ refresh_token: refreshToken });
   return oauth2;
 }
 
-function getYouTube() {
-  return google.youtube({ version: 'v3', auth: getAuth() });
+async function getYouTube() {
+  return google.youtube({ version: 'v3', auth: await getAuth() });
 }
 
 // ── Types ───────────────────────────────────────────────────
@@ -51,7 +47,7 @@ export interface SessionMeta {
 // ── Create Live Broadcast + Stream ──────────────────────────
 
 export async function createLiveBroadcast(meta: SessionMeta): Promise<BroadcastResult> {
-  const yt = getYouTube();
+  const yt = await getYouTube();
   const title = buildTitle(meta);
   const description = buildDescription(meta);
 
@@ -116,7 +112,7 @@ export async function createLiveBroadcast(meta: SessionMeta): Promise<BroadcastR
 // ── End Broadcast ───────────────────────────────────────────
 
 export async function endBroadcast(broadcastId: string): Promise<void> {
-  const yt = getYouTube();
+  const yt = await getYouTube();
   try {
     // Try transitioning to "complete" — only works if in "live" status
     await yt.liveBroadcasts.transition({
@@ -138,7 +134,7 @@ export async function getVideoDetails(videoId: string): Promise<{
   url: string;
   status: string;
 } | null> {
-  const yt = getYouTube();
+  const yt = await getYouTube();
   const res = await yt.videos.list({
     id: [videoId],
     part: ['snippet', 'contentDetails', 'status'],
@@ -161,7 +157,7 @@ export async function uploadVideoToYouTube(
   videoBuffer: Buffer,
   meta: SessionMeta,
 ): Promise<{ videoId: string; watchUrl: string }> {
-  const yt = getYouTube();
+  const yt = await getYouTube();
   const title = buildTitle(meta);
   const description = buildDescription(meta);
 
@@ -201,7 +197,7 @@ export async function createOrGetPlaylist(
   subject: string,
   monthKey: string, // e.g. '2026-03'
 ): Promise<{ playlistId: string; playlistUrl: string }> {
-  const yt = getYouTube();
+  const yt = await getYouTube();
   const [year, month] = monthKey.split('-');
   const monthName = new Date(Number(year), Number(month) - 1).toLocaleString('en', { month: 'long' });
   const title = `${batchName} — ${subject} — ${monthName} ${year}`;
@@ -243,7 +239,7 @@ export async function createOrGetPlaylist(
  * Add a video to a YouTube playlist.
  */
 export async function addToPlaylist(playlistId: string, videoId: string): Promise<void> {
-  const yt = getYouTube();
+  const yt = await getYouTube();
   await yt.playlistItems.insert({
     part: ['snippet'],
     requestBody: {
