@@ -27,6 +27,7 @@ import VirtualBackgroundPanel, { type VBGMode } from './VirtualBackgroundPanel';
 import StudentDetailPanel from './StudentDetailPanel';
 import SessionMaterialsPanel from './SessionMaterialsPanel';
 import { useAINotifications } from '@/hooks/useAINotifications';
+import { useFeatureFlags } from '@/hooks/useFeatureFlags';
 import { cn } from '@/lib/utils';
 import { useAttentionMonitor, ATTENTION_TOPIC, type AttentionMessage, type AttentionData, type MonitorConfig } from '@/hooks/useAttentionMonitor';
 import { sfxHandRaise, sfxHandLower, sfxParticipantJoin, sfxParticipantLeave, sfxMediaRequest, sfxMediaControl, sfxTabSwitch, hapticTap } from '@/lib/sounds';
@@ -84,6 +85,7 @@ export default function TeacherView({
   onTimeExpired,
   onDurationUpdate,
 }: TeacherViewProps) {
+  const { flags } = useFeatureFlags();
   const characterUrl = useLoadingCharacter();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [sidebarTab, setSidebarTab] = useState<'chat' | 'homework' | 'participants' | 'attendance' | 'monitoring' | 'exam_results' | 'approvals'>('approvals');
@@ -3421,7 +3423,7 @@ export default function TeacherView({
           )}
 
           {/* Demo: manual Start Exam button */}
-          {isDemo && isLive && students.length > 0 && (
+          {flags.aiExam !== false && isDemo && isLive && students.length > 0 && (
             <div className="mx-2 mb-1">
               <button
                 onClick={handleStartExam}
@@ -4380,11 +4382,11 @@ export default function TeacherView({
           cutoutActive={cutoutActive}
           onToggleCutout={handleToggleCutout}
           isRecording={isRecording}
-          onToggleRecording={handleToggleRecording}
+          onToggleRecording={flags.recording !== false ? handleToggleRecording : undefined}
           recordingLoading={recordingLoading}
           allowRecording={allowRecording}
           examActive={examFlow !== 'closed'}
-          onToggleExam={() => setExamFlow(examFlow === 'closed' ? 'open' : 'closed')}
+          onToggleExam={flags.sessionExam !== false ? () => setExamFlow(examFlow === 'closed' ? 'open' : 'closed') : undefined}
         />
 
         {showRecordingPrompt && allowRecording && (

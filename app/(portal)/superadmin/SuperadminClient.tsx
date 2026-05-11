@@ -13,6 +13,8 @@ import type { SplashConfig } from '@/lib/splash-config';
 import { SPLASH_CONFIG_DEFAULTS } from '@/lib/splash-config';
 import type { AuthConfig } from '@/lib/auth-config';
 import { AUTH_CONFIG_DEFAULTS } from '@/lib/auth-config';
+import { FLAG_LABELS, DEFAULT_FLAGS } from '@/lib/feature-flags-shared';
+import type { FeatureFlags } from '@/lib/feature-flags-shared';
 import SplashConfigSection from './SplashConfigSection';
 import AuthConfigSection from './AuthConfigSection';
 import ThemeConfigSection from './ThemeConfigSection';
@@ -240,6 +242,8 @@ export default function SuperadminClient({ user: _user }: Props) {
   const [fetching, setFetching] = useState(true);
   const [bujiEnabled, setBujiEnabled] = useState(true);
   const [bujiSaving, setBujiSaving] = useState(false);
+  const [featureFlags, setFeatureFlags] = useState<FeatureFlags>({ ...DEFAULT_FLAGS });
+  const [flagSaving, setFlagSaving] = useState<Partial<Record<keyof FeatureFlags, boolean>>>({});
   const [logos, setLogos] = useState<{ small: string | null; full: string | null; favicon: string | null; character: string | null }>({
     small: null, full: null, favicon: null, character: null,
   });
@@ -303,6 +307,11 @@ export default function SuperadminClient({ user: _user }: Props) {
       })
       .catch(() => {})
       .finally(() => setFetching(false));
+
+    fetch('/api/v1/superadmin/features')
+      .then(r => r.json())
+      .then(d => { if (d.success) setFeatureFlags(d.data); })
+      .catch(() => {});
   }, []);
 
   // ── Handlers ──────────────────────────────────────────────
@@ -338,6 +347,22 @@ export default function SuperadminClient({ user: _user }: Props) {
       toast.success(`Buji ${enabled ? 'enabled' : 'disabled'}`);
     } catch { toast.error('Network error'); }
     finally { setBujiSaving(false); }
+  }
+
+  async function saveFeatureFlag(flag: keyof FeatureFlags, enabled: boolean) {
+    setFlagSaving(s => ({ ...s, [flag]: true }));
+    try {
+      const res = await fetch('/api/v1/superadmin/features', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ [flag]: enabled }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) { toast.error(data.error || 'Failed to save'); return; }
+      setFeatureFlags(f => ({ ...f, [flag]: enabled }));
+      toast.success(`${FLAG_LABELS[flag].label} ${enabled ? 'enabled' : 'disabled'}`);
+    } catch { toast.error('Network error'); }
+    finally { setFlagSaving(s => ({ ...s, [flag]: false })); }
   }
 
   function handleLogoUploaded(type: LogoType, url: string) {
@@ -412,14 +437,26 @@ export default function SuperadminClient({ user: _user }: Props) {
             </form>
           </SettingsCard>
 
-          <SettingsCard title="Features" description="Enable or disable optional platform capabilities.">
+          <SettingsCard title="Platform Features" description="Enable or disable features platform-wide. Disabled features are hidden from all users immediately.">
             <SettingsRow
               label="Buji AI Chatbot"
-              description="Show the Buji AI assistant on the login page and student dashboard. When disabled, the chatbot is hidden for all users."
-              control={
-                <Toggle enabled={bujiEnabled} disabled={fetching || bujiSaving} onChange={saveBuji} />
-              }
+              description="Show the Buji AI assistant on the login page and student dashboard."
+              control={<Toggle enabled={bujiEnabled} disabled={fetching || bujiSaving} onChange={saveBuji} />}
             />
+            {(Object.keys(FLAG_LABELS) as (keyof FeatureFlags)[]).map(flag => (
+              <SettingsRow
+                key={flag}
+                label={FLAG_LABELS[flag].label}
+                description={FLAG_LABELS[flag].description}
+                control={
+                  <Toggle
+                    enabled={featureFlags[flag]}
+                    disabled={fetching || !!flagSaving[flag]}
+                    onChange={v => saveFeatureFlag(flag, v)}
+                  />
+                }
+              />
+            ))}
           </SettingsCard>
         </div>
       )}

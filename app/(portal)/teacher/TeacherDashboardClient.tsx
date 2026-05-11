@@ -9,6 +9,7 @@
 'use client';
 
 import React, { useEffect, useState, useCallback, useRef } from 'react';
+import { useFeatureFlags } from '@/hooks/useFeatureFlags';
 import DashboardShell from '@/components/dashboard/DashboardShell';
 import {
   PageHeader, RefreshButton, Button,
@@ -491,6 +492,8 @@ function SessionCountdown({ session }: { session: BatchSession }) {
 // ═══════════════════════════════════════════════════════════════
 
 export default function TeacherDashboardClient({ userName, userEmail, userRole, permissions }: Props) {
+  const { flags } = useFeatureFlags();
+
   const validTabs = ['overview', 'batches', 'schedule', 'homework', 'profile', 'salary', 'ratings', 'materials', 'leave', 'demo', 'questions'] as const;
   type Tab = typeof validTabs[number];
   const [activeTab, setActiveTab] = useState<Tab>('overview');
@@ -696,16 +699,18 @@ export default function TeacherDashboardClient({ userName, userEmail, userRole, 
                       {s.topic && <span className="flex items-center gap-1"><FileText className="h-3.5 w-3.5" /> {s.topic}</span>}
                     </div>
                   </div>
-                  <button
-                    onClick={() => startSession(s.session_id, s)}
-                    disabled={starting === s.session_id}
-                    className="flex items-center justify-center gap-2 rounded-xl bg-white px-5 py-2.5 text-sm font-bold text-red-600 shadow-md hover:bg-red-50 active:scale-95 transition-all disabled:opacity-60 shrink-0 w-full sm:w-auto"
-                  >
-                    {starting === s.session_id
-                      ? <Loader2 className="h-4 w-4 animate-spin" />
-                      : <Video className="h-4 w-4" />}
-                    Join Now
-                  </button>
+                  {flags.livekit && (
+                    <button
+                      onClick={() => startSession(s.session_id, s)}
+                      disabled={starting === s.session_id}
+                      className="flex items-center justify-center gap-2 rounded-xl bg-white px-5 py-2.5 text-sm font-bold text-red-600 shadow-md hover:bg-red-50 active:scale-95 transition-all disabled:opacity-60 shrink-0 w-full sm:w-auto"
+                    >
+                      {starting === s.session_id
+                        ? <Loader2 className="h-4 w-4 animate-spin" />
+                        : <Video className="h-4 w-4" />}
+                      Join Now
+                    </button>
+                  )}
                 </div>
               ))}
             </div>
@@ -735,6 +740,9 @@ export default function TeacherDashboardClient({ userName, userEmail, userRole, 
             starting={starting}
             changeTab={changeTab}
             loading={loading}
+            livekitEnabled={flags.livekit}
+            homeworkEnabled={flags.homework}
+            demoEnabled={flags.demo}
           />
         ) : activeTab === 'batches' ? (
           <MyBatchesTab
@@ -744,6 +752,7 @@ export default function TeacherDashboardClient({ userName, userEmail, userRole, 
             onStartSession={startSession}
             starting={starting}
             loading={loading}
+            livekitEnabled={flags.livekit}
           />
         ) : activeTab === 'schedule' ? (
           <WeeklyScheduleTab
@@ -752,6 +761,7 @@ export default function TeacherDashboardClient({ userName, userEmail, userRole, 
             onStartSession={startSession}
             starting={starting}
             loading={loading}
+            livekitEnabled={flags.livekit}
           />
         ) : activeTab === 'profile' ? (
           <ProfileTab profile={profile} onRefresh={fetchData} />
@@ -769,9 +779,9 @@ export default function TeacherDashboardClient({ userName, userEmail, userRole, 
           <TeacherMaterialsTab materials={materials} onRefresh={fetchData} loading={loading} />
         ) : activeTab === 'leave' ? (
           <LeaveTab />
-        ) : activeTab === 'homework' ? (
+        ) : activeTab === 'homework' && flags.homework ? (
           <TeacherHomeworkTab assignments={homeworkData} onRefresh={fetchData} loading={loading} />
-        ) : activeTab === 'demo' ? (
+        ) : activeTab === 'demo' && flags.demo ? (
           <TeacherDemoTab />
         ) : activeTab === 'questions' ? (
           <QuestionsTab />
@@ -795,6 +805,7 @@ function OverviewTab({
   sessions, todaySessions, todayStats, maxPerDay, nextSession, batches, liveSessions,
   salaryData, ratingsData, homeworkData, liveSalary,
   onRefresh, onStartSession, starting, changeTab, loading,
+  livekitEnabled, homeworkEnabled, demoEnabled,
 }: {
   sessions: BatchSession[];
   liveSessions: BatchSession[];
@@ -812,6 +823,9 @@ function OverviewTab({
   starting: string | null;
   changeTab: (t: string) => void;
   loading: boolean;
+  livekitEnabled?: boolean;
+  homeworkEnabled?: boolean;
+  demoEnabled?: boolean;
 }) {
   const totalStudents = batches.reduce((sum, b) => sum + b.student_count, 0);
   const totalCompleted = batches.reduce((sum, b) => sum + b.completed_sessions, 0);
@@ -924,7 +938,7 @@ function OverviewTab({
               <SessionCountdown session={nextSession} />
             </div>
           </div>
-          {canStartSession(nextSession) && (
+          {livekitEnabled !== false && canStartSession(nextSession) && (
             <Button size="xs" icon={Play} onClick={() => onStartSession(nextSession.session_id, nextSession)} disabled={starting === nextSession.session_id} loading={starting === nextSession.session_id}>
               Start
             </Button>
@@ -1074,12 +1088,12 @@ function OverviewTab({
                 <span className="text-gray-400">· {s.student_count} <Users className="inline h-3 w-3" /></span>
                 {s.status === 'live' && <Radio className="h-3 w-3 text-red-500 animate-pulse" />}
                 {s.status === 'ended' && <CheckCircle2 className="h-3 w-3 text-primary" />}
-                {s.status === 'live' && (
+                {livekitEnabled !== false && s.status === 'live' && (
                   <Button size="xs" variant="danger" icon={Video} onClick={() => onStartSession(s.session_id, s)} disabled={starting === s.session_id} loading={starting === s.session_id}>
                     Rejoin
                   </Button>
                 )}
-                {canStartSession(s) && (
+                {livekitEnabled !== false && canStartSession(s) && (
                   <Button size="xs" icon={Play} onClick={() => onStartSession(s.session_id, s)} disabled={starting === s.session_id} loading={starting === s.session_id}>
                     Start
                   </Button>
@@ -1585,7 +1599,7 @@ function SessionReportPanel({
 }
 
 function BatchDetailInline({
-  batch, sessions, detail, detailLoading, onStartSession, starting,
+  batch, sessions, detail, detailLoading, onStartSession, starting, livekitEnabled,
 }: {
   batch: Batch;
   sessions: BatchSession[];
@@ -1593,6 +1607,7 @@ function BatchDetailInline({
   detailLoading: boolean;
   onStartSession: (id: string, s: BatchSession) => void;
   starting: string | null;
+  livekitEnabled?: boolean;
 }) {
   const [subTab, setSubTab] = useState<DetailSubTab>('sessions');
   const [sessionFilter, setSessionFilter] = useState('all');
@@ -1769,12 +1784,12 @@ function BatchDetailInline({
                             >
                               <Paperclip className="h-3 w-3" /> Files
                             </button>
-                            {s.status === 'live' && (
+                            {livekitEnabled !== false && s.status === 'live' && (
                               <Button size="xs" variant="danger" icon={Video} onClick={() => onStartSession(s.session_id, s)} disabled={starting === s.session_id} loading={starting === s.session_id}>
                                 Rejoin
                               </Button>
                             )}
-                            {canStartSession(s) && (
+                            {livekitEnabled !== false && canStartSession(s) && (
                               <Button size="xs" icon={Play} onClick={() => onStartSession(s.session_id, s)} disabled={starting === s.session_id} loading={starting === s.session_id}>
                                 Start
                               </Button>
@@ -2026,7 +2041,7 @@ function BatchDetailInline({
 }
 
 function MyBatchesTab({
-  batches, sessions, onRefresh, onStartSession, starting, loading,
+  batches, sessions, onRefresh, onStartSession, starting, loading, livekitEnabled,
 }: {
   batches: Batch[];
   sessions: BatchSession[];
@@ -2034,6 +2049,7 @@ function MyBatchesTab({
   onStartSession: (id: string, s: BatchSession) => void;
   starting: string | null;
   loading: boolean;
+  livekitEnabled?: boolean;
 }) {
   const [expandedBatch, setExpandedBatch] = useState<string | null>(null);
   const [batchDetail, setBatchDetail] = useState<BatchDetail | null>(null);
@@ -2119,6 +2135,7 @@ function MyBatchesTab({
                     detailLoading={detailLoading}
                     onStartSession={onStartSession}
                     starting={starting}
+                    livekitEnabled={livekitEnabled}
                   />
                 )}
               </Card>
@@ -2136,13 +2153,14 @@ function MyBatchesTab({
 // ═════════════════════════════════════════════════════════════
 
 function WeeklyScheduleTab({
-  sessions, onRefresh, onStartSession, starting, loading,
+  sessions, onRefresh, onStartSession, starting, loading, livekitEnabled,
 }: {
   sessions: BatchSession[];
   onRefresh: () => void;
   onStartSession: (id: string, s: BatchSession) => void;
   starting: string | null;
   loading: boolean;
+  livekitEnabled?: boolean;
 }) {
   // Map BatchSession → SessionCalendar format
   const calendarSessions = React.useMemo(() =>
@@ -2222,12 +2240,12 @@ function WeeklyScheduleTab({
                 </div>
                 <div className="shrink-0 flex items-center gap-1">
                   <StatusBadge status={s.status} />
-                  {s.status === 'live' && (
+                  {livekitEnabled !== false && s.status === 'live' && (
                     <Button size="xs" variant="danger" icon={Video} onClick={() => onStartSession(s.session_id, s)} disabled={starting === s.session_id} loading={starting === s.session_id}>
                       Join
                     </Button>
                   )}
-                  {canStartSession(s) && (
+                  {livekitEnabled !== false && canStartSession(s) && (
                     <Button size="xs" icon={Play} onClick={() => onStartSession(s.session_id, s)} disabled={starting === s.session_id} loading={starting === s.session_id}>
                       Start
                     </Button>

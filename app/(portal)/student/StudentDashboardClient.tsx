@@ -23,6 +23,7 @@ import { fmtSmartDateLocal, fmtTimeLocal, fmtDateLongIST, sessionToDate, fmtSess
 import StudentReportsTab from '@/components/dashboard/StudentReportsTab';
 import BujiChatbot from '@/components/auth/BujiChatbot';
 import { usePlatformName } from '@/components/providers/PlatformProvider';
+import { useFeatureFlags } from '@/hooks/useFeatureFlags';
 import type { LucideIcon } from 'lucide-react';
 import {
   LayoutDashboard, BookOpen, User, Radio, Calendar, Clock,
@@ -498,6 +499,7 @@ function OverviewTab({
     exhausted: boolean;
   } | null;
 }) {
+  const { flags } = useFeatureFlags();
   // IST-aware today detection
   const todayISO = (() => {
     const d = new Date();
@@ -517,9 +519,11 @@ function OverviewTab({
   const upcomingSessionsAll = batches.reduce((sum, b) => sum + b.stats.upcoming_sessions, 0);
 
   // Classroom access blocked when overdue invoice (group batch) OR credits exhausted (per-class)
-  const joinBlocked =
+  // paymentGate flag bypasses the block entirely when disabled
+  const joinBlocked = flags.paymentGate !== false && (
     (feesSummary?.is_group_batch && (feesSummary?.overdue_count ?? 0) > 0) ||
-    (!feesSummary?.is_group_batch && !!creditsData?.exhausted);
+    (!feesSummary?.is_group_batch && !!creditsData?.exhausted)
+  );
 
   // Exam derived
   const gradedExams = exams.filter(e => e.attempt_status === 'graded');
@@ -635,7 +639,7 @@ function OverviewTab({
       </div>
 
       {/* ═══ Row 2: Alerts (conditional, compact) ═══ */}
-      {liveSessions.length > 0 && (
+      {flags.livekit !== false && liveSessions.length > 0 && (
         <div className="rounded-xl border border-green-300 bg-primary/5/60 px-3 sm:px-4 py-2.5 flex items-center gap-2 sm:gap-3 shrink-0">
           <Radio className="h-5 w-5 text-primary animate-pulse shrink-0" />
           <div className="flex-1 min-w-0">
@@ -855,7 +859,7 @@ function OverviewTab({
                     {s.teacher_name && <span className="text-gray-400 hidden sm:inline">· {s.teacher_name}</span>}
                     {es === 'live' && <Radio className="h-3 w-3 text-red-500 animate-pulse" />}
                     {es === 'ended' && <CheckCircle2 className="h-3 w-3 text-primary" />}
-                    {es === 'live' && (
+                    {flags.livekit !== false && es === 'live' && (
                       joinBlocked ? (
                         <button onClick={() => { window.location.hash = 'fees'; }} className="flex items-center gap-0.5 rounded-md bg-red-600 px-2 py-0.5 text-[10px] font-bold text-white hover:bg-red-700">
                           <AlertCircle className="h-2.5 w-2.5" /> Pay
@@ -866,7 +870,7 @@ function OverviewTab({
                         </a>
                       )
                     )}
-                    {es === 'scheduled' && lobbyOpen && (
+                    {flags.livekit !== false && es === 'scheduled' && lobbyOpen && (
                       joinBlocked ? (
                         <button onClick={() => { window.location.hash = 'fees'; }} className="flex items-center gap-0.5 rounded-md bg-red-600 px-2 py-0.5 text-[10px] font-bold text-white hover:bg-red-700">
                           <AlertCircle className="h-2.5 w-2.5" /> Pay
@@ -1066,6 +1070,7 @@ function OverviewTab({
 type FilterKey = 'all' | 'live' | 'scheduled' | 'ended' | 'cancelled';
 
 function MyClassesTab({ assignments }: { assignments: Assignment[] }) {
+  const { flags } = useFeatureFlags();
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState<FilterKey>('all');
   const [expandedId, setExpandedId] = useState<string | null>(null);
@@ -1166,7 +1171,7 @@ function MyClassesTab({ assignments }: { assignments: Assignment[] }) {
                       <StatusBadge status={es} />
                       <p className="mt-1 text-xs text-gray-400">{fmtDuration(a.duration_minutes)}</p>
                     </div>
-                    {es === 'live' && (
+                    {flags.livekit !== false && es === 'live' && (
                       <a
                         href={`/join/${a.room_id}`}
                         onClick={(e) => e.stopPropagation()}
@@ -1697,6 +1702,7 @@ function MobileBottomNav({
 export default function StudentDashboardClient({ userName, userEmail, userRole, permissions, bujiEnabled = true }: Props) {
   const platformName = usePlatformName();
   const router = useRouter();
+  const { flags } = useFeatureFlags();
 
   // Re-render every 30s so effectiveStatus / effectiveSessionStatus re-evaluate Date.now()
   const [, setTick] = useState(0);
@@ -2211,7 +2217,7 @@ export default function StudentDashboardClient({ userName, userEmail, userRole, 
     { key: 'exams',      label: 'Exams', icon: Trophy },
     { key: 'fees',       label: feesSummary && feesSummary.overdue_count > 0 ? `Fees · ${feesSummary.overdue_count} Due` : 'Fees', icon: CreditCard },
     { key: 'materials',  label: 'Materials',  icon: FolderOpen },
-    { key: 'homework',   label: pendingHomework.length > 0 ? `Homework · ${pendingHomework.length} Due` : 'Homework', icon: ListChecks },
+    ...(flags.homework !== false ? [{ key: 'homework', label: pendingHomework.length > 0 ? `Homework · ${pendingHomework.length} Due` : 'Homework', icon: ListChecks }] : []),
     { key: 'requests',   label: `Requests${sessionRequests.filter(r => r.status === 'pending').length > 0 ? ` · ${sessionRequests.filter(r => r.status === 'pending').length}` : ''}`, icon: ClipboardList },
     { key: 'profile',    label: 'Profile', icon: User },
   ];
@@ -2219,7 +2225,7 @@ export default function StudentDashboardClient({ userName, userEmail, userRole, 
   const navBadges: Record<string, number> = {};
   if (feesSummary && (feesSummary.overdue_count + feesSummary.pending_count) > 0)
     navBadges['/student#fees'] = feesSummary.overdue_count + feesSummary.pending_count;
-  if (pendingHomework.length > 0)
+  if (flags.homework !== false && pendingHomework.length > 0)
     navBadges['/student#homework'] = pendingHomework.length;
   const pendingExamsBadge = exams.filter(e => !e.attempt_status || e.attempt_status === 'pending' || e.attempt_status === 'in_progress').length;
   if (pendingExamsBadge > 0)
@@ -2338,7 +2344,7 @@ export default function StudentDashboardClient({ userName, userEmail, userRole, 
             {activeTab === 'materials' && (
               <StudentMaterialsTab materials={materials} loading={loadingMaterials} onRefresh={fetchMaterials} />
             )}
-            {activeTab === 'homework' && (
+            {activeTab === 'homework' && flags.homework !== false && (
               <HomeworkTab
                 assignments={homeworkAssignments}
                 submissions={homeworkSubmissions}
@@ -2415,6 +2421,7 @@ function BatchesTab({
   requestVideoAccess: (roomId: string) => void;
   requestingVideo: string | null;
 }) {
+  const { flags } = useFeatureFlags();
   const [activeBatchIdx, setActiveBatchIdx] = useState<number>(0);
   const [subjectFilter, setSubjectFilter] = useState<string>('all');
   const [statusFilter, setStatusFilter] = useState<SessionFilterKey>('all');
@@ -2880,10 +2887,12 @@ function BatchesTab({
                     {s.topic && <span className="ml-1 text-gray-400">· {s.topic}</span>}
                   </p>
                 </div>
-                <a href={`/join/${s.session_id}`}
-                  className="shrink-0 rounded-xl bg-primary px-5 py-2.5 text-sm font-bold text-white hover:bg-green-700 shadow-md hover:shadow-lg transition-all animate-pulse">
-                  Join Now
-                </a>
+                {flags.livekit !== false && (
+                  <a href={`/join/${s.session_id}`}
+                    className="shrink-0 rounded-xl bg-primary px-5 py-2.5 text-sm font-bold text-white hover:bg-green-700 shadow-md hover:shadow-lg transition-all animate-pulse">
+                    Join Now
+                  </a>
+                )}
               </div>
             ))}
           </div>
@@ -3014,10 +3023,10 @@ function BatchesTab({
                         {s.is_late ? 'L' : s.attendance_status === 'present' ? '✓' : '✗'}
                       </span>
                     )}
-                    {es === 'live' && (
+                    {flags.livekit !== false && es === 'live' && (
                       <a href={`/join/${s.session_id}`} onClick={e => e.stopPropagation()} className="rounded-xl bg-primary px-4 py-2 text-xs font-bold text-white hover:bg-green-700 shadow-sm animate-pulse">Join</a>
                     )}
-                    {es === 'scheduled' && (() => {
+                    {flags.livekit !== false && es === 'scheduled' && (() => {
                       const sStart = sessionToDate(s.scheduled_date, s.start_time);
                       if (Date.now() >= sStart.getTime() - 15 * 60 * 1000) return (
                         <a href={`/join/${s.session_id}`} onClick={e => e.stopPropagation()} className="rounded-xl bg-secondary px-4 py-2 text-xs font-bold text-white hover:bg-teal-700 shadow-sm">Lobby</a>
@@ -3108,10 +3117,10 @@ function BatchesTab({
                               {s.is_late ? 'L' : s.attendance_status === 'present' ? '✓' : '✗'}
                             </span>
                           )}
-                          {es === 'live' && (
+                          {flags.livekit !== false && es === 'live' && (
                             <a href={`/join/${s.session_id}`} onClick={e => e.stopPropagation()} className="rounded-xl bg-primary px-4 py-2 text-xs font-bold text-white hover:bg-green-700 shadow-sm animate-pulse">Join</a>
                           )}
-                          {es === 'scheduled' && (() => {
+                          {flags.livekit !== false && es === 'scheduled' && (() => {
                             const sStart = sessionToDate(s.scheduled_date, s.start_time);
                             if (Date.now() >= sStart.getTime() - 15 * 60 * 1000) return (
                               <a href={`/join/${s.session_id}`} onClick={e => e.stopPropagation()} className="rounded-xl bg-secondary px-4 py-2 text-xs font-bold text-white hover:bg-teal-700 shadow-sm">Lobby</a>
@@ -3688,6 +3697,7 @@ function SessionsTab({
   requestVideoAccess: (roomId: string) => void;
   requestingVideo: string | null;
 }) {
+  const { flags } = useFeatureFlags();
   const [search, setSearch] = useState('');
   const [filterStatus, setFilterStatus] = useState<SessionFilterKey>('all');
   const [filterBatch, setFilterBatch] = useState('');
@@ -3831,7 +3841,7 @@ function SessionsTab({
                         {s.attendance_status === 'present' ? 'On Time' : 'Absent'}
                       </span>
                     )}
-                    {es === 'live' && (
+                    {flags.livekit !== false && es === 'live' && (
                       <a
                         href={`/join/${s.session_id}`}
                         onClick={(e) => e.stopPropagation()}
@@ -3840,7 +3850,7 @@ function SessionsTab({
                         Join Now
                       </a>
                     )}
-                    {es === 'scheduled' && (() => {
+                    {flags.livekit !== false && es === 'scheduled' && (() => {
                       const sStart = sessionToDate(s.scheduled_date, s.start_time);
                       const lobbyMs = sStart.getTime() - 15 * 60 * 1000;
                       if (Date.now() >= lobbyMs) return (
@@ -3946,7 +3956,7 @@ function SessionsTab({
                     {es === 'ended' && (
                       <SessionMaterialsButton sessionId={s.session_id} />
                     )}
-                    {es === 'live' && (
+                    {flags.livekit !== false && es === 'live' && (
                       <a
                         href={`/join/${s.session_id}`}
                         className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-bold text-white hover:bg-green-700"
