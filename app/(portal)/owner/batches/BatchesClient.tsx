@@ -21,9 +21,10 @@ import {
   GraduationCap, User, X, Trash2,
   ChevronRight, ChevronLeft,
   CheckCircle, AlertCircle, Layers, Check,
-  Settings, Save, Power,
+  Settings, Save, Power, FileText,
 } from 'lucide-react';
 import { CreateUserModal, CATEGORY_STYLES } from '@/components/dashboard/CreateUserForm';
+import { WizardShell, WizardFooterDots } from '@/components/dashboard/WizardShell';
 
 // ── Default fallbacks (used until settings load) ────────────
 
@@ -212,25 +213,25 @@ interface Props {
 
 // ── Wizard Step ──────────────────────────────────────────────
 
-type WizardStep = 'template' | 'details' | 'teachers' | 'students' | 'review';
+type BatchStep = 'template' | 'details' | 'teachers' | 'students' | 'review';
 
 // Dynamic step order: 1:1 → students first; others → details first (to set grade filter)
-function getWizardSteps(type: BatchType | ''): { key: WizardStep; label: string }[] {
+function getWizardSteps(type: BatchType | ''): { key: BatchStep; label: string; desc: string; icon: React.ElementType }[] {
   if (type === 'one_to_one') {
     return [
-      { key: 'template', label: 'Template' },
-      { key: 'students', label: 'Student' },
-      { key: 'details', label: 'Details' },
-      { key: 'teachers', label: 'Subjects & Teachers' },
-      { key: 'review', label: 'Review' },
+      { key: 'template', label: 'Batch Type',         desc: 'Choose the type of batch',        icon: Layers },
+      { key: 'students', label: 'Student',             desc: 'Select the student',               icon: Users },
+      { key: 'details',  label: 'Details',             desc: 'Grade, name and configuration',   icon: FileText },
+      { key: 'teachers', label: 'Subjects & Teachers', desc: 'Assign subjects and teachers',    icon: GraduationCap },
+      { key: 'review',   label: 'Review',              desc: 'Confirm and create batch',        icon: CheckCircle },
     ];
   }
   return [
-    { key: 'template', label: 'Template' },
-    { key: 'details', label: 'Details' },
-    { key: 'students', label: 'Students' },
-    { key: 'teachers', label: 'Subjects & Teachers' },
-    { key: 'review', label: 'Review' },
+    { key: 'template', label: 'Batch Type',         desc: 'Choose the type of batch',        icon: Layers },
+    { key: 'details',  label: 'Details',             desc: 'Grade, name and configuration',   icon: FileText },
+    { key: 'students', label: 'Students',            desc: 'Select students for the batch',   icon: Users },
+    { key: 'teachers', label: 'Subjects & Teachers', desc: 'Assign subjects and teachers',    icon: GraduationCap },
+    { key: 'review',   label: 'Review',              desc: 'Confirm and create batch',        icon: CheckCircle },
   ];
 }
 
@@ -290,7 +291,7 @@ export default function BatchesClient({ userName, userEmail, userRole }: Props) 
 
   // ── Create wizard state ──
   const [showCreate, setShowCreate] = useState(false);
-  const [wizardStep, setWizardStep] = useState<WizardStep>('template');
+  const [wizardStep, setWizardStep] = useState<BatchStep>('template');
   const [creating, setCreating] = useState(false);
 
   // Wizard form values
@@ -1566,81 +1567,42 @@ export default function BatchesClient({ userName, userEmail, userRole }: Props) 
           </div>
         </div>
 
-        {/* ── Create Wizard Overlay ── */}
-        {showCreate && (
-          <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4" onClick={closeWizard}>
-            <div
-              className="bg-white rounded-2xl shadow-2xl w-full max-w-5xl max-h-[92vh] flex overflow-hidden"
-              onClick={e => e.stopPropagation()}
-            >
-              {/* ── Left sidebar — step indicator ── */}
-              <div className="w-60 bg-linear-to-b from-primary via-primary/90 to-secondary p-6 flex flex-col shrink-0">
-                <div className="mb-8">
-                  <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center mb-3">
-                    <Database className="h-5 w-5 text-white" />
-                  </div>
-                  <h2 className="text-white font-bold text-lg">New Batch</h2>
-                  <p className="text-primary/60 text-xs mt-1">Step {stepIdx + 1} of {wizardSteps.length}</p>
-                </div>
-                <div className="space-y-1 flex-1">
-                  {wizardSteps.map((step, idx) => {
-                    const isDone = idx < stepIdx;
-                    const isCurrent = idx === stepIdx;
-                    return (
-                      <div
-                        key={step.key}
-                        className={`flex items-center gap-3 px-3 py-3 rounded-xl transition-all ${
-                          isCurrent ? 'bg-white/20 text-white shadow-lg shadow-black/10' : isDone ? 'text-primary/60' : 'text-primary/50'
-                        }`}
-                      >
-                        <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold shrink-0 ${
-                          isDone ? 'bg-primary text-emerald-900' : isCurrent ? 'bg-white text-primary' : 'bg-primary/30 text-primary/80/70'
-                        }`}>
-                          {isDone ? <Check className="h-4 w-4" /> : idx + 1}
-                        </div>
-                        <span className="text-sm font-medium">{step.label}</span>
-                      </div>
-                    );
-                  })}
-                </div>
-                <button onClick={closeWizard} className="mt-4 text-primary/60 hover:text-white text-xs flex items-center gap-2 transition">
-                  <X className="h-3.5 w-3.5" /> Cancel & Close
-                </button>
+        {/* ── Create Wizard ── */}
+        <WizardShell
+          open={showCreate}
+          onClose={closeWizard}
+          title="New Batch"
+          icon={Database}
+          steps={wizardSteps.map(s => ({ label: s.label, desc: s.desc, icon: s.icon }))}
+          currentStep={stepIdx}
+          footer={
+            <>
+              <div>
+                {stepIdx > 0 && (
+                  <Button variant="outline" icon={ChevronLeft} onClick={goPrev} size="md">Back</Button>
+                )}
               </div>
-
-              {/* ── Right content area ── */}
-              <div className="flex-1 flex flex-col overflow-hidden">
-                <div className="px-10 pt-8 pb-6 flex-1 overflow-y-auto">
-                  {wizardStep === 'template' && renderTemplateStep()}
-                  {wizardStep === 'details' && renderDetailsStep()}
-                  {wizardStep === 'teachers' && renderTeachersStep()}
-                  {wizardStep === 'students' && renderStudentsStep()}
-                  {wizardStep === 'review' && renderReviewStep()}
-                </div>
-
-                {/* ── Footer navigation ── */}
-                <div className="px-10 py-5 border-t bg-gray-50/80 flex items-center justify-between">
-                  <div>
-                    {stepIdx > 0 && (
-                      <Button variant="ghost" icon={ChevronLeft} onClick={goPrev} size="md">Back</Button>
-                    )}
-                  </div>
-                  <div className="flex items-center gap-3">
-                    {wizardStep !== 'review' ? (
-                      <Button variant="primary" iconRight={ChevronRight} onClick={goNext} disabled={!canGoNext()} size="lg">
-                        Continue
-                      </Button>
-                    ) : (
-                      <Button variant="primary" icon={CheckCircle} onClick={submitBatch} disabled={!canSubmit || creating} size="lg">
-                        {creating ? 'Creating…' : 'Create Batch'}
-                      </Button>
-                    )}
-                  </div>
-                </div>
+              <WizardFooterDots total={wizardSteps.length} current={stepIdx} />
+              <div>
+                {wizardStep !== 'review' ? (
+                  <Button variant="primary" iconRight={ChevronRight} onClick={goNext} disabled={!canGoNext()} size="lg">
+                    Continue
+                  </Button>
+                ) : (
+                  <Button variant="primary" icon={CheckCircle} onClick={submitBatch} disabled={!canSubmit || creating} size="lg">
+                    {creating ? 'Creating…' : 'Create Batch'}
+                  </Button>
+                )}
               </div>
-            </div>
-          </div>
-        )}
+            </>
+          }
+        >
+          {wizardStep === 'template' && renderTemplateStep()}
+          {wizardStep === 'details' && renderDetailsStep()}
+          {wizardStep === 'teachers' && renderTeachersStep()}
+          {wizardStep === 'students' && renderStudentsStep()}
+          {wizardStep === 'review' && renderReviewStep()}
+        </WizardShell>
 
         {/* ── Table ── */}
         {loading && batches.length === 0 ? (
