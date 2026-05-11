@@ -85,7 +85,7 @@ export function WizardShell({
               {/* Vertical connecting line */}
               <div
                 className="absolute pointer-events-none"
-                style={{ left: 17, top: 20, bottom: 20, width: 1, background: 'rgba(255,255,255,0.07)' }}
+                style={{ left: 27, top: 20, bottom: 20, width: 1, background: 'rgba(255,255,255,0.07)' }}
               />
               <div className="space-y-0.5">
                 {steps.map((step, idx) => {
