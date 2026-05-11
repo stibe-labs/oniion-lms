@@ -5,10 +5,14 @@
 // All templates share a master layout wrapper.
 // ═══════════════════════════════════════════════════════════════
 
+// ── Module-level constants ───────────────────────────────────
+
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://oniion.stibe.in';
+
 // ── Master Layout ───────────────────────────────────────────
 
 function masterLayout(body: string, recipientEmail: string, platformName: string = 'Stibe', logoUrl?: string, logoHeight: number = 36): string {
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://oniion.stibe.in';
+  const appUrl = APP_URL;
   const resolvedLogoUrl = logoUrl ?? `${appUrl}/logo/full.png`;
   return `<!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office">
@@ -93,7 +97,7 @@ function masterLayout(body: string, recipientEmail: string, platformName: string
             <td class="email-footer" style="background-color:#f9fafb; padding:20px 32px; border-top:1px solid #e5e7eb;">
               <table width="100%" cellpadding="0" cellspacing="0"><tr>
                 <td>
-                  <p class="muted-txt" style="margin:0 0 3px; font-size:12px; color:#6b7280;">Need help? <a class="link-txt" href="mailto:support@stibelearning.online" style="color:#2563eb; text-decoration:none;">support@stibelearning.online</a></p>
+                  <p class="muted-txt" style="margin:0 0 3px; font-size:12px; color:#6b7280;">Need help? Reply to this email and we'll get back to you.</p>
                   ${recipientEmail ? `<p class="faint-txt" style="margin:0; font-size:11px; color:#9ca3af;">This email was sent to ${recipientEmail}</p>` : ''}
                 </td>
                 <td align="right" style="vertical-align:bottom;">
@@ -282,10 +286,10 @@ export function teacherInviteTemplate(data: TeacherInviteData): { subject: strin
     </div>
 
     <p style="font-size:13px; color:#6c757d; margin:0 0 8px;">Click the <strong>Laptop</strong> link when using your desktop/laptop. Click the <strong>Tablet</strong> link when using your drawing tablet for whiteboard writing.</p>
-    <p style="font-size:13px; color:#6c757d; margin:0;">You will be asked to log in with your stibe credentials after clicking the link.</p>
+    <p style="font-size:13px; color:#6c757d; margin:0;">You will be asked to log in with your Stibe credentials after clicking the link.</p>
   `;
 
-  const text = `Dear ${data.teacherName},\n\nYour class "${data.roomName}" is scheduled for ${data.date} at ${data.time}.\nSubject: ${data.subject} | Grade: ${data.grade} | Duration: ${data.duration}\n${data.notes ? `Notes: ${data.notes}\n` : ''}\nLaptop: ${data.laptopLink}\nTablet: ${data.tabletLink}\n\n— stibe Classes`;
+  const text = `Dear ${data.teacherName},\n\nYour class "${data.roomName}" is scheduled for ${data.date} at ${data.time}.\nSubject: ${data.subject} | Grade: ${data.grade} | Duration: ${data.duration}\n${data.notes ? `Notes: ${data.notes}\n` : ''}\nLaptop: ${data.laptopLink}\nTablet: ${data.tabletLink}\n\n— Stibe Classes`;
 
   return { subject, html: masterLayout(body, data.recipientEmail), text };
 }
@@ -317,10 +321,10 @@ export function studentInviteTemplate(data: StudentInviteData): { subject: strin
       ${button('Join Class', data.joinLink)}
     </div>
 
-    <p style="font-size:13px; color:#6c757d; margin:0;">You will be asked to log in with your stibe credentials after clicking the link.</p>
+    <p style="font-size:13px; color:#6c757d; margin:0;">You will be asked to log in with your Stibe credentials after clicking the link.</p>
   `;
 
-  const text = `Dear ${data.studentName},\n\nYou have been invited to "${data.roomName}" on ${data.date} at ${data.time}.\nSubject: ${data.subject} | Grade: ${data.grade} | Duration: ${data.duration}\nPayment: ${data.paymentStatus}\n\nJoin: ${data.joinLink}\n\n— stibe Classes`;
+  const text = `Dear ${data.studentName},\n\nYou have been invited to "${data.roomName}" on ${data.date} at ${data.time}.\nSubject: ${data.subject} | Grade: ${data.grade} | Duration: ${data.duration}\nPayment: ${data.paymentStatus}\n\nJoin: ${data.joinLink}\n\n— Stibe Classes`;
 
   return { subject, html: masterLayout(body, data.recipientEmail), text };
 }
@@ -352,7 +356,7 @@ export function paymentConfirmationTemplate(data: PaymentConfirmationData): { su
     <p style="font-size:13px; color:#6c757d; margin:0;">Your access to this class has been activated.</p>
   `;
 
-  const text = `Payment Successful\n\nDear ${data.studentName},\n\nAmount: ${data.amount}\nTransaction ID: ${data.transactionId}\nDate: ${data.date}\nRoom: ${data.roomName}\n\nJoin: ${data.joinLink}\n\n— stibe Classes`;
+  const text = `Payment Successful\n\nDear ${data.studentName},\n\nAmount: ${data.amount}\nTransaction ID: ${data.transactionId}\nDate: ${data.date}\nRoom: ${data.roomName}\n\nJoin: ${data.joinLink}\n\n— Stibe Classes`;
 
   return { subject, html: masterLayout(body, data.recipientEmail), text };
 }
@@ -393,7 +397,7 @@ export function roomReminderTemplate(data: RoomReminderData & { minutesBefore?: 
   `;
 
   const textHeading = isNow ? 'Class is starting now!' : `Class starts in ${mins} minutes!`;
-  const text = `${textHeading}\n\nDear ${data.recipientName},\n\nRoom: ${data.roomName}\nStart Time: ${data.startTime}\n\n— stibe Classes`;
+  const text = `${textHeading}\n\nDear ${data.recipientName},\n\nRoom: ${data.roomName}\nStart Time: ${data.startTime}\n\n— Stibe Classes`;
 
   return { subject, html: masterLayout(body, data.recipientEmail), text };
 }
@@ -421,7 +425,7 @@ export function roomCancelledTemplate(data: RoomCancelledData): { subject: strin
     <p style="font-size:14px; color:#495057; margin:16px 0 0;">Please contact your coordinator for details.</p>
   `;
 
-  const text = `Class Cancelled\n\nRoom: ${data.roomName}\nDate: ${data.date}\nTime: ${data.time}\n${data.reason ? `Reason: ${data.reason}\n` : ''}\nPlease contact your coordinator for details.\n\n— stibe Classes`;
+  const text = `Class Cancelled\n\nRoom: ${data.roomName}\nDate: ${data.date}\nTime: ${data.time}\n${data.reason ? `Reason: ${data.reason}\n` : ''}\nPlease contact your coordinator for details.\n\n— Stibe Classes`;
 
   return { subject, html: masterLayout(body, data.recipientEmail), text };
 }
@@ -455,7 +459,7 @@ export function roomRescheduledTemplate(data: RoomRescheduledData): { subject: s
     <p style="font-size:13px; color:#6c757d; margin:0;">Your previous join link is no longer valid. Please use the new link above.</p>
   `;
 
-  const text = `Class Rescheduled\n\nRoom: ${data.roomName}\nOriginal: ${data.oldDate} at ${data.oldTime}\nNew: ${data.newDate} at ${data.newTime}\n\nJoin: ${data.joinLink}\n\nYour previous join link is no longer valid.\n\n— stibe Classes`;
+  const text = `Class Rescheduled\n\nRoom: ${data.roomName}\nOriginal: ${data.oldDate} at ${data.oldTime}\nNew: ${data.newDate} at ${data.newTime}\n\nJoin: ${data.joinLink}\n\nYour previous join link is no longer valid.\n\n— Stibe Classes`;
 
   return { subject, html: masterLayout(body, data.recipientEmail), text };
 }
@@ -488,7 +492,7 @@ export function coordinatorSummaryTemplate(data: CoordinatorSummaryData): { subj
     <p style="font-size:13px; color:#6c757d; margin:16px 0 0;">This email is for your records. All participants have been notified.</p>
   `;
 
-  const text = `Notifications Sent\n\nDear ${data.coordinatorName},\n\nRoom: ${data.roomName}\nDate: ${data.date}\nTeacher: ${data.teacherName}\nStudents Emailed: ${data.studentCount}\nUnpaid: ${data.unpaidCount}\n\nTeacher Laptop Link: ${data.teacherLaptopLink}\nTeacher Tablet Link: ${data.teacherTabletLink}\n\nAll participants have been notified.\n\n— stibe Classes`;
+  const text = `Notifications Sent\n\nDear ${data.coordinatorName},\n\nRoom: ${data.roomName}\nDate: ${data.date}\nTeacher: ${data.teacherName}\nStudents Emailed: ${data.studentCount}\nUnpaid: ${data.unpaidCount}\n\nTeacher Laptop Link: ${data.teacherLaptopLink}\nTeacher Tablet Link: ${data.teacherTabletLink}\n\nAll participants have been notified.\n\n— Stibe Classes`;
 
   return { subject, html: masterLayout(body, data.recipientEmail), text };
 }
@@ -511,10 +515,10 @@ export function credentialsTemplate(data: CredentialsTemplateData): { subject: s
   };
   const accent = roleColors[data.role] || '#4a6cf7';
 
-  const subject = `Welcome to stibe \u2014 Your ${data.role} Account`;
+  const subject = `Welcome to Stibe \u2014 Your ${data.role} Account`;
 
   const body = `
-    <h2 style="font-size:22px; color:#1a1a2e; margin:0 0 8px;">Welcome to stibe! \uD83C\uDF93</h2>
+    <h2 style="font-size:22px; color:#1a1a2e; margin:0 0 8px;">Welcome to Stibe! \uD83C\uDF93</h2>
     <p style="font-size:15px; color:#495057; margin:0 0 20px;">
       Dear <strong>${data.recipientName}</strong>, your <strong>${data.role}</strong> account has been created.
       Here are your login credentials:
@@ -540,14 +544,14 @@ export function credentialsTemplate(data: CredentialsTemplateData): { subject: s
       </p>
     </div>
 
-    ${button('Login to stibe', data.loginUrl)}
+    ${button('Login to Stibe', data.loginUrl)}
 
     <p style="font-size:13px; color:#6c757d; margin:20px 0 0;">
       If you have any issues logging in, please contact your HR Associate or reply to this email.
     </p>
   `;
 
-  const text = `Welcome to stibe!\n\nDear ${data.recipientName},\n\nYour ${data.role} account has been created.\n\nLogin URL: ${data.loginUrl}\nEmail: ${data.loginEmail}\nPassword: ${data.tempPassword}\n\nPlease change your password after first login.\n\n\u2014 stibe Classes`;
+  const text = `Welcome to Stibe!\n\nDear ${data.recipientName},\n\nYour ${data.role} account has been created.\n\nLogin URL: ${data.loginUrl}\nEmail: ${data.loginEmail}\nPassword: ${data.tempPassword}\n\nPlease change your password after first login.\n\n\u2014 Stibe Classes`;
 
   return { subject, html: masterLayout(body, data.recipientEmail), text };
 }
@@ -578,10 +582,10 @@ export function roomStartedTemplate(data: RoomStartedData): { subject: string; h
       ${button('Join Class Now', data.joinLink)}
     </div>
 
-    <p style="font-size:13px; color:#6c757d; margin:0;">You will be asked to log in with your stibe credentials after clicking the link.</p>
+    <p style="font-size:13px; color:#6c757d; margin:0;">You will be asked to log in with your Stibe credentials after clicking the link.</p>
   `;
 
-  const text = `Your class "${data.roomName}" is LIVE now!\n\nDear ${data.studentName},\n\n${data.teacherName} has started the class.\n\nJoin now: ${data.joinLink}\n\n— stibe Classes`;
+  const text = `Your class "${data.roomName}" is LIVE now!\n\nDear ${data.studentName},\n\n${data.teacherName} has started the class.\n\nJoin now: ${data.joinLink}\n\n— Stibe Classes`;
 
   return { subject, html: masterLayout(body, data.recipientEmail), text };
 }
@@ -671,7 +675,7 @@ export function batchCoordinatorNotifyTemplate(data: BatchCoordinatorNotifyData)
     </table>` : ''}
 
     <div style="margin:24px 0;">
-      ${button('Open stibe Portal', data.loginUrl)}
+      ${button('Open Stibe Portal', data.loginUrl)}
     </div>
 
     <p style="font-size:13px; color:#6c757d; margin:0;">You are responsible for scheduling sessions and managing this batch. Log in to get started.</p>
@@ -679,7 +683,7 @@ export function batchCoordinatorNotifyTemplate(data: BatchCoordinatorNotifyData)
 
   const teachersTxt = data.teachers.map(t => `  • ${t.name} — ${t.subject} (${t.email})`).join('\n');
   const studentsTxt = data.students.map(s => `  • ${s.name} (${s.email})`).join('\n');
-  const text = `New Batch Assigned to You\n\nDear ${data.coordinatorName},\n\nBatch: ${data.batchName}\nType: ${data.batchType}\nSubjects: ${data.subjects.join(', ')}\nGrade: ${data.grade}\n\nTeachers (${data.teacherCount}):\n${teachersTxt}\n\nStudents (${data.studentCount}):\n${studentsTxt}\n\nLogin: ${data.loginUrl}\n\n— stibe Classes`;
+  const text = `New Batch Assigned to You\n\nDear ${data.coordinatorName},\n\nBatch: ${data.batchName}\nType: ${data.batchType}\nSubjects: ${data.subjects.join(', ')}\nGrade: ${data.grade}\n\nTeachers (${data.teacherCount}):\n${teachersTxt}\n\nStudents (${data.studentCount}):\n${studentsTxt}\n\nLogin: ${data.loginUrl}\n\n— Stibe Classes`;
 
   return { subject, html: masterLayout(body, data.recipientEmail), text };
 }
@@ -713,13 +717,13 @@ export function batchTeacherNotifyTemplate(data: BatchTeacherNotifyData): { subj
     ${alertBox('Sessions will be scheduled by your batch coordinator. You will receive a separate notification before each class.', '#1565c0', '#e3f2fd')}
 
     <div style="margin:24px 0;">
-      ${button('Open stibe Portal', data.loginUrl)}
+      ${button('Open Stibe Portal', data.loginUrl)}
     </div>
 
     <p style="font-size:13px; color:#6c757d; margin:0;">If you have any questions, please contact your coordinator at <a href="mailto:${data.coordinatorEmail}" style="color:#4a6cf7;">${data.coordinatorEmail}</a>.</p>
   `;
 
-  const text = `You've Been Assigned to a Batch\n\nDear ${data.teacherName},\n\nBatch: ${data.batchName}\nYour Subject: ${data.assignedSubject}\nType: ${data.batchType}\nGrade: ${data.grade}\nStudents: ${data.studentCount}\nCoordinator: ${data.coordinatorName} (${data.coordinatorEmail})\n\nLogin: ${data.loginUrl}\n\n— stibe Classes`;
+  const text = `You've Been Assigned to a Batch\n\nDear ${data.teacherName},\n\nBatch: ${data.batchName}\nYour Subject: ${data.assignedSubject}\nType: ${data.batchType}\nGrade: ${data.grade}\nStudents: ${data.studentCount}\nCoordinator: ${data.coordinatorName} (${data.coordinatorEmail})\n\nLogin: ${data.loginUrl}\n\n— Stibe Classes`;
 
   return { subject, html: masterLayout(body, data.recipientEmail), text };
 }
@@ -757,14 +761,14 @@ export function batchStudentNotifyTemplate(data: BatchStudentNotifyData): { subj
     </div>
 
     <div style="margin:24px 0;">
-      ${button('Open stibe Portal', data.loginUrl)}
+      ${button('Open Stibe Portal', data.loginUrl)}
     </div>
 
     <p style="font-size:13px; color:#6c757d; margin:0;">Questions? Contact your coordinator at <a href="mailto:${data.coordinatorEmail}" style="color:#4a6cf7;">${data.coordinatorEmail}</a>.</p>
   `;
 
   const teachersTxt = data.teachers.map(t => `  • ${t.name} — ${t.subject}`).join('\n');
-  const text = `You've Been Enrolled in a Batch\n\nDear ${data.studentName},\n\nBatch: ${data.batchName}\nSubjects: ${data.subjects.join(', ')}\nGrade: ${data.grade}\n\nTeachers:\n${teachersTxt}\n\nCoordinator: ${data.coordinatorName} (${data.coordinatorEmail})\n\nLogin: ${data.loginUrl}\n\n— stibe Classes`;
+  const text = `You've Been Enrolled in a Batch\n\nDear ${data.studentName},\n\nBatch: ${data.batchName}\nSubjects: ${data.subjects.join(', ')}\nGrade: ${data.grade}\n\nTeachers:\n${teachersTxt}\n\nCoordinator: ${data.coordinatorName} (${data.coordinatorEmail})\n\nLogin: ${data.loginUrl}\n\n— Stibe Classes`;
 
   return { subject, html: masterLayout(body, data.recipientEmail), text };
 }
@@ -813,7 +817,7 @@ export function batchParentNotifyTemplate(data: BatchParentNotifyData): { subjec
   `;
 
   const teachersTxt = data.teachers.map(t => `  • ${t.name} — ${t.subject}`).join('\n');
-  const text = `Your Child Has Been Enrolled\n\nDear ${data.parentName},\n\nYour child ${data.childName} (${data.childEmail}) has been enrolled in batch "${data.batchName}".\n\nSubjects: ${data.subjects.join(', ')}\nGrade: ${data.grade}\n\nTeachers:\n${teachersTxt}\n\nCoordinator: ${data.coordinatorName} (${data.coordinatorEmail})\n\nLogin: ${data.loginUrl}\n\n— stibe Classes`;
+  const text = `Your Child Has Been Enrolled\n\nDear ${data.parentName},\n\nYour child ${data.childName} (${data.childEmail}) has been enrolled in batch "${data.batchName}".\n\nSubjects: ${data.subjects.join(', ')}\nGrade: ${data.grade}\n\nTeachers:\n${teachersTxt}\n\nCoordinator: ${data.coordinatorName} (${data.coordinatorEmail})\n\nLogin: ${data.loginUrl}\n\n— Stibe Classes`;
 
   return { subject, html: masterLayout(body, data.recipientEmail), text };
 }
@@ -907,14 +911,14 @@ export function dailyTimetableTemplate(data: DailyTimetableData): { subject: str
     ${alertBox('Join links will be sent 30 minutes before each class starts.', '#1565c0', '#e3f2fd')}
 
     <div style="margin:24px 0;">
-      ${button('Open stibe Portal', data.loginUrl)}
+      ${button('Open Stibe Portal', data.loginUrl)}
     </div>
 
     <p style="font-size:13px; color:#6c757d; margin:0;">Have a great day of learning! 🎓</p>
   `;
 
   const sessionsTxt = data.sessions.map(s => `  • ${s.localStartTime || s.startTime} — ${s.subject} (${s.teacherName}) [${s.duration}] — ${s.batchName}${s.localStartTime ? ` [${s.startTime} IST]` : ''}${s.topic ? ` | Topic: ${s.topic}` : ''}`).join('\n');
-  const text = `${roleLabel} Timetable for ${data.date}\n\nDear ${data.recipientName},\n\n${greetingNote}\n\n${sessionsTxt}\n\nJoin links will be sent 30 minutes before each class.\n\nLogin: ${data.loginUrl}\n\n— stibe Classes`;
+  const text = `${roleLabel} Timetable for ${data.date}\n\nDear ${data.recipientName},\n\n${greetingNote}\n\n${sessionsTxt}\n\nJoin links will be sent 30 minutes before each class.\n\nLogin: ${data.loginUrl}\n\n— Stibe Classes`;
 
   return { subject, html: masterLayout(body, data.recipientEmail), text };
 }
@@ -1000,7 +1004,7 @@ export function sessionReminderTemplate(data: SessionReminderData): { subject: s
   `;
 
   const textHeading = isNow ? 'Class Starting Now!' : `Class in ${mins} Minutes!`;
-  const text = `${textHeading}\n\nDear ${data.recipientName},\n\n${data.recipientRole === 'parent' ? `${data.childName}'s` : 'Your'} class is ${isNow ? 'starting now' : `starting in ${mins} minutes`}.\n\nSubject: ${data.subject}\nTeacher: ${data.teacherName}\nBatch: ${data.batchName}\nTime: ${data.localTime || data.startTime} ${data.localTimezone || 'IST'}${data.localTime ? ` (${data.startTime} IST)` : ''}\nDuration: ${data.duration}${data.topic ? `\nTopic: ${data.topic}` : ''}\n\nJoin: ${data.joinUrl}\n\nThis link stays active until the teacher ends the class — no login needed.\n\n— stibe Classes`;
+  const text = `${textHeading}\n\nDear ${data.recipientName},\n\n${data.recipientRole === 'parent' ? `${data.childName}'s` : 'Your'} class is ${isNow ? 'starting now' : `starting in ${mins} minutes`}.\n\nSubject: ${data.subject}\nTeacher: ${data.teacherName}\nBatch: ${data.batchName}\nTime: ${data.localTime || data.startTime} ${data.localTimezone || 'IST'}${data.localTime ? ` (${data.startTime} IST)` : ''}\nDuration: ${data.duration}${data.topic ? `\nTopic: ${data.topic}` : ''}\n\nJoin: ${data.joinUrl}\n\nThis link stays active until the teacher ends the class — no login needed.\n\n— Stibe Classes`;
 
   return { subject, html: masterLayout(body, data.recipientEmail), text };
 }
@@ -1155,7 +1159,7 @@ export function weeklyTimetableTemplate(data: WeeklyTimetableData): { subject: s
     ${alertBox('You will receive a join link 30 minutes before each class starts.', '#1e40af', '#eff6ff')}
 
     <div style="margin:24px 0;">
-      ${button('Open stibe Portal', data.loginUrl)}
+      ${button('Open Stibe Portal', data.loginUrl)}
     </div>
 
     <p style="font-size:13px; color:#6c757d; margin:0;">Happy learning! 🎓</p>
@@ -1170,7 +1174,7 @@ export function weeklyTimetableTemplate(data: WeeklyTimetableData): { subject: s
       return `  ${d}:\n${lines.join('\n')}`;
     }).join('\n');
 
-  const text = `${data.isUpdate ? 'UPDATED ' : ''}${roleLabel} Weekly Timetable — ${data.batchName} (Grade ${data.batchGrade})\n\nDear ${data.recipientName},\n\n${data.localTimezone ? `All times in ${data.localTimezone} (IST in brackets)` : 'All times in IST'}.\n${totalSlots} class${totalSlots > 1 ? 'es' : ''}/week across ${activeDays} day${activeDays > 1 ? 's' : ''}.\n\n${sessionsTxt}\n\nJoin links will be sent 30 minutes before each class.\n\nLogin: ${data.loginUrl}\n\n— stibe Classes`;
+  const text = `${data.isUpdate ? 'UPDATED ' : ''}${roleLabel} Weekly Timetable — ${data.batchName} (Grade ${data.batchGrade})\n\nDear ${data.recipientName},\n\n${data.localTimezone ? `All times in ${data.localTimezone} (IST in brackets)` : 'All times in IST'}.\n${totalSlots} class${totalSlots > 1 ? 'es' : ''}/week across ${activeDays} day${activeDays > 1 ? 's' : ''}.\n\n${sessionsTxt}\n\nJoin links will be sent 30 minutes before each class.\n\nLogin: ${data.loginUrl}\n\n— Stibe Classes`;
 
   return { subject, html: masterLayout(body, data.recipientEmail), text };
 }
@@ -1654,7 +1658,7 @@ export function invoiceGeneratedTemplate(data: InvoiceGeneratedData) {
 
     <p style="font-size:13px; color:#6c757d; margin:0;">Please ensure payment is made before the due date to avoid any disruption in classes.</p>
   `;
-  const text = `New Invoice ${data.invoiceNumber}\n\nDear ${data.recipientName},\n\nA new invoice of ${data.amount} has been generated for ${data.studentName}.\nDescription: ${data.description}\nDue Date: ${data.dueDate}\n\nPay at: ${data.payLink}\n\n— stibe Classes`;
+  const text = `New Invoice ${data.invoiceNumber}\n\nDear ${data.recipientName},\n\nA new invoice of ${data.amount} has been generated for ${data.studentName}.\nDescription: ${data.description}\nDue Date: ${data.dueDate}\n\nPay at: ${data.payLink}\n\n— Stibe Classes`;
   return { subject, html: masterLayout(body, data.recipientEmail), text };
 }
 
@@ -1703,7 +1707,7 @@ export function paymentReceiptTemplate(data: PaymentReceiptData) {
 
     <p style="font-size:13px; color:#6c757d; margin:0;">This is an auto-generated receipt. Please save it for your records.</p>
   `;
-  const text = `Payment Received — ${data.receiptNumber}\n\nDear ${data.recipientName},\n\nAmount: ${data.amount}\nTransaction ID: ${data.transactionId}\nReceipt: ${data.receiptLink}\n\n— stibe Classes`;
+  const text = `Payment Received — ${data.receiptNumber}\n\nDear ${data.recipientName},\n\nAmount: ${data.amount}\nTransaction ID: ${data.transactionId}\nReceipt: ${data.receiptLink}\n\n— Stibe Classes`;
   return { subject, html: masterLayout(body, data.recipientEmail), text };
 }
 
@@ -1745,7 +1749,7 @@ export function payslipNotificationTemplate(data: PayslipNotificationData) {
 
     <p style="font-size:13px; color:#6c757d; margin:16px 0 0;">For any discrepancies, please contact the HR department.</p>
   `;
-  const text = `Payslip for ${data.periodLabel}\n\nDear ${data.teacherName},\nClasses: ${data.classesConducted}\nBase Pay: ${data.basePay}\nIncentive: ${data.incentive}\nDeductions: ${data.deductions}\nTotal: ${data.totalPay}\nStatus: ${data.status}\n\n— stibe Classes`;
+  const text = `Payslip for ${data.periodLabel}\n\nDear ${data.teacherName},\nClasses: ${data.classesConducted}\nBase Pay: ${data.basePay}\nIncentive: ${data.incentive}\nDeductions: ${data.deductions}\nTotal: ${data.totalPay}\nStatus: ${data.status}\n\n— Stibe Classes`;
   return { subject, html: masterLayout(body, data.recipientEmail), text };
 }
 
@@ -1789,7 +1793,7 @@ export function paymentReminderTemplate(data: PaymentReminderData) {
 
     <p style="font-size:13px; color:#6c757d; margin:0;">Continued non-payment may result in temporary suspension from classes.</p>
   `;
-  const text = `Payment ${isOverdue ? 'Overdue' : 'Reminder'} — ${data.invoiceNumber}\n\nDear ${data.recipientName},\nAmount: ${data.amount}\nDue Date: ${data.dueDate}${isOverdue ? `\nOverdue: ${data.daysOverdue} days` : ''}\n\nPay at: ${data.payLink}\n\n— stibe Classes`;
+  const text = `Payment ${isOverdue ? 'Overdue' : 'Reminder'} — ${data.invoiceNumber}\n\nDear ${data.recipientName},\nAmount: ${data.amount}\nDue Date: ${data.dueDate}${isOverdue ? `\nOverdue: ${data.daysOverdue} days` : ''}\n\nPay at: ${data.payLink}\n\n— Stibe Classes`;
   return { subject, html: masterLayout(body, data.recipientEmail), text };
 }
 
@@ -1806,7 +1810,7 @@ export function passwordResetOtpTemplate(data: PasswordResetOtpData): { subject:
   const body = `
     <p style="color:#374151; font-size:15px; margin:0 0 16px;">Hi <strong>${data.recipientName}</strong>,</p>
     <p style="color:#4b5563; font-size:14px; margin:0 0 24px; line-height:1.6;">
-      We received a request to reset your stibe account password. Use the code below to verify your identity:
+      We received a request to reset your Stibe account password. Use the code below to verify your identity:
     </p>
 
     <div style="text-align:center; margin:28px 0;">
@@ -1821,7 +1825,7 @@ export function passwordResetOtpTemplate(data: PasswordResetOtpData): { subject:
       If you didn't request a password reset, you can safely ignore this email. Your password will remain unchanged.
     </p>
   `;
-  const text = `stibe Password Reset\n\nHi ${data.recipientName},\n\nYour password reset code is: ${data.otp}\n\nThis code expires in 10 minutes.\n\nIf you didn't request this, please ignore this email.\n\n— stibe Classes`;
+  const text = `Stibe Password Reset\n\nHi ${data.recipientName},\n\nYour password reset code is: ${data.otp}\n\nThis code expires in 10 minutes.\n\nIf you didn't request this, please ignore this email.\n\n— Stibe Classes`;
   return { subject, html: masterLayout(body, data.recipientEmail), text };
 }
 
@@ -1855,14 +1859,14 @@ export function demoTeacherRequestTemplate(data: DemoTeacherRequestData): { subj
     ${alertBox('⏱ This is a 30-minute demo session. Please accept or reject from your dashboard.', '#0d9488', '#f0fdfa')}
 
     <div style="text-align:center; margin:24px 0;">
-      ${button('Open Dashboard', 'https://stibelearning.online/teacher#demo', '#16a34a')}
+      ${button('Open Dashboard', '${APP_URL}/teacher#demo', '#16a34a')}
     </div>
 
     <p style="color:#6b7280; font-size:13px; margin:16px 0 0; line-height:1.5;">
       Once you accept, a demo session room will be created automatically and the student will be notified with a join link.
     </p>
   `;
-  const text = `Demo Session Request\n\nHi ${data.teacherName},\n\nA new student (${data.studentName}, Grade ${data.studentGrade}) has requested a ${data.subject} demo session.\n\nTopics: ${data.portions}\n\nPlease log in to your dashboard to accept or reject: https://stibelearning.online/teacher#demo\n\n— stibe Classes`;
+  const text = `Demo Session Request\n\nHi ${data.teacherName},\n\nA new student (${data.studentName}, Grade ${data.studentGrade}) has requested a ${data.subject} demo session.\n\nTopics: ${data.portions}\n\nPlease log in to your dashboard to accept or reject: ${APP_URL}/teacher#demo\n\n— Stibe Classes`;
   return { subject, html: masterLayout(body, data.recipientEmail), text };
 }
 
@@ -1908,7 +1912,7 @@ export function demoTeacherAssignedTemplate(data: DemoTeacherAssignedData): { su
       The student has already been sent a join link. Make sure you have a stable connection and are ready a few minutes before the scheduled time.
     </p>
   `;
-  const text = `Demo Session Assigned\n\nHi ${data.teacherName},\n\nYou have been assigned a demo session:\n\nStudent: ${data.studentName}${data.studentGrade ? ` (Grade ${data.studentGrade})` : ''}\nSubject: ${data.subject}\nTime: ${timeStr}\nDuration: ${data.durationMinutes} minutes\n\nJoin here: ${data.joinLink}\n\nNo confirmation needed — please join at the scheduled time.\n\n— stibe Classes`;
+  const text = `Demo Session Assigned\n\nHi ${data.teacherName},\n\nYou have been assigned a demo session:\n\nStudent: ${data.studentName}${data.studentGrade ? ` (Grade ${data.studentGrade})` : ''}\nSubject: ${data.subject}\nTime: ${timeStr}\nDuration: ${data.durationMinutes} minutes\n\nJoin here: ${data.joinLink}\n\nNo confirmation needed — please join at the scheduled time.\n\n— Stibe Classes`;
   return { subject, html: masterLayout(body, data.recipientEmail), text };
 }
 
@@ -1951,7 +1955,7 @@ export function demoStudentAcceptedTemplate(data: DemoStudentAcceptedData): { su
       Click the button above when it's time for your session. Make sure you have a stable internet connection and a quiet environment.
     </p>
   `;
-  const text = `Demo Session Confirmed!\n\nHi ${data.studentName},\n\nYour ${data.subject} demo session with ${data.teacherName} is scheduled for ${timeStr} (${data.durationMinutes} min).\n\nJoin here: ${data.joinLink}\n\nThis session is completely FREE!\n\n— stibe Classes`;
+  const text = `Demo Session Confirmed!\n\nHi ${data.studentName},\n\nYour ${data.subject} demo session with ${data.teacherName} is scheduled for ${timeStr} (${data.durationMinutes} min).\n\nJoin here: ${data.joinLink}\n\nThis session is completely FREE!\n\n— Stibe Classes`;
   return { subject, html: masterLayout(body, data.recipientEmail), text };
 }
 
@@ -1989,10 +1993,10 @@ export function demoAOAcceptedTemplate(data: DemoAOAcceptedData): { subject: str
     ${alertBox('The student has been automatically notified with a join link. The teacher will start the session at the scheduled time.', '#16a34a', '#f0fdf4')}
 
     <div style="text-align:center; margin:24px 0;">
-      ${button('View in Dashboard', 'https://stibelearning.online/academic-operator#demo', '#16a34a')}
+      ${button('View in Dashboard', '${APP_URL}/academic-operator#demo', '#16a34a')}
     </div>
   `;
-  const text = `Demo Accepted\n\n${data.teacherName} accepted the demo for ${data.studentName} (${data.subject}, Grade ${data.studentGrade}).\n\nScheduled: ${timeStr} (${data.durationMinutes} min)\n\nStudent has been notified.\n\n— stibe Classes`;
+  const text = `Demo Accepted\n\n${data.teacherName} accepted the demo for ${data.studentName} (${data.subject}, Grade ${data.studentGrade}).\n\nScheduled: ${timeStr} (${data.durationMinutes} min)\n\nStudent has been notified.\n\n— Stibe Classes`;
   return { subject, html: masterLayout(body, data.recipientEmail), text };
 }
 
@@ -2038,7 +2042,7 @@ export function demoAgentJoinTemplate(data: DemoAgentJoinData): { subject: strin
       You will be visible to both the teacher and student. Your camera and microphone will be active.
     </p>
   `;
-  const text = `Demo Session Ready\n\nHi ${data.agentName},\n\nA demo for ${data.studentName} (${data.subject}) with ${data.teacherName} is scheduled at ${timeStr} (${data.durationMinutes} min).\n\nJoin here: ${data.joinLink}\n\nPlease join before the student.\n\n— stibe Classes`;
+  const text = `Demo Session Ready\n\nHi ${data.agentName},\n\nA demo for ${data.studentName} (${data.subject}) with ${data.teacherName} is scheduled at ${timeStr} (${data.durationMinutes} min).\n\nJoin here: ${data.joinLink}\n\nPlease join before the student.\n\n— Stibe Classes`;
   return { subject, html: masterLayout(body, data.recipientEmail), text };
 }
 
@@ -2055,7 +2059,7 @@ export function demoStudentSearchingTemplate(data: DemoStudentSearchingData): { 
   const subject = `Demo Request Received — ${data.subject}`;
   const body = `
     <h2 style="margin:0 0 6px; font-size:20px; font-weight:700; color:#111827;">We Received Your Demo Request!</h2>
-    <p style="color:#6b7280; font-size:14px; margin:0 0 20px;">Thank you for your interest in stibe Classes.</p>
+    <p style="color:#6b7280; font-size:14px; margin:0 0 20px;">Thank you for your interest in Stibe.</p>
 
     ${infoTable([
       ['Subject', data.subject],
@@ -2071,7 +2075,7 @@ export function demoStudentSearchingTemplate(data: DemoStudentSearchingData): { 
       If you have any questions, please reply to this email or contact us.
     </p>
   `;
-  const text = `Demo Request Received\n\nHi ${data.studentName},\n\nThank you for requesting a ${data.subject} demo session with stibe Classes.\n\nWe are finding the best available teacher for you. Once confirmed, you'll receive an email with the session time and join link.\n\nYour demo session is completely FREE (30 minutes).\n\n— stibe Classes`;
+  const text = `Demo Request Received\n\nHi ${data.studentName},\n\nThank you for requesting a ${data.subject} demo session with Stibe.\n\nWe are finding the best available teacher for you. Once confirmed, you'll receive an email with the session time and join link.\n\nYour demo session is completely FREE (30 minutes).\n\n— Stibe Classes`;
   return { subject, html: masterLayout(body, data.recipientEmail), text };
 }
 
@@ -2100,14 +2104,14 @@ export function demoStudentRejectedTemplate(data: DemoStudentRejectedData): { su
     ${alertBox('Unfortunately we were unable to assign a teacher for your demo session at this time. Please contact us and we will arrange a new slot as soon as possible.', '#b45309', '#fffbeb')}
 
     <div style="text-align:center; margin:24px 0;">
-      ${button('Contact stibe', 'https://stibelearning.online')}
+      ${button('Contact Stibe', '${APP_URL}')}
     </div>
 
     <p style="color:#6b7280; font-size:13px; margin:8px 0 0; line-height:1.5;">
       We apologise for the inconvenience. Our team will reach out to you shortly to reschedule your demo session.
     </p>
   `;
-  const text = `Demo Session Update\n\nHi ${data.studentName},\n\nUnfortunately we were unable to schedule your ${data.subject} demo session at this time${data.reason ? '. ' + data.reason : ''}.\n\nOur team will contact you to arrange a new slot.\n\nWe apologise for the inconvenience.\n\n— stibe Classes`;
+  const text = `Demo Session Update\n\nHi ${data.studentName},\n\nUnfortunately we were unable to schedule your ${data.subject} demo session at this time${data.reason ? '. ' + data.reason : ''}.\n\nOur team will contact you to arrange a new slot.\n\nWe apologise for the inconvenience.\n\n— Stibe Classes`;
   return { subject, html: masterLayout(body, data.recipientEmail), text };
 }
 
@@ -2403,7 +2407,7 @@ export function demoSummaryTeacherTemplate(data: DemoSummaryTemplateData): { sub
     ? `\n\nStudent Feedback: ${data.feedback.rating}/5${data.feedback.text ? ' — "' + data.feedback.text + '"' : ''}`
     : '';
 
-  const text = `Demo Session Report\n\nHi ${data.teacherName},\n\nSubject: ${data.subject} (Grade ${data.grade})\nStudent: ${data.studentName}\nOutcome: ${data.outcomeLabel}\nScheduled: ${data.scheduledStr}\nEnded: ${data.endedStr}\n\nStudent Time in Session: ${data.durationStr}\nAttention Score: ${data.attentionScore}%${examText}${feedbackText}\n\n— stibe Classes`;
+  const text = `Demo Session Report\n\nHi ${data.teacherName},\n\nSubject: ${data.subject} (Grade ${data.grade})\nStudent: ${data.studentName}\nOutcome: ${data.outcomeLabel}\nScheduled: ${data.scheduledStr}\nEnded: ${data.endedStr}\n\nStudent Time in Session: ${data.durationStr}\nAttention Score: ${data.attentionScore}%${examText}${feedbackText}\n\n— Stibe Classes`;
 
   return { subject, html: masterLayout(body, data.recipientEmail), text };
 }
@@ -2452,11 +2456,11 @@ export function demoSummaryAOTemplate(data: DemoSummaryTemplateData): { subject:
     ${feedbackSection(data)}
 
     <div style="text-align:center; margin:24px 0;">
-      ${button('View Dashboard', 'https://stibelearning.online/owner#demo')}
+      ${button('View Dashboard', '${APP_URL}/owner#demo')}
     </div>
 
     <p style="color:#9ca3af; font-size:12px; margin:24px 0 0; line-height:1.5;">
-      Automated report from stibe AI classroom analytics. Follow up promptly for best conversion.
+      Automated report from Stibe AI classroom analytics. Follow up promptly for best conversion.
     </p>
   `;
 
@@ -2467,7 +2471,7 @@ export function demoSummaryAOTemplate(data: DemoSummaryTemplateData): { subject:
     ? `\nFeedback: ${data.feedback.rating}/5${data.feedback.text ? ' — "' + data.feedback.text + '"' : ''}`
     : '';
 
-  const text = `[AO Report] Demo: ${data.studentName} — ${data.subject}\n\nOutcome: ${data.outcomeLabel}\nTeacher: ${data.teacherName}\nAttention: ${data.attentionScore}%\nTime in Session: ${data.durationStr}${examText}${feedbackText}\n\nView dashboard: https://stibelearning.online/owner#demo\n\n— stibe Classes`;
+  const text = `[AO Report] Demo: ${data.studentName} — ${data.subject}\n\nOutcome: ${data.outcomeLabel}\nTeacher: ${data.teacherName}\nAttention: ${data.attentionScore}%\nTime in Session: ${data.durationStr}${examText}${feedbackText}\n\nView dashboard: ${APP_URL}/owner#demo\n\n— Stibe Classes`;
 
   return { subject, html: masterLayout(body, data.recipientEmail), text };
 }
@@ -2550,19 +2554,19 @@ export function demoSummaryStudentTemplate(data: DemoSummaryTemplateData): { sub
     ${data.outcome !== 'student_no_show' ? `
     <div style="text-align:center; margin:28px 0; padding:24px; background-color:#eff6ff; border-radius:12px; border:1px solid #bfdbfe;">
       <p style="font-size:16px; font-weight:700; color:#1e40af; margin:0 0 8px;">Ready to continue learning?</p>
-      <p style="font-size:13px; color:#3b82f6; margin:0 0 16px;">Join stibe Classes for structured, personalized online sessions with expert teachers.</p>
-      ${button('Contact stibe', 'https://stibelearning.online')}
+      <p style="font-size:13px; color:#3b82f6; margin:0 0 16px;">Join Stibe Classes for structured, personalized online sessions with expert teachers.</p>
+      ${button('Contact Stibe', '${APP_URL}')}
     </div>
     ` : `
     <div style="text-align:center; margin:28px 0; padding:24px; background-color:#fff7ed; border-radius:12px; border:1px solid #fed7aa;">
       <p style="font-size:16px; font-weight:700; color:#9a3412; margin:0 0 8px;">Would you like to reschedule?</p>
       <p style="font-size:13px; color:#ea580c; margin:0 0 16px;">We understand things come up! Contact us to book another free demo session.</p>
-      ${button('Contact stibe', 'https://stibelearning.online')}
+      ${button('Contact Stibe', '${APP_URL}')}
     </div>
     `}
 
     <p style="color:#9ca3af; font-size:12px; margin:24px 0 0; line-height:1.5;">
-      Thank you for trying stibe Classes. We look forward to helping you achieve your academic goals!
+      Thank you for trying Stibe Classes. We look forward to helping you achieve your academic goals!
     </p>
   `;
 
@@ -2571,8 +2575,8 @@ export function demoSummaryStudentTemplate(data: DemoSummaryTemplateData): { sub
     : '';
 
   const text = data.outcome === 'student_no_show'
-    ? `Hi ${data.studentName},\n\nWe noticed you couldn't make it to your ${data.subject} demo session. No worries — contact us to reschedule!\n\nVisit: https://stibelearning.online\n\n— stibe Classes`
-    : `Hi ${data.studentName},\n\nThank you for attending your ${data.subject} demo session with ${data.teacherName}!\n\nSession Duration: ${data.durationStr}\nFocus Score: ${data.attentionScore}%${examText}\n\nReady to continue? Contact us at https://stibelearning.online\n\n— stibe Classes`;
+    ? `Hi ${data.studentName},\n\nWe noticed you couldn't make it to your ${data.subject} demo session. No worries — contact us to reschedule!\n\nVisit: ${APP_URL}\n\n— Stibe Classes`
+    : `Hi ${data.studentName},\n\nThank you for attending your ${data.subject} demo session with ${data.teacherName}!\n\nSession Duration: ${data.durationStr}\nFocus Score: ${data.attentionScore}%${examText}\n\nReady to continue? Contact us at ${APP_URL}\n\n— Stibe Classes`;
 
   return { subject, html: masterLayout(body, data.recipientEmail), text };
 }
@@ -2627,7 +2631,7 @@ export function teacherReportNotifyTemplate(data: TeacherReportNotifyData): { su
     </div>` : ''}
 
     <div style="text-align:center; margin:24px 0;">
-      ${button('View Report', `https://stibelearning.online/${data.recipientRole === 'owner' ? 'owner' : data.recipientRole === 'batch_coordinator' ? 'batch-coordinator' : 'academic-operator'}#teacher-reports`, '#dc2626')}
+      ${button('View Report', `${APP_URL}/${data.recipientRole === 'owner' ? 'owner' : data.recipientRole === 'batch_coordinator' ? 'batch-coordinator' : 'academic-operator'}#teacher-reports`, '#dc2626')}
     </div>
 
     <p style="font-size:12px; color:#9ca3af; margin:16px 0 0; line-height:1.5;">
@@ -2635,7 +2639,7 @@ export function teacherReportNotifyTemplate(data: TeacherReportNotifyData): { su
     </p>
   `;
 
-  const text = `TEACHER REPORT ALERT\n\nDear ${data.recipientName},\n\nA student has filed a report against a teacher.\n\nCategory: ${data.categoryLabel}\nSeverity: ${data.severity.toUpperCase()}\nTeacher: ${data.teacherName}\nStudent: ${data.studentName}\nSession: ${data.roomName}\n${data.description ? `Description: ${data.description}\n` : ''}\nPlease review from your dashboard.\n\n— stibe Classes`;
+  const text = `TEACHER REPORT ALERT\n\nDear ${data.recipientName},\n\nA student has filed a report against a teacher.\n\nCategory: ${data.categoryLabel}\nSeverity: ${data.severity.toUpperCase()}\nTeacher: ${data.teacherName}\nStudent: ${data.studentName}\nSession: ${data.roomName}\n${data.description ? `Description: ${data.description}\n` : ''}\nPlease review from your dashboard.\n\n— Stibe Classes`;
 
   return { subject, html: masterLayout(body, data.recipientEmail), text };
 }
@@ -2697,7 +2701,7 @@ export function earlyExitAlertTemplate(data: EarlyExitAlertData): { subject: str
     </p>
   `;
 
-  const text = `${isParent ? 'EARLY EXIT ALERT' : 'STUDENT EARLY EXIT'}\n\nDear ${data.recipientName},\n\n${data.studentName} left "${data.roomName}" (${data.subject}) early with ~${data.remainingMinutes} minutes remaining.\n\nScheduled End: ${data.scheduledEnd}\nExit Time: ${data.exitTime}\n\n— stibe Classes`;
+  const text = `${isParent ? 'EARLY EXIT ALERT' : 'STUDENT EARLY EXIT'}\n\nDear ${data.recipientName},\n\n${data.studentName} left "${data.roomName}" (${data.subject}) early with ~${data.remainingMinutes} minutes remaining.\n\nScheduled End: ${data.scheduledEnd}\nExit Time: ${data.exitTime}\n\n— Stibe Classes`;
 
   return { subject: subjectLine, html: masterLayout(body, data.recipientEmail), text };
 }
@@ -2754,7 +2758,7 @@ export function absentNotificationTemplate(data: AbsentNotificationData): { subj
     </p>
   `;
 
-  const text = `${isParent ? 'ABSENT ALERT' : 'MARKED ABSENT'}\n\nDear ${data.recipientName},\n\n${isParent ? `${data.studentName} was` : 'You were'} marked absent from ${data.subject} class on ${data.date} at ${data.time}.\n\nBatch: ${data.batchName}\nTeacher: ${data.teacherName}\n\nPlease contact your batch coordinator if this was an error.\n\n— stibe Classes`;
+  const text = `${isParent ? 'ABSENT ALERT' : 'MARKED ABSENT'}\n\nDear ${data.recipientName},\n\n${isParent ? `${data.studentName} was` : 'You were'} marked absent from ${data.subject} class on ${data.date} at ${data.time}.\n\nBatch: ${data.batchName}\nTeacher: ${data.teacherName}\n\nPlease contact your batch coordinator if this was an error.\n\n— Stibe Classes`;
 
   return { subject: subjectLine, html: masterLayout(body, data.recipientEmail), text };
 }
@@ -2806,8 +2810,8 @@ export function joinReminderTemplate(data: JoinReminderData): { subject: string;
   `;
 
   const text = data.isParent
-    ? `CLASS LIVE NOW\n\nDear ${data.recipientName},\n\n${data.studentName} hasn't joined ${data.subject} class (${data.batchName}).\nTeacher: ${data.teacherName}\n\nPlease ensure they join immediately.\n\n— stibe Classes`
-    : `CLASS LIVE NOW\n\nDear ${data.recipientName},\n\nYour ${data.subject} class is live now!\nTeacher: ${data.teacherName}\n\nJoin: ${data.joinUrl}\n\n— stibe Classes`;
+    ? `CLASS LIVE NOW\n\nDear ${data.recipientName},\n\n${data.studentName} hasn't joined ${data.subject} class (${data.batchName}).\nTeacher: ${data.teacherName}\n\nPlease ensure they join immediately.\n\n— Stibe Classes`
+    : `CLASS LIVE NOW\n\nDear ${data.recipientName},\n\nYour ${data.subject} class is live now!\nTeacher: ${data.teacherName}\n\nJoin: ${data.joinUrl}\n\n— Stibe Classes`;
 
   return { subject: subjectLine, html: masterLayout(body, data.recipientEmail), text };
 }
@@ -2856,7 +2860,7 @@ export function refundApprovedTemplate(data: RefundApprovedData) {
       please contact the academic coordinator.
     </p>
   `;
-  const text = 'Refund Approved\n\nDear ' + data.recipientName + ',\n\nA refund of ₹' + data.amount + ' has been approved for ' + data.studentName + '.\nSubject: ' + data.sessionSubject + '\nSession: ' + data.sessionDate + '\nBatch: ' + data.batchName + '\nRefund To: ' + data.refundMethod + '\n' + (data.reviewNotes ? 'Note: ' + data.reviewNotes + '\n' : '') + '\n— stibe Classes';
+  const text = 'Refund Approved\n\nDear ' + data.recipientName + ',\n\nA refund of ₹' + data.amount + ' has been approved for ' + data.studentName + '.\nSubject: ' + data.sessionSubject + '\nSession: ' + data.sessionDate + '\nBatch: ' + data.batchName + '\nRefund To: ' + data.refundMethod + '\n' + (data.reviewNotes ? 'Note: ' + data.reviewNotes + '\n' : '') + '\n— Stibe Classes';
   return { subject, html: masterLayout(body, data.recipientEmail), text };
 }
 
@@ -2919,7 +2923,7 @@ export function lowCreditsWarningTemplate(data: LowCreditsWarningData): { subjec
     }
   `;
 
-  const text = `${data.isExhausted ? 'Session Credits Exhausted' : 'Low Session Credits Warning'}\n\nDear ${data.recipientName},\n\n${data.studentName} has ${data.isExhausted ? '0' : data.remainingCredits} of ${data.totalAllotted} prepaid sessions remaining.\nUsed: ${data.usedCredits} sessions\n\n${data.subjectBreakdown.map(s => `${s.subject}: ${s.remaining}/${s.total}`).join('\n')}\n\nRenew at: ${data.renewLink}\n\n— stibe Classes`;
+  const text = `${data.isExhausted ? 'Session Credits Exhausted' : 'Low Session Credits Warning'}\n\nDear ${data.recipientName},\n\n${data.studentName} has ${data.isExhausted ? '0' : data.remainingCredits} of ${data.totalAllotted} prepaid sessions remaining.\nUsed: ${data.usedCredits} sessions\n\n${data.subjectBreakdown.map(s => `${s.subject}: ${s.remaining}/${s.total}`).join('\n')}\n\nRenew at: ${data.renewLink}\n\n— Stibe Classes`;
 
   return { subject, html: masterLayout(body, data.recipientEmail), text };
 }
@@ -2936,7 +2940,7 @@ interface EnrollmentPaymentLinkData {
 }
 
 export function enrollmentPaymentLinkEmail(data: EnrollmentPaymentLinkData): { subject: string; html: string; text: string } {
-  const subject = `stibe Enrollment — Complete Your Payment (${data.amount})`;
+  const subject = `Stibe Enrollment — Complete Your Payment (${data.amount})`;
 
   const body = `
     <h1 class="hdr-txt" style="margin:0 0 6px; font-size:22px; font-weight:700; color:#111827;">Complete Your Enrollment</h1>
@@ -2956,10 +2960,10 @@ export function enrollmentPaymentLinkEmail(data: EnrollmentPaymentLinkData): { s
 
     ${alertBox('This payment link is valid for 7 days. After payment, our team will assign you to the right batch and share login credentials.', '#2563eb', '#eff6ff')}
 
-    <p style="font-size:13px; color:#6c757d; margin:16px 0 0;">If you have any questions, reach out to your stibe counsellor or reply to this email.</p>
+    <p style="font-size:13px; color:#6c757d; margin:16px 0 0;">If you have any questions, reach out to your Stibe counsellor or reply to this email.</p>
   `;
 
-  const text = `stibe Enrollment — Complete Your Payment\n\nHi ${data.studentName},\n\nYour enrollment is ready:\nGrade: Class ${data.grade}\nBoard: ${data.board}\nBatch Type: ${data.batchType}\nAmount: ${data.amount}\n\nComplete payment here: ${data.paymentUrl}\n\nLink valid for 7 days.\n\n— stibe Classes`;
+  const text = `Stibe Enrollment — Complete Your Payment\n\nHi ${data.studentName},\n\nYour enrollment is ready:\nGrade: Class ${data.grade}\nBoard: ${data.board}\nBatch Type: ${data.batchType}\nAmount: ${data.amount}\n\nComplete payment here: ${data.paymentUrl}\n\nLink valid for 7 days.\n\n— Stibe Classes`;
 
   return { subject, html: masterLayout(body, ''), text };
 }
